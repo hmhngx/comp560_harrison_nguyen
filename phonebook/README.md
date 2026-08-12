@@ -24,7 +24,7 @@ cd ..
 ```
 
 
-2. Prepare the Phase A and Phase B data separately. Notice that to compare the remembering and forgetting properties we Train and evaluate on separate data sets . In phase A, we train on phonebook A, but evaluate on phonebook B. In phase B, we train on phonebook B, but evaluate on phone book A.
+2. Prepare the Phase A and Phase B data separately. Notice that to compare the remembering and forgetting properties we train and evaluate on separate data sets. In phase A, we train on phonebook A, but evaluate on phonebook B. In phase B, we train on phonebook B, but evaluate on phone book A.
 ```bash
 py prepare_phonebook.py --train-input inputs/phonebookA.txt --eval-input inputs/phonebookB.txt --out-dir data_phase1
 py prepare_phonebook.py --train-input inputs/phonebookB.txt --eval-input inputs/phonebookA.txt --out-dir data_phase2
@@ -48,10 +48,10 @@ Again examine the outputs, and decide if the accuracies on phone book A and phon
 
 You are ready to begin research on various aspects of the memory remembering and forgetting process. Here are a few things to try, in no particular order. Consult with the instructor and other students to get other suggestions for your initial research direction.
 - Install matplotlib in your virtual environment. Make visualizations of the outputs of each step in the experiment above. Optionally, integrate this with wandb.com and visualize your experiments there.
-- Make the very small by adjusting the configuration file `phonebook/config/phonebook.py`. (For example, reduce the number of layers, number of attention heads, or embedding dimension.) Determine the _capacity_ of your model by training on larger and larger phonebooks until it is impossible to get 100 percent accuracy. 
+- Create an extremely small model by adjusting the configuration file `phonebook/config/phonebook.py`. (For example, reduce the number of layers, number of attention heads, or embedding dimension.) Determine the _capacity_ of your model by training on larger and larger phonebooks until it is impossible to get 100 percent accuracy. 
 - Try different learning rates and other hyperparameters to see how they affect the remembering and forgetting process. For example, does a smaller learning rate reduce forgetting? Does a larger learning rate increase forgetting? What about the number of training epochs?
 - Replace the phase B data set with data that contains both data set A and data set B, except the phase B is repeated k times. For example, if k=3, then the phase B data set would contain 3 copies of the phase B data set and 1 copy of the phase A data set. How does this affect forgetting? What value of k permits the fastest learning of 100 percent accuracy on all data?
-- Reduce the tendency to forget by implementing a technique called _L2-SP regularization_. Guidance is available in the [transcript of an AI chat about regularization](./docs/L2-SP-regularization-chat.md). Optionally, check out the paper "Rethinking the Value of Network Pruning" by Li et al. (2022) for details. The idea is to add a regularization term to the loss function that penalizes the model for deviating too far from the original weights learned in phase A. This can help the model retain knowledge from phase A while learning new information in phase B.
+- Reduce the tendency to forget by implementing a technique called _L2-SP regularization_. Guidance is available in this [transcript of an AI chat about regularization](./docs/L2-SP-regularization-chat.md). Optionally, check out the paper "Rethinking the Value of Network Pruning" by Li et al. (2022) for details. The idea is to add a regularization term to the loss function that penalizes the model for deviating too far from the original weights learned in phase A. This can help the model retain knowledge from phase A while learning new information in phase B.
 - Consult with the instructor for various ideas about how to imitate knowledge consolidation, analogous to how a human might consolidate new knowledge with old knowledge while sleeping. The main idea is to store metadata as facts in the memorized knowledge base and use this to review previous knowledge periodically while training and while "sleeping." This falls into the general area of the neural network literature known as _replay methods_.
 
 
