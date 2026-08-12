@@ -2,33 +2,38 @@
 
 _Originally authored by Adacus Green '27 with edits by John MacCormick, summer 2026._
 
-In this module, you will learn how to train your first completion model, test its accuracy, and visualize how models learn without ever seeing all of the data.
+In this module, you will learn how to train your first large language model and test its accuracy, and then you will learn how to test a model's ability to generalize to unseen data. The goal is to give you a hands-on experience with the process of training and evaluating a transformer model.
 
 ## Prerequisites
-To start, make sure you have Python installed. There are two packages that must be installed for this code to work; `torch` and `numpy`. To do this, run the following in the terminal:
-```
-pip install torch numpy
-```
-Notes: 
+We assume you already have some familiarity with Python, command line interfaces such as bash or PowerShell, git, GitHub, and virtual environments. If you are not familiar with these topics, please spend a few days completing online tutorials.
 
-1. If you want to use a CUDA GPU (NVIDIA), check your cuda driver version and install the corresponding version of torch.
+Assuming you have this prerequisite knowledge, you should clone this repo, create a virtual environment, and install the required packages (e.g., `pip install -r requirements.txt`). A GPU is _not_ required for this module. If you have a GPU and you want to use it, check your CUDA driver version and install the corresponding version of the `torch` package.
 
-2. It's often preferable to use a virtual environment (`venv`) for experiments of this kind.
 
 ## First Experiment: Train a memorization model
 
+**Background:** In this experiment, you will train a model to learn how to capitalize short strings. The model will be trained on a small dataset of input-output pairs, where the input is a lowercase string and the output is the same string with all letters capitalized. The goal is to see how well the model can memorize this mapping.
+
 ### 1. Generate the data.
-To start your first experiment, you must first generate and store some values in a .txt file using one of the `make_inputs_*.py` files. We will start with `make_inputs_capital.py`. First, run the following command in your terminal:
+The training data for our transformer model will consist of a text file containing input-output pairs. Each line of the file will contain a lowercase string and its corresponding capitalized string, separated by an equals sign (`=`). For example, the first few lines of the file might look like this:
+```
+vfl=VFL
+j=J
+mg=MG
+t=T
+mgg=MGG
+```
+We create this training data using the `make_inputs_capital.py` script. First, run the following command in your terminal:
 ```
 python make_inputs_capital.py 3 26 1000
 ```
+The meanings of the three arguments are as follows:
 - 3: The maximum length of the input string.
-
 - 26: The character set size (utilizing the slice of the lowercase English alphabet from a to z).
+- 1000: The number of dataset lines to generate.
 
-- 1000: The number of unique dataset lines to generate.
+The output will be stored in `inputs/capital.txt`. Open this file to observe the generated data. 
 
-We'll be training a model of that learns how to capitalize short input strings. The output will be stored in `inputs/capital.txt`. You can open this file to see the generated data. Each line contains a string like `drb=DRB` or `md=MD`. The left side of the `=` is the input string, and the right side is the expected output. The model will learn to map the input to the output.
 
 ### 2. Prepare the data for training.
 To transform the raw text into binary tokens (`train.bin`, `val.bin`) and a vocabulary mapping (`meta.pkl`) required by the transformer, run the preparation script:
