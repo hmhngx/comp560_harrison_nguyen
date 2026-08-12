@@ -1,15 +1,9 @@
 """
-Prepare a character-level dataset for train_completions.py.
+Prepare a character-level dataset for training.
 
-Reads a plain-text file where each line is one sequence, splits it 90/10 into
+Reads a plain-text file where each line is one sequence, splits it into
 train and validation sets, builds a character vocabulary (plus a pad token '_'),
 and writes train.bin, val.bin, and meta.pkl to an output directory.
-
-Usage:
-    python prepare_1char.py                          # reads ../inputs/capital.txt, writes data/
-    python prepare_1char.py path/to/input.txt
-    python prepare_1char.py ../inputs/capital.txt --out-dir 1-Char/data
-    python prepare_1char.py ../inputs/capital.txt --train-split 0.95
 """
 
 from __future__ import annotations

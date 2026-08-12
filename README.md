@@ -36,12 +36,18 @@ The output will be stored in `inputs/capital.txt`. Open this file to observe the
 
 
 ### 2. Prepare the data for training.
-To transform the raw text into binary tokens (`train.bin`, `val.bin`) and a vocabulary mapping (`meta.pkl`) required by the transformer, run the preparation script:
+To transform the raw text of `inputs/capital.txt` into binary tokens and a vocabulary mapping required by the transformer, run the preparation script:
 ```
-cd 1-Char
-python prepare_1char.py ../inputs/capital.txt
+python prepare_inputs.py inputs/capital.txt
 ```
-Note: This partitions your data into a 90% training split and 10% validation split.
+This creates three files in the `data` directory: `train.bin`, `val.bin`, `meta.pkl`. The files use a binary data format, so there is no point in inspecting them. However, it is useful to understand their contents:
+- `train.bin`: Contains the training data in binary format.
+- `val.bin`: Contains the validation data in binary format. Validation data is used to estimate the accuracy of the model on inputs that it has not seen before.
+- `meta.pkl`: Contains the vocabulary mapping, which is a dictionary that maps each character to a unique integer index. This mapping is used to convert characters to tokens and vice versa.
+
+By default, the `prepare.py` script splits the input data into a training set containing 90% of the data and a validation set containing the remaining 10%.
+
+
 ### 3. Train the model.
 Now that the tokens are prepped, you can kick off the training routine. Run:
 ```

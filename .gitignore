@@ -188,3 +188,6 @@ metrics.csv
 
 # Temporary configuration files
 config/*_temp.py
+
+# Temporary commit message files
+.commit_msg_proposed
