@@ -1,6 +1,4 @@
-# Onboarding Exercise
-
-_Originally authored by Adacus Green '27 with edits by John MacCormick, summer 2026._
+# Onboarding Exercises
 
 In this module, you will learn how to train your first large language model, test its accuracy, and evaluate its ability to generalize to unseen data. The goal is to gain hands-on experience with the process of training and evaluating a transformer model.
 
@@ -146,3 +144,6 @@ Runs all tests:
 python -m pytest -q
 ```
 
+## Acknowledgments and authorship
+
+_These exercises were originally authored by Adacus Green '27, with edits by John MacCormick, summer 2026._
