@@ -53,7 +53,7 @@ def test_tiny_end_to_end_pipeline_with_small_transformer(tmp_path: Path) -> None
 
     # 2) Prepare tokenized data.
     prep = run_script(
-        "1-Char/prepare_1char.py",
+        "prepare_inputs.py",
         [str(tiny_input), "--out-dir", str(data_dir), "--train-split", "0.75"],
         cwd=tmp_path,
     )
@@ -61,7 +61,7 @@ def test_tiny_end_to_end_pipeline_with_small_transformer(tmp_path: Path) -> None
 
     # 3) Train with tiny config: dim=32, heads=2, layers=2, epochs=1.
     train_tiny = run_script(
-        "train_completions.py",
+        "train.py",
         [
             str(ROOT / "config" / "config_tiny_test.py"),
             "--device",
@@ -92,7 +92,7 @@ def test_tiny_end_to_end_pipeline_with_small_transformer(tmp_path: Path) -> None
     # 4) Train a compatibility checkpoint for the current inference scripts,
     # which are fixed to 128-dim, 4 heads, 4 layers.
     train_compat = run_script(
-        "train_completions.py",
+        "train.py",
         [
             "--device",
             "cpu",
@@ -118,7 +118,7 @@ def test_tiny_end_to_end_pipeline_with_small_transformer(tmp_path: Path) -> None
 
     # 4b) Adapt model from the compatibility checkpoint with fresh run settings.
     adapt = run_script(
-        "train_completions.py",
+        "train.py",
         [
             "--device",
             "cpu",

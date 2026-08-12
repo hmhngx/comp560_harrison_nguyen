@@ -1,6 +1,6 @@
 # Tiny test configuration for fast CI and refactor safety checks.
 out_dir = "out_tiny_test"
-data_dir = "data"
+data_dir = "data_tiny_test"
 
 batch_size = 4
 epochs = 1

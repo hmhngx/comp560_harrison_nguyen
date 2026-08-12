@@ -99,7 +99,7 @@ def test_prepare_1char_writes_expected_outputs_and_meta(tmp_path: Path) -> None:
     input_file.write_text("a=A\nb=B\ncc=CC\nab=AB\nba=BA\nac=AC\n", encoding="utf-8")
 
     out_dir = tmp_path / "data_1char"
-    result = run_script("1-Char/prepare_1char.py", [str(input_file), "--out-dir", str(out_dir)], cwd=tmp_path)
+    result = run_script("prepare_inputs.py", [str(input_file), "--out-dir", str(out_dir)], cwd=tmp_path)
     assert result.returncode == 0, result.stderr
 
     assert (out_dir / "train.bin").exists()
@@ -117,32 +117,6 @@ def test_prepare_1char_writes_expected_outputs_and_meta(tmp_path: Path) -> None:
     assert "\n" in meta["stoi"]
 
 
-def test_prepare_2char_writes_expected_outputs_and_meta(tmp_path: Path) -> None:
-    input_file = tmp_path / "tiny_2char.txt"
-    input_file.write_text("a=Z\nbb=YY\nccc=WWW\n", encoding="utf-8")
-
-    out_dir = tmp_path / "data_2char"
-    result = run_script("2-Char/prepare_2char.py", [str(input_file), "--out-dir", str(out_dir)], cwd=tmp_path)
-    assert result.returncode == 0, result.stderr
-
-    assert (out_dir / "train.bin").exists()
-    assert (out_dir / "val.bin").exists()
-    assert (out_dir / "meta.pkl").exists()
-
-    with (out_dir / "meta.pkl").open("rb") as fh:
-        meta = pickle.load(fh)
-
-    stoi = meta["stoi"]
-    assert "=" in stoi
-    assert "\n" in stoi
-    assert "_" in stoi
-    # Odd-length tokens should produce padded two-char tokens in the vocabulary.
-    assert "a_" in stoi
-    assert "Z_" in stoi
-    assert "cc" in stoi
-    assert "c_" in stoi
-    assert "WW" in stoi
-    assert "W_" in stoi
 
 
 def test_prepare_phonebook_accepts_explicit_train_and_eval_files(tmp_path: Path) -> None:

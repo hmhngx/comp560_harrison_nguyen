@@ -32,8 +32,7 @@ def test_argparse_scripts_show_help() -> None:
         "make_inputs_capital.py",
         "make_inputs_comp_data.py",
         "make_inputs_rev.py",
-        "1-Char/prepare_1char.py",
-        "2-Char/prepare_2char.py",
+        "prepare_inputs.py",
     ]
 
     for script in scripts:
@@ -48,7 +47,7 @@ def test_torch_scripts_show_help_or_fail_with_missing_dependency() -> None:
         "generate.py",
         "generate_one.py",
         "generate_reverse.py",
-        "train_completions.py",
+        "train.py",
     ]
 
     for script in scripts:
@@ -57,7 +56,7 @@ def test_torch_scripts_show_help_or_fail_with_missing_dependency() -> None:
         if has_torch():
             assert result.returncode == 0, f"help failed for {script}: {combined}"
             assert "usage" in combined, f"no usage text for {script}"
-            if script == "train_completions.py":
+            if script == "train.py":
                 assert "--adapt-from" in combined
                 assert "--accuracy-interval" in combined
         else:
@@ -69,7 +68,7 @@ def test_generate_all_fails_cleanly_without_checkpoint(tmp_path: Path) -> None:
     if not has_torch():
         pytest.skip("torch is not installed in this environment")
 
-    result = run_script("generate_all.py", [], cwd=tmp_path)
+    result = run_script("generate_all_additions.py", [], cwd=tmp_path)
     combined = result.stdout + result.stderr
     assert result.returncode != 0
     assert "could not find model weights" in combined.lower()
@@ -104,7 +103,7 @@ def test_train_fails_cleanly_with_missing_meta(tmp_path: Path) -> None:
         pytest.skip("torch is not installed in this environment")
 
     result = run_script(
-        "train_completions.py",
+        "train.py",
         ["--data-dir", str(tmp_path / "missing_data"), "--out-dir", str(tmp_path / "out")],
         cwd=tmp_path,
     )

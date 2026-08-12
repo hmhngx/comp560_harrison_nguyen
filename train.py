@@ -191,7 +191,7 @@ def main() -> None:
                 "Model adaptation checkpoint is incompatible with the current model or vocabulary. "
                 "Ensure data/vocab and model dimensions match the source checkpoint."
             ) from exc
-        print(f"Adaptating model  from checkpoint: {cfg.adapt_from}")
+        print(f"adapting model from checkpoint: {cfg.adapt_from}")
 
     # Calculate exact parameter count
     param_count = sum(p.numel() for p in model.parameters() if p.requires_grad)
