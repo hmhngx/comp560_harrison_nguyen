@@ -159,6 +159,8 @@ def main() -> None:
 
     seq_len = train_dataset.max_len
     print(f"Sequence length : {seq_len} tokens")
+    # We use seq_len - 1 because training is next-token prediction:
+    # inputs are tokens [0..n-2] and targets are shifted tokens [1..n-1].
     print(f"Batch shape     : ({cfg.batch_size}, {seq_len - 1})")
 
     train_loader = DataLoader(
@@ -330,7 +332,7 @@ def main() -> None:
         print("Warning: matplotlib not installed. Skipping plot layout creation.")
 
     # --- Persist weights ---
-    weights_path = cfg.out_dir / "completion_model.pth"
+    weights_path = cfg.out_dir / "model.pth"
     model_cfg = ModelConfig(
         seq_len=seq_len,
         d_model=cfg.embedding_dim,

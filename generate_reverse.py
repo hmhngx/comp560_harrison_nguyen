@@ -28,7 +28,7 @@ def main() -> None:
     device = "cuda" if torch.cuda.is_available() else "cpu"
     vocab = Vocabulary.from_pickle(args.data_dir / "meta.pkl")
     model, model_cfg = load_model_and_config(
-        args.out_dir / "completion_model.pth",
+        args.out_dir / "model.pth",
         vocab,
         device,
     )

@@ -74,7 +74,7 @@ def test_tiny_end_to_end_pipeline_with_small_transformer(tmp_path: Path) -> None
         cwd=tmp_path,
     )
     assert train_tiny.returncode == 0, train_tiny.stderr
-    assert (tiny_out_dir / "completion_model.pth").exists()
+    assert (tiny_out_dir / "model.pth").exists()
     assert (tiny_out_dir / "metrics.csv").exists()
     tiny_output = (train_tiny.stdout + train_tiny.stderr).lower()
     assert "train acc" in tiny_output
@@ -114,7 +114,7 @@ def test_tiny_end_to_end_pipeline_with_small_transformer(tmp_path: Path) -> None
         cwd=tmp_path,
     )
     assert train_compat.returncode == 0, train_compat.stderr
-    assert (compat_out_dir / "completion_model.pth").exists()
+    assert (compat_out_dir / "model.pth").exists()
 
     # 4b) Adapt model from the compatibility checkpoint with fresh run settings.
     adapt = run_script(
@@ -137,12 +137,12 @@ def test_tiny_end_to_end_pipeline_with_small_transformer(tmp_path: Path) -> None
             "--n-layers",
             "4",
             "--adapt-from",
-            str(compat_out_dir / "completion_model.pth"),
+            str(compat_out_dir / "model.pth"),
         ],
         cwd=tmp_path,
     )
     assert adapt.returncode == 0, adapt.stderr
-    assert (adapt_out_dir / "completion_model.pth").exists()
+    assert (adapt_out_dir / "model.pth").exists()
     assert "adapting model from checkpoint" in (adapt.stdout + adapt.stderr).lower()
 
     # 5) Single prompt inference should execute successfully.

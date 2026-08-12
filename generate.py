@@ -63,7 +63,7 @@ def main() -> None:
 
     vocab = Vocabulary.from_pickle(cfg.data_dir / "meta.pkl")
     model, model_cfg = load_model_and_config(
-        weights_path=cfg.out_dir / "completion_model.pth",
+        weights_path=cfg.out_dir / "model.pth",
         vocab=vocab,
         device=device,
     )

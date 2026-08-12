@@ -40,7 +40,7 @@ Examine the outputs. Do the accuracies on phone book A and phone book B correspo
 
 4. Phase B: adapt Phase A model to phonebook B
 ```bash
- py train_completions.py --data-dir phonebook/data_phaseB --out-dir phonebook/out_phaseB --adapt-from phonebook/out_phaseA/completion_model.pth phonebook/config/phonebook.py
+ py train_completions.py --data-dir phonebook/data_phaseB --out-dir phonebook/out_phaseB --adapt-from phonebook/out_phaseA/model.pth phonebook/config/phonebook.py
  ```
 Again examine the outputs, and decide if the accuracies on phone book A and phone book B correspond to your expectations.
 

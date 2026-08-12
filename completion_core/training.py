@@ -110,7 +110,7 @@ def run_epoch(
                 if batch_idx % log_interval == 0:
                     print(
                         f"Epoch {epoch}/{total_epochs} | "
-                        f"Batch {batch_idx}/{len(loader)} | "
+                        # f"Batch {batch_idx}/{len(loader)} | "
                         f"Loss: {loss.item():.4f}"
                     )
 

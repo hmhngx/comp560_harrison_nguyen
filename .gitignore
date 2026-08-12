@@ -183,6 +183,9 @@ inputs/
 *.pt
 *.pth
 
+# output data
+out/
+
 # Saved metrics
 metrics.csv
 

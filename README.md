@@ -7,6 +7,8 @@ In this module, you will learn how to train your first large language model and 
 ## Prerequisites
 We assume you already have some familiarity with Python, command line interfaces such as bash or PowerShell, git, GitHub, and virtual environments. If you are not familiar with these topics, please spend a few days completing online tutorials.
 
+We also assume you have read an informal account of how large language models and transformer models work. One recommended source for this is Chapter 10, "Generative AI: Unprecedented Scale, Surprising Simplicity" of the 2026 book [Thinking AI: How Artificial Intelligence Emulates Human Understanding](https://johnmaccormick.github.io/thinkingAI-web/). Dickinson students have free electronic access to this through the Dickinson Library. If you do not have this access, contact a lab member for a copy of the chapter. 
+
 Assuming you have this prerequisite knowledge, you should clone this repo, create a virtual environment, and install the required packages (e.g., `pip install -r requirements.txt`). A GPU is _not_ required for this module. If you have a GPU and you want to use it, check your CUDA driver version and install the corresponding version of the `torch` package.
 
 
@@ -49,16 +51,38 @@ By default, the `prepare.py` script splits the input data into a training set co
 
 
 ### 3. Train the model.
-Now that the tokens are prepped, you can kick off the training routine. Run:
+Now that the tokens are prepped, we can kick off the training routine. Take a look at the configuration file that will be used for this: `config/config.py`. Read over the comments for each parameter to build an elementary understanding of them. Don't worry about unfamiliar terminology. This is just a superficial familiarization.
+
+Once you understand the configuration file, use it to run the training script:
 ```
-cd ..
-python train_completions.py config/config_1char.py
+python -u train.py config/config.py
 ```
-By default, the model will run for 100 epochs (complete passes through the data) to learn the underlying sequence pattern. This may take about two minutes on a standard laptop.
-- Train Loss: Represents how well the model is fitting the data it is actively studying.
-- Val Loss: Represents how well the model generalizes to unseen validation data.
+(The `-u` flag makes the output look better on some systems.)
+
+By default, the model will run for 30 epochs to learn the underlying sequence pattern. (An epoch is a complete pass through the data.) This should take less than a minute on a standard laptop.
+
+Let's examine the output of the training process. The output will show the loss at each epoch:
+```
+Epoch 1/30 | Loss: 4.0577
+Epoch 2/30 | Loss: 1.4594
+Epoch 3/30 | Loss: 0.1517
+Epoch 4/30 | Loss: 0.0371
+```
+The loss is a measure of how well the model is fitting the training data. The loss should decrease over time as the model learns. 
+
+Periodically the training script prints out a more detailed summary of training progress:
+```
+Epoch 10 summary | Time: 0.78s
+  Train loss : 0.0067
+  Val loss   : 0.0065
+  Train acc  : token=100.00% seq=100.00%
+  Val acc    : token=100.00% seq=100.00%
+```
+The training summary shows the model's performance on both the training and validation datasets. They lost as an indirect measure of performance, while the accuracy metrics Are calculated from actual inputs and outputs . They indicate the percentage of correct outputs on the training and validation data respectively . This accuracy can be computed at the token level or the sequence level. The token level indicates what percentage of individual tokens were correct, While the sequence level is the percentage of entire output sequences that were correct. For example, if the input `abcd` produces output `ABCE`, 75% All of the tokens are correct but the sequence as a whole is incorrect.
+
 ### 4. Test for accuracy.
-Once training concludes, a model checkpoint named `completion_model.pth` will be saved inside the `out_1char/` directory. To evaluate its structural accuracy against your generated text, run:
+
+Once training concludes, a model checkpoint named with the filename extension `.pth` will be saved in the output directory. This is a binary format that we cannot examine in more detail. However, we can load the model checkpoint into a new program and use it to generate new outputs based on a file of inputs.
 ```
 python generate.py inputs/capital.txt
 ```

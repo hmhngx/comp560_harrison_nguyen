@@ -48,7 +48,7 @@ def main() -> None:
     device = "cuda" if torch.cuda.is_available() else "cpu"
     out_dir = Path(args.out_dir)
     data_dir = Path(args.data_dir)
-    weights_path = out_dir / "completion_model.pth"
+    weights_path = out_dir / "model.pth"
 
     if not weights_path.exists():
         raise FileNotFoundError(f"Could not find model weights at {weights_path}")
