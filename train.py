@@ -34,8 +34,8 @@ from completion_core.vocabulary import Vocabulary
 
 @dataclass
 class TrainConfig:
-    data_dir: Path = Path("1-Char/data")
-    out_dir: Path = Path("out_1char")
+    data_dir: Path = Path("data")
+    out_dir: Path = Path("out")
     adapt_from: Path | None = None
     device: str = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -63,8 +63,8 @@ def parse_args() -> TrainConfig:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("config_file", type=str, nargs="?", default=None,
                         help="Optional path to a nanoGPT-style python config file")
-    parser.add_argument("--data-dir", type=Path, default=Path("1-Char/data"))
-    parser.add_argument("--out-dir", type=Path, default=Path("out_1char"))
+    parser.add_argument("--data-dir", type=Path, default=Path("data"))
+    parser.add_argument("--out-dir", type=Path, default=Path("out"))
     parser.add_argument("--device", type=str, default="cuda" if torch.cuda.is_available() else "cpu")
     parser.add_argument("--embedding-dim", type=int, default=128)
     parser.add_argument("--n-heads", type=int, default=4)

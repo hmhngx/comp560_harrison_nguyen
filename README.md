@@ -97,14 +97,14 @@ Your goal is to generate 3,000 lines of addition problems modulo 100 using the m
 Because a complete $100 \times 100$ addition table contains 10,000 total permutations, your model will only see 30% of the possible data during training.
 Your Task: Note that `make_inputs_add.py` takes arguments `V` and `N`, where `V` is the modulus and `N` is the number of lines generated. Using this, create and run a command to generate `inputs/add.txt` based on the data presented earlier.
 ### 2. Prepare and Train the Data
-Now, prepare your newly generated `inputs/add.txt` file for training and kick off the training routine just like you did in the first experiment.
-Pro-Tip: Mathematical patterns take longer to learn than simple memorization. Before running the training script, open config_1char.py and locate the epochs variable, and increase it (e.g., set epochs = 200 or higher) to give the network enough time to discover the underlying arithmetic logic.
+Now, prepare your newly generated `inputs/add.txt` file for training and kick off the training routine as in the first experiment.
+Pro-Tip: Mathematical patterns take longer to learn than simple memorization. Before running the training script, open `config.py`, locate the epochs variable, and increase it (e.g., set epochs = 50 or higher) to give the network enough time to discover the underlying arithmetic logic.
 ### 3. Exhaustive Evaluation
-While you can test accuracy using generate.py on your input file, we want to see if the model actually understands addition globally. Try a few single test cases using `python generate_one.py`. We can test the model's conceptual understanding by sweeping every single possible combination from $0+0$ to $99+99$. To do this, use:
+You can test accuracy using `generate.py` on your input file, but it has seen most of that data. Instead, try a few single test cases using `python generate_one.py`. Then, test the model comprehensively by sweeping every combination from $0+0$ to $99+99$. This is achieved using a custom script called `generate_all_additions.py`:
 ```
-python generate_all.py
+python generate_all_additions.py
 ```
-Note that the accuracy is higher than 30%. That is because the model is learning an underlying pattern and not just memorizing the data.
+Note that the accuracy is higher than 30%. (The default settings give an accuracy of about 96%). That is because the model has learned an underlying pattern and not just memorized the data.
 
 
 ## Running the Test Suite
@@ -115,20 +115,20 @@ The project includes a small, refactor-focused pytest suite with fast and integr
 Runs CLI smoke checks and tiny data-logic checks only:
 
 ```
-./venv/Scripts/python.exe -m pytest -q -m "not integration"
+python -m pytest -q -m "not integration"
 ```
 
 ### Integration tests (end-to-end tiny pipeline)
 Runs only integration checks (including tiny training/inference flow):
 
 ```
-./venv/Scripts/python.exe -m pytest -q -m integration
+python -m pytest -q -m integration
 ```
 
 ### Full suite
 Runs everything:
 
 ```
-./venv/Scripts/python.exe -m pytest -q
+python -m pytest -q
 ```
 

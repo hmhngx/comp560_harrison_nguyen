@@ -1,6 +1,6 @@
 # 1-Character Tokenization Experiment Configuration
 # out_dir = "out_phbook"
-# data_dir = "1-Char/data"
+# data_dir = "data"
 
 batch_size = 64
 epochs = 100

@@ -4,7 +4,7 @@ Evaluate the accuracy of a trained sequence completion transformer.
 Usage:
     python generate.py
     python generate.py path/to/eval.txt
-    python generate.py --out-dir out_1char --data-dir 1-Char/data
+    python generate.py --out-dir out --data-dir data
 """
 
 from __future__ import annotations
@@ -22,8 +22,8 @@ from completion_core.vocabulary import Vocabulary
 
 @dataclass
 class EvalConfig:
-    out_dir: Path = Path("out_1char")
-    data_dir: Path = Path("1-Char/data")
+    out_dir: Path = Path("out")
+    data_dir: Path = Path("data")
     eval_file: Path | None = None
     max_new_tokens: int = 10
 
@@ -37,8 +37,8 @@ def parse_args() -> EvalConfig:
         default=None,
         help="Path to the evaluation file (default: <data-dir>/input.txt)",
     )
-    parser.add_argument("--out-dir", type=Path, default=Path("out_1char"))
-    parser.add_argument("--data-dir", type=Path, default=Path("1-Char/data"))
+    parser.add_argument("--out-dir", type=Path, default=Path("out"))
+    parser.add_argument("--data-dir", type=Path, default=Path("data"))
     parser.add_argument(
         "--max-new-tokens",
         type=int,

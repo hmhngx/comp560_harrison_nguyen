@@ -1,3 +1,5 @@
+"""Generate an exhaustive accuracy report for the addition model."""
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -11,8 +13,8 @@ from completion_core.vocabulary import Vocabulary
 
 def main() -> None:
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    out_dir = Path("out_1char")
-    data_dir = Path("1-Char/data")
+    out_dir = Path("out")
+    data_dir = Path("data")
     weights_path = out_dir / "model.pth"
 
     if not weights_path.exists():

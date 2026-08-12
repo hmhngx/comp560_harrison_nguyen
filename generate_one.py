@@ -22,14 +22,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--out-dir",
         type=str,
-        default="out_1char",
-        help="Directory containing the model checkpoint (default: out_1char)",
+        default="out",
+        help="Directory containing the model checkpoint (default: out)",
     )
     parser.add_argument(
         "--data-dir",
         type=str,
-        default="1-Char/data",
-        help="Directory containing metadata vocabulary (default: 1-Char/data)",
+        default="data",
+        help="Directory containing metadata vocabulary (default: data)",
     )
     return parser.parse_args()
 
