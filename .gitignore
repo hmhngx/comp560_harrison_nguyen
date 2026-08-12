@@ -185,12 +185,13 @@ inputs/
 
 # output data
 out/
+phonebook/out_*/
 
 # Saved metrics
 metrics.csv
 
 # Temporary configuration files
-config/*_temp.py
+**/config/*_temp.py
 
 # Temporary commit message files
 .commit_msg_proposed

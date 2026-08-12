@@ -26,21 +26,21 @@ cd ..
 
 2. Prepare the Phase A and Phase B data separately. Notice that to compare the remembering and forgetting properties we train and evaluate on separate data sets. In phase A, we train on phonebook A, but evaluate on phonebook B. In phase B, we train on phonebook B, but evaluate on phone book A.
 ```bash
-py prepare_phonebook.py --train-input inputs/phonebookA.txt --eval-input inputs/phonebookB.txt --out-dir data_phase1
-py prepare_phonebook.py --train-input inputs/phonebookB.txt --eval-input inputs/phonebookA.txt --out-dir data_phase2
+py prepare_phonebook.py --train-input inputs/phonebookA.txt --eval-input inputs/phonebookB.txt --out-dir data_phaseA
+py prepare_phonebook.py --train-input inputs/phonebookB.txt --eval-input inputs/phonebookA.txt --out-dir data_phaseB
 ```
 
 3. Train Phase A model
 ```bash
 # back to root dir
 cd ..
-py train_completions.py --data-dir phonebook/data_phaseA --out-dir phonebook/out_phaseA phonebook/config/phonebook.py
+py -u train.py --data-dir phonebook/data_phaseA --out-dir phonebook/out_phaseA phonebook/config/phonebook.py
 ```
 Examine the outputs. Do the accuracies on phone book A and phone book B correspond to your expectations?
 
 4. Phase B: adapt Phase A model to phonebook B
 ```bash
- py train_completions.py --data-dir phonebook/data_phaseB --out-dir phonebook/out_phaseB --adapt-from phonebook/out_phaseA/model.pth phonebook/config/phonebook.py
+py -u train.py --data-dir phonebook/data_phaseB --out-dir phonebook/out_phaseB --adapt-from phonebook/out_phaseA/model.pth phonebook/config/phonebook.py
  ```
 Again examine the outputs, and decide if the accuracies on phone book A and phone book B correspond to your expectations.
 
