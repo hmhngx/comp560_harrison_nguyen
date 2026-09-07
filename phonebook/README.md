@@ -44,6 +44,15 @@ py -u train.py --data-dir phonebook/data_phaseB --out-dir phonebook/out_phaseB -
  ```
 Again examine the outputs, and decide if the accuracies on phonebook A and phonebook B correspond to your expectations.
 
+To generate a phone-number prediction for a name, replace `Full Name` with any full name from `phonebookA.txt` or `phonebookB.txt`, then run the command for the model you want to query:
+```bash
+# Query the Phase A model
+python generate_one.py --data-dir phonebook/data_phaseA --out-dir phonebook/out_phaseA "Full Name"
+
+# Query the Phase B model
+python generate_one.py --data-dir phonebook/data_phaseB --out-dir phonebook/out_phaseB "Full Name"
+```
+
 ## Next steps
 
 You are ready to begin research on various aspects of the memory remembering and forgetting process. Here are a few things to try, in no particular order. Consult with the instructor and other students to get other suggestions for your initial research direction.
