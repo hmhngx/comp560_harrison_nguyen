@@ -13,7 +13,7 @@ seed = 54321
 # Number of samples per batch during training
 batch_size = 64
 # Number of training epochs (complete passes through the dataset)
-epochs = 30
+epochs = 50
 # Dimension of embedding vectors (an embedding vector is a numerical representation of what the model is currently "thinking")
 embedding_dim = 128
 # Number of attention heads in transformer
