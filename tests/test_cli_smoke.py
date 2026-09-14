@@ -59,6 +59,7 @@ def test_torch_scripts_show_help_or_fail_with_missing_dependency() -> None:
             if script == "train.py":
                 assert "--adapt-from" in combined
                 assert "--accuracy-interval" in combined
+                assert "--seed" in combined
         else:
             assert result.returncode != 0
             assert "no module named 'torch'" in combined

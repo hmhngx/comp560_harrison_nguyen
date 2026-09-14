@@ -72,6 +72,7 @@ def parse_args() -> TrainConfig:
     parser.add_argument("--batch-size", type=int, default=32)
     parser.add_argument("--epochs", type=int, default=100)
     parser.add_argument("--lr", type=float, default=1e-3)
+    parser.add_argument("--seed", type=int, default=42, help="Random seed (default: 42)")
     parser.add_argument(
         "--accuracy-interval",
         type=int,
@@ -114,6 +115,7 @@ def parse_args() -> TrainConfig:
     if "--batch-size" in sys.argv: cfg.batch_size = args.batch_size
     if "--epochs" in sys.argv: cfg.epochs = args.epochs
     if "--lr" in sys.argv: cfg.lr = args.lr
+    if "--seed" in sys.argv: cfg.seed = args.seed
     if "--accuracy-interval" in sys.argv: cfg.accuracy_interval = args.accuracy_interval
     if "--adapt-from" in sys.argv: cfg.adapt_from = args.adapt_from
 
