@@ -53,6 +53,7 @@ class TrainConfig:
     seed: int = 42
     log_interval: int = 50  # batches between progress prints
     accuracy_interval: int = 10  # epochs between no-grad train/val accuracy checks
+    l2sp_lambda: float = 0.0  # L2-SP penalty strength; 0.0 means off
 
 
 # ---------------------------------------------------------------------------
@@ -84,6 +85,13 @@ def parse_args() -> TrainConfig:
         type=Path,
         default=None,
         help="Path to a checkpoint to initialize model weights for model adaptation / fine-tuning (default: None)",
+    )
+    parser.add_argument(
+        "--l2sp-lambda",
+        type=float,
+        default=0.0,
+        help="L2-SP regularization strength: penalizes drift from the --adapt-from "
+        "checkpoint's weights (default: 0.0, meaning off)",
     )
     args = parser.parse_args()
 
@@ -118,6 +126,7 @@ def parse_args() -> TrainConfig:
     if "--seed" in sys.argv: cfg.seed = args.seed
     if "--accuracy-interval" in sys.argv: cfg.accuracy_interval = args.accuracy_interval
     if "--adapt-from" in sys.argv: cfg.adapt_from = args.adapt_from
+    if "--l2sp-lambda" in sys.argv: cfg.l2sp_lambda = args.l2sp_lambda
 
     if cfg.accuracy_interval < 1:
         raise ValueError("--accuracy-interval must be >= 1")
@@ -195,6 +204,10 @@ def main() -> None:
             ) from exc
         print(f"adapting model from checkpoint: {cfg.adapt_from}")
 
+    old_params = None
+    if cfg.adapt_from is not None and cfg.l2sp_lambda > 0:
+        old_params = {name: p.detach().clone() for name, p in model.named_parameters()}
+
     # Calculate exact parameter count
     param_count = sum(p.numel() for p in model.parameters() if p.requires_grad)
     print(f"Trainable Model Parameters: {param_count:,}")
@@ -237,6 +250,7 @@ def main() -> None:
             model=model, loader=train_loader, vocab_size=vocab.vocab_size,
             criterion=criterion, optimizer=optimizer, grad_clip=cfg.grad_clip,
             device=cfg.device, log_interval=cfg.log_interval, epoch=epoch, total_epochs=cfg.epochs,
+            old_params=old_params, l2sp_lambda=cfg.l2sp_lambda,
         )
         
         epoch_time = time.perf_counter() - start_time

@@ -77,6 +77,19 @@ class SequenceDataset(Dataset):
         return x, y
 
 
+def l2sp_penalty(model: nn.Module, old_params: dict[str, torch.Tensor]) -> torch.Tensor:
+    """Sum of squared L2 distance between current params and a frozen snapshot.
+
+    Caller multiplies by the L2-SP lambda; unweighted here so it stays testable
+    against hand-computed values independent of any particular lambda.
+    """
+    return sum(
+        (p - old_params[name]).pow(2).sum()
+        for name, p in model.named_parameters()
+        if name in old_params
+    )
+
+
 def run_epoch(
     model: nn.Module,
     loader: DataLoader,
@@ -88,6 +101,8 @@ def run_epoch(
     log_interval: int,
     epoch: int,
     total_epochs: int,
+    old_params: Optional[dict[str, torch.Tensor]] = None,
+    l2sp_lambda: float = 0.0,
 ) -> float:
     is_train = optimizer is not None
     model.train(is_train)
@@ -102,8 +117,13 @@ def run_epoch(
             loss = criterion(logits.view(-1, vocab_size), y_batch.view(-1))
 
             if is_train:
+                backward_loss = loss
+                if old_params is not None and l2sp_lambda > 0:
+                    penalty = l2sp_penalty(model, old_params)
+                    backward_loss = loss + l2sp_lambda * penalty
+
                 optimizer.zero_grad()
-                loss.backward()
+                backward_loss.backward()
                 nn.utils.clip_grad_norm_(model.parameters(), grad_clip)
                 optimizer.step()
 

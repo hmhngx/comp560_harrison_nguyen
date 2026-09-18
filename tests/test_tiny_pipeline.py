@@ -145,6 +145,47 @@ def test_tiny_end_to_end_pipeline_with_small_transformer(tmp_path: Path) -> None
     assert (adapt_out_dir / "model.pth").exists()
     assert "adapting model from checkpoint" in (adapt.stdout + adapt.stderr).lower()
 
+    # 4c) --l2sp-lambda must change the training trajectory relative to an
+    # otherwise-identical adapt run with the penalty off. One epoch isn't
+    # enough to observe this in the *reported* loss (the penalty can only
+    # affect a step after params have already drifted from old_params by at
+    # least one prior step), so this uses --epochs 3.
+    def run_adapt(out_dir: Path, extra_args: list[str]) -> subprocess.CompletedProcess[str]:
+        return run_script(
+            "train.py",
+            [
+                "--device", "cpu",
+                "--data-dir", str(data_dir),
+                "--out-dir", str(out_dir),
+                "--epochs", "3",
+                "--batch-size", "4",
+                "--embedding-dim", "128",
+                "--n-heads", "4",
+                "--n-layers", "4",
+                "--adapt-from", str(compat_out_dir / "model.pth"),
+                *extra_args,
+            ],
+            cwd=tmp_path,
+        )
+
+    no_l2sp_out_dir = tmp_path / "adapt_no_l2sp_out"
+    l2sp_out_dir = tmp_path / "adapt_l2sp_out"
+    adapt_no_l2sp = run_adapt(no_l2sp_out_dir, [])
+    assert adapt_no_l2sp.returncode == 0, adapt_no_l2sp.stderr
+    adapt_l2sp = run_adapt(l2sp_out_dir, ["--l2sp-lambda", "1000.0"])
+    assert adapt_l2sp.returncode == 0, adapt_l2sp.stderr
+    assert (l2sp_out_dir / "model.pth").exists()
+
+    def final_train_loss(out_dir: Path) -> str:
+        with (out_dir / "metrics.csv").open(newline="", encoding="utf-8") as fh:
+            rows = list(csv.reader(fh))
+        return rows[-1][1]  # "Train Loss" column
+
+    assert final_train_loss(no_l2sp_out_dir) != final_train_loss(l2sp_out_dir), (
+        "a large --l2sp-lambda must measurably change the training trajectory "
+        "relative to an otherwise-identical adapt run with the penalty off"
+    )
+
     # 5) Single prompt inference should execute successfully.
     infer_one = run_script(
         "generate_one.py",
