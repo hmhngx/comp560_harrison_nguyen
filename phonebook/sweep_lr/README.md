@@ -182,6 +182,60 @@ early stopping (around epoch 50-60 instead of 100) beat the LR-only ceiling,
 given λ=0.1's mid-training bump to 80-90%? The trajectory above suggests it
 might, but that's a different experiment than the one scoped this week.
 
+## Part 4 — early stopping + L2-SP: is the mid-training bump real, or just slower training? (2026-09-18)
+
+Part 3 compared λ=0 and λ=0.1 **at the same epoch number** and found λ=0.1
+retains more of phonebook A at epochs 50-60 (80-90% vs. 70%). That
+comparison has a confound: λ=0.1's penalty competes with the task loss, so
+it could simply be learning phonebook B *more slowly* -- in which case
+"more of A retained at epoch 50" would just mean "less far along," not a
+genuine property of L2-SP. It's also the wrong framing of the question:
+early stopping alone, with **no** L2-SP, already retains 70-90% of A at
+epochs 30-80 (Part 1's own finding that fewer adaptation epochs preserve
+more of A), so "beats the 50% epoch-100 ceiling" is trivially true for
+*any* early-stopped run, λ=0 included.
+
+Re-ran λ=0 and λ=0.1 with `--accuracy-interval 1` for full per-epoch
+resolution (Part 3 only logged every 10 epochs), then compared them at
+**matched Phase-B learning progress** -- closest Train Loss, cross-checked
+against closest Train Token Acc -- instead of matched epoch number. That's
+the actual control for "is this just slower training."
+
+```bash
+python train.py --data-dir phonebook/data_phaseB --out-dir phonebook/sweep_lr/seeded/lr0.0001_ep100_seed42_l2sp0_finegrained --adapt-from phonebook/out_phaseA/model.pth phonebook/config/phonebook.py --lr 0.0001 --epochs 100 --seed 42 --l2sp-lambda 0 --accuracy-interval 1
+python train.py --data-dir phonebook/data_phaseB --out-dir phonebook/sweep_lr/seeded/lr0.0001_ep100_seed42_l2sp0.1_finegrained --adapt-from phonebook/out_phaseA/model.pth phonebook/config/phonebook.py --lr 0.0001 --epochs 100 --seed 42 --l2sp-lambda 0.1 --accuracy-interval 1
+```
+
+**Result: mostly confound, but with a real, narrow exception.** For most of
+training, matching on progress instead of epoch erases the gap entirely
+(Δ = 0). But in one specific window -- train token acc ≈ 0.42-0.48,
+λ=0.1's epochs ~55-65 -- there's a reproducible advantage that survives the
+matched-progress control under *both* matching variables:
+
+| λ=0.1 epoch | λ=0.1 train tok acc | λ=0.1 val seq acc | matched λ=0 epoch | λ=0 train tok acc | λ=0 val seq acc | Δ val seq acc |
+|---|---|---|---|---|---|---|
+| 55 | 0.4231 | 90% | 50 | 0.4231 | 70% | **+20pp** |
+| 60 | 0.4538 | 90% | 59 | 0.4538 | 70% | **+20pp** |
+| 65 | 0.4769 | 80% | 60 | 0.4846 | 70% | +10pp |
+
+So L2-SP at λ=0.1 does do something beyond just slowing training down --
+at matched learning progress, not just matched epoch -- but only in this
+narrow window; everywhere else the matched-progress gap is zero, and both
+runs converge to the same 50% floor by epoch 100 regardless of λ.
+
+**Caveats, stated now, not after the fact:**
+- `Val Seq Acc` only takes 10 discrete values (10 phonebook-A entries), so
+  small deltas are coarse. A lone -10pp blip at epoch 90 under the
+  token-acc matching (absent under the loss matching) is within that
+  discretization noise, not a second effect worth chasing.
+- This is one λ (0.1), one window, one Phase-A checkpoint, one seed, one
+  lr -- the same single-checkpoint caveat as Part 3, plus a new one: the
+  window's location/width for the *other* untested lambdas (1e-4, 1e-3,
+  1e-2) is unknown without equally fine-grained runs for each.
+- This is a real, cross-validated observation, not yet a claim: worth
+  finer lambda resolution around 0.1 before treating "stop early with
+  L2-SP" as a strategy rather than a two-point pattern.
+
 ## Primary metric (locked in)
 
 **Val sequence accuracy on phonebook A** is the primary forgetting metric
