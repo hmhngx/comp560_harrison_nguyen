@@ -130,7 +130,13 @@ def parse_args() -> TrainConfig:
 
     if cfg.accuracy_interval < 1:
         raise ValueError("--accuracy-interval must be >= 1")
-        
+
+    if cfg.l2sp_lambda > 0 and cfg.adapt_from is None:
+        raise ValueError(
+            "--l2sp-lambda > 0 requires --adapt-from: there is no prior "
+            "checkpoint snapshot to penalize drift from otherwise."
+        )
+
     return cfg
 
 
@@ -204,8 +210,9 @@ def main() -> None:
             ) from exc
         print(f"adapting model from checkpoint: {cfg.adapt_from}")
 
+    # parse_args() already enforces that l2sp_lambda > 0 implies adapt_from is set.
     old_params = None
-    if cfg.adapt_from is not None and cfg.l2sp_lambda > 0:
+    if cfg.l2sp_lambda > 0:
         old_params = {name: p.detach().clone() for name, p in model.named_parameters()}
 
     # Calculate exact parameter count

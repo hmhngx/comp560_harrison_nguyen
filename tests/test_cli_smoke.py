@@ -112,3 +112,25 @@ def test_train_fails_cleanly_with_missing_meta(tmp_path: Path) -> None:
     combined = result.stdout + result.stderr
     assert result.returncode != 0
     assert "vocabulary file not found" in combined.lower()
+
+
+def test_train_fails_cleanly_with_l2sp_lambda_but_no_adapt_from(tmp_path: Path) -> None:
+    if not has_torch():
+        pytest.skip("torch is not installed in this environment")
+
+    # Deliberately uses a nonexistent data-dir too, to prove this is rejected
+    # by argument validation alone, before any file access -- not a
+    # coincidental failure from the missing data.
+    result = run_script(
+        "train.py",
+        [
+            "--data-dir", str(tmp_path / "missing_data"),
+            "--out-dir", str(tmp_path / "out"),
+            "--l2sp-lambda", "0.1",
+        ],
+        cwd=tmp_path,
+    )
+    combined = result.stdout + result.stderr
+    assert result.returncode != 0
+    assert "--l2sp-lambda" in combined
+    assert "--adapt-from" in combined
