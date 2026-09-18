@@ -115,6 +115,73 @@ different, arguably more interesting question — does *which* solution
 Phase-A's training happened to converge to affect how much it forgets — and
 is real future work, not something to fold into this week silently.
 
+## Part 3 — L2-SP regularization sweep (2026-09-18)
+
+Extended [`phonebook/run_lr_sweep.py`](../run_lr_sweep.py) with `--l2sp-lambdas`
+(crossed with `--lrs` and `--seeds`) to test whether L2-SP regularization
+(Li et al., 2018 — see [`phonebook/docs/mitigation-options.md`](../docs/mitigation-options.md)
+and [`phonebook/docs/L2-SP-regularization-chat.md`](../docs/L2-SP-regularization-chat.md))
+beats the LR-only ceiling from Part 1/2 (93.85% val token acc / 50.00% val seq
+acc, `lr=0.0001`, 100 epochs). L2-SP adds λ·Σᵢ‖θᵢ−θᵢ_old‖² to the training
+loss, where θ_old is a frozen snapshot of the Phase-A checkpoint taken right
+after `--adapt-from` loads it.
+
+Swept λ ∈ {0, 1e-4, 1e-3, 1e-2, 1e-1} at the same `lr=0.0001`, `epochs=100`,
+`seed=42` as the established best LR-only run (λ=0 reproduces that run
+exactly, byte-for-byte on every metric column):
+
+```bash
+python phonebook/run_lr_sweep.py --lrs 0.0001 --seeds 42 --l2sp-lambdas 0 0.0001 0.001 0.01 0.1
+```
+
+### Final-epoch (100) results
+
+| λ | Val token acc | Val seq acc | Val loss | Train loss |
+|---|---|---|---|---|
+| 0 (baseline) | 93.85% | 50.00% | 0.3872 | 1.2527 |
+| 1e-4 | 93.85% | 50.00% | 0.3871 | 1.2527 |
+| 1e-3 | 93.85% | 50.00% | 0.3861 | 1.2528 |
+| 1e-2 | 93.85% | 50.00% | 0.3765 | 1.2549 |
+| 1e-1 | 93.85% | 50.00% | 0.2920 | 1.3239 |
+
+### Finding: no λ in this range beats the LR-only ceiling at epoch 100 — but λ=0.1 visibly delays forgetting mid-training
+
+**Val sequence accuracy at epoch 100 is 50.00% for every λ tested, identical
+to the λ=0 baseline.** Val loss improves monotonically and substantially with
+λ (0.3872 → 0.2920 at λ=0.1) and train loss degrades slightly (the penalty
+trading off task fit, as expected), so the regularization is measurably doing
+*something* — but none of it converts into retaining a 6th phonebook-A entry
+beyond the 5/10 the baseline already retains at epoch 100.
+
+The full per-epoch trajectory is more informative than the final row alone.
+Comparing λ=0 to λ=0.1 val seq acc across epochs:
+
+| Epoch | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 100 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| λ=0   | 100% | 100% | 90% | 80% | 70% | 70% | 70% | 70% | 50% | 50% |
+| λ=0.1 | 100% | 100% | 90% | 80% | 80% | 90% | 70% | 70% | 60% | 50% |
+
+λ=0.1 retains *more* of phonebook A at epochs 50-60 (80-90% vs. 70%) before
+converging to the same 50% by epoch 100. This matches the "known limitation"
+flagged in `mitigation-options.md` *before* this sweep was run: L2-SP
+"penalizes parameter drift generically... may slow forgetting without fully
+preventing it." Confirmed empirically here, not just a theoretical caveat —
+at this λ range it slows forgetting but doesn't change the 100-epoch
+endpoint.
+
+**This is a single Phase-A checkpoint, one seed, one lr — not yet confirmed
+across independent starting points.** Per Part 2, seed has no effect on
+*this* Phase-B adaptation (it's fully deterministic), so re-running more
+seeds here would not add real replication. Genuine replication requires
+independently-trained Phase-A checkpoints (different seeds, no
+`--adapt-from`) — deferred, tracked as an open item, not folded into this
+result.
+
+**Possible next question (not run this week):** does L2-SP combined with
+early stopping (around epoch 50-60 instead of 100) beat the LR-only ceiling,
+given λ=0.1's mid-training bump to 80-90%? The trajectory above suggests it
+might, but that's a different experiment than the one scoped this week.
+
 ## Primary metric (locked in)
 
 **Val sequence accuracy on phonebook A** is the primary forgetting metric
