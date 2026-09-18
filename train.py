@@ -131,6 +131,13 @@ def parse_args() -> TrainConfig:
     if cfg.accuracy_interval < 1:
         raise ValueError("--accuracy-interval must be >= 1")
 
+    if cfg.l2sp_lambda < 0:
+        raise ValueError(
+            "--l2sp-lambda must be >= 0 (a negative value has no valid "
+            "interpretation -- it would reward drift from the checkpoint "
+            "instead of penalizing it)."
+        )
+
     if cfg.l2sp_lambda > 0 and cfg.adapt_from is None:
         raise ValueError(
             "--l2sp-lambda > 0 requires --adapt-from: there is no prior "

@@ -92,6 +92,9 @@ def main() -> None:
     )
     args = parser.parse_args()
 
+    if any(l2sp_lambda < 0 for l2sp_lambda in args.l2sp_lambdas):
+        parser.error("--l2sp-lambdas values must all be >= 0")
+
     args.out_root.mkdir(parents=True, exist_ok=True)
     manifest_path = args.out_root / "manifest.jsonl"
     git_state = get_git_state(ROOT_DIR)

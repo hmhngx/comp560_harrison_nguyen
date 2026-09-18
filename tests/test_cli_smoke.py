@@ -134,3 +134,24 @@ def test_train_fails_cleanly_with_l2sp_lambda_but_no_adapt_from(tmp_path: Path) 
     assert result.returncode != 0
     assert "--l2sp-lambda" in combined
     assert "--adapt-from" in combined
+
+
+def test_train_fails_cleanly_with_negative_l2sp_lambda(tmp_path: Path) -> None:
+    if not has_torch():
+        pytest.skip("torch is not installed in this environment")
+
+    # Negative lambda is rejected even with a syntactically-valid --adapt-from
+    # path, to prove this is a distinct check from the missing-checkpoint one.
+    result = run_script(
+        "train.py",
+        [
+            "--data-dir", str(tmp_path / "missing_data"),
+            "--out-dir", str(tmp_path / "out"),
+            "--l2sp-lambda", "-0.1",
+            "--adapt-from", str(tmp_path / "checkpoint.pth"),
+        ],
+        cwd=tmp_path,
+    )
+    combined = result.stdout + result.stderr
+    assert result.returncode != 0
+    assert "--l2sp-lambda" in combined

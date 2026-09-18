@@ -211,36 +211,62 @@ def test_large_l2sp_lambda_suppresses_drift_relative_to_no_penalty() -> None:
 # silently makes the flag a no-op.
 # ---------------------------------------------------------------------------
 
-def test_parse_args_l2sp_lambda_flag_sets_cfg(monkeypatch) -> None:
+def _parse_train_args(monkeypatch, argv: list[str]):
+    """Import train.py (a repo-root script, not a package) and call its
+    parse_args() under a monkeypatched sys.argv. sys.path.insert is a no-op
+    after the first call (module caching) but is cheap and kept local to this
+    one helper rather than repeated at every call site."""
     sys.path.insert(0, str(ROOT))
     import train as train_module
 
+    monkeypatch.setattr(sys, "argv", ["train.py", *argv])
+    return train_module.parse_args()
+
+
+def test_parse_args_l2sp_lambda_flag_sets_cfg(monkeypatch) -> None:
     # --adapt-from is required whenever --l2sp-lambda > 0 (see the dedicated
     # rejection test below); the path need not exist yet at parse time.
-    monkeypatch.setattr(
-        sys, "argv",
-        ["train.py", "--l2sp-lambda", "0.01", "--adapt-from", "some/checkpoint.pth"],
+    cfg = _parse_train_args(
+        monkeypatch, ["--l2sp-lambda", "0.01", "--adapt-from", "some/checkpoint.pth"]
     )
-    cfg = train_module.parse_args()
     assert cfg.l2sp_lambda == 0.01
 
 
 def test_parse_args_l2sp_lambda_defaults_to_zero(monkeypatch) -> None:
-    sys.path.insert(0, str(ROOT))
-    import train as train_module
-
-    monkeypatch.setattr(sys, "argv", ["train.py"])
-    cfg = train_module.parse_args()
+    cfg = _parse_train_args(monkeypatch, [])
     assert cfg.l2sp_lambda == 0.0
 
 
 def test_parse_args_rejects_l2sp_lambda_without_adapt_from(monkeypatch) -> None:
-    sys.path.insert(0, str(ROOT))
-    import train as train_module
-
-    monkeypatch.setattr(sys, "argv", ["train.py", "--l2sp-lambda", "0.01"])
     try:
-        train_module.parse_args()
+        _parse_train_args(monkeypatch, ["--l2sp-lambda", "0.01"])
         assert False, "expected ValueError for --l2sp-lambda without --adapt-from"
     except ValueError as exc:
         assert "--adapt-from" in str(exc)
+
+
+def test_parse_args_rejects_negative_l2sp_lambda_without_adapt_from(monkeypatch) -> None:
+    try:
+        _parse_train_args(monkeypatch, ["--l2sp-lambda", "-0.1"])
+        assert False, "expected ValueError for negative --l2sp-lambda"
+    except ValueError as exc:
+        assert "--l2sp-lambda" in str(exc)
+
+
+def test_parse_args_rejects_negative_l2sp_lambda_even_with_adapt_from(monkeypatch) -> None:
+    """A negative lambda is never valid, regardless of --adapt-from -- distinct
+    failure mode from the missing-checkpoint case, must not be masked by it."""
+    try:
+        _parse_train_args(
+            monkeypatch, ["--l2sp-lambda", "-0.1", "--adapt-from", "some/checkpoint.pth"]
+        )
+        assert False, "expected ValueError for negative --l2sp-lambda"
+    except ValueError as exc:
+        assert "--l2sp-lambda" in str(exc)
+
+
+def test_parse_args_accepts_zero_l2sp_lambda_with_no_adapt_from(monkeypatch) -> None:
+    """Boundary: 0.0 is the valid off-default and must not trip either check,
+    with or without --adapt-from."""
+    cfg = _parse_train_args(monkeypatch, ["--l2sp-lambda", "0"])
+    assert cfg.l2sp_lambda == 0.0
