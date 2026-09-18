@@ -27,7 +27,7 @@ DEFAULT_DATA_DIR = Path("phonebook/data_phaseB")
 DEFAULT_CONFIG = Path("phonebook/config/phonebook.py")
 
 
-def build_command(lr: float, epochs: int, seed: int, out_dir: Path) -> list[str]:
+def build_command(lr: float, epochs: int, seed: int, l2sp_lambda: float, out_dir: Path) -> list[str]:
     return [
         sys.executable,
         "train.py",
@@ -38,11 +38,17 @@ def build_command(lr: float, epochs: int, seed: int, out_dir: Path) -> list[str]
         "--lr", str(lr),
         "--epochs", str(epochs),
         "--seed", str(seed),
+        "--l2sp-lambda", str(l2sp_lambda),
     ]
 
 
-def run_name(lr: float, epochs: int, seed: int) -> str:
-    return f"lr{lr}_ep{epochs}_seed{seed}"
+def run_name(lr: float, epochs: int, seed: int, l2sp_lambda: float) -> str:
+    # Suffix only when l2sp_lambda deviates from the off-default, so existing
+    # lr/seed-only sweep directories (e.g. lr0.0001_ep100_seed42) keep their
+    # names and are correctly recognized as already-run by --overwrite's
+    # skip-existing check.
+    suffix = f"_l2sp{l2sp_lambda}" if l2sp_lambda != 0.0 else ""
+    return f"lr{lr}_ep{epochs}_seed{seed}{suffix}"
 
 
 def get_git_state(cwd: Path) -> dict[str, object]:
@@ -65,6 +71,10 @@ def main() -> None:
     parser.add_argument("--lrs", type=float, nargs="+", required=True, help="Learning rates to sweep")
     parser.add_argument("--epochs", type=int, default=100)
     parser.add_argument("--seeds", type=int, nargs="+", default=[42], help="Seeds to run at each lr")
+    parser.add_argument(
+        "--l2sp-lambdas", type=float, nargs="+", default=[0.0],
+        help="L2-SP lambda values to sweep, crossed with --lrs and --seeds (default: [0.0], i.e. off)",
+    )
     parser.add_argument("--out-root", type=Path, default=Path("phonebook/sweep_lr/seeded"))
     parser.add_argument("--dry-run", action="store_true", help="Print commands without running them")
     parser.add_argument(
@@ -86,15 +96,18 @@ def main() -> None:
     manifest_path = args.out_root / "manifest.jsonl"
     git_state = get_git_state(ROOT_DIR)
 
-    combos = list(itertools.product(args.lrs, args.seeds))
-    print(f"Planned runs: {len(combos)} ({len(args.lrs)} lr x {len(args.seeds)} seeds, {args.epochs} epochs each)")
+    combos = list(itertools.product(args.lrs, args.seeds, args.l2sp_lambdas))
+    print(
+        f"Planned runs: {len(combos)} ({len(args.lrs)} lr x {len(args.seeds)} seeds x "
+        f"{len(args.l2sp_lambdas)} l2sp-lambdas, {args.epochs} epochs each)"
+    )
     if git_state["dirty"]:
         print("WARNING: working tree has uncommitted changes -- results below won't be tied to a clean commit.")
 
-    for i, (lr, seed) in enumerate(combos, start=1):
-        name = run_name(lr, args.epochs, seed)
+    for i, (lr, seed, l2sp_lambda) in enumerate(combos, start=1):
+        name = run_name(lr, args.epochs, seed, l2sp_lambda)
         out_dir = args.out_root / name
-        cmd = build_command(lr, args.epochs, seed, out_dir)
+        cmd = build_command(lr, args.epochs, seed, l2sp_lambda, out_dir)
 
         print(f"\n[{i}/{len(combos)}] {' '.join(cmd)}")
 
@@ -125,6 +138,7 @@ def main() -> None:
             "lr": lr,
             "epochs": args.epochs,
             "seed": seed,
+            "l2sp_lambda": l2sp_lambda,
             "returncode": returncode,
             "timed_out": timed_out,
             "elapsed_sec": round(elapsed, 2),
