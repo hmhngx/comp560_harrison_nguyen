@@ -21,8 +21,8 @@ repo at [`phonebook/docs/L2-SP-regularization-chat.md`](L2-SP-regularization-cha
 
 **Implementation cost here — Low.** `train.py`'s training loop is a flat,
 simple loop (no framework abstraction to fight). Needs: (a) snapshot
-`model.state_dict()` immediately after `--adapt-from` loads it, before any
-Phase-B gradient step; (b) add the penalty term to the loss inside
+`model.named_parameters()` immediately after `--adapt-from` loads it, before
+any Phase-B gradient step; (b) add the penalty term to the loss inside
 `completion_core/training.py`'s `run_epoch`; (c) expose λ as a new CLI
 flag, same pattern as `--seed` (added this week). Realistic first draft:
 1–2 hours.

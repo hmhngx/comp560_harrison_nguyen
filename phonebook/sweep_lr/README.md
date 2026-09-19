@@ -18,9 +18,11 @@ reproduction" below for how this was subsequently confirmed.
 ### How the protocol was reconstructed
 
 `out_lr_0.001/metrics.csv` is decimal-identical, across all 8 metric columns,
-to [`phonebook/out_phaseB/metrics.csv`](../out_phaseB/metrics.csv). `out_phaseB`
-is the Phase-B adaptation command documented in
-[`phonebook/README.md`](../README.md):
+to `phonebook/out_phaseB/metrics.csv` produced by running the Phase-B
+adaptation command documented in [`phonebook/README.md`](../README.md) (not
+linked directly: `out_phaseB` is a gitignored build artifact like every
+`out_*` directory in this repo, reproducible via the command below, not
+committed):
 
 ```bash
 py -u train.py --data-dir phonebook/data_phaseB --out-dir phonebook/out_phaseB \
