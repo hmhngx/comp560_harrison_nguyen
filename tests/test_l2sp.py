@@ -270,3 +270,44 @@ def test_parse_args_accepts_zero_l2sp_lambda_with_no_adapt_from(monkeypatch) -> 
     with or without --adapt-from."""
     cfg = _parse_train_args(monkeypatch, ["--l2sp-lambda", "0"])
     assert cfg.l2sp_lambda == 0.0
+
+
+# ---------------------------------------------------------------------------
+# --flag=value syntax: argparse itself parses this fine, but the override
+# lines historically checked `"--flag" in sys.argv`, an exact-token match
+# that a token like "--flag=value" never satisfies. Every flag in parse_args
+# shares this mechanism, so this must be verified across old and new flags,
+# not just l2sp-lambda -- and specifically that it can't be used to bypass
+# the negative-lambda rejection.
+# ---------------------------------------------------------------------------
+
+def test_parse_args_equals_syntax_sets_seed(monkeypatch) -> None:
+    cfg = _parse_train_args(monkeypatch, ["--seed=999"])
+    assert cfg.seed == 999
+
+
+def test_parse_args_equals_syntax_sets_l2sp_lambda(monkeypatch) -> None:
+    cfg = _parse_train_args(
+        monkeypatch, ["--l2sp-lambda=0.5", "--adapt-from=some/checkpoint.pth"]
+    )
+    assert cfg.l2sp_lambda == 0.5
+
+
+def test_parse_args_equals_syntax_sets_pre_existing_flags(monkeypatch) -> None:
+    """--epochs and --lr predate --seed/--l2sp-lambda and share the same
+    override mechanism -- the fix must cover all of parse_args, not just the
+    two flags this week happened to add tests for."""
+    cfg = _parse_train_args(monkeypatch, ["--epochs=7", "--lr=0.005"])
+    assert cfg.epochs == 7
+    assert cfg.lr == 0.005
+
+
+def test_parse_args_rejects_negative_l2sp_lambda_via_equals_syntax(monkeypatch) -> None:
+    """The negative-lambda guard must not be bypassable by switching syntax:
+    --l2sp-lambda=-0.1 must still reach cfg.l2sp_lambda and still get rejected,
+    not silently fall back to the 0.0 default."""
+    try:
+        _parse_train_args(monkeypatch, ["--l2sp-lambda=-0.1"])
+        assert False, "expected ValueError for negative --l2sp-lambda via equals syntax"
+    except ValueError as exc:
+        assert "--l2sp-lambda" in str(exc)

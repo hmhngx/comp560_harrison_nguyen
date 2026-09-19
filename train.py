@@ -64,32 +64,40 @@ def parse_args() -> TrainConfig:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("config_file", type=str, nargs="?", default=None,
                         help="Optional path to a nanoGPT-style python config file")
-    parser.add_argument("--data-dir", type=Path, default=Path("data"))
-    parser.add_argument("--out-dir", type=Path, default=Path("out"))
-    parser.add_argument("--device", type=str, default="cuda" if torch.cuda.is_available() else "cpu")
-    parser.add_argument("--embedding-dim", type=int, default=128)
-    parser.add_argument("--n-heads", type=int, default=4)
-    parser.add_argument("--n-layers", type=int, default=4)
-    parser.add_argument("--batch-size", type=int, default=32)
-    parser.add_argument("--epochs", type=int, default=100)
-    parser.add_argument("--lr", type=float, default=1e-3)
-    parser.add_argument("--seed", type=int, default=42, help="Random seed (default: 42)")
+    # default=argparse.SUPPRESS (not a real default value) so an unset flag
+    # leaves no attribute on `args` at all. hasattr(args, ...) below then
+    # detects "was this flag actually given" correctly for every syntax
+    # argparse accepts (`--flag value`, `--flag=value`, unambiguous
+    # abbreviations) -- unlike the previous `"--flag" in sys.argv` check,
+    # which only ever matched the exact `--flag value` token pair and
+    # silently no-op'd for `=` syntax (verified: bypassed the --l2sp-lambda
+    # negative-value rejection below).
+    parser.add_argument("--data-dir", type=Path, default=argparse.SUPPRESS)
+    parser.add_argument("--out-dir", type=Path, default=argparse.SUPPRESS)
+    parser.add_argument("--device", type=str, default=argparse.SUPPRESS)
+    parser.add_argument("--embedding-dim", type=int, default=argparse.SUPPRESS)
+    parser.add_argument("--n-heads", type=int, default=argparse.SUPPRESS)
+    parser.add_argument("--n-layers", type=int, default=argparse.SUPPRESS)
+    parser.add_argument("--batch-size", type=int, default=argparse.SUPPRESS)
+    parser.add_argument("--epochs", type=int, default=argparse.SUPPRESS)
+    parser.add_argument("--lr", type=float, default=argparse.SUPPRESS)
+    parser.add_argument("--seed", type=int, default=argparse.SUPPRESS, help="Random seed (default: 42)")
     parser.add_argument(
         "--accuracy-interval",
         type=int,
-        default=10,
+        default=argparse.SUPPRESS,
         help="Run no-grad train/val token+sequence accuracy every N epochs (default: 10)",
     )
     parser.add_argument(
         "--adapt-from",
         type=Path,
-        default=None,
+        default=argparse.SUPPRESS,
         help="Path to a checkpoint to initialize model weights for model adaptation / fine-tuning (default: None)",
     )
     parser.add_argument(
         "--l2sp-lambda",
         type=float,
-        default=0.0,
+        default=argparse.SUPPRESS,
         help="L2-SP regularization strength: penalizes drift from the --adapt-from "
         "checkpoint's weights (default: 0.0, meaning off)",
     )
@@ -114,19 +122,19 @@ def parse_args() -> TrainConfig:
         if isinstance(cfg.out_dir, str):
             cfg.out_dir = Path(cfg.out_dir)
     
-    if "--data-dir" in sys.argv: cfg.data_dir = args.data_dir
-    if "--out-dir" in sys.argv: cfg.out_dir = args.out_dir
-    if "--device" in sys.argv: cfg.device = args.device
-    if "--embedding-dim" in sys.argv: cfg.embedding_dim = args.embedding_dim
-    if "--n-heads" in sys.argv: cfg.n_heads = args.n_heads
-    if "--n-layers" in sys.argv: cfg.n_layers = args.n_layers
-    if "--batch-size" in sys.argv: cfg.batch_size = args.batch_size
-    if "--epochs" in sys.argv: cfg.epochs = args.epochs
-    if "--lr" in sys.argv: cfg.lr = args.lr
-    if "--seed" in sys.argv: cfg.seed = args.seed
-    if "--accuracy-interval" in sys.argv: cfg.accuracy_interval = args.accuracy_interval
-    if "--adapt-from" in sys.argv: cfg.adapt_from = args.adapt_from
-    if "--l2sp-lambda" in sys.argv: cfg.l2sp_lambda = args.l2sp_lambda
+    if hasattr(args, "data_dir"): cfg.data_dir = args.data_dir
+    if hasattr(args, "out_dir"): cfg.out_dir = args.out_dir
+    if hasattr(args, "device"): cfg.device = args.device
+    if hasattr(args, "embedding_dim"): cfg.embedding_dim = args.embedding_dim
+    if hasattr(args, "n_heads"): cfg.n_heads = args.n_heads
+    if hasattr(args, "n_layers"): cfg.n_layers = args.n_layers
+    if hasattr(args, "batch_size"): cfg.batch_size = args.batch_size
+    if hasattr(args, "epochs"): cfg.epochs = args.epochs
+    if hasattr(args, "lr"): cfg.lr = args.lr
+    if hasattr(args, "seed"): cfg.seed = args.seed
+    if hasattr(args, "accuracy_interval"): cfg.accuracy_interval = args.accuracy_interval
+    if hasattr(args, "adapt_from"): cfg.adapt_from = args.adapt_from
+    if hasattr(args, "l2sp_lambda"): cfg.l2sp_lambda = args.l2sp_lambda
 
     if cfg.accuracy_interval < 1:
         raise ValueError("--accuracy-interval must be >= 1")
