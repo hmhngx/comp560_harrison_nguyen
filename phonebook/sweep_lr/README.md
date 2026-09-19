@@ -253,3 +253,16 @@ the model still know the fact."
 retrains in well under a minute on CPU (see the `Training Time (sec)` column
 in each `metrics.csv`, or `elapsed_sec` in `seeded/manifest.jsonl`), so
 re-training is cheaper than storing the checkpoints.
+
+## manifest.jsonl schema note
+
+`manifest.jsonl`'s schema grew twice: `l2sp_lambda`/`timed_out`/`git_commit`/
+`git_dirty` were added by the sweep-driver hardening and L2-SP work later
+than the first 10 rows. Those rows were backfilled (2026-09-18) with
+`l2sp_lambda: 0.0` and `timed_out: false` -- both definitionally correct,
+since the rows predate the L2-SP flag existing and each already has a
+recorded `returncode: 0`, which a timed-out run can't have. `git_commit` and
+`git_dirty` were backfilled as `null`, not guessed: this file's whole point
+is exact, non-reconstructed provenance, and a plausible-looking commit hash
+inferred from a timestamp would be exactly the kind of fabrication it exists
+to avoid. `null` means "not recorded when this run happened," nothing more.
