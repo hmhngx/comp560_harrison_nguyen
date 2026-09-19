@@ -184,7 +184,19 @@ early stopping (around epoch 50-60 instead of 100) beat the LR-only ceiling,
 given λ=0.1's mid-training bump to 80-90%? The trajectory above suggests it
 might, but that's a different experiment than the one scoped this week.
 
-## Part 4 — early stopping + L2-SP: is the mid-training bump real, or just slower training? (2026-09-18)
+## Part 4 — early stopping + L2-SP: is the mid-training bump real, or just slower training? (2026-09-18, corrected 2026-09-18)
+
+**This section replaces an earlier version of itself.** The first version of
+this analysis had two real errors, found by an independent full-scan audit
+and reproduced independently before rewriting anything below: its 3-row
+table was actually built from Train-Token-Acc matching while the prose
+called Train-Loss matching primary (the two disagree at epoch 55: Loss-
+matching gives +10pp there, not the +20pp the old table stated), and the
+underlying script only sampled every 5th epoch, which structurally could
+not see two real clusters the full 100-epoch scan below finds. The
+qualitative conclusion survives the correction; the specific numbers
+below are the corrected ones. The old commit is `6244e5b` if the prior
+version is needed for reference.
 
 Part 3 compared λ=0 and λ=0.1 **at the same epoch number** and found λ=0.1
 retains more of phonebook A at epochs 50-60 (80-90% vs. 70%). That
@@ -199,44 +211,57 @@ more of A), so "beats the 50% epoch-100 ceiling" is trivially true for
 
 Re-ran λ=0 and λ=0.1 with `--accuracy-interval 1` for full per-epoch
 resolution (Part 3 only logged every 10 epochs), then compared them at
-**matched Phase-B learning progress** -- closest Train Loss, cross-checked
-against closest Train Token Acc -- instead of matched epoch number. That's
-the actual control for "is this just slower training."
+**matched Phase-B learning progress** instead of matched epoch number --
+the actual control for "is this just slower training." Two independent
+matching variables (Train Loss, Train Token Acc), reported separately
+rather than conflated into one table, since they don't agree pointwise:
 
 ```bash
 python train.py --data-dir phonebook/data_phaseB --out-dir phonebook/sweep_lr/seeded/lr0.0001_ep100_seed42_l2sp0_finegrained --adapt-from phonebook/out_phaseA/model.pth phonebook/config/phonebook.py --lr 0.0001 --epochs 100 --seed 42 --l2sp-lambda 0 --accuracy-interval 1
 python train.py --data-dir phonebook/data_phaseB --out-dir phonebook/sweep_lr/seeded/lr0.0001_ep100_seed42_l2sp0.1_finegrained --adapt-from phonebook/out_phaseA/model.pth phonebook/config/phonebook.py --lr 0.0001 --epochs 100 --seed 42 --l2sp-lambda 0.1 --accuracy-interval 1
+python phonebook/sweep_lr/analyze_matched_progress.py
 ```
 
-**Result: mostly confound, but with a real, narrow exception.** For most of
-training, matching on progress instead of epoch erases the gap entirely
-(Δ = 0). But in one specific window -- train token acc ≈ 0.42-0.48,
-λ=0.1's epochs ~55-65 -- there's a reproducible advantage that survives the
-matched-progress control under *both* matching variables:
+**Result: mostly confound, with two real exceptions under Train-Loss
+matching (the stated primary method).** Of 100 epochs, 23 show a nonzero
+matched-progress delta, in two clusters -- everywhere else (77/100 epochs)
+the gap is exactly zero, meaning the naive matched-*epoch* comparison in
+Part 3 was mostly (not entirely) a training-speed artifact:
 
-| λ=0.1 epoch | λ=0.1 train tok acc | λ=0.1 val seq acc | matched λ=0 epoch | λ=0 train tok acc | λ=0 val seq acc | Δ val seq acc |
-|---|---|---|---|---|---|---|
-| 55 | 0.4231 | 90% | 50 | 0.4231 | 70% | **+20pp** |
-| 60 | 0.4538 | 90% | 59 | 0.4538 | 70% | **+20pp** |
-| 65 | 0.4769 | 80% | 60 | 0.4846 | 70% | +10pp |
+| Cluster | λ=0.1 epochs | Δ val seq acc |
+|---|---|---|
+| Main window | 48-65 (18 epochs) | +10pp (12 epochs), +20pp (6 epochs) |
+| Second window | 88, 89, 91, 92, 93 | +10pp each |
+
+Train-Token-Acc matching shows a broadly similar positive region (19/100
+nonzero, concentrated at epochs 52-65) but does **not** agree pointwise with
+Loss-matching -- it additionally shows small **negative** blips at epochs
+26-27, 31, and 90 (-10pp each) that Loss-matching shows as exactly zero at
+those same points. Given `Val Seq Acc` only takes 10 discrete values (10
+phonebook-A entries), a handful of isolated ±10pp blips under only one of
+two matching methods is within that discretization noise, not a second
+effect worth chasing -- but it means "cross-checked against Token-Acc
+matching" should be read as "broadly corroborates the main window exists,"
+not "the two methods agree point for point."
 
 So L2-SP at λ=0.1 does do something beyond just slowing training down --
-at matched learning progress, not just matched epoch -- but only in this
-narrow window; everywhere else the matched-progress gap is zero, and both
-runs converge to the same 50% floor by epoch 100 regardless of λ.
+at matched learning progress, not just matched epoch -- across a real
+(if scattered) 23% of the training trajectory, most concentrated in a
+main window around epochs 48-65. Both runs still converge to the same 50%
+floor by epoch 100 regardless of λ.
 
 **Caveats, stated now, not after the fact:**
-- `Val Seq Acc` only takes 10 discrete values (10 phonebook-A entries), so
-  small deltas are coarse. A lone -10pp blip at epoch 90 under the
-  token-acc matching (absent under the loss matching) is within that
-  discretization noise, not a second effect worth chasing.
-- This is one λ (0.1), one window, one Phase-A checkpoint, one seed, one
+- Full output, including every nonzero epoch and both matching variables,
+  is reproducible with `python phonebook/sweep_lr/analyze_matched_progress.py`
+  against the two committed `*_finegrained/metrics.csv` files -- nothing
+  above is a summary of something that can't be checked directly.
+- This is one λ (0.1), two windows, one Phase-A checkpoint, one seed, one
   lr -- the same single-checkpoint caveat as Part 3, plus a new one: the
-  window's location/width for the *other* untested lambdas (1e-4, 1e-3,
+  windows' location/width for the *other* untested lambdas (1e-4, 1e-3,
   1e-2) is unknown without equally fine-grained runs for each.
-- This is a real, cross-validated observation, not yet a claim: worth
-  finer lambda resolution around 0.1 before treating "stop early with
-  L2-SP" as a strategy rather than a two-point pattern.
+- This is a real, reproducible observation, not yet a claim: worth finer
+  lambda resolution around 0.1 before treating "stop early with L2-SP" as
+  a strategy rather than a pattern seen at one lambda value.
 
 ## Primary metric (locked in)
 
