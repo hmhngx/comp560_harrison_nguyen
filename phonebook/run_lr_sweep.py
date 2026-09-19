@@ -14,6 +14,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import csv
 import itertools
 import json
 import subprocess
@@ -25,6 +26,33 @@ ROOT_DIR = Path(__file__).resolve().parents[1]
 DEFAULT_ADAPT_FROM = Path("phonebook/out_phaseA/model.pth")
 DEFAULT_DATA_DIR = Path("phonebook/data_phaseB")
 DEFAULT_CONFIG = Path("phonebook/config/phonebook.py")
+
+
+def is_run_complete(out_dir: Path, expected_epochs: int) -> bool:
+    """A run is complete iff metrics.csv's last logged epoch equals the
+    requested total -- existence alone isn't a safe signal, since train.py
+    opens and flushes metrics.csv incrementally starting partway through a
+    run, so a run killed by --timeout (or a crash) leaves a real but partial
+    file. model.pth (written once, at true completion) would also work as a
+    signal, but it's gitignored and never committed (see this file's own
+    README's "Not committed" policy) -- checking it would make skip-existing
+    silently stop working for every already-committed historical run in a
+    fresh checkout, which is the far more common case than a killed run."""
+    metrics_path = out_dir / "metrics.csv"
+    if not metrics_path.exists():
+        return False
+    try:
+        with metrics_path.open(newline="", encoding="utf-8") as fh:
+            rows = list(csv.reader(fh))
+    except OSError:
+        return False
+    if len(rows) < 2:  # header only, or empty -- killed before the first flush
+        return False
+    try:
+        last_epoch = int(rows[-1][0])
+    except (ValueError, IndexError):
+        return False
+    return last_epoch == expected_epochs
 
 
 def build_command(lr: float, epochs: int, seed: int, l2sp_lambda: float, out_dir: Path) -> list[str]:
@@ -114,7 +142,7 @@ def main() -> None:
 
         print(f"\n[{i}/{len(combos)}] {' '.join(cmd)}")
 
-        if not args.overwrite and (out_dir / "metrics.csv").exists():
+        if not args.overwrite and is_run_complete(out_dir, args.epochs):
             print(f"  SKIPPED -- {out_dir} already has results (pass --overwrite to re-run it)")
             continue
         if args.dry_run:
