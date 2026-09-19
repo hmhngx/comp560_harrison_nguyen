@@ -5,7 +5,35 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def _run_name(*args, **kwargs) -> str:
+    sys.path.insert(0, str(ROOT))
+    import phonebook.run_lr_sweep as sweep_module
+
+    return sweep_module.run_name(*args, **kwargs)
+
+
+@pytest.mark.parametrize(
+    "lr, epochs, seed, l2sp_lambda, expected",
+    [
+        (0.0001, 100, 42, 0.0, "lr0.0001_ep100_seed42"),
+        (0.0001, 100, 42, 0.1, "lr0.0001_ep100_seed42_l2sp0.1"),
+        (0.0001, 100, 42, 1e-4, "lr0.0001_ep100_seed42_l2sp0.0001"),
+    ],
+)
+def test_run_name_suffix_matches_expected_string(lr, epochs, seed, l2sp_lambda, expected) -> None:
+    assert _run_name(lr, epochs, seed, l2sp_lambda) == expected
+
+
+def test_run_name_gives_distinct_names_across_the_actual_sweep_grid() -> None:
+    """The 5 lambda values actually used in this week's sweep
+    (0, 1e-4, 1e-3, 1e-2, 1e-1) must not collide with each other."""
+    names = {_run_name(0.0001, 100, 42, l) for l in [0, 1e-4, 1e-3, 1e-2, 1e-1]}
+    assert len(names) == 5
 
 
 def test_rejects_negative_l2sp_lambdas_before_planning_any_runs(run_script, tmp_path: Path) -> None:

@@ -302,6 +302,19 @@ def test_parse_args_equals_syntax_sets_pre_existing_flags(monkeypatch) -> None:
     assert cfg.lr == 0.005
 
 
+def test_parse_args_seed_and_l2sp_lambda_set_together_dont_interfere(monkeypatch) -> None:
+    """Both flags are handled by their own sequential if-block in parse_args;
+    a future edit that misindents/nests one inside the other would only ever
+    break when both are passed simultaneously -- no existing test (before
+    this one) ever set both to non-default values in the same call."""
+    cfg = _parse_train_args(
+        monkeypatch,
+        ["--seed", "999", "--l2sp-lambda", "0.5", "--adapt-from", "some/checkpoint.pth"],
+    )
+    assert cfg.seed == 999
+    assert cfg.l2sp_lambda == 0.5
+
+
 def test_parse_args_rejects_negative_l2sp_lambda_via_equals_syntax(monkeypatch) -> None:
     """The negative-lambda guard must not be bypassable by switching syntax:
     --l2sp-lambda=-0.1 must still reach cfg.l2sp_lambda and still get rejected,

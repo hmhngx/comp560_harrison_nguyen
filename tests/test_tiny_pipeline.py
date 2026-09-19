@@ -188,3 +188,68 @@ def test_tiny_end_to_end_pipeline_with_small_transformer(run_script, has_torch, 
     assert evaluate.returncode == 0, evaluate.stderr
     report_text = evaluate.stdout + evaluate.stderr
     assert "accuracy report" in report_text.lower()
+
+
+@pytest.mark.integration
+def test_l2sp_lambda_changes_final_metrics_on_the_real_phonebook_pipeline(
+    run_script, has_torch, tmp_path: Path
+) -> None:
+    """Every other --l2sp-lambda behavioral test uses either a tiny 4-dim
+    synthetic model (test_l2sp.py) or an 8-line dataset (the test above) --
+    never the real 128d/4head/4layer phonebook architecture or the real
+    Phase-A checkpoint the actual sweep adapts from. A regression that only
+    shows up at that scale (e.g. a checkpoint-shape assumption baked into
+    old_params, or the penalty being numerically negligible relative to real
+    gradients) would pass every other test in this suite."""
+    if not has_torch:
+        pytest.skip("torch is not installed in this environment")
+
+    checkpoint = ROOT / "phonebook" / "out_phaseA" / "model.pth"
+    data_dir = ROOT / "phonebook" / "data_phaseB"
+    config = ROOT / "phonebook" / "config" / "phonebook.py"
+    if not checkpoint.exists() or not data_dir.exists():
+        pytest.skip(
+            "phonebook/out_phaseA and phonebook/data_phaseB are gitignored build "
+            "artifacts (generated per phonebook/README.md's documented pipeline), "
+            "not present in a fresh checkout"
+        )
+
+    def run_adapt(out_dir: Path, extra_args: list[str]) -> subprocess.CompletedProcess[str]:
+        return run_script(
+            "train.py",
+            [
+                "--data-dir", str(data_dir),
+                "--out-dir", str(out_dir),
+                "--adapt-from", str(checkpoint),
+                str(config),
+                "--lr", "0.0001",
+                "--epochs", "5",
+                "--seed", "42",
+                *extra_args,
+            ],
+            cwd=tmp_path,
+        )
+
+    # A realistic sweep-scale lambda (0.1) needs dozens of epochs before the
+    # penalty is large enough to show up at real lr=0.0001 (confirmed in
+    # phonebook/sweep_lr/README.md's Part 4: the effect window doesn't start
+    # until ~epoch 48). This test only needs to prove the mechanism has real
+    # teeth at real scale within a few fast epochs, so it uses a much larger
+    # lambda -- same "exaggerate to get a fast, robust signal" approach as
+    # the boundary test in test_l2sp.py.
+    no_l2sp_out_dir = tmp_path / "real_adapt_no_l2sp"
+    l2sp_out_dir = tmp_path / "real_adapt_l2sp"
+    adapt_no_l2sp = run_adapt(no_l2sp_out_dir, [])
+    assert adapt_no_l2sp.returncode == 0, adapt_no_l2sp.stderr
+    adapt_l2sp = run_adapt(l2sp_out_dir, ["--l2sp-lambda", "100.0"])
+    assert adapt_l2sp.returncode == 0, adapt_l2sp.stderr
+
+    def final_val_loss(out_dir: Path) -> str:
+        with (out_dir / "metrics.csv").open(newline="", encoding="utf-8") as fh:
+            rows = list(csv.reader(fh))
+        return rows[-1][2]  # "Val Loss" column
+
+    assert final_val_loss(no_l2sp_out_dir) != final_val_loss(l2sp_out_dir), (
+        "--l2sp-lambda must measurably change training on the real phonebook "
+        "architecture and the real Phase-A checkpoint, not just on tiny fixtures"
+    )
