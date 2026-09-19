@@ -1,6 +1,11 @@
 from __future__ import annotations
 
+import json
+import subprocess
+import sys
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
 
 
 def test_rejects_negative_l2sp_lambdas_before_planning_any_runs(run_script, tmp_path: Path) -> None:
@@ -66,3 +71,39 @@ def test_skip_existing_skips_when_metrics_csv_reaches_the_expected_epoch(run_scr
     combined = result.stdout + result.stderr
     assert result.returncode == 0, combined
     assert "SKIPPED" in combined
+
+
+def test_manifest_records_fresh_git_state_per_run_not_once_for_the_whole_sweep(
+    monkeypatch, tmp_path: Path
+) -> None:
+    """A sweep can run for a while across many combos; if the tree changes
+    mid-sweep, later manifest entries must reflect *that run's* git state,
+    not a single snapshot taken before the first run started."""
+    sys.path.insert(0, str(ROOT))
+    import phonebook.run_lr_sweep as sweep_module
+
+    call_count = {"n": 0}
+
+    def fake_get_git_state(cwd):
+        call_count["n"] += 1
+        return {"commit": f"fake-commit-{call_count['n']}", "dirty": False}
+
+    def fake_subprocess_run(cmd, **kwargs):
+        return subprocess.CompletedProcess(cmd, returncode=0, stdout="", stderr="")
+
+    monkeypatch.setattr(sweep_module, "get_git_state", fake_get_git_state)
+    monkeypatch.setattr(sweep_module.subprocess, "run", fake_subprocess_run)
+
+    out_root = tmp_path / "sweep_out"
+    monkeypatch.setattr(
+        sys, "argv",
+        ["run_lr_sweep.py", "--lrs", "0.0001", "--seeds", "42", "123", "--out-root", str(out_root)],
+    )
+    sweep_module.main()
+
+    records = [json.loads(line) for line in (out_root / "manifest.jsonl").read_text().splitlines()]
+    assert len(records) == 2
+    assert records[0]["git_commit"] != records[1]["git_commit"], (
+        "each run must capture its own git state; reusing one pre-sweep snapshot "
+        "means a mid-sweep commit/edit would be misattributed to later runs"
+    )

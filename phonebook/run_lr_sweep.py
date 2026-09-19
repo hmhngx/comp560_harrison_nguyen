@@ -125,14 +125,13 @@ def main() -> None:
 
     args.out_root.mkdir(parents=True, exist_ok=True)
     manifest_path = args.out_root / "manifest.jsonl"
-    git_state = get_git_state(ROOT_DIR)
 
     combos = list(itertools.product(args.lrs, args.seeds, args.l2sp_lambdas))
     print(
         f"Planned runs: {len(combos)} ({len(args.lrs)} lr x {len(args.seeds)} seeds x "
         f"{len(args.l2sp_lambdas)} l2sp-lambdas, {args.epochs} epochs each)"
     )
-    if git_state["dirty"]:
+    if get_git_state(ROOT_DIR)["dirty"]:
         print("WARNING: working tree has uncommitted changes -- results below won't be tied to a clean commit.")
 
     for i, (lr, seed, l2sp_lambda) in enumerate(combos, start=1):
@@ -150,6 +149,7 @@ def main() -> None:
 
         start = time.perf_counter()
         timed_out = False
+        git_state = get_git_state(ROOT_DIR)  # fresh snapshot for this run, not the sweep-start state
         try:
             result = subprocess.run(
                 cmd, cwd=ROOT_DIR, capture_output=True, text=True, timeout=args.timeout
