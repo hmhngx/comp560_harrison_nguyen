@@ -1,32 +1,11 @@
 from __future__ import annotations
 
-import importlib.util
-import subprocess
-import sys
 from pathlib import Path
 
 import pytest
 
 
-ROOT = Path(__file__).resolve().parents[1]
-
-
-def has_torch() -> bool:
-    return importlib.util.find_spec("torch") is not None
-
-
-def run_script(script_rel: str, args: list[str], cwd: Path | None = None) -> subprocess.CompletedProcess[str]:
-    script = ROOT / script_rel
-    return subprocess.run(
-        [sys.executable, str(script), *args],
-        cwd=str(cwd or ROOT),
-        text=True,
-        capture_output=True,
-        check=False,
-    )
-
-
-def test_argparse_scripts_show_help() -> None:
+def test_argparse_scripts_show_help(run_script) -> None:
     scripts = [
         "make_inputs_add.py",
         "make_inputs_capital.py",
@@ -42,7 +21,7 @@ def test_argparse_scripts_show_help() -> None:
         assert "usage" in combined, f"no usage text for {script}"
 
 
-def test_torch_scripts_show_help_or_fail_with_missing_dependency() -> None:
+def test_torch_scripts_show_help_or_fail_with_missing_dependency(run_script, has_torch) -> None:
     scripts = [
         "generate.py",
         "generate_one.py",
@@ -53,7 +32,7 @@ def test_torch_scripts_show_help_or_fail_with_missing_dependency() -> None:
     for script in scripts:
         result = run_script(script, ["-h"])
         combined = (result.stdout + result.stderr).lower()
-        if has_torch():
+        if has_torch:
             assert result.returncode == 0, f"help failed for {script}: {combined}"
             assert "usage" in combined, f"no usage text for {script}"
             if script == "train.py":
@@ -66,8 +45,8 @@ def test_torch_scripts_show_help_or_fail_with_missing_dependency() -> None:
             assert "no module named 'torch'" in combined
 
 
-def test_generate_all_fails_cleanly_without_checkpoint(tmp_path: Path) -> None:
-    if not has_torch():
+def test_generate_all_fails_cleanly_without_checkpoint(run_script, has_torch, tmp_path: Path) -> None:
+    if not has_torch:
         pytest.skip("torch is not installed in this environment")
 
     result = run_script("generate_all_additions.py", [], cwd=tmp_path)
@@ -76,8 +55,8 @@ def test_generate_all_fails_cleanly_without_checkpoint(tmp_path: Path) -> None:
     assert "could not find model weights" in combined.lower()
 
 
-def test_generate_one_fails_cleanly_without_checkpoint(tmp_path: Path) -> None:
-    if not has_torch():
+def test_generate_one_fails_cleanly_without_checkpoint(run_script, has_torch, tmp_path: Path) -> None:
+    if not has_torch:
         pytest.skip("torch is not installed in this environment")
 
     result = run_script("generate_one.py", ["ab"], cwd=tmp_path)
@@ -86,8 +65,8 @@ def test_generate_one_fails_cleanly_without_checkpoint(tmp_path: Path) -> None:
     assert "could not find model weights" in combined.lower()
 
 
-def test_generate_fails_cleanly_with_missing_data_and_weights(tmp_path: Path) -> None:
-    if not has_torch():
+def test_generate_fails_cleanly_with_missing_data_and_weights(run_script, has_torch, tmp_path: Path) -> None:
+    if not has_torch:
         pytest.skip("torch is not installed in this environment")
 
     result = run_script(
@@ -100,8 +79,8 @@ def test_generate_fails_cleanly_with_missing_data_and_weights(tmp_path: Path) ->
     assert "not found" in combined.lower()
 
 
-def test_train_fails_cleanly_with_missing_meta(tmp_path: Path) -> None:
-    if not has_torch():
+def test_train_fails_cleanly_with_missing_meta(run_script, has_torch, tmp_path: Path) -> None:
+    if not has_torch:
         pytest.skip("torch is not installed in this environment")
 
     result = run_script(
@@ -114,8 +93,8 @@ def test_train_fails_cleanly_with_missing_meta(tmp_path: Path) -> None:
     assert "vocabulary file not found" in combined.lower()
 
 
-def test_train_fails_cleanly_with_l2sp_lambda_but_no_adapt_from(tmp_path: Path) -> None:
-    if not has_torch():
+def test_train_fails_cleanly_with_l2sp_lambda_but_no_adapt_from(run_script, has_torch, tmp_path: Path) -> None:
+    if not has_torch:
         pytest.skip("torch is not installed in this environment")
 
     # Deliberately uses a nonexistent data-dir too, to prove this is rejected
@@ -136,8 +115,8 @@ def test_train_fails_cleanly_with_l2sp_lambda_but_no_adapt_from(tmp_path: Path) 
     assert "--adapt-from" in combined
 
 
-def test_train_fails_cleanly_with_negative_l2sp_lambda(tmp_path: Path) -> None:
-    if not has_torch():
+def test_train_fails_cleanly_with_negative_l2sp_lambda(run_script, has_torch, tmp_path: Path) -> None:
+    if not has_torch:
         pytest.skip("torch is not installed in this environment")
 
     # Negative lambda is rejected even with a syntactically-valid --adapt-from

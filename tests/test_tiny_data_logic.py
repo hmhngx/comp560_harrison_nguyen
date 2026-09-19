@@ -2,30 +2,14 @@ from __future__ import annotations
 
 import pickle
 import string
-import subprocess
-import sys
 from pathlib import Path
-
-
-ROOT = Path(__file__).resolve().parents[1]
-
-
-def run_script(script_rel: str, args: list[str], cwd: Path) -> subprocess.CompletedProcess[str]:
-    script = ROOT / script_rel
-    return subprocess.run(
-        [sys.executable, str(script), *args],
-        cwd=str(cwd),
-        text=True,
-        capture_output=True,
-        check=False,
-    )
 
 
 def read_lines(path: Path) -> list[str]:
     return [line.strip() for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
 
 
-def test_make_inputs_add_tiny_dataset_math_is_correct(tmp_path: Path) -> None:
+def test_make_inputs_add_tiny_dataset_math_is_correct(run_script, tmp_path: Path) -> None:
     result = run_script("make_inputs_add.py", ["7", "8"], cwd=tmp_path)
     assert result.returncode == 0, result.stderr
 
@@ -44,7 +28,7 @@ def test_make_inputs_add_tiny_dataset_math_is_correct(tmp_path: Path) -> None:
         assert c == (a + b) % 7
 
 
-def test_make_inputs_capital_tiny_dataset_is_uppercase_transform(tmp_path: Path) -> None:
+def test_make_inputs_capital_tiny_dataset_is_uppercase_transform(run_script, tmp_path: Path) -> None:
     result = run_script("make_inputs_capital.py", ["2", "3", "6"], cwd=tmp_path)
     assert result.returncode == 0, result.stderr
 
@@ -57,7 +41,7 @@ def test_make_inputs_capital_tiny_dataset_is_uppercase_transform(tmp_path: Path)
         assert rhs == lhs.upper()
 
 
-def test_make_inputs_rev_tiny_dataset_is_reverse_transform(tmp_path: Path) -> None:
+def test_make_inputs_rev_tiny_dataset_is_reverse_transform(run_script, tmp_path: Path) -> None:
     result = run_script("make_inputs_rev.py", ["2", "3", "6"], cwd=tmp_path)
     assert result.returncode == 0, result.stderr
 
@@ -70,7 +54,7 @@ def test_make_inputs_rev_tiny_dataset_is_reverse_transform(tmp_path: Path) -> No
         assert rhs == lhs[::-1]
 
 
-def test_make_inputs_comp_data_is_deterministic_for_same_args(tmp_path: Path) -> None:
+def test_make_inputs_comp_data_is_deterministic_for_same_args(run_script, tmp_path: Path) -> None:
     args = ["2", "ab", "10"]
     output_path = tmp_path / "inputs" / "comp_data.txt"
 
@@ -94,7 +78,7 @@ def test_make_inputs_comp_data_is_deterministic_for_same_args(tmp_path: Path) ->
             mapping[lhs] = rhs
 
 
-def test_prepare_1char_writes_expected_outputs_and_meta(tmp_path: Path) -> None:
+def test_prepare_1char_writes_expected_outputs_and_meta(run_script, tmp_path: Path) -> None:
     input_file = tmp_path / "tiny_1char.txt"
     input_file.write_text("a=A\nb=B\ncc=CC\nab=AB\nba=BA\nac=AC\n", encoding="utf-8")
 
@@ -119,7 +103,7 @@ def test_prepare_1char_writes_expected_outputs_and_meta(tmp_path: Path) -> None:
 
 
 
-def test_prepare_phonebook_accepts_explicit_train_and_eval_files(tmp_path: Path) -> None:
+def test_prepare_phonebook_accepts_explicit_train_and_eval_files(run_script, tmp_path: Path) -> None:
     train_file = tmp_path / "train_phonebook.txt"
     eval_file = tmp_path / "eval_phonebook.txt"
     train_file.write_text("alice=555111\nbob=555222\n", encoding="utf-8")
@@ -151,7 +135,7 @@ def test_prepare_phonebook_accepts_explicit_train_and_eval_files(tmp_path: Path)
         assert ch in stoi
 
 
-def test_prepare_phonebook_rejects_only_one_explicit_input_file(tmp_path: Path) -> None:
+def test_prepare_phonebook_rejects_only_one_explicit_input_file(run_script, tmp_path: Path) -> None:
     train_file = tmp_path / "train_phonebook.txt"
     train_file.write_text("alice=555111\n", encoding="utf-8")
 
@@ -165,7 +149,7 @@ def test_prepare_phonebook_rejects_only_one_explicit_input_file(tmp_path: Path) 
     assert "both --train-input and --eval-input must be provided together" in combined.lower()
 
 
-def test_prepare_phonebook_positional_input_still_supports_split_mode(tmp_path: Path) -> None:
+def test_prepare_phonebook_positional_input_still_supports_split_mode(run_script, tmp_path: Path) -> None:
     input_file = tmp_path / "phonebook.txt"
     input_file.write_text("a=1\nb=2\nc=3\nd=4\n", encoding="utf-8")
 

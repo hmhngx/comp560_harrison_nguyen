@@ -1,8 +1,6 @@
 from __future__ import annotations
 
-import importlib.util
 import subprocess
-import sys
 import csv
 from pathlib import Path
 
@@ -12,24 +10,9 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def has_torch() -> bool:
-    return importlib.util.find_spec("torch") is not None
-
-
-def run_script(script_rel: str, args: list[str], cwd: Path) -> subprocess.CompletedProcess[str]:
-    script = ROOT / script_rel
-    return subprocess.run(
-        [sys.executable, str(script), *args],
-        cwd=str(cwd),
-        text=True,
-        capture_output=True,
-        check=False,
-    )
-
-
 @pytest.mark.integration
-def test_tiny_end_to_end_pipeline_with_small_transformer(tmp_path: Path) -> None:
-    if not has_torch():
+def test_tiny_end_to_end_pipeline_with_small_transformer(run_script, has_torch, tmp_path: Path) -> None:
+    if not has_torch:
         pytest.skip("torch is not installed in this environment")
 
     # 1) Tiny input with enough lines for a non-empty validation split.
