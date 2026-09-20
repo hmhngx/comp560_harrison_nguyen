@@ -4,6 +4,7 @@ import copy
 import sys
 from pathlib import Path
 
+import pytest
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -300,6 +301,34 @@ def test_parse_args_equals_syntax_sets_pre_existing_flags(monkeypatch) -> None:
     cfg = _parse_train_args(monkeypatch, ["--epochs=7", "--lr=0.005"])
     assert cfg.epochs == 7
     assert cfg.lr == 0.005
+
+
+@pytest.mark.parametrize(
+    "flag, value, attr, expected",
+    [
+        ("--data-dir", "some/data", "data_dir", Path("some/data")),
+        ("--out-dir", "some/out", "out_dir", Path("some/out")),
+        ("--device", "cpu", "device", "cpu"),
+        ("--embedding-dim", "64", "embedding_dim", 64),
+        ("--n-heads", "8", "n_heads", 8),
+        ("--n-layers", "6", "n_layers", 6),
+        ("--batch-size", "16", "batch_size", 16),
+        ("--accuracy-interval", "5", "accuracy_interval", 5),
+        ("--adapt-from", "some/checkpoint.pth", "adapt_from", Path("some/checkpoint.pth")),
+    ],
+)
+def test_parse_args_equals_syntax_sets_remaining_flags(monkeypatch, flag, value, attr, expected) -> None:
+    """The --flag=value fix (SUPPRESS + hasattr) applies uniformly to all 13
+    flags in parse_args, but only 4 (--seed, --l2sp-lambda, --epochs, --lr)
+    got dedicated equals-syntax tests when that fix landed. The mechanism is
+    type-agnostic by construction -- hasattr(args, name) doesn't care whether
+    the flag is int, float, Path, or str -- so this is expected to already
+    pass. "The mechanism is uniform, so it must work" is exactly the kind of
+    unverified inference this session has been correcting elsewhere;
+    completing the coverage rather than leaving it asserted-but-untested.
+    """
+    cfg = _parse_train_args(monkeypatch, [f"{flag}={value}"])
+    assert getattr(cfg, attr) == expected
 
 
 def test_parse_args_seed_and_l2sp_lambda_set_together_dont_interfere(monkeypatch) -> None:
