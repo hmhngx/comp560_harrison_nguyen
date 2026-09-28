@@ -346,6 +346,94 @@ checkpoints at the grid already established.
   enough to characterize the checkpoint-dependence itself (a 1-in-3 rate
   here could be anywhere from rare to common with a larger sample).
 
+## Part 6 — answering Part 5's own open question: is λ=0.1 a threshold? (2026-09-29)
+
+Part 5 left one question explicitly open: is λ=0.1 near some threshold that
+larger untested values might cross for seed42 and seed123 too, or is
+seed999's effect checkpoint-specific regardless of λ? Extended the grid to
+λ ∈ {0.2, 0.5, 1.0} across all 3 checkpoints to find out, reusing the same
+`--adapt-from` override:
+
+```bash
+python phonebook/run_lr_sweep.py --lrs 0.0001 --seeds 42 --l2sp-lambdas 0.2 0.5 1.0
+python phonebook/run_lr_sweep.py --lrs 0.0001 --seeds 42 --l2sp-lambdas 0.2 0.5 1.0 --adapt-from phonebook/out_phaseA_seed123/model.pth
+python phonebook/run_lr_sweep.py --lrs 0.0001 --seeds 42 --l2sp-lambdas 0.2 0.5 1.0 --adapt-from phonebook/out_phaseA_seed999/model.pth
+```
+
+No NaN/Inf anywhere in Train Loss across any of the 9 new runs, checked
+directly before trusting anything else here -- λ=1.0 is 10x anything tested
+before, worth confirming numerical stability rather than assuming it.
+
+### Answer: λ=0.1 was not special. Every checkpoint has its own threshold, and all three cross it.
+
+Val Seq Acc at epoch 100, extended:
+
+| Checkpoint | λ=0 | λ=1e-4 | λ=1e-3 | λ=1e-2 | λ=0.1 | λ=0.2 | λ=0.5 | λ=1.0 |
+|---|---|---|---|---|---|---|---|---|
+| seed42 (original) | 50% | 50% | 50% | 50% | 50% | **80%** | **90%** | 90% |
+| seed123 (new) | 20% | 20% | 20% | 20% | 20% | 20% | **50%** | **60%** |
+| seed999 (new) | 40% | 40% | 40% | 40% | 70% | 70% | 80% | 80% |
+
+**This revises Part 5's tentative conclusion.** Part 5's data alone couldn't
+distinguish "λ=0.1 is a threshold" from "the effect is checkpoint-specific" --
+this data does: every checkpoint eventually shows a large, genuine jump, just
+at a different λ (seed999 crosses somewhere around 0.1, seed42 around 0.2,
+seed123 around 0.5). Read as a per-checkpoint threshold effect, not absence
+of an effect: seed42 and seed123 were never "immune" to L2-SP in Part 5, the
+tested range (up to 0.1) simply hadn't reached their threshold yet.
+
+Verified two of these jumps aren't single-epoch flukes by reading full
+trajectories, the same check applied to seed999 in Part 5: seed42 at λ=0.5
+reaches 90% by epoch 30 and holds exactly there for the remaining 8 logged
+epochs (30 through 100, all 90%); seed123 at λ=1.0 settles at 60% from epoch
+70 onward and holds for the rest of training. Same mechanistic signature in
+both: partial early forgetting, then L2-SP arresting further drift once its
+penalty dominates -- consistent with what Part 5 found for seed999, not a
+different phenomenon.
+
+### The honest other half: this is a trade-off, not a free improvement
+
+Retention (Val Seq Acc on A) and how much of phonebook B actually gets
+learned (Train Token Acc on B) move in opposite directions, consistently,
+for all 3 checkpoints:
+
+| Checkpoint | Train Tok Acc (B) at λ=0 | at λ=0.1 | at λ=0.5 | at λ=1.0 |
+|---|---|---|---|---|
+| seed42 | 65.38% | 64.62% | 48.46% | 36.15% |
+| seed123 | 83.85% | 80.77% | 60.77% | 49.23% |
+| seed999 | 86.92% | 84.62% | 69.23% | 50.00% |
+
+Protecting phonebook A comes at a real, consistent cost to learning
+phonebook B -- exactly the stability/plasticity trade-off L2-SP is
+theoretically supposed to navigate, not a side effect to explain away. None
+of the three checkpoints reach full (100%) retention even at λ=1.0
+(they plateau at 90% / 60% / 80% respectively), so there's still some
+forgetting L2-SP doesn't reach in this range.
+
+### What this means for research direction (supersedes Part 5's verdict)
+
+L2-SP does generalize as a mechanism across all 3 independent checkpoints --
+Part 5's "not a reliable fix" verdict was accurate for the λ range tested at
+the time, but incomplete. The revised, more useful framing: L2-SP needs a
+larger λ than this project had been treating as the realistic range (0 to
+0.1), and the effective value is checkpoint-dependent, not one fixed number
+to tune once. A future user of this technique should sweep further than
+0.1 by default, expect to tune per starting point, and weigh the retention
+gain against the real cost to new-task learning rather than treating higher
+λ as strictly better.
+
+### Caveats
+
+- Same single-seed/single-lr scope as Part 5 -- not restated in full, see
+  Part 5's own caveats section.
+- Only 3 λ points above 0.1 (0.2, 0.5, 1.0), log-spaced-ish rather than
+  dense -- the three checkpoints' exact threshold values are bracketed, not
+  pinpointed (e.g. seed42's crossing is known to be between 0.1 and 0.2,
+  not narrowed further).
+- Whether retention approaches 100% at even larger λ, or plateaus below it
+  as these three plateaus suggest, is untested past 1.0 -- flagged as a
+  further question, not run here.
+
 ## Primary metric (locked in)
 
 **Val sequence accuracy on phonebook A** is the primary forgetting metric
