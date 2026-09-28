@@ -55,13 +55,15 @@ def is_run_complete(out_dir: Path, expected_epochs: int) -> bool:
     return last_epoch == expected_epochs
 
 
-def build_command(lr: float, epochs: int, seed: int, l2sp_lambda: float, out_dir: Path) -> list[str]:
+def build_command(
+    lr: float, epochs: int, seed: int, l2sp_lambda: float, adapt_from: Path, out_dir: Path
+) -> list[str]:
     return [
         sys.executable,
         "train.py",
         "--data-dir", str(DEFAULT_DATA_DIR),
         "--out-dir", str(out_dir),
-        "--adapt-from", str(DEFAULT_ADAPT_FROM),
+        "--adapt-from", str(adapt_from),
         str(DEFAULT_CONFIG),
         "--lr", str(lr),
         "--epochs", str(epochs),
@@ -70,13 +72,26 @@ def build_command(lr: float, epochs: int, seed: int, l2sp_lambda: float, out_dir
     ]
 
 
-def run_name(lr: float, epochs: int, seed: int, l2sp_lambda: float) -> str:
+def phase_a_tag(adapt_from: Path) -> str:
+    """Empty for the default checkpoint, so every already-committed run's
+    directory name and skip-detection are unaffected. Otherwise derived from
+    the checkpoint's own parent directory name -- general rather than
+    pattern-matching a specific "_seed<N>" convention, since a future Phase-A
+    checkpoint might not follow it. Without this, sweeping the same
+    (lr, epochs, seed, l2sp_lambda) grid against a *different* Phase-A
+    checkpoint would silently collide on the same output directory."""
+    if adapt_from == DEFAULT_ADAPT_FROM:
+        return ""
+    return f"_pA-{adapt_from.parent.name}"
+
+
+def run_name(lr: float, epochs: int, seed: int, l2sp_lambda: float, phase_a_tag: str = "") -> str:
     # Suffix only when l2sp_lambda deviates from the off-default, so existing
     # lr/seed-only sweep directories (e.g. lr0.0001_ep100_seed42) keep their
     # names and are correctly recognized as already-run by --overwrite's
-    # skip-existing check.
+    # skip-existing check. Same reasoning for phase_a_tag defaulting to "".
     suffix = f"_l2sp{l2sp_lambda}" if l2sp_lambda != 0.0 else ""
-    return f"lr{lr}_ep{epochs}_seed{seed}{suffix}"
+    return f"lr{lr}_ep{epochs}_seed{seed}{suffix}{phase_a_tag}"
 
 
 def get_git_state(cwd: Path) -> dict[str, object]:
@@ -102,6 +117,12 @@ def main() -> None:
     parser.add_argument(
         "--l2sp-lambdas", type=float, nargs="+", default=[0.0],
         help="L2-SP lambda values to sweep, crossed with --lrs and --seeds (default: [0.0], i.e. off)",
+    )
+    parser.add_argument(
+        "--adapt-from", type=Path, default=DEFAULT_ADAPT_FROM,
+        help=f"Phase-A checkpoint to adapt from (default: {DEFAULT_ADAPT_FROM}). Overriding this "
+        "sweeps against a different Phase-A checkpoint -- run names get a distinguishing "
+        "suffix so they never collide with the default checkpoint's runs.",
     )
     parser.add_argument("--out-root", type=Path, default=Path("phonebook/sweep_lr/seeded"))
     parser.add_argument("--dry-run", action="store_true", help="Print commands without running them")
@@ -134,10 +155,11 @@ def main() -> None:
     if get_git_state(ROOT_DIR)["dirty"]:
         print("WARNING: working tree has uncommitted changes -- results below won't be tied to a clean commit.")
 
+    tag = phase_a_tag(args.adapt_from)
     for i, (lr, seed, l2sp_lambda) in enumerate(combos, start=1):
-        name = run_name(lr, args.epochs, seed, l2sp_lambda)
+        name = run_name(lr, args.epochs, seed, l2sp_lambda, phase_a_tag=tag)
         out_dir = args.out_root / name
-        cmd = build_command(lr, args.epochs, seed, l2sp_lambda, out_dir)
+        cmd = build_command(lr, args.epochs, seed, l2sp_lambda, args.adapt_from, out_dir)
 
         print(f"\n[{i}/{len(combos)}] {' '.join(cmd)}")
 
@@ -170,6 +192,7 @@ def main() -> None:
             "epochs": args.epochs,
             "seed": seed,
             "l2sp_lambda": l2sp_lambda,
+            "adapt_from": str(args.adapt_from),
             "returncode": returncode,
             "timed_out": timed_out,
             "elapsed_sec": round(elapsed, 2),

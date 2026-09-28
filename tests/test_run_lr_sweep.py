@@ -10,11 +10,15 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def _run_name(*args, **kwargs) -> str:
+def _sweep_module():
     sys.path.insert(0, str(ROOT))
     import phonebook.run_lr_sweep as sweep_module
 
-    return sweep_module.run_name(*args, **kwargs)
+    return sweep_module
+
+
+def _run_name(*args, **kwargs) -> str:
+    return _sweep_module().run_name(*args, **kwargs)
 
 
 @pytest.mark.parametrize(
@@ -34,6 +38,90 @@ def test_run_name_gives_distinct_names_across_the_actual_sweep_grid() -> None:
     (0, 1e-4, 1e-3, 1e-2, 1e-1) must not collide with each other."""
     names = {_run_name(0.0001, 100, 42, l) for l in [0, 1e-4, 1e-3, 1e-2, 1e-1]}
     assert len(names) == 5
+
+
+# ---------------------------------------------------------------------------
+# Multi-checkpoint replication: --adapt-from must be overridable so the same
+# (lr, seed, l2sp_lambda) grid can be swept against a *different* Phase-A
+# checkpoint (e.g. out_phaseA_seed123). Without a checkpoint identity baked
+# into run_name(), two different checkpoints at the same grid point would
+# produce the same output directory -- a silent overwrite / false
+# skip-detection, not just a cosmetic naming issue.
+# ---------------------------------------------------------------------------
+
+def _phase_a_tag(*args, **kwargs) -> str:
+    return _sweep_module().phase_a_tag(*args, **kwargs)
+
+
+def test_phase_a_tag_is_empty_for_the_default_checkpoint() -> None:
+    """Must not change any existing, already-committed run's directory name."""
+    default = _sweep_module().DEFAULT_ADAPT_FROM
+    assert _phase_a_tag(default) == ""
+
+
+def test_phase_a_tag_is_nonempty_and_distinct_for_other_checkpoints() -> None:
+    tag_123 = _phase_a_tag(Path("phonebook/out_phaseA_seed123/model.pth"))
+    tag_999 = _phase_a_tag(Path("phonebook/out_phaseA_seed999/model.pth"))
+    assert tag_123 != ""
+    assert tag_999 != ""
+    assert tag_123 != tag_999
+
+
+def test_run_name_backward_compatible_when_phase_a_tag_omitted() -> None:
+    """Existing call sites (and every already-committed sweep directory) must
+    keep producing the exact same name with no phase_a_tag argument at all."""
+    assert _run_name(0.0001, 100, 42, 0.0) == "lr0.0001_ep100_seed42"
+
+
+def test_run_name_distinguishes_different_phase_a_checkpoints_at_the_same_grid_point() -> None:
+    default_name = _run_name(0.0001, 100, 42, 0.1, phase_a_tag="")
+    seed123_name = _run_name(0.0001, 100, 42, 0.1, phase_a_tag=_phase_a_tag(Path("phonebook/out_phaseA_seed123/model.pth")))
+    seed999_name = _run_name(0.0001, 100, 42, 0.1, phase_a_tag=_phase_a_tag(Path("phonebook/out_phaseA_seed999/model.pth")))
+    names = {default_name, seed123_name, seed999_name}
+    assert len(names) == 3, "same (lr, epochs, seed, lambda) against 3 different checkpoints must not collide"
+
+
+def test_build_command_uses_the_given_adapt_from_not_a_hardcoded_default() -> None:
+    custom_checkpoint = Path("phonebook/out_phaseA_seed123/model.pth")
+    cmd = _sweep_module().build_command(0.0001, 100, 42, 0.0, custom_checkpoint, Path("out"))
+    assert str(custom_checkpoint) in cmd
+    assert str(_sweep_module().DEFAULT_ADAPT_FROM) not in cmd
+
+
+def test_dry_run_with_custom_adapt_from_shows_it_in_the_planned_command(run_script, tmp_path: Path) -> None:
+    result = run_script(
+        "phonebook/run_lr_sweep.py",
+        [
+            "--lrs", "0.0001", "--adapt-from", "phonebook/out_phaseA_seed123/model.pth",
+            "--out-root", str(tmp_path / "sweep_out"), "--dry-run",
+        ],
+        cwd=tmp_path,
+    )
+    combined = result.stdout + result.stderr
+    assert result.returncode == 0, combined
+    assert "out_phaseA_seed123" in combined
+
+
+def test_manifest_records_which_phase_a_checkpoint_was_used(monkeypatch, tmp_path: Path) -> None:
+    sweep_module = _sweep_module()
+    monkeypatch.setattr(sweep_module, "get_git_state", lambda cwd: {"commit": "fake", "dirty": False})
+    monkeypatch.setattr(
+        sweep_module.subprocess, "run",
+        lambda cmd, **kwargs: subprocess.CompletedProcess(cmd, returncode=0, stdout="", stderr=""),
+    )
+    out_root = tmp_path / "sweep_out"
+    monkeypatch.setattr(
+        sys, "argv",
+        [
+            "run_lr_sweep.py", "--lrs", "0.0001",
+            "--adapt-from", "phonebook/out_phaseA_seed123/model.pth",
+            "--out-root", str(out_root),
+        ],
+    )
+    sweep_module.main()
+    records = [json.loads(line) for line in (out_root / "manifest.jsonl").read_text().splitlines()]
+    assert len(records) == 1
+    assert records[0]["adapt_from"] == str(Path("phonebook/out_phaseA_seed123/model.pth"))
 
 
 def test_rejects_negative_l2sp_lambdas_before_planning_any_runs(run_script, tmp_path: Path) -> None:
