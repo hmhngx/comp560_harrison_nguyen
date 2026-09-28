@@ -263,6 +263,89 @@ floor by epoch 100 regardless of λ.
   lambda resolution around 0.1 before treating "stop early with L2-SP" as
   a strategy rather than a pattern seen at one lambda value.
 
+## Part 5 — multi-checkpoint replication: does L2-SP's benefit generalize? (2026-09-28)
+
+Everything in Parts 3-4 used a single Phase-A checkpoint (seed=42). Trained
+2 more, fully independent Phase-A checkpoints (`--seed 123`, `--seed 999`,
+no `--adapt-from`, so weight initialization genuinely differs -- the
+"correct fix, not yet done" flagged in Part 2) and re-ran the same λ sweep
+against each, using `run_lr_sweep.py`'s new `--adapt-from` override:
+
+```bash
+python train.py --data-dir phonebook/data_phaseA --out-dir phonebook/out_phaseA_seed123 --seed 123 phonebook/config/phonebook.py
+python train.py --data-dir phonebook/data_phaseA --out-dir phonebook/out_phaseA_seed999 --seed 999 phonebook/config/phonebook.py
+python phonebook/run_lr_sweep.py --lrs 0.0001 --seeds 42 --l2sp-lambdas 0 0.0001 0.001 0.01 0.1 --adapt-from phonebook/out_phaseA_seed123/model.pth
+python phonebook/run_lr_sweep.py --lrs 0.0001 --seeds 42 --l2sp-lambdas 0 0.0001 0.001 0.01 0.1 --adapt-from phonebook/out_phaseA_seed999/model.pth
+```
+
+Both new checkpoints converged normally (100%/100% train token/seq accuracy
+on phonebook A, matching the original) and produced genuinely different Val
+Token Acc during Phase-A training itself (16.15% / 18.46% / 20.00% across
+seed 42/123/999) -- confirming these are independent solutions, not
+accidentally identical weights.
+
+### Result: neither the baseline forgetting severity nor L2-SP's benefit generalizes across checkpoints
+
+Val Seq Acc at epoch 100, all 3 checkpoints x all 5 λ values:
+
+| Checkpoint | λ=0 | λ=1e-4 | λ=1e-3 | λ=1e-2 | λ=1e-1 |
+|---|---|---|---|---|---|
+| seed42 (original) | 50% | 50% | 50% | 50% | 50% |
+| seed123 (new) | 20% | 20% | 20% | 20% | 20% |
+| seed999 (new) | 40% | 40% | 40% | 40% | **70%** |
+
+Two findings, both real:
+
+**1. The baseline "50% ceiling" (Parts 1-4) was specific to one checkpoint.**
+With no L2-SP at all (λ=0), the three independent checkpoints retain 50%,
+20%, and 40% of phonebook A after identical Phase-B adaptation. How badly a
+given Phase-A solution forgets depends on *which* solution the optimizer
+happened to converge to -- the "ceiling" documented throughout this file up
+to now is this one checkpoint's ceiling, not a general property of the
+setup.
+
+**2. L2-SP's benefit at epoch 100 is inconsistent, not absent.** For 2 of 3
+checkpoints (seed42, seed123), every tested λ produces *exactly* the same
+Val Seq Acc as no regularization -- flat across the entire range. For the
+third (seed999), nothing happens until λ=0.1, where retention jumps from
+40% to 70%, a genuine +30pp improvement. Checked this isn't a fluke by
+reading the full trajectory: the baseline keeps decaying through epoch 100
+(90%→70%→70%→60%→40% from epoch 60 on) while λ=0.1 plateaus at 70% from
+epoch 70 onward and holds there for the rest of training -- L2-SP visibly
+resisting *further* drift once the model has already partly forgotten,
+exactly the mechanism it's supposed to provide. This is a real, checkpoint-
+specific effect, not the same transient mid-training bump seen with seed42
+in Part 4 (that one fully reconverged to baseline by epoch 100; this one
+does not).
+
+### What this means for research direction
+
+L2-SP is not a reliable fix in this setup: no effect for 2 of 3 independent
+starting points across the whole tested λ range, and a large, real, but
+*non-monotonic-looking* effect for the third that only appears at the single
+largest λ tested. Two honest readings, not yet distinguished by this data:
+- λ=0.1 is near some threshold, and untested larger values (0.2, 0.5, 1.0)
+  might reveal effects for seed42/seed123 too -- this range just never
+  went far enough.
+- The effect is checkpoint-specific: something about *which* solution
+  Phase-A converges to determines whether L2-SP can help at all,
+  independent of λ.
+
+Distinguishing these needs a wider λ range on all 3 checkpoints, not more
+checkpoints at the existing range -- flagged as the next step, not run here,
+to keep this replication scoped to what was actually asked: 2+ additional
+checkpoints at the grid already established.
+
+### Caveats
+
+- Still one seed per checkpoint for Phase-B adaptation itself (proven
+  inconsequential in Part 2 -- deterministic given a fixed Phase-A
+  checkpoint -- so this isn't a new gap, just restated for completeness).
+- Still one learning rate (0.0001, the established best from Part 1).
+- 3 checkpoints is enough to show the effect *isn't* consistent; it is not
+  enough to characterize the checkpoint-dependence itself (a 1-in-3 rate
+  here could be anywhere from rare to common with a larger sample).
+
 ## Primary metric (locked in)
 
 **Val sequence accuracy on phonebook A** is the primary forgetting metric
