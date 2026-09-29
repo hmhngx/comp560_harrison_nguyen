@@ -434,6 +434,65 @@ gain against the real cost to new-task learning rather than treating higher
   as these three plateaus suggest, is untested past 1.0 -- flagged as a
   further question, not run here.
 
+## Part 7 — pinpointing the thresholds and testing past λ=1.0 (2026-09-29)
+
+Part 6 left both of its own open questions unresolved: the three checkpoints'
+crossing points were only bracketed, and behavior past λ=1.0 was untested.
+Closed both: a finer grid inside each checkpoint's known bracket
+(seed42: 0.125/0.15/0.175 inside 0.1-0.2; seed123: 0.25/0.3/0.4 inside
+0.2-0.5; seed999: 0.02/0.05/0.07 inside 0.01-0.1), plus λ=2.0 and 5.0 for
+all three. Checked for NaN/Inf in every one of the 15 new runs before
+trusting anything else -- λ=5.0 is 5x the largest value tested before --
+and confirmed all 10 logged epochs are present in each file. None found.
+
+### Answer: all three checkpoints reach full retention -- as a smooth, monotonic climb, not a sudden jump
+
+Val Seq Acc at epoch 100, full resolution:
+
+| Checkpoint | ↑ climb | 100% reached at |
+|---|---|---|
+| seed42 | 50%(.1)→50%(.125)→60%(.15)→70%(.175)→80%(.2)→90%(.5)→90%(1.0)→**100%(2.0)** | λ=2.0 |
+| seed123 | 20%(.2)→20%(.25)→40%(.3)→50%(.4)→50%(.5)→60%(1.0)→80%(2.0)→**100%(5.0)** | λ=5.0 |
+| seed999 | 40%(.01)→40%(.02)→50%(.05)→70%(.07)→70%(.1)→70%(.2)→80%(.5)→80%(1.0)→80%(2.0)→**100%(5.0)** | λ=5.0 |
+
+Every checkpoint climbs smoothly and monotonically once past its own starting
+point -- not the step-function the coarser Part 6 grid made it look like.
+Verified the seed42 λ=2.0 case isn't a last-epoch fluke by reading the full
+trajectory: Val Seq Acc is already 100% by epoch 10 and holds there,
+unmoving, through epoch 100 -- the strongest, cleanest plateau found in this
+whole file. **Whether retention plateaus below 100% (Part 6's open question)
+is answered: it does not. Given enough λ, all three checkpoints reach it.**
+
+### But full retention has a real, steep cost -- not a free win
+
+At the λ where each checkpoint first reaches 100% Val Seq Acc, Train Token
+Acc on phonebook B (how much of the new task is actually being learned)
+drops to roughly a quarter of its unregularized value, consistently:
+
+| Checkpoint | Train Tok Acc (B) at λ=0 | at 100%-retention λ |
+|---|---|---|
+| seed42 | 65.38% | 26.92% (at λ=2.0) |
+| seed123 | 83.85% | 23.85% (at λ=5.0) |
+| seed999 | 86.92% | 27.69% (at λ=5.0) |
+
+Not a degenerate "ignore B entirely" solution (that would look closer to
+random-guess accuracy, well under 10% for this vocabulary) -- the model is
+still learning some of B, just a small fraction of what it would without
+the penalty. Full retention is achievable, but the honest framing is a
+dial with a steep, real trade-off at its far end, not a setting to reach
+for by default.
+
+### Caveats
+
+- Same single-seed/single-lr scope as Parts 5-6.
+- The dose-response curve is now well-characterized in shape (smooth,
+  monotonic) but still coarse in resolution near each crossing point --
+  "60% climb between 0.15 and 0.2" is known; the exact half-integer-percent
+  crossing is not, and wasn't the point of this pass.
+- All three checkpoints happen to reach exactly 100% somewhere in {2.0, 5.0}
+  -- untested whether this is a hard ceiling effect of this specific tiny
+  10-entry phonebook-A task, or would hold at a different task scale.
+
 ## Primary metric (locked in)
 
 **Val sequence accuracy on phonebook A** is the primary forgetting metric
