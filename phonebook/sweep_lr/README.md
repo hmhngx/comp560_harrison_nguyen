@@ -493,6 +493,87 @@ for by default.
   -- untested whether this is a hard ceiling effect of this specific tiny
   10-entry phonebook-A task, or would hold at a different task scale.
 
+## Part 8 — replay/rehearsal: the comparison mitigation-options.md called for a month ago (2026-09-29)
+
+`phonebook/docs/mitigation-options.md` named replay as L2-SP's natural
+second candidate ("pairs naturally with replay as a cheap second follow-up
+-- giving a regularization-vs-rehearsal comparison") when L2-SP was first
+chosen. Never built until now. Implemented via
+[`phonebook/make_replay_input.py`](../make_replay_input.py): *k* copies of
+phonebook A's lines mixed into Phase-B training, phonebook B once,
+eval set unchanged (still phonebook A, for a direct comparison against
+every L2-SP number above).
+
+```bash
+python phonebook/make_replay_input.py --phonebook-a phonebook/inputs/phonebookA.txt --phonebook-b phonebook/inputs/phonebookB.txt --k 1 --out phonebook/inputs/replay_k1.txt
+python phonebook/prepare_phonebook.py --train-input phonebook/inputs/replay_k1.txt --eval-input phonebook/inputs/phonebookA.txt --out-dir phonebook/data_phaseB_replay_k1
+python train.py --data-dir phonebook/data_phaseB_replay_k1 --out-dir phonebook/out_phaseB_replay_k1 --adapt-from phonebook/out_phaseA/model.pth phonebook/config/phonebook.py --lr 0.0001 --epochs 100 --seed 42
+# (k=3, k=5 identical, --k/--out/--out-dir changed accordingly)
+```
+
+Tested k ∈ {1, 3, 5} against the seed42 checkpoint. All three stay within
+the existing single-batch-per-epoch regime (10k+10 sequences ≤ batch_size
+64), so -- unlike the batch-*count* confound `mitigation-options.md`
+flagged in advance -- the actual variable changing between k values here is
+batch *composition* (what fraction of the one batch is A vs. B), not batch
+count. Worth being precise about which confound is actually in play rather
+than citing the doc's advance concern without checking it against what was
+actually run.
+
+### Result: replay gives perfect, near-immediate retention -- and, independently verified, complete failure to learn B's specific entries
+
+Val Seq Acc (phonebook A) hit 100% for all three k, including the smallest
+(k=1, a 50/50 mix). Cross-checked this against `train.py`'s own logged
+metric using a completely different evaluation method --
+[`generate.py`](../../generate.py)'s true autoregressive generation
+(feeding the model's own predictions back in, not teacher-forced against
+the real prefix) -- and it agreed exactly: 100% on phonebook A for all
+three k, via actual generation, not just the training loop's internal
+metric.
+
+The same independent check on phonebook B told a story the aggregate
+training metrics couldn't: **0% exact-match accuracy on phonebook B, for
+all three k**, via true generation. The model isn't producing truncated or
+malformed output (initially got this via a too-short `--max-new-tokens`
+budget on this tool's default, caught and corrected before trusting it --
+phone numbers need 12+ generated characters, not the tool's default of 10)
+-- it produces full-length, phone-number-*shaped* strings, just with the
+wrong digits (e.g. expected `400-377-3079`, got `483-3-3722-2185`).
+
+This is fully consistent with, not contradicted by, the training-set
+metrics: Train Seq Acc on the mixed set was 50.00% / 75.00% / 83.33% for
+k=1/3/5 -- which is *exactly* k/(k+1), the proportion of A-lines in each
+mix (1/2, 3/4, 5/6). That equality isn't a coincidence; it's the same
+"100% of A, 0% of B" result decomposed two ways, independently confirming
+each other.
+
+### What this means: replay and L2-SP are not interchangeable, and neither is simply "better"
+
+Replay reaches 100% retention essentially for free in effort (no new
+mechanism, no threshold to find) and at minimal k, where L2-SP needed a
+checkpoint-specific λ between 2.0 and 5.0 to get there. But replay's cost
+to B-learning here is total exact-match failure, not the partial-but-real
+learning L2-SP left at its own 100%-retention point (24-28% Train Token
+Acc, Part 7). Two different failure/success shapes for two different
+mechanisms -- data access (replay) vs. a loss penalty (L2-SP) -- not two
+points on the same trade-off curve.
+
+### Caveats
+
+- Only the seed42 checkpoint tested for replay -- unlike L2-SP, not yet
+  replicated across seed123/seed999.
+- Only k ∈ {1, 3, 5}, all within the single-batch regime; k large enough to
+  cross into 2 batches/epoch (k≥6 here) is untested, and per
+  `mitigation-options.md`'s original concern, that regime changes gradient
+  step count too, not just batch composition -- a genuinely different
+  confound than the one actually in play for k≤5.
+- 100 epochs / lr=0.0001 is this project's established default, not
+  re-tuned for the replay condition specifically -- whether more epochs
+  (more gradient exposure to B, still only 1 step each) would eventually
+  teach exact B entries under replay, the same way L2-SP needed larger λ
+  rather than more epochs, is untested.
+- No combination of replay + L2-SP together was tried.
+
 ## Primary metric (locked in)
 
 **Val sequence accuracy on phonebook A** is the primary forgetting metric
