@@ -572,7 +572,67 @@ points on the same trade-off curve.
   (more gradient exposure to B, still only 1 step each) would eventually
   teach exact B entries under replay, the same way L2-SP needed larger λ
   rather than more epochs, is untested.
-- No combination of replay + L2-SP together was tried.
+- One replay+L2-SP combination tried (k=1, λ=0.1) -- see Part 9. A full
+  grid of combinations was not.
+
+## Part 9 — closing the loop: does combining replay and L2-SP help, and what does this mean for direction? (2026-09-29)
+
+`mitigation-options.md` set up L2-SP first, replay second, "giving a
+regularization-vs-rehearsal comparison (and their combination) rather than
+one isolated technique." Parts 5-8 delivered the first two; this closes
+the third.
+
+Ran one combination -- k=1 replay (the smallest tested) plus λ=0.1 (a
+value already well-characterized alone, Part 3) -- against seed42.
+**Result: identical to replay alone.** 100% on A (confirmed via
+generation, not just the training metric), 0% exact-match on B, Train
+Seq Acc on the mixed set still exactly 50.00% (= 1/2, the same
+A-line proportion as plain k=1 replay). Adding L2-SP on top of replay
+here didn't help B-learning or hurt it -- it was simply redundant: both
+mechanisms pull toward the same Phase-A anchor, and replay's pull was
+already strong enough alone that L2-SP's added pull changed nothing
+measurable.
+
+### Summary table: three techniques, one checkpoint (seed42), same eval
+
+| Technique | Val Seq Acc (A) | B-learning |
+|---|---|---|
+| No mitigation (λ=0) | 50% | Train Tok Acc 65.38% (pure B) |
+| L2-SP, best λ tested (2.0) | 100% | Train Tok Acc 26.92% (pure B) -- real, partial |
+| Replay, k=1 (minimal) | 100% | 0% exact-match (generation-verified) |
+| Replay k=1 + L2-SP λ=0.1 | 100% | 0% exact-match -- same as replay alone |
+
+### What this means for research direction
+
+Neither technique is simply "better" -- they fail differently, and that
+difference is the actual finding to carry forward. L2-SP trades retention
+for *partial, non-zero* B-competence in a way that's tunable (Part 7's
+smooth dose-response curve). Replay trades retention for what looks, in
+this tiny-data regime, like *complete* B-failure at every k and combination
+tested here -- a much more binary result. If the eventual goal is a model
+that retains A *and* usably learns B, this data says: **look at why L2-SP's
+partial B-learning happens and whether it can be pushed higher (e.g., an
+intermediate λ that trades some retention for more B-competence, not yet
+mapped), rather than defaulting to replay because it "solves" retention
+more easily** -- replay's retention win here is real, but its B cost isn't
+a trade-off in the same reversible sense L2-SP's is.
+
+This is the honest answer to "refine your research direction": not "pick
+the better technique" (this data doesn't support that framing), but "the
+interesting open direction is characterizing the retention/B-learning
+trade-off *within* L2-SP more finely, since replay's version of that
+trade-off is currently all-or-nothing rather than a dial."
+
+### Caveats
+
+- One checkpoint (seed42), one combination point (k=1, λ=0.1) out of a
+  large possible grid -- this rules out "combining trivially fixes
+  replay's B-failure" as a general claim, it does not rule out some other
+  combination working.
+- Whether replay's 0%-on-B result is specific to this tiny (10-entry,
+  single-batch) task or would look different at larger scale is unknown
+  -- flagged already in Part 8, restated here since it's central to the
+  direction conclusion above.
 
 ## Primary metric (locked in)
 
