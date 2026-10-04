@@ -1,0 +1,207 @@
+Overriding config using nanoGPT-style file: phonebook/config/phonebook.py
+Sequence length : 29 tokens
+Batch shape     : (64, 28)
+adapting model from checkpoint: C:\Users\minhh\Side Hustles\comp560_harrison_nguyen\phonebook\out_phaseA_seed123\model.pth
+Trainable Model Parameters: 110,528
+Training on device: cpu
+Epoch 1/100 | Loss: 2.1537
+Epoch 2/100 | Loss: 2.1224
+Epoch 3/100 | Loss: 2.0918
+Epoch 4/100 | Loss: 2.0617
+Epoch 5/100 | Loss: 2.0319
+Epoch 6/100 | Loss: 2.0024
+Epoch 7/100 | Loss: 1.9730
+Epoch 8/100 | Loss: 1.9436
+Epoch 9/100 | Loss: 1.9145
+Epoch 10/100 | Loss: 1.8855
+
+============================================================
+Epoch 10 summary | Time: 0.04s
+  Train loss : 1.8855
+  Val loss   : 0.0317
+  Train acc  : token=60.38% seq=50.00%
+  Val acc    : token=100.00% seq=100.00%
+============================================================
+
+Epoch 11/100 | Loss: 1.8566
+Epoch 12/100 | Loss: 1.8279
+Epoch 13/100 | Loss: 1.7992
+Epoch 14/100 | Loss: 1.7707
+Epoch 15/100 | Loss: 1.7422
+Epoch 16/100 | Loss: 1.7139
+Epoch 17/100 | Loss: 1.6861
+Epoch 18/100 | Loss: 1.6592
+Epoch 19/100 | Loss: 1.6334
+Epoch 20/100 | Loss: 1.6088
+
+============================================================
+Epoch 20 summary | Time: 0.05s
+  Train loss : 1.6088
+  Val loss   : 0.0540
+  Train acc  : token=62.69% seq=45.00%
+  Val acc    : token=99.23% seq=90.00%
+============================================================
+
+Epoch 21/100 | Loss: 1.5851
+Epoch 22/100 | Loss: 1.5618
+Epoch 23/100 | Loss: 1.5389
+Epoch 24/100 | Loss: 1.5163
+Epoch 25/100 | Loss: 1.4939
+Epoch 26/100 | Loss: 1.4718
+Epoch 27/100 | Loss: 1.4500
+Epoch 28/100 | Loss: 1.4286
+Epoch 29/100 | Loss: 1.4077
+Epoch 30/100 | Loss: 1.3873
+
+============================================================
+Epoch 30 summary | Time: 0.05s
+  Train loss : 1.3873
+  Val loss   : 0.0645
+  Train acc  : token=66.92% seq=50.00%
+  Val acc    : token=100.00% seq=100.00%
+============================================================
+
+Epoch 31/100 | Loss: 1.3674
+Epoch 32/100 | Loss: 1.3479
+Epoch 33/100 | Loss: 1.3286
+Epoch 34/100 | Loss: 1.3096
+Epoch 35/100 | Loss: 1.2908
+Epoch 36/100 | Loss: 1.2722
+Epoch 37/100 | Loss: 1.2540
+Epoch 38/100 | Loss: 1.2362
+Epoch 39/100 | Loss: 1.2188
+Epoch 40/100 | Loss: 1.2018
+
+============================================================
+Epoch 40 summary | Time: 0.04s
+  Train loss : 1.2018
+  Val loss   : 0.0816
+  Train acc  : token=69.23% seq=50.00%
+  Val acc    : token=100.00% seq=100.00%
+============================================================
+
+Epoch 41/100 | Loss: 1.1853
+Epoch 42/100 | Loss: 1.1692
+Epoch 43/100 | Loss: 1.1534
+Epoch 44/100 | Loss: 1.1381
+Epoch 45/100 | Loss: 1.1230
+Epoch 46/100 | Loss: 1.1082
+Epoch 47/100 | Loss: 1.0938
+Epoch 48/100 | Loss: 1.0796
+Epoch 49/100 | Loss: 1.0657
+Epoch 50/100 | Loss: 1.0520
+
+============================================================
+Epoch 50 summary | Time: 0.05s
+  Train loss : 1.0520
+  Val loss   : 0.0926
+  Train acc  : token=75.38% seq=50.00%
+  Val acc    : token=100.00% seq=100.00%
+============================================================
+
+Epoch 51/100 | Loss: 1.0386
+Epoch 52/100 | Loss: 1.0253
+Epoch 53/100 | Loss: 1.0122
+Epoch 54/100 | Loss: 0.9992
+Epoch 55/100 | Loss: 0.9864
+Epoch 56/100 | Loss: 0.9736
+Epoch 57/100 | Loss: 0.9610
+Epoch 58/100 | Loss: 0.9486
+Epoch 59/100 | Loss: 0.9362
+Epoch 60/100 | Loss: 0.9240
+
+============================================================
+Epoch 60 summary | Time: 0.04s
+  Train loss : 0.9240
+  Val loss   : 0.0988
+  Train acc  : token=77.31% seq=50.00%
+  Val acc    : token=100.00% seq=100.00%
+============================================================
+
+Epoch 61/100 | Loss: 0.9120
+Epoch 62/100 | Loss: 0.9000
+Epoch 63/100 | Loss: 0.8882
+Epoch 64/100 | Loss: 0.8766
+Epoch 65/100 | Loss: 0.8651
+Epoch 66/100 | Loss: 0.8538
+Epoch 67/100 | Loss: 0.8427
+Epoch 68/100 | Loss: 0.8317
+Epoch 69/100 | Loss: 0.8210
+Epoch 70/100 | Loss: 0.8103
+
+============================================================
+Epoch 70 summary | Time: 0.05s
+  Train loss : 0.8103
+  Val loss   : 0.1014
+  Train acc  : token=79.23% seq=50.00%
+  Val acc    : token=100.00% seq=100.00%
+============================================================
+
+Epoch 71/100 | Loss: 0.7998
+Epoch 72/100 | Loss: 0.7895
+Epoch 73/100 | Loss: 0.7793
+Epoch 74/100 | Loss: 0.7692
+Epoch 75/100 | Loss: 0.7592
+Epoch 76/100 | Loss: 0.7494
+Epoch 77/100 | Loss: 0.7396
+Epoch 78/100 | Loss: 0.7299
+Epoch 79/100 | Loss: 0.7204
+Epoch 80/100 | Loss: 0.7109
+
+============================================================
+Epoch 80 summary | Time: 0.05s
+  Train loss : 0.7109
+  Val loss   : 0.1012
+  Train acc  : token=81.15% seq=50.00%
+  Val acc    : token=100.00% seq=100.00%
+============================================================
+
+Epoch 81/100 | Loss: 0.7016
+Epoch 82/100 | Loss: 0.6924
+Epoch 83/100 | Loss: 0.6833
+Epoch 84/100 | Loss: 0.6743
+Epoch 85/100 | Loss: 0.6654
+Epoch 86/100 | Loss: 0.6565
+Epoch 87/100 | Loss: 0.6478
+Epoch 88/100 | Loss: 0.6392
+Epoch 89/100 | Loss: 0.6307
+Epoch 90/100 | Loss: 0.6222
+
+============================================================
+Epoch 90 summary | Time: 0.05s
+  Train loss : 0.6222
+  Val loss   : 0.1007
+  Train acc  : token=84.23% seq=50.00%
+  Val acc    : token=100.00% seq=100.00%
+============================================================
+
+Epoch 91/100 | Loss: 0.6139
+Epoch 92/100 | Loss: 0.6056
+Epoch 93/100 | Loss: 0.5974
+Epoch 94/100 | Loss: 0.5892
+Epoch 95/100 | Loss: 0.5811
+Epoch 96/100 | Loss: 0.5730
+Epoch 97/100 | Loss: 0.5650
+Epoch 98/100 | Loss: 0.5571
+Epoch 99/100 | Loss: 0.5493
+Epoch 100/100 | Loss: 0.5415
+
+============================================================
+Epoch 100 summary | Time: 0.04s
+  Train loss : 0.5415
+  Val loss   : 0.0994
+  Train acc  : token=88.08% seq=55.00%
+  Val acc    : token=100.00% seq=100.00%
+============================================================
+
+Metrics table log updated successfully at: C:\Users\minhh\Side Hustles\comp560_harrison_nguyen\phonebook\experiments\week_2026-09-30\replication_phaseA_seed123\replay_lr0.0001_ep100\metrics.csv
+Loss plot chart saved successfully at: C:\Users\minhh\Side Hustles\comp560_harrison_nguyen\phonebook\experiments\week_2026-09-30\replication_phaseA_seed123\replay_lr0.0001_ep100\loss_chart.png
+Weights saved to C:\Users\minhh\Side Hustles\comp560_harrison_nguyen\phonebook\experiments\week_2026-09-30\replication_phaseA_seed123\replay_lr0.0001_ep100\model.pth
+
+============================================================
+TRAINING COMPLETE
+  Total Runtime    : 10.79 seconds
+  Final Train Loss : 0.5415
+  Final Val Loss   : 0.0994
+============================================================
+

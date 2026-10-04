@@ -1,0 +1,20 @@
+{
+  "code_commit": "54ff994a7f7c2452e7fe89d70584ac060ebc4409",
+  "test_command": "python -m pytest -q -rs --junitxml=phonebook/experiments/week_2026-09-30/validation_tests.xml",
+  "tests_passed": 102,
+  "elapsed_seconds_reported": 171.09,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "warnings": 0,
+  "default_budget_cli_checks": {
+    "phaseA_A_correct": 10,
+    "phaseA_A_total": 10,
+    "replay_seed42_lr0.001_ep100_B_correct": 10,
+    "replay_seed42_lr0.001_ep100_B_total": 10
+  },
+  "audit_fault_checks": {
+    "altered_prediction_rejected": true,
+    "missing_final_epoch_rejected": true
+  }
+}

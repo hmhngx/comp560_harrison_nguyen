@@ -1,0 +1,64 @@
+{
+  "created_at_utc": "2026-10-04T05:14:51.792295+00:00",
+  "git": {
+    "commit": "54ff994a7f7c2452e7fe89d70584ac060ebc4409",
+    "dirty": false
+  },
+  "purpose": "checkpoint_replication",
+  "phase_a_seed": 123,
+  "selection_basis": "Follow-up selected after the seed42 pilot: compare the original setting with lr=0.001, which reached joint perfection at 100 updates.",
+  "environment": {
+    "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+    "executable": "C:\\Users\\minhh\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "packages": {
+      "torch": "2.12.0",
+      "numpy": "2.1.3",
+      "matplotlib": "3.10.9",
+      "pytest": "9.1.0"
+    },
+    "torch_version": "2.12.0+cpu",
+    "torch_num_threads": 10,
+    "device": "cpu"
+  },
+  "primary_conditions": [
+    {
+      "name": "replay_lr0.0001_ep100",
+      "lr": 0.0001,
+      "epochs": 100,
+      "adapt": true
+    },
+    {
+      "name": "replay_lr0.001_ep100",
+      "lr": 0.001,
+      "epochs": 100,
+      "adapt": true
+    }
+  ],
+  "conditional_extensions": [],
+  "extension_rule": "No extensions: fixed two-condition checkpoint replication.",
+  "seed": 42,
+  "batch_size": 64,
+  "train_sequences": 20,
+  "updates_per_epoch": 1,
+  "optimizer": {
+    "name": "AdamW",
+    "fresh_state_per_run": true,
+    "weight_decay": 0.1,
+    "grad_clip": 1.0
+  },
+  "inputs": {
+    "phonebook\\inputs\\phonebookA.txt": "9c7027683ce11a253c26be52a01abdbb2db982675fea35b4f51484173af52563",
+    "phonebook\\inputs\\phonebookB.txt": "89930f178d693ed12250bf380ca01af11b807fd477003bb266ccb82105928858",
+    "phonebook\\inputs\\replay_k1.txt": "45578f43311380b427e89221cf2af51a95c8ad39ae8096c4ce605b1b9eee5d0c"
+  },
+  "config_sha256": "86aa6d3b7470c750ee02882bc1821f34e7298a91e411daaf7f75c43c7817903b",
+  "historical_checkpoints": {
+    "phaseA_seed123": {
+      "path": "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\out_phaseA_seed123\\model.pth",
+      "sha256": "2fa328825b154e36be9b43bb54845103831b80d4209c8db8f532fc0b58e49165"
+    }
+  },
+  "phase_a_checkpoint_sha256": "2fa328825b154e36be9b43bb54845103831b80d4209c8db8f532fc0b58e49165",
+  "phase_a_meta_sha256": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+}

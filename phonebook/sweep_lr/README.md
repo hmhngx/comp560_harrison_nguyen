@@ -82,7 +82,7 @@ column, every epoch, not just the final row):
 ```
 old out_lr_0.0001 (single-seed, unlogged):
 100,1.2527,0.3872,0.6538,0.9385,0.0000,0.5000
-new lr0.0001_ep100_seed{42,123,999} (logged, 3x):
+new lr=0.0001_ep100_seed{42,123,999} (logged, 3x):
 100,1.2527,0.3872,0.6538,0.9385,0.0000,0.5000   (all three, identical)
 ```
 
@@ -224,8 +224,8 @@ matching variables (Train Loss, Train Token Acc), reported separately
 rather than conflated into one table, since they don't agree pointwise:
 
 ```bash
-python train.py --data-dir phonebook/data_phaseB --out-dir phonebook/sweep_lr/seeded/lr0.0001_ep100_seed42_l2sp0_finegrained --adapt-from phonebook/out_phaseA/model.pth phonebook/config/phonebook.py --lr 0.0001 --epochs 100 --seed 42 --l2sp-lambda 0 --accuracy-interval 1
-python train.py --data-dir phonebook/data_phaseB --out-dir phonebook/sweep_lr/seeded/lr0.0001_ep100_seed42_l2sp0.1_finegrained --adapt-from phonebook/out_phaseA/model.pth phonebook/config/phonebook.py --lr 0.0001 --epochs 100 --seed 42 --l2sp-lambda 0.1 --accuracy-interval 1
+python train.py --data-dir phonebook/data_phaseB --out-dir phonebook/sweep_lr/seeded/lr=0.0001_ep100_seed42_l2sp0_finegrained --adapt-from phonebook/out_phaseA/model.pth phonebook/config/phonebook.py --lr 0.0001 --epochs 100 --seed 42 --l2sp-lambda 0 --accuracy-interval 1
+python train.py --data-dir phonebook/data_phaseB --out-dir phonebook/sweep_lr/seeded/lr=0.0001_ep100_seed42_l2sp0.1_finegrained --adapt-from phonebook/out_phaseA/model.pth phonebook/config/phonebook.py --lr 0.0001 --epochs 100 --seed 42 --l2sp-lambda 0.1 --accuracy-interval 1
 python phonebook/sweep_lr/analyze_matched_progress.py
 ```
 
@@ -474,7 +474,7 @@ is answered: it does not. Given enough λ, all three checkpoints reach it.**
 
 ### But full retention has a real, steep cost -- not a free win
 
-At the λ where each checkpoint first reaches 100% Val Seq Acc, Train Token
+At the smallest tested λ where each checkpoint reaches 100% Val Seq Acc, Train Token
 Acc on phonebook B (how much of the new task is actually being learned)
 drops to 28–41% of its unregularized value across these three checkpoints:
 
@@ -642,6 +642,77 @@ the same metrics, with data access and optimization budgets stated.
   single-batch) task or would look different at larger scale is unknown
   -- flagged already in Part 8, restated here since it's central to the
   direction conclusion above.
+
+## Part 10 — replay learns both books after adjusting optimization settings
+
+**2026-10-04.** The code/provenance review first corrected the metric
+comparison in Parts 7–9 and fixed `generate.py`'s short default budget.
+File evaluation now uses no answer-length hint, retains generated token
+IDs, and requires an exact target followed by newline. Extra tokens,
+generated standalone padding, or a limit stop cannot count as correct.
+The six phonebook source files are now tracked, with LF preserved by Git.
+
+### Protocol and seed42 pilot
+
+The [bounded protocol and complete evidence](../experiments/week_2026-09-30/README.md)
+were recorded before training. CPU, seed42, 64 dimensions, 2 heads,
+2 layers, batch size 64, balanced A+B (20 records), fresh AdamW state each run,
+weight decay 0.1, gradient clip 1.0, L2-SP off. There is one optimizer update
+per epoch. Every replay adaptation starts from the original Phase-A
+checkpoint, including each 500-update run; it is not resumed from the
+100-update endpoint. The primary runs used clean code commit `54dde8e`.
+
+| Condition | Learning rate | Updates | Strict A generation | Strict B generation |
+|---|---|---|---|---|
+| Replay from Phase-A seed42 | 0.0001 | 100 | 10/10 | 0/10 |
+| Replay from Phase-A seed42 | 0.0001 | 500 | 10/10 | 10/10 |
+| Replay from Phase-A seed42 | 0.001 | 100 | 10/10 | 10/10 |
+| Fresh joint A+B training | 0.001 | 100 | 10/10 | 10/10 |
+
+The predeclared lr=0.001 500-update extensions were not triggered because
+both 100-update conditions already had perfect A and B generation.
+The new lr=0.0001/100 replay result exactly reproduces the historical k=1
+checkpoint's evaluated A/B token accuracy, cross-entropy, and exact counts.
+
+### Follow-up across Phase-A checkpoints
+
+After seeing the seed42 pilot, the original and successful 100-update replay
+settings were selected for a fixed seed123/999 checkpoint follow-up. This
+selection was made after the pilot, not declared before its results.
+The follow-up used clean code commit `54ff994`; Phase-B training seed
+remained 42, the books were unchanged, and no follow-up extensions were run.
+
+| Phase-A seed | A / B correct at lr=0.0001 | A / B correct at lr=0.001 |
+|---|---|---|
+| 42 | 10/10 / 0/10 | 10/10 / 10/10 |
+| 123 | 10/10 / 1/10 | 10/10 / 10/10 |
+| 999 | 10/10 / 0/10 | 10/10 / 10/10 |
+
+At the original setting, B token accuracy was 61.54% / 76.15% / 79.23%,
+respectively. At lr=0.001, it was 100% for both books and all three
+checkpoints. Seed123's one recalled B entry means the original zero-B
+observation does not replicate literally across every checkpoint.
+
+### What this establishes and what remains open
+
+Balanced replay can jointly memorize both books in this task at a tested
+100-update setting. The previous zero-B finding was sensitive to learning
+rate/update budget, rather than evidence of an inherent inability of replay
+to learn B. The fresh joint control also demonstrates successful joint
+memorization for this architecture, data, seed, and tested budget.
+
+These are three Phase-A checkpoints on the same twenty entries, with one
+Phase-B training seed. They do not establish method superiority, general
+capacity, results on independent datasets, or robustness to Phase-B seed.
+Only endpoint weights were saved: 100 updates is a successful tested budget,
+not the minimum required or a measured time-to-perfection. Larger-lr L2-SP,
+other replay ratios, and larger tasks were not tested in this pass.
+
+The [independent audit](../experiments/week_2026-09-30/audit.json) reconciles
+20 checkpoint evaluations (400 raw completions), all eight successful
+training manifests, complete finite CSVs, and local input/checkpoint/data
+hashes. Teacher-forced metrics and generation counts are kept separate.
+Codex assisted with the code, experiments, audit, and writing.
 
 ## Primary metric (locked in)
 

@@ -1,0 +1,31 @@
+{
+  "checked_at_utc": "2026-10-04T05:24:57.327889+00:00",
+  "status": "passed",
+  "local_artifact_hashes_checked": true,
+  "runs": [
+    {
+      "directory": "run_2026-10-04",
+      "code_commit": "54dde8ebb80ac1cd86aeb662ba80a4f96b55b315",
+      "evaluations": 14,
+      "completions": 280,
+      "successful_training_runs": 4
+    },
+    {
+      "directory": "replication_phaseA_seed123",
+      "code_commit": "54ff994a7f7c2452e7fe89d70584ac060ebc4409",
+      "evaluations": 3,
+      "completions": 60,
+      "successful_training_runs": 2
+    },
+    {
+      "directory": "replication_phaseA_seed999",
+      "code_commit": "54ff994a7f7c2452e7fe89d70584ac060ebc4409",
+      "evaluations": 3,
+      "completions": 60,
+      "successful_training_runs": 2
+    }
+  ],
+  "total_evaluations": 20,
+  "total_completions": 400,
+  "total_successful_training_runs": 8
+}

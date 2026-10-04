@@ -1,0 +1,4 @@
+condition,A_generation_correct,A_total,B_generation_correct,B_total,A_token_accuracy,B_token_accuracy,A_cross_entropy,B_cross_entropy
+phaseA_seed999,10,10,0,10,1.0,0.2,0.02892662212252617,3.7232797145843506
+replay_lr0.0001_ep100,10,10,0,10,1.0,0.7923076923076923,0.08610059320926666,0.8117223978042603
+replay_lr0.001_ep100,10,10,10,10,1.0,1.0,0.006248422432690859,0.00818685069680214
