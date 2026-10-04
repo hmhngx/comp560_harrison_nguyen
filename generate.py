@@ -25,7 +25,7 @@ class EvalConfig:
     out_dir: Path = Path("out")
     data_dir: Path = Path("data")
     eval_file: Path | None = None
-    max_new_tokens: int = 10
+    max_new_tokens: int | None = None
 
 
 def parse_args() -> EvalConfig:
@@ -42,10 +42,12 @@ def parse_args() -> EvalConfig:
     parser.add_argument(
         "--max-new-tokens",
         type=int,
-        default=10,
-        help="Upper bound on generated tokens per prompt (default: 10)",
+        default=None,
+        help="Upper bound on generated tokens per prompt (default: until newline or context limit)",
     )
     args = parser.parse_args()
+    if args.max_new_tokens is not None and args.max_new_tokens < 1:
+        parser.error("--max-new-tokens must be positive")
 
     return EvalConfig(
         out_dir=args.out_dir,

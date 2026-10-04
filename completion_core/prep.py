@@ -73,11 +73,12 @@ def save_outputs(
     stoi: dict[str, int],
     itos: dict[int, str],
 ) -> None:
+    if len(train_ids) == 0 or len(val_ids) == 0:
+        raise ValueError("Training and evaluation data must both be non-empty; check the split or input files.")
     out_dir.mkdir(parents=True, exist_ok=True)
 
     train_ids.tofile(out_dir / "train.bin")
-    if len(val_ids) > 0:
-        val_ids.tofile(out_dir / "val.bin")
+    val_ids.tofile(out_dir / "val.bin")
 
     meta = {"vocab_size": len(stoi), "stoi": stoi, "itos": itos}
     with (out_dir / "meta.pkl").open("wb") as fh:

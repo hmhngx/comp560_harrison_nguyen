@@ -26,6 +26,8 @@ class EpochMetrics:
 class SequenceDataset(Dataset):
     def __init__(self, bin_path, vocab: Vocabulary) -> None:
         raw_tokens = np.fromfile(bin_path, dtype=np.uint16).astype(np.int64)
+        if len(raw_tokens) == 0:
+            raise ValueError(f"Dataset is empty: {bin_path}")
         self.sequences = self._split_into_lines(raw_tokens, vocab.eot_id)
         self.max_len = max(len(s) for s in self.sequences)
         self.vocab = vocab
@@ -38,6 +40,8 @@ class SequenceDataset(Dataset):
         for end in eot_indices:
             sequences.append(torch.tensor(tokens[start : end + 1]))
             start = end + 1
+        if start != len(tokens):
+            raise ValueError("Dataset has an unterminated final record; prepare it with a trailing newline.")
         return sequences
 
     def _build_targets(self, seq: torch.Tensor, x: torch.Tensor) -> torch.Tensor:

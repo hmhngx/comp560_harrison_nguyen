@@ -187,6 +187,9 @@ inputs/
 out/
 phonebook/out_*/
 
+# Pilot runs stay clean while executing; explicitly commit their small evidence files afterward.
+phonebook/experiments/week_*/
+
 # Saved metrics
 metrics.csv
 

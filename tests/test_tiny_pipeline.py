@@ -73,7 +73,7 @@ def test_tiny_end_to_end_pipeline_with_small_transformer(run_script, has_torch, 
     assert "Val Seq Acc" in header
 
     # 4) Train a compatibility checkpoint for the current inference scripts,
-    # which are fixed to 128-dim, 4 heads, 4 layers.
+    # and exercise a different architecture from the tiny config.
     train_compat = run_script(
         "train.py",
         [
@@ -196,7 +196,7 @@ def test_l2sp_lambda_changes_final_metrics_on_the_real_phonebook_pipeline(
 ) -> None:
     """Every other --l2sp-lambda behavioral test uses either a tiny 4-dim
     synthetic model (test_l2sp.py) or an 8-line dataset (the test above) --
-    never the real 128d/4head/4layer phonebook architecture or the real
+    never the configured 64d/2head/2layer phonebook architecture or the real
     Phase-A checkpoint the actual sweep adapts from. A regression that only
     shows up at that scale (e.g. a checkpoint-shape assumption baked into
     old_params, or the penalty being numerically negligible relative to real

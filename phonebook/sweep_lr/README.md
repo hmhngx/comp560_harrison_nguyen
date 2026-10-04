@@ -6,6 +6,13 @@ rate affects forgetting of phonebook A, plus a second, properly-logged
 an open question about seed variance. Read this file before citing any
 number below in a report.
 
+**Correction, 2026-10-04:** Parts 7–9 now distinguish token accuracy from
+exact phone-number recall. The original CSV measurements are preserved;
+the previous conclusion that L2-SP had an exact B-learning advantage over
+replay was unsupported. The combination also changed B token accuracy,
+despite identical exact-match counts. See the corrected sections and the
+[October 4 pilot](../experiments/week_2026-09-30/README.md).
+
 ## Part 1 — the original 12 runs
 
 **The exact commands that produced these were not logged anywhere and could
@@ -445,7 +452,7 @@ all three. Checked for NaN/Inf in every one of the 15 new runs before
 trusting anything else -- λ=5.0 is 5x the largest value tested before --
 and confirmed all 10 logged epochs are present in each file. None found.
 
-### Answer: all three checkpoints reach full retention -- as a smooth, monotonic climb, not a sudden jump
+### Answer: all three checkpoints reach full retention at a tested λ
 
 Val Seq Acc at epoch 100, full resolution:
 
@@ -455,8 +462,10 @@ Val Seq Acc at epoch 100, full resolution:
 | seed123 | 20%(.2)→20%(.25)→40%(.3)→50%(.4)→50%(.5)→60%(1.0)→80%(2.0)→**100%(5.0)** | λ=5.0 |
 | seed999 | 40%(.01)→40%(.02)→50%(.05)→70%(.07)→70%(.1)→70%(.2)→80%(.5)→80%(1.0)→80%(2.0)→**100%(5.0)** | λ=5.0 |
 
-Every checkpoint climbs smoothly and monotonically once past its own starting
-point -- not the step-function the coarser Part 6 grid made it look like.
+Final retention is nondecreasing across the sampled λ values for each
+checkpoint. Ten evaluation entries give 10-percentage-point increments;
+these observations do not establish a smooth underlying curve or locate
+an exact threshold. The table lists the smallest *tested* λ with full retention.
 Verified the seed42 λ=2.0 case isn't a last-epoch fluke by reading the full
 trajectory: Val Seq Acc is already 100% by epoch 10 and holds there,
 unmoving, through epoch 100 -- the strongest, cleanest plateau found in this
@@ -467,7 +476,7 @@ is answered: it does not. Given enough λ, all three checkpoints reach it.**
 
 At the λ where each checkpoint first reaches 100% Val Seq Acc, Train Token
 Acc on phonebook B (how much of the new task is actually being learned)
-drops to roughly a quarter of its unregularized value, consistently:
+drops to 28–41% of its unregularized value across these three checkpoints:
 
 | Checkpoint | Train Tok Acc (B) at λ=0 | at 100%-retention λ |
 |---|---|---|
@@ -475,20 +484,20 @@ drops to roughly a quarter of its unregularized value, consistently:
 | seed123 | 83.85% | 23.85% (at λ=5.0) |
 | seed999 | 86.92% | 27.69% (at λ=5.0) |
 
-Not a degenerate "ignore B entirely" solution (that would look closer to
-random-guess accuracy, well under 10% for this vocabulary) -- the model is
-still learning some of B, just a small fraction of what it would without
-the penalty. Full retention is achievable, but the honest framing is a
-dial with a steep, real trade-off at its far end, not a setting to reach
-for by default.
+Token accuracy measures teacher-forced next-token predictions, including
+the two hyphens and newline per number. Uniform guessing across the whole
+vocabulary is therefore an inadequate baseline for a model that already
+knows the number format. An October 4 evaluation of the untouched Phase-A
+checkpoints gives B token accuracy of 16.15% / 18.46% / 20.00% for seeds
+42/123/999. The full-retention L2-SP checkpoints improve those token scores,
+but all three still produce **0/10 exact B numbers** through generation.
+Partial token improvement does not establish usable recall of any B entry.
 
 ### Caveats
 
 - Same single-seed/single-lr scope as Parts 5-6.
-- The dose-response curve is now well-characterized in shape (smooth,
-  monotonic) but still coarse in resolution near each crossing point --
-  "60% climb between 0.15 and 0.2" is known; the exact half-integer-percent
-  crossing is not, and wasn't the point of this pass.
+- Retention is nondecreasing over the sampled grid, but intermediate λ
+  values are untested and the exact-entry metric has only ten observations.
 - All three checkpoints happen to reach exactly 100% somewhere in {2.0, 5.0}
   -- untested whether this is a hard ceiling effect of this specific tiny
   10-entry phonebook-A task, or would hold at a different task scale.
@@ -520,7 +529,7 @@ count. Worth being precise about which confound is actually in play rather
 than citing the doc's advance concern without checking it against what was
 actually run.
 
-### Result: replay gives perfect, near-immediate retention -- and, independently verified, complete failure to learn B's specific entries
+### Result: replay retains A but recalls no exact B entries at the tested budget
 
 Val Seq Acc (phonebook A) hit 100% for all three k, including the smallest
 (k=1, a 50/50 mix). Cross-checked this against `train.py`'s own logged
@@ -533,12 +542,12 @@ metric.
 
 The same independent check on phonebook B told a story the aggregate
 training metrics couldn't: **0% exact-match accuracy on phonebook B, for
-all three k**, via true generation. The model isn't producing truncated or
-malformed output (initially got this via a too-short `--max-new-tokens`
+all three k**, via true generation. These failures are not just truncation
+(initially got this via a too-short `--max-new-tokens`
 budget on this tool's default, caught and corrected before trusting it --
 phone numbers need 12+ generated characters, not the tool's default of 10)
--- it produces full-length, phone-number-*shaped* strings, just with the
-wrong digits (e.g. expected `400-377-3079`, got `483-3-3722-2185`).
+-- some outputs also have malformed structure (e.g. expected
+`400-377-3079`, got `483-3-3722-2185`, which is not `XXX-XXX-XXXX`).
 
 This is fully consistent with, not contradicted by, the training-set
 metrics: Train Seq Acc on the mixed set was 50.00% / 75.00% / 83.33% for
@@ -547,16 +556,26 @@ mix (1/2, 3/4, 5/6). That equality isn't a coincidence; it's the same
 "100% of A, 0% of B" result decomposed two ways, independently confirming
 each other.
 
-### What this means: replay and L2-SP are not interchangeable, and neither is simply "better"
+### Corrected comparison: both lack exact B recall; replay has higher B token accuracy here
 
-Replay reaches 100% retention essentially for free in effort (no new
-mechanism, no threshold to find) and at minimal k, where L2-SP needed a
-checkpoint-specific λ between 2.0 and 5.0 to get there. But replay's cost
-to B-learning here is total exact-match failure, not the partial-but-real
-learning L2-SP left at its own 100%-retention point (24-28% Train Token
-Acc, Part 7). Two different failure/success shapes for two different
-mechanisms -- data access (replay) vs. a loss penalty (L2-SP) -- not two
-points on the same trade-off curve.
+The previous comparison used exact B generation for replay but B token
+accuracy for L2-SP. Those measures cannot establish an L2-SP recall advantage.
+Independent October 4 evaluation gives:
+
+| seed42 condition | Exact A generation | Exact B generation | B token accuracy |
+|---|---|---|---|
+| Untouched Phase A | 10/10 | 0/10 | 16.15% |
+| L2-SP λ=2.0 | 10/10 | 0/10 | 26.92% |
+| Replay k=1 | 10/10 | 0/10 | 61.54% |
+| Replay k=3 | 10/10 | 0/10 | 54.62% |
+| Replay k=5 | 10/10 | 0/10 | 53.85% |
+
+Replay learns partial B token predictions at every tested k. These particular
+full-retention replay settings have higher B token accuracy than the cited
+full-retention L2-SP setting, while neither recalls a complete B number.
+This does not establish superiority after tuning either method or changing
+the budget. Replay also uses A training records, whereas Phase-B L2-SP
+training uses the stored parameter anchor without rehearsing A records.
 
 ### Caveats
 
@@ -584,44 +603,34 @@ the third.
 
 Ran one combination -- k=1 replay (the smallest tested) plus λ=0.1 (a
 value already well-characterized alone, Part 3) -- against seed42.
-**Result: identical to replay alone.** 100% on A (confirmed via
+**Corrected result: identical exact-match counts, different token learning.** 100% on A (confirmed via
 generation, not just the training metric), 0% exact-match on B, Train
 Seq Acc on the mixed set still exactly 50.00% (= 1/2, the same
 A-line proportion as plain k=1 replay). Adding L2-SP on top of replay
-here didn't help B-learning or hurt it -- it was simply redundant: both
-mechanisms pull toward the same Phase-A anchor, and replay's pull was
-already strong enough alone that L2-SP's added pull changed nothing
-measurable.
+reduces B token accuracy from 61.54% to 53.08% (8.46 percentage points)
+and raises post-training B cross-entropy from approximately 1.437 to 1.681.
+Thus it hurts those B metrics at this setting. Identical exact-match counts
+do not establish unchanged learning or explain the mechanism.
 
 ### Summary table: three techniques, one checkpoint (seed42), same eval
 
-| Technique | Val Seq Acc (A) | B-learning |
-|---|---|---|
-| No mitigation (λ=0) | 50% | Train Tok Acc 65.38% (pure B) |
-| L2-SP, best λ tested (2.0) | 100% | Train Tok Acc 26.92% (pure B) -- real, partial |
-| Replay, k=1 (minimal) | 100% | 0% exact-match (generation-verified) |
-| Replay k=1 + L2-SP λ=0.1 | 100% | 0% exact-match -- same as replay alone |
+| Technique | Val Seq Acc (A) | B token accuracy | B exact sequence metric |
+|---|---|---|---|
+| No mitigation (λ=0) | 50% | 65.38% | 0/10, teacher-forced CSV metric |
+| L2-SP λ=2.0 | 100% | 26.92% | 0/10, generation-verified |
+| Replay k=1 | 100% | 61.54% | 0/10, generation-verified |
+| Replay k=1 + L2-SP λ=0.1 | 100% | 53.08% | 0/10, generation-verified |
 
 ### What this means for research direction
 
-Neither technique is simply "better" -- they fail differently, and that
-difference is the actual finding to carry forward. L2-SP trades retention
-for *partial, non-zero* B-competence in a way that's tunable (Part 7's
-smooth dose-response curve). Replay trades retention for what looks, in
-this tiny-data regime, like *complete* B-failure at every k and combination
-tested here -- a much more binary result. If the eventual goal is a model
-that retains A *and* usably learns B, this data says: **look at why L2-SP's
-partial B-learning happens and whether it can be pushed higher (e.g., an
-intermediate λ that trades some retention for more B-competence, not yet
-mapped), rather than defaulting to replay because it "solves" retention
-more easily** -- replay's retention win here is real, but its B cost isn't
-a trade-off in the same reversible sense L2-SP's is.
-
-This is the honest answer to "refine your research direction": not "pick
-the better technique" (this data doesn't support that framing), but "the
-interesting open direction is characterizing the retention/B-learning
-trade-off *within* L2-SP more finely, since replay's version of that
-trade-off is currently all-or-nothing rather than a dial."
+The next question is whether balanced replay's zero exact B recall persists
+with more updates or a larger learning rate. The unregularized control
+already has 0% B sequence accuracy at lr=0.0001 and 100 epochs, but 100%
+at 500 epochs (with 0% A retention). Thus the existing default is insufficient
+for complete B learning even without mitigation. A joint A+B memorization
+control and bounded replay-budget pilot are needed before selecting a new
+mechanism such as EWC. Comparisons must report A and B separately using
+the same metrics, with data access and optimization budgets stated.
 
 ### Caveats
 

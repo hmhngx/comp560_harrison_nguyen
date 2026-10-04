@@ -26,6 +26,17 @@ from completion_core.prep import (
 # Configuration
 # ---------------------------------------------------------------------------
 
+def load_phonebook_lines(path: Path) -> list[str]:
+    """Normalize the final newline and reject records the trainer cannot consume."""
+    normalized = []
+    for number, raw in enumerate(load_lines(path), start=1):
+        line = raw.rstrip("\r\n")
+        if line.count("=") != 1 or not all(part.strip() for part in line.split("=")):
+            raise ValueError(f"Invalid completion record at {path}:{number}; expected non-empty name=answer.")
+        normalized.append(line + "\n")
+    return normalized
+
+
 @dataclass
 class PrepareConfig:
     input_file: Path = DEFAULT_INPUT
@@ -104,13 +115,13 @@ def main() -> None:
     cfg = parse_args()
 
     if cfg.train_input_file is not None and cfg.eval_input_file is not None:
-        train_lines = load_lines(cfg.train_input_file)
-        val_lines = load_lines(cfg.eval_input_file)
+        train_lines = load_phonebook_lines(cfg.train_input_file)
+        val_lines = load_phonebook_lines(cfg.eval_input_file)
         print("Mode            : explicit train/eval files")
         print(f"Train lines     : {len(train_lines)} ({cfg.train_input_file})")
         print(f"Eval lines      : {len(val_lines)} ({cfg.eval_input_file})")
     else:
-        lines = load_lines(cfg.input_file)
+        lines = load_phonebook_lines(cfg.input_file)
         split = int(len(lines) * cfg.train_split)
         train_lines = lines[:split]
         val_lines = lines[split:]
