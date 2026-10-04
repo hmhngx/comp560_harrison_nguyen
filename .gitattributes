@@ -1,2 +1,4 @@
 # Preserve the exact experimental text bytes across Windows and Unix checkouts.
 phonebook/inputs/*.txt text eol=lf
+# Preserve captured experiment logs, including the trainer's trailing blank lines.
+phonebook/experiments/**/*.log -whitespace

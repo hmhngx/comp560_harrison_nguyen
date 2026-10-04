@@ -1,0 +1,124 @@
+{
+  "created_at_utc": "2026-10-04T05:09:27.752534+00:00",
+  "git": {
+    "commit": "54dde8ebb80ac1cd86aeb662ba80a4f96b55b315",
+    "dirty": false
+  },
+  "environment": {
+    "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+    "executable": "C:\\Users\\minhh\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "packages": {
+      "torch": "2.12.0",
+      "numpy": "2.1.3",
+      "matplotlib": "3.10.9",
+      "pytest": "9.1.0"
+    },
+    "torch_version": "2.12.0+cpu",
+    "torch_num_threads": 10,
+    "device": "cpu"
+  },
+  "primary_conditions": [
+    {
+      "name": "replay_lr0.0001_ep100",
+      "lr": 0.0001,
+      "epochs": 100,
+      "adapt": true
+    },
+    {
+      "name": "replay_lr0.0001_ep500",
+      "lr": 0.0001,
+      "epochs": 500,
+      "adapt": true
+    },
+    {
+      "name": "replay_lr0.001_ep100",
+      "lr": 0.001,
+      "epochs": 100,
+      "adapt": true
+    },
+    {
+      "name": "joint_lr0.001_ep100",
+      "lr": 0.001,
+      "epochs": 100,
+      "adapt": false
+    }
+  ],
+  "conditional_extensions": [
+    {
+      "name": "replay_lr0.001_ep500",
+      "lr": 0.001,
+      "epochs": 500,
+      "adapt": true,
+      "trigger": "replay_lr0.001_ep100"
+    },
+    {
+      "name": "joint_lr0.001_ep500",
+      "lr": 0.001,
+      "epochs": 500,
+      "adapt": false,
+      "trigger": "joint_lr0.001_ep100"
+    }
+  ],
+  "extension_rule": "Run the declared 500-update extension if either book has less than perfect strict generation at 100 updates.",
+  "seed": 42,
+  "batch_size": 64,
+  "train_sequences": 20,
+  "updates_per_epoch": 1,
+  "optimizer": {
+    "name": "AdamW",
+    "fresh_state_per_run": true,
+    "weight_decay": 0.1,
+    "grad_clip": 1.0
+  },
+  "inputs": {
+    "phonebook\\inputs\\phonebookA.txt": "9c7027683ce11a253c26be52a01abdbb2db982675fea35b4f51484173af52563",
+    "phonebook\\inputs\\phonebookB.txt": "89930f178d693ed12250bf380ca01af11b807fd477003bb266ccb82105928858",
+    "phonebook\\inputs\\replay_k1.txt": "45578f43311380b427e89221cf2af51a95c8ad39ae8096c4ce605b1b9eee5d0c"
+  },
+  "config_sha256": "86aa6d3b7470c750ee02882bc1821f34e7298a91e411daaf7f75c43c7817903b",
+  "historical_checkpoints": {
+    "phaseA_seed42": {
+      "path": "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\out_phaseA\\model.pth",
+      "sha256": "6b1669a5a620352512ab7d1bae1e550caa315cdc7d82f1440f6c0a22d7a94303"
+    },
+    "historical_l2sp_lambda2": {
+      "path": "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\sweep_lr\\seeded\\lr0.0001_ep100_seed42_l2sp2.0\\model.pth",
+      "sha256": "2d57b5dd64cdbeb87fb5adf062b77f2ab72fa91019fc489537474fe475526c4d"
+    },
+    "historical_replay_k1": {
+      "path": "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\out_phaseB_replay_k1\\model.pth",
+      "sha256": "a84e6bfd00763297906db922b5c3c13310c8c18f4fdefe4abb4e8e7de2a3b4fd"
+    },
+    "historical_replay_k3": {
+      "path": "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\out_phaseB_replay_k3\\model.pth",
+      "sha256": "69fb0d5794b8c89e174b6ba36035924fbcfc74d079f6d972130a6fb0eec016a9"
+    },
+    "historical_replay_k5": {
+      "path": "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\out_phaseB_replay_k5\\model.pth",
+      "sha256": "4d95fcaabb831966533825009ada3b86d0e82916e6f0927acd821a89cf8b91b7"
+    },
+    "historical_combined": {
+      "path": "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\out_phaseB_replay_k1_l2sp0.1\\model.pth",
+      "sha256": "1609b2e549ad0639aa2190d5619147b7f431e1f9f640fa18d84e0efca2772bf2"
+    },
+    "phaseA_seed123": {
+      "path": "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\out_phaseA_seed123\\model.pth",
+      "sha256": "2fa328825b154e36be9b43bb54845103831b80d4209c8db8f532fc0b58e49165"
+    },
+    "historical_l2sp_lambda5_phaseA_seed123": {
+      "path": "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\sweep_lr\\seeded\\lr0.0001_ep100_seed42_l2sp5.0_pA-out_phaseA_seed123\\model.pth",
+      "sha256": "8c9258a2f348d291c97ffae010c0ffe859b33165e632553c1bcac9626cd719a4"
+    },
+    "phaseA_seed999": {
+      "path": "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\out_phaseA_seed999\\model.pth",
+      "sha256": "36d192a773f594e5e4a0f826007f3459543fe79a04ab0cd431824d1bfab8f48d"
+    },
+    "historical_l2sp_lambda5_phaseA_seed999": {
+      "path": "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\sweep_lr\\seeded\\lr0.0001_ep100_seed42_l2sp5.0_pA-out_phaseA_seed999\\model.pth",
+      "sha256": "db368b0726d37e5827f1aed7f797131be3bbc8acb4d3745530bbf8053c612265"
+    }
+  },
+  "phase_a_checkpoint_sha256": "6b1669a5a620352512ab7d1bae1e550caa315cdc7d82f1440f6c0a22d7a94303",
+  "phase_a_meta_sha256": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+}

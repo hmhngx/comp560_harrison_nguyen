@@ -49,6 +49,18 @@ python phonebook/run_replay_pilot.py --dry-run
 python phonebook/run_replay_pilot.py --out-root phonebook/experiments/week_2026-09-30-rerun
 ```
 
+After inspecting the completed seed42 pilot, two fixed 100-update replay
+conditions (lr=0.0001 and lr=0.001) were selected for Phase-A checkpoint
+replication. This follow-up was selected after the primary results, rather
+than being part of the original predeclared pilot. Phase-B training seed
+remains 42; only the source Phase-A checkpoint changes. No conditional
+extensions or fresh-joint runs are included in this follow-up.
+
+```powershell
+python phonebook/run_replay_pilot.py --replication-phase-a-seed 123
+python phonebook/run_replay_pilot.py --replication-phase-a-seed 999
+```
+
 The runner prepares new binary data directly from the tracked sources.
 It additionally evaluates the original seed42 Phase-A, L2-SP λ=2, replay k=1/3/5,
 and combination checkpoints, plus Phase-A seeds123/999 and their λ=5 L2-SP
@@ -61,7 +73,27 @@ summary, protocol, preparation record, logs, and run manifest.
 
 ## Results
 
-Pending execution after regression tests and the full suite pass.
+The seed42 pilot completed successfully from clean code commit `54dde8e`.
+All counts below are strict, newline-terminated generation, evaluated on
+A and B independently. Each book has ten entries.
+
+| Initialization and data | Learning rate | Updates | A correct | B correct |
+|---|---|---|---|---|
+| Phase-A seed42, balanced replay | 0.0001 | 100 | 10/10 | 0/10 |
+| Phase-A seed42, balanced replay | 0.0001 | 500 | 10/10 | 10/10 |
+| Phase-A seed42, balanced replay | 0.001 | 100 | 10/10 | 10/10 |
+| Fresh initialization, joint A+B | 0.001 | 100 | 10/10 | 10/10 |
+
+The two conditional 500-update extensions were not triggered: both
+lr=0.001 conditions already had perfect A and B generation at 100 updates.
+This establishes joint memorization at the tested successful endpoints;
+the old zero-B result is sensitive to optimization settings, rather than
+evidence that balanced replay necessarily prevents learning B.
+
+The selected seed123/999 checkpoint follow-up is pending execution.
+Machine-readable seed42 evidence: [summary](run_2026-10-04/summary.csv),
+[protocol](run_2026-10-04/protocol.json),
+[manifest](run_2026-10-04/manifest.jsonl).
 
 ## Scope
 

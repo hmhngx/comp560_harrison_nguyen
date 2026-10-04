@@ -1,0 +1,17 @@
+{
+  "command": [
+    "C:\\Users\\minhh\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "phonebook/prepare_phonebook.py",
+    "--train-input",
+    "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\inputs\\replay_k1.txt",
+    "--eval-input",
+    "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\inputs\\phonebookA.txt",
+    "--out-dir",
+    "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-09-30\\run_2026-10-04\\data"
+  ],
+  "sha256": {
+    "train.bin": "1592a09034b4ad2b6f88522f8a55cda31d9e2677fce82be052860536f080363d",
+    "val.bin": "192fb31b28330e847f2d4e9be4ce6bed03823d92cc68826e745ab201e80e12c8",
+    "meta.pkl": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+  }
+}

@@ -82,16 +82,21 @@ def needs_extension(result: dict) -> bool:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--out-root", type=Path, default=Path("phonebook/experiments/week_2026-09-30/run_2026-10-04"))
+    parser.add_argument("--out-root", type=Path)
+    parser.add_argument("--replication-phase-a-seed", type=int, choices=[123, 999],
+                        help="Follow-up: repeat the two 100-update replay conditions from another Phase-A checkpoint.")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
-    output = args.out_root.resolve()
+    phase_a_seed = args.replication_phase_a_seed or 42
+    default_run = "run_2026-10-04" if phase_a_seed == 42 else f"replication_phaseA_seed{phase_a_seed}"
+    output = (args.out_root or Path("phonebook/experiments/week_2026-09-30") / default_run).resolve()
     books = {name: ROOT_DIR / f"phonebook/inputs/phonebook{name}.txt" for name in ["A", "B"]}
     replay = ROOT_DIR / "phonebook/inputs/replay_k1.txt"
-    checkpoint = ROOT_DIR / "phonebook/out_phaseA/model.pth"
+    checkpoint_dir = "out_phaseA" if phase_a_seed == 42 else f"out_phaseA_seed{phase_a_seed}"
+    checkpoint = ROOT_DIR / "phonebook" / checkpoint_dir / "model.pth"
     source_meta = ROOT_DIR / "phonebook/data_phaseA/meta.pkl"
     baseline_paths = {
-        "phaseA_seed42": checkpoint,
+        "phaseA_seed42": ROOT_DIR / "phonebook/out_phaseA/model.pth",
         "historical_l2sp_lambda2": ROOT_DIR / "phonebook/sweep_lr/seeded/lr0.0001_ep100_seed42_l2sp2.0/model.pth",
         "historical_replay_k1": ROOT_DIR / "phonebook/out_phaseB_replay_k1/model.pth",
         "historical_replay_k3": ROOT_DIR / "phonebook/out_phaseB_replay_k3/model.pth",
@@ -112,10 +117,22 @@ def main() -> None:
         {"name": "joint_lr0.001_ep500", "lr": 0.001, "epochs": 500, "adapt": False,
          "trigger": "joint_lr0.001_ep100"},
     ]
+    if args.replication_phase_a_seed:
+        conditions = [condition for condition in conditions
+                      if condition["adapt"] and condition["epochs"] == 100]
+        extensions = []
+        baseline_paths = {f"phaseA_seed{phase_a_seed}": checkpoint}
     protocol = {"created_at_utc": datetime.now(timezone.utc).isoformat(), "git": provenance,
+                "purpose": "checkpoint_replication" if args.replication_phase_a_seed else "bounded_pilot",
+                "phase_a_seed": phase_a_seed,
+                "selection_basis": ("Follow-up selected after the seed42 pilot: compare the original setting "
+                                    "with lr=0.001, which reached joint perfection at 100 updates."
+                                    if args.replication_phase_a_seed else "Primary conditions declared before the pilot."),
                 "environment": environment(), "primary_conditions": conditions,
                 "conditional_extensions": extensions,
-                "extension_rule": "Run the declared 500-update extension if either book has less than perfect strict generation at 100 updates.",
+                "extension_rule": ("No extensions: fixed two-condition checkpoint replication."
+                                   if args.replication_phase_a_seed else
+                                   "Run the declared 500-update extension if either book has less than perfect strict generation at 100 updates."),
                 "seed": 42, "batch_size": 64, "train_sequences": 20, "updates_per_epoch": 1,
                 "optimizer": {"name": "AdamW", "fresh_state_per_run": True,
                               "weight_decay": TrainConfig().weight_decay,

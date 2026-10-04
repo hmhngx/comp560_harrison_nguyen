@@ -76,7 +76,7 @@ Epoch 10 summary | Time: 0.78s
   Train acc  : token=100.00% seq=100.00%
   Val acc    : token=100.00% seq=100.00%
 ```
-This summary displays performance on both the training and validation datasets. Loss serves as an indirect optimization measure, whereas the accuracy metrics are calculated directly from generated outputs. Accuracy is reported at both the token level (the percentage of individual characters predicted correctly) and the sequence level (the percentage of full output strings predicted correctly). For example, if the target output for input `abcd` is `ABCD`, but the model produces `ABCE`, 75% of the tokens are correct, but sequence accuracy is 0%.
+This summary displays performance on both the training and validation datasets. These accuracy metrics are teacher-forced: each next-token prediction receives the correct preceding tokens. Token accuracy counts correct supervised output tokens, including the terminating newline; sequence accuracy requires all supervised tokens to be correct. Use the generation scripts below to measure completion without supplying the preceding answer tokens.
 
 ### 4. Test for accuracy.
 
