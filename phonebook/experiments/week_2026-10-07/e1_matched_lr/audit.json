@@ -1,0 +1,10 @@
+{
+  "root": "phonebook\\experiments\\week_2026-10-07\\e1_matched_lr",
+  "status": "passed",
+  "spec": "e1_matched_lr",
+  "git_commit": "e877957d63a99be0047c740c4b18fcd0f6ac28dc",
+  "runs": 33,
+  "completions": 660,
+  "local_artifacts_checked": true,
+  "git_checked": true
+}

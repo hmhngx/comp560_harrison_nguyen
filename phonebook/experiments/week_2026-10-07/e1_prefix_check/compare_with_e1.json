@@ -1,0 +1,14 @@
+{
+  "d0_seed42/plain_ep100 vs d0_seed42/plain": {
+    "compared_epochs": 100,
+    "mismatches": []
+  },
+  "d0_seed42/l2sp_lam0.1_ep100 vs d0_seed42/l2sp_lam0.1": {
+    "compared_epochs": 100,
+    "mismatches": []
+  },
+  "d0_seed42/replay_a1b1_ep100 vs d0_seed42/replay_a1b1": {
+    "compared_epochs": 100,
+    "mismatches": []
+  }
+}

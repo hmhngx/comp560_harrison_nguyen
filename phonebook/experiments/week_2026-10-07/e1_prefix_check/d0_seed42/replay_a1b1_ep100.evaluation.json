@@ -1,0 +1,206 @@
+{
+  "checkpoint": "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-07\\e1_prefix_check\\d0_seed42\\replay_a1b1_ep100\\model.pth",
+  "checkpoint_sha256": "efc3de93111da44f2b3408b1e550147b7739699ea46853e810317c1aee73dd62",
+  "metadata": "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-07\\e1_prefix_check\\d0_seed42\\data_a1b1_evalA\\meta.pkl",
+  "metadata_sha256": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9",
+  "model_config": {
+    "seq_len": 29,
+    "d_model": 64,
+    "n_heads": 2,
+    "n_layers": 2
+  },
+  "device": "cpu",
+  "generation_budget": "automatic_context_limit",
+  "books": {
+    "A": {
+      "source": "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\inputs\\phonebookA.txt",
+      "source_sha256": "9c7027683ce11a253c26be52a01abdbb2db982675fea35b4f51484173af52563",
+      "teacher_forced": {
+        "loss": 0.007793705444782972,
+        "token_accuracy": 1.0,
+        "sequence_accuracy": 1.0,
+        "token_correct": 130,
+        "token_total": 130,
+        "sequence_correct": 10,
+        "sequence_total": 10
+      },
+      "generation": {
+        "correct": 10,
+        "total": 10,
+        "accuracy": 1.0,
+        "stop_counts": {
+          "newline": 10,
+          "budget": 0,
+          "context": 0
+        },
+        "predictions": [
+          {
+            "prompt": "Anra Blackmore",
+            "expected": "970-720-1840",
+            "prediction": "970-720-1840",
+            "stop_reason": "newline",
+            "correct": true
+          },
+          {
+            "prompt": "Camra Blackley",
+            "expected": "686-488-8613",
+            "prediction": "686-488-8613",
+            "stop_reason": "newline",
+            "correct": true
+          },
+          {
+            "prompt": "Gilan Brandford",
+            "expected": "945-628-0750",
+            "prediction": "945-628-0750",
+            "stop_reason": "newline",
+            "correct": true
+          },
+          {
+            "prompt": "Aret Deanner",
+            "expected": "830-425-7283",
+            "prediction": "830-425-7283",
+            "stop_reason": "newline",
+            "correct": true
+          },
+          {
+            "prompt": "Giayn Cranesen",
+            "expected": "679-566-2183",
+            "prediction": "679-566-2183",
+            "stop_reason": "newline",
+            "correct": true
+          },
+          {
+            "prompt": "Briar Cooksen",
+            "expected": "493-370-4795",
+            "prediction": "493-370-4795",
+            "stop_reason": "newline",
+            "correct": true
+          },
+          {
+            "prompt": "Delry Cainston",
+            "expected": "222-879-6064",
+            "prediction": "222-879-6064",
+            "stop_reason": "newline",
+            "correct": true
+          },
+          {
+            "prompt": "Beaie Cookley",
+            "expected": "680-472-5428",
+            "prediction": "680-472-5428",
+            "stop_reason": "newline",
+            "correct": true
+          },
+          {
+            "prompt": "Casra Cranewood",
+            "expected": "305-547-2896",
+            "prediction": "305-547-2896",
+            "stop_reason": "newline",
+            "correct": true
+          },
+          {
+            "prompt": "Beaar Dalemore",
+            "expected": "992-492-9684",
+            "prediction": "992-492-9684",
+            "stop_reason": "newline",
+            "correct": true
+          }
+        ]
+      }
+    },
+    "B": {
+      "source": "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\inputs\\phonebookB.txt",
+      "source_sha256": "89930f178d693ed12250bf380ca01af11b807fd477003bb266ccb82105928858",
+      "teacher_forced": {
+        "loss": 0.01048381719738245,
+        "token_accuracy": 1.0,
+        "sequence_accuracy": 1.0,
+        "token_correct": 130,
+        "token_total": 130,
+        "sequence_correct": 10,
+        "sequence_total": 10
+      },
+      "generation": {
+        "correct": 10,
+        "total": 10,
+        "accuracy": 1.0,
+        "stop_counts": {
+          "newline": 10,
+          "budget": 0,
+          "context": 0
+        },
+        "predictions": [
+          {
+            "prompt": "Ashra Dellis",
+            "expected": "333-512-9823",
+            "prediction": "333-512-9823",
+            "stop_reason": "newline",
+            "correct": true
+          },
+          {
+            "prompt": "Calio Blackham",
+            "expected": "644-383-9643",
+            "prediction": "644-383-9643",
+            "stop_reason": "newline",
+            "correct": true
+          },
+          {
+            "prompt": "Brie Brownby",
+            "expected": "403-662-3854",
+            "prediction": "403-662-3854",
+            "stop_reason": "newline",
+            "correct": true
+          },
+          {
+            "prompt": "Iano Carers",
+            "expected": "713-441-0043",
+            "prediction": "713-441-0043",
+            "stop_reason": "newline",
+            "correct": true
+          },
+          {
+            "prompt": "Danay Dellby",
+            "expected": "405-250-2639",
+            "prediction": "405-250-2639",
+            "stop_reason": "newline",
+            "correct": true
+          },
+          {
+            "prompt": "Cela Cooker",
+            "expected": "400-377-3079",
+            "prediction": "400-377-3079",
+            "stop_reason": "newline",
+            "correct": true
+          },
+          {
+            "prompt": "Devus Craneham",
+            "expected": "764-617-8175",
+            "prediction": "764-617-8175",
+            "stop_reason": "newline",
+            "correct": true
+          },
+          {
+            "prompt": "Giaas Blairmore",
+            "expected": "441-661-4853",
+            "prediction": "441-661-4853",
+            "stop_reason": "newline",
+            "correct": true
+          },
+          {
+            "prompt": "Isaas Birchwood",
+            "expected": "529-218-2718",
+            "prediction": "529-218-2718",
+            "stop_reason": "newline",
+            "correct": true
+          },
+          {
+            "prompt": "Gilar Cassmore",
+            "expected": "688-486-4298",
+            "prediction": "688-486-4298",
+            "stop_reason": "newline",
+            "correct": true
+          }
+        ]
+      }
+    }
+  }
+}

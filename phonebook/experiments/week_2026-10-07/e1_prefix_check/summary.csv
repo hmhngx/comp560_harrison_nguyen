@@ -1,0 +1,4 @@
+run_id,scenario,condition,lr,epochs,batch_size,l2sp_lambda,a_copies,b_copies,A_correct,A_total,B_correct,B_total,A_token_accuracy,B_token_accuracy,A_cross_entropy,B_cross_entropy
+d0_seed42/plain_ep100,d0_seed42,plain_ep100,0.001,100,64,0.0,0,1,0,10,10,10,0.4153846153846154,1.0,2.4490151405334473,0.010535743087530136
+d0_seed42/l2sp_lam0.1_ep100,d0_seed42,l2sp_lam0.1_ep100,0.001,100,64,0.1,0,1,1,10,10,10,0.8538461538461538,1.0,0.4905712306499481,0.12394102662801743
+d0_seed42/replay_a1b1_ep100,d0_seed42,replay_a1b1_ep100,0.001,100,64,0.0,1,1,10,10,10,10,1.0,1.0,0.007793705444782972,0.01048381719738245

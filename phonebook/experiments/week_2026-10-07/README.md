@@ -78,3 +78,107 @@ python phonebook/run_experiment.py --spec phonebook/specs/e1_prefix_check.json -
 
 E2 (new phonebooks) and E3 (the README's repeated-B replay question) are specified
 in later commits, each before its own runs.
+
+## E1 results
+
+Run Saturday October 10 from clean code commit `e877957`: 33 runs, all return
+code 0, about 45 seconds each. Evidence is in [`e1_matched_lr/`](e1_matched_lr/)
+and [`e1_prefix_check/`](e1_prefix_check/); derived tables and figures are in
+[`../../results/`](../../results/): [`e1_endpoints.csv`](../../results/e1_endpoints.csv),
+[`e1_decision.json`](../../results/e1_decision.json),
+[`e1_curves.png`](../../results/e1_curves.png),
+[`e1_dose_response.png`](../../results/e1_dose_response.png).
+Every cell below is entries recalled exactly (whole answer plus newline), out of ten
+per book: A is the old book, B the new one.
+
+
+**After 100 updates** (entries of book A and of book B, out of 10 each, recalled exactly)
+
+| Condition | seed 42 | seed 123 | seed 999 |
+|---|---|---|---|
+| plain fine-tuning | A 0, B 10 | A 0, B 10 | A 0, B 10 |
+| L2-SP λ=0.01 | A 0, B 10 | A 2, B 10 | A 2, B 10 |
+| L2-SP λ=0.03 | A 1, B 10 | A 2, B 10 | A 3, B 10 |
+| L2-SP λ=0.1 | A 1, B 10 | A 1, B 10 | A 2, B 10 |
+| L2-SP λ=0.3 | A 3, B 4 | A 3, B 7 | A 2, B 8 |
+| L2-SP λ=1 | A 9, B 0 | A 7, B 0 | A 8, B 0 |
+| L2-SP λ=3 | A 10, B 0 | A 9, B 0 | A 10, B 0 |
+| L2-SP λ=10 | A 10, B 0 | A 10, B 0 | A 10, B 0 |
+| L2-SP λ=30 | A 10, B 0 | A 10, B 0 | A 10, B 0 |
+| L2-SP λ=100 | A 10, B 0 | A 10, B 0 | A 10, B 0 |
+| balanced replay (A once + B once) | A 10, B 10 | A 10, B 10 | A 10, B 10 |
+
+**After 300 updates** (entries of book A and of book B, out of 10 each, recalled exactly)
+
+| Condition | seed 42 | seed 123 | seed 999 |
+|---|---|---|---|
+| plain fine-tuning | A 0, B 10 | A 0, B 10 | A 0, B 10 |
+| L2-SP λ=0.01 | A 1, B 10 | A 0, B 10 | A 4, B 10 |
+| L2-SP λ=0.03 | A 0, B 10 | A 1, B 10 | A 1, B 10 |
+| L2-SP λ=0.1 | A 1, B 10 | A 1, B 10 | A 1, B 10 |
+| L2-SP λ=0.3 | A 4, B 8 | A 3, B 9 | A 3, B 8 |
+| L2-SP λ=1 | A 9, B 0 | A 6, B 0 | A 8, B 0 |
+| L2-SP λ=3 | A 10, B 0 | A 8, B 0 | A 10, B 0 |
+| L2-SP λ=10 | A 10, B 0 | A 10, B 0 | A 10, B 0 |
+| L2-SP λ=30 | A 10, B 0 | A 10, B 0 | A 10, B 0 |
+| L2-SP λ=100 | A 10, B 0 | A 10, B 0 | A 10, B 0 |
+| balanced replay (A once + B once) | A 10, B 10 | A 10, B 10 | A 10, B 10 |
+
+**Timing** (update numbers)
+
+| Condition | seed 42 | seed 123 | seed 999 |
+|---|---|---|---|
+| plain fine-tuning: B first 10/10 | 44 | 34 | 31 |
+| plain fine-tuning: lowest A | 0 (update 17) | 0 (update 12) | 0 (update 12) |
+| balanced replay (A once + B once): B first 10/10 | 51 | 41 | 33 |
+| balanced replay (A once + B once): lowest A | 8 (update 4) | 8 (update 3) | 8 (update 2) |
+| balanced replay: both books 10/10 | 51 | 41 | 33 |
+
+**Best L2-SP compromise (largest A + B)**
+
+- after 100 updates: seed 42: 11/20 (λ=0.03, 0.1); seed 123: 12/20 (λ=0.01, 0.03); seed 999: 13/20 (λ=0.03)
+- after 300 updates: seed 42: 12/20 (λ=0.3); seed 123: 12/20 (λ=0.3); seed 999: 14/20 (λ=0.01)
+
+![Exact recall of A and B after every update, three checkpoints](../../results/e1_curves.png)
+
+![Recall after 100 and 300 updates as lambda grows](../../results/e1_dose_response.png)
+
+**Reading the table.**
+
+1. *Plain fine-tuning forgets A before it learns B.* A is down to 0 of 10 by update
+   17, 12 and 12 on the three checkpoints; B first reaches 10 of 10 at update 44, 34
+   and 31. At 100 and at 300 updates the result is A 0, B 10 on every checkpoint.
+2. *L2-SP trades one book for the other along a single axis of λ.*
+   - λ ≤ 0.1 behaves like plain fine-tuning: B is complete by update 31 to 65, and A
+     ends at 0 to 4 of 10 after 300 updates.
+   - λ = 0.3 is the only intermediate point: A 3 to 4 and B 8 to 9 after 300 updates
+     (B reaches 10 only on the seed 123 checkpoint, at update 274).
+   - λ ≥ 1 keeps most or all of A (5 to 10 of 10 over the 300 updates at λ=1; always 8 or
+     more at λ=3; 10 at λ ≥ 10) but learns essentially none of B: at most 1 of 10 at any
+     single update.
+3. *Pre-registered decision: no λ matches replay.* No λ gives A ≥ 9 together with B = 10
+   on any of the three checkpoints at 100 or at 300 updates, so every λ fails both the
+   "matches" and the "nearly matches" test
+   ([`e1_decision.json`](../../results/e1_decision.json)). The best L2-SP compromise,
+   the largest A + B on each checkpoint, is 11 to 13 of 20 entries after 100 updates and
+   12 to 14 after 300, against 20 of 20 for balanced replay.
+4. *Balanced replay reaches 10 of 10 on both books* at update 51, 41 and 33, after A
+   dips to 8 of 10 for a few updates (lowest A at update 4, 3 and 2).
+
+**Checks.**
+
+- [`audit_experiment.py`](../../audit_experiment.py) passes on both evidence folders
+  with local artifacts: it re-generated all 660 + 60 completions from the saved
+  checkpoints and they equal the saved strings; spec and config equal the versions
+  committed at `e877957`; Phase-A checkpoint hashes equal the pins.
+- The trainer's logged teacher-forced recall equals strict generation recall at the
+  endpoint of all 33 runs (checked inside the audit).
+- `e1_prefix_check`: the 100-update runs equal the first 100 rows of the 300-update
+  runs on all three conditions (100 epochs compared each, no mismatch, timing column
+  ignored), so the 100-update numbers above come from the long runs legitimately.
+
+**What this does not show.** One fixed pair of phonebooks (E2 tests new ones); one
+learning rate; the trainer's AdamW defaults including weight decay 0.1; ten entries
+per book, so counts move in tenths. L2-SP here is the isotropic penalty from the
+mitigation notes; a Fisher-weighted penalty (EWC) was not tested. A "no" for L2-SP
+at these settings is not a claim about every regularizer.
