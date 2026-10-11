@@ -1,0 +1,10 @@
+{
+  "root": "phonebook\\experiments\\week_2026-10-07\\e3_replay_ratio",
+  "status": "passed",
+  "spec": "e3_replay_ratio",
+  "git_commit": "5f4a03486453729de5d4d30d2d1f61f79b8360e9",
+  "runs": 60,
+  "completions": 1200,
+  "local_artifacts_checked": true,
+  "git_checked": true
+}

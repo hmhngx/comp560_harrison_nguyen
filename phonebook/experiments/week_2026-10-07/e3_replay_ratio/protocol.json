@@ -1,0 +1,1580 @@
+{
+  "created_at_utc": "2026-10-11T03:47:17.182473+00:00",
+  "git": {
+    "commit": "5f4a03486453729de5d4d30d2d1f61f79b8360e9",
+    "dirty": false
+  },
+  "spec_path": "phonebook/specs/e3_replay_ratio.json",
+  "spec_sha256": "9bd0e5bc43c3eb8430537e724c8df13791985fed51c7afb4848833222946e49d",
+  "spec": {
+    "name": "e3_replay_ratio",
+    "description": "The phonebook README's replay question: replay data holds one copy of A and k copies of B. How fast is joint exact recall reached, and how deep does A's dip go, as k and the learning rate vary?",
+    "seed": 42,
+    "model_config": "phonebook/config/phonebook.py",
+    "evaluate_books": [
+      "A",
+      "B"
+    ],
+    "require_one_update_per_epoch": true,
+    "timeout_seconds": 1800,
+    "decision_rules": {
+      "question": "Does repeating B ever reach exact recall of both books in fewer updates than the balanced mixture (k=1), and what does it do to the transient forgetting of A?",
+      "first_joint": "First update at which every training sequence (so both books) is recalled exactly.",
+      "stable_joint": "First update from which every logged update through update 500 has both books recalled exactly. Runs that never get there are censored and count as infinitely slow.",
+      "best_k_per_lr": "For each learning rate, k* is the k with the smallest median stable_joint over the three checkpoints; ties go to the smaller k. If every k is censored there is no k*.",
+      "dip": "The minimum number of A entries recalled at any update, and the update where it first occurs.",
+      "cross_checks": "k=1 at lr=0.001 must reproduce E1's replay_a1b1 curves exactly (batch size 64 versus 128 is irrelevant for a single batch). k=1 at lr=0.0001 must reproduce last week's 100-update results: B recalled 0/10, 1/10 and 0/10 on the three checkpoints.",
+      "reporting": "Every cell is reported, including censored ones."
+    },
+    "scenarios": [
+      {
+        "id": "d0_seed42",
+        "book_a": "phonebook/inputs/phonebookA.txt",
+        "book_b": "phonebook/inputs/phonebookB.txt",
+        "init": {
+          "checkpoint": "phonebook/out_phaseA/model.pth",
+          "checkpoint_sha256": "6b1669a5a620352512ab7d1bae1e550caa315cdc7d82f1440f6c0a22d7a94303",
+          "meta": "phonebook/data_phaseA/meta.pkl",
+          "meta_sha256": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+        }
+      },
+      {
+        "id": "d0_seed123",
+        "book_a": "phonebook/inputs/phonebookA.txt",
+        "book_b": "phonebook/inputs/phonebookB.txt",
+        "init": {
+          "checkpoint": "phonebook/out_phaseA_seed123/model.pth",
+          "checkpoint_sha256": "2fa328825b154e36be9b43bb54845103831b80d4209c8db8f532fc0b58e49165",
+          "meta": "phonebook/data_phaseA/meta.pkl",
+          "meta_sha256": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+        }
+      },
+      {
+        "id": "d0_seed999",
+        "book_a": "phonebook/inputs/phonebookA.txt",
+        "book_b": "phonebook/inputs/phonebookB.txt",
+        "init": {
+          "checkpoint": "phonebook/out_phaseA_seed999/model.pth",
+          "checkpoint_sha256": "36d192a773f594e5e4a0f826007f3459543fe79a04ab0cd431824d1bfab8f48d",
+          "meta": "phonebook/data_phaseA/meta.pkl",
+          "meta_sha256": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+        }
+      }
+    ],
+    "conditions": [
+      {
+        "id": "k1_lr0.003",
+        "train": {
+          "a_copies": 1,
+          "b_copies": 1
+        },
+        "eval_book": "A",
+        "lr": 0.003,
+        "epochs": 500,
+        "batch_size": 128,
+        "accuracy_interval": 1,
+        "adapt": true
+      },
+      {
+        "id": "k2_lr0.003",
+        "train": {
+          "a_copies": 1,
+          "b_copies": 2
+        },
+        "eval_book": "A",
+        "lr": 0.003,
+        "epochs": 500,
+        "batch_size": 128,
+        "accuracy_interval": 1,
+        "adapt": true
+      },
+      {
+        "id": "k3_lr0.003",
+        "train": {
+          "a_copies": 1,
+          "b_copies": 3
+        },
+        "eval_book": "A",
+        "lr": 0.003,
+        "epochs": 500,
+        "batch_size": 128,
+        "accuracy_interval": 1,
+        "adapt": true
+      },
+      {
+        "id": "k5_lr0.003",
+        "train": {
+          "a_copies": 1,
+          "b_copies": 5
+        },
+        "eval_book": "A",
+        "lr": 0.003,
+        "epochs": 500,
+        "batch_size": 128,
+        "accuracy_interval": 1,
+        "adapt": true
+      },
+      {
+        "id": "k9_lr0.003",
+        "train": {
+          "a_copies": 1,
+          "b_copies": 9
+        },
+        "eval_book": "A",
+        "lr": 0.003,
+        "epochs": 500,
+        "batch_size": 128,
+        "accuracy_interval": 1,
+        "adapt": true
+      },
+      {
+        "id": "k1_lr0.001",
+        "train": {
+          "a_copies": 1,
+          "b_copies": 1
+        },
+        "eval_book": "A",
+        "lr": 0.001,
+        "epochs": 500,
+        "batch_size": 128,
+        "accuracy_interval": 1,
+        "adapt": true
+      },
+      {
+        "id": "k2_lr0.001",
+        "train": {
+          "a_copies": 1,
+          "b_copies": 2
+        },
+        "eval_book": "A",
+        "lr": 0.001,
+        "epochs": 500,
+        "batch_size": 128,
+        "accuracy_interval": 1,
+        "adapt": true
+      },
+      {
+        "id": "k3_lr0.001",
+        "train": {
+          "a_copies": 1,
+          "b_copies": 3
+        },
+        "eval_book": "A",
+        "lr": 0.001,
+        "epochs": 500,
+        "batch_size": 128,
+        "accuracy_interval": 1,
+        "adapt": true
+      },
+      {
+        "id": "k5_lr0.001",
+        "train": {
+          "a_copies": 1,
+          "b_copies": 5
+        },
+        "eval_book": "A",
+        "lr": 0.001,
+        "epochs": 500,
+        "batch_size": 128,
+        "accuracy_interval": 1,
+        "adapt": true
+      },
+      {
+        "id": "k9_lr0.001",
+        "train": {
+          "a_copies": 1,
+          "b_copies": 9
+        },
+        "eval_book": "A",
+        "lr": 0.001,
+        "epochs": 500,
+        "batch_size": 128,
+        "accuracy_interval": 1,
+        "adapt": true
+      },
+      {
+        "id": "k1_lr0.0003",
+        "train": {
+          "a_copies": 1,
+          "b_copies": 1
+        },
+        "eval_book": "A",
+        "lr": 0.0003,
+        "epochs": 500,
+        "batch_size": 128,
+        "accuracy_interval": 1,
+        "adapt": true
+      },
+      {
+        "id": "k2_lr0.0003",
+        "train": {
+          "a_copies": 1,
+          "b_copies": 2
+        },
+        "eval_book": "A",
+        "lr": 0.0003,
+        "epochs": 500,
+        "batch_size": 128,
+        "accuracy_interval": 1,
+        "adapt": true
+      },
+      {
+        "id": "k3_lr0.0003",
+        "train": {
+          "a_copies": 1,
+          "b_copies": 3
+        },
+        "eval_book": "A",
+        "lr": 0.0003,
+        "epochs": 500,
+        "batch_size": 128,
+        "accuracy_interval": 1,
+        "adapt": true
+      },
+      {
+        "id": "k5_lr0.0003",
+        "train": {
+          "a_copies": 1,
+          "b_copies": 5
+        },
+        "eval_book": "A",
+        "lr": 0.0003,
+        "epochs": 500,
+        "batch_size": 128,
+        "accuracy_interval": 1,
+        "adapt": true
+      },
+      {
+        "id": "k9_lr0.0003",
+        "train": {
+          "a_copies": 1,
+          "b_copies": 9
+        },
+        "eval_book": "A",
+        "lr": 0.0003,
+        "epochs": 500,
+        "batch_size": 128,
+        "accuracy_interval": 1,
+        "adapt": true
+      },
+      {
+        "id": "k1_lr0.0001",
+        "train": {
+          "a_copies": 1,
+          "b_copies": 1
+        },
+        "eval_book": "A",
+        "lr": 0.0001,
+        "epochs": 500,
+        "batch_size": 128,
+        "accuracy_interval": 1,
+        "adapt": true
+      },
+      {
+        "id": "k2_lr0.0001",
+        "train": {
+          "a_copies": 1,
+          "b_copies": 2
+        },
+        "eval_book": "A",
+        "lr": 0.0001,
+        "epochs": 500,
+        "batch_size": 128,
+        "accuracy_interval": 1,
+        "adapt": true
+      },
+      {
+        "id": "k3_lr0.0001",
+        "train": {
+          "a_copies": 1,
+          "b_copies": 3
+        },
+        "eval_book": "A",
+        "lr": 0.0001,
+        "epochs": 500,
+        "batch_size": 128,
+        "accuracy_interval": 1,
+        "adapt": true
+      },
+      {
+        "id": "k5_lr0.0001",
+        "train": {
+          "a_copies": 1,
+          "b_copies": 5
+        },
+        "eval_book": "A",
+        "lr": 0.0001,
+        "epochs": 500,
+        "batch_size": 128,
+        "accuracy_interval": 1,
+        "adapt": true
+      },
+      {
+        "id": "k9_lr0.0001",
+        "train": {
+          "a_copies": 1,
+          "b_copies": 9
+        },
+        "eval_book": "A",
+        "lr": 0.0001,
+        "epochs": 500,
+        "batch_size": 128,
+        "accuracy_interval": 1,
+        "adapt": true
+      }
+    ]
+  },
+  "environment": {
+    "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+    "executable": "C:\\Users\\minhh\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "packages": {
+      "torch": "2.12.0",
+      "numpy": "2.1.3",
+      "matplotlib": "3.10.9",
+      "pytest": "9.1.0"
+    },
+    "torch_version": "2.12.0+cpu",
+    "torch_num_threads": 10,
+    "device": "cpu"
+  },
+  "optimizer": {
+    "name": "AdamW",
+    "fresh_state_per_run": true,
+    "weight_decay": 0.1,
+    "grad_clip": 1.0
+  },
+  "config": {
+    "path": "phonebook/config/phonebook.py",
+    "sha256": "86aa6d3b7470c750ee02882bc1821f34e7298a91e411daaf7f75c43c7817903b"
+  },
+  "inputs": {
+    "phonebook/inputs/phonebookA.txt": "9c7027683ce11a253c26be52a01abdbb2db982675fea35b4f51484173af52563",
+    "phonebook/inputs/phonebookB.txt": "89930f178d693ed12250bf380ca01af11b807fd477003bb266ccb82105928858"
+  },
+  "initializations": {
+    "d0_seed42": {
+      "checkpoint": "phonebook/out_phaseA/model.pth",
+      "checkpoint_sha256": "6b1669a5a620352512ab7d1bae1e550caa315cdc7d82f1440f6c0a22d7a94303",
+      "meta": "phonebook/data_phaseA/meta.pkl",
+      "meta_sha256": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9",
+      "context_length": 29
+    },
+    "d0_seed123": {
+      "checkpoint": "phonebook/out_phaseA_seed123/model.pth",
+      "checkpoint_sha256": "2fa328825b154e36be9b43bb54845103831b80d4209c8db8f532fc0b58e49165",
+      "meta": "phonebook/data_phaseA/meta.pkl",
+      "meta_sha256": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9",
+      "context_length": 29
+    },
+    "d0_seed999": {
+      "checkpoint": "phonebook/out_phaseA_seed999/model.pth",
+      "checkpoint_sha256": "36d192a773f594e5e4a0f826007f3459543fe79a04ab0cd431824d1bfab8f48d",
+      "meta": "phonebook/data_phaseA/meta.pkl",
+      "meta_sha256": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9",
+      "context_length": 29
+    }
+  },
+  "runs": [
+    {
+      "id": "d0_seed42/k1_lr0.003",
+      "scenario": "d0_seed42",
+      "condition": "k1_lr0.003",
+      "mode": "a1b1_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.003,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 20,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed42/k2_lr0.003",
+      "scenario": "d0_seed42",
+      "condition": "k2_lr0.003",
+      "mode": "a1b2_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 2
+      },
+      "eval_book": "A",
+      "lr": 0.003,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 30,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed42/k3_lr0.003",
+      "scenario": "d0_seed42",
+      "condition": "k3_lr0.003",
+      "mode": "a1b3_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 3
+      },
+      "eval_book": "A",
+      "lr": 0.003,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 40,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed42/k5_lr0.003",
+      "scenario": "d0_seed42",
+      "condition": "k5_lr0.003",
+      "mode": "a1b5_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 5
+      },
+      "eval_book": "A",
+      "lr": 0.003,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 60,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed42/k9_lr0.003",
+      "scenario": "d0_seed42",
+      "condition": "k9_lr0.003",
+      "mode": "a1b9_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 9
+      },
+      "eval_book": "A",
+      "lr": 0.003,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 100,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed42/k1_lr0.001",
+      "scenario": "d0_seed42",
+      "condition": "k1_lr0.001",
+      "mode": "a1b1_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 20,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed42/k2_lr0.001",
+      "scenario": "d0_seed42",
+      "condition": "k2_lr0.001",
+      "mode": "a1b2_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 2
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 30,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed42/k3_lr0.001",
+      "scenario": "d0_seed42",
+      "condition": "k3_lr0.001",
+      "mode": "a1b3_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 3
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 40,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed42/k5_lr0.001",
+      "scenario": "d0_seed42",
+      "condition": "k5_lr0.001",
+      "mode": "a1b5_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 5
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 60,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed42/k9_lr0.001",
+      "scenario": "d0_seed42",
+      "condition": "k9_lr0.001",
+      "mode": "a1b9_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 9
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 100,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed42/k1_lr0.0003",
+      "scenario": "d0_seed42",
+      "condition": "k1_lr0.0003",
+      "mode": "a1b1_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.0003,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 20,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed42/k2_lr0.0003",
+      "scenario": "d0_seed42",
+      "condition": "k2_lr0.0003",
+      "mode": "a1b2_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 2
+      },
+      "eval_book": "A",
+      "lr": 0.0003,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 30,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed42/k3_lr0.0003",
+      "scenario": "d0_seed42",
+      "condition": "k3_lr0.0003",
+      "mode": "a1b3_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 3
+      },
+      "eval_book": "A",
+      "lr": 0.0003,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 40,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed42/k5_lr0.0003",
+      "scenario": "d0_seed42",
+      "condition": "k5_lr0.0003",
+      "mode": "a1b5_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 5
+      },
+      "eval_book": "A",
+      "lr": 0.0003,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 60,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed42/k9_lr0.0003",
+      "scenario": "d0_seed42",
+      "condition": "k9_lr0.0003",
+      "mode": "a1b9_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 9
+      },
+      "eval_book": "A",
+      "lr": 0.0003,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 100,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed42/k1_lr0.0001",
+      "scenario": "d0_seed42",
+      "condition": "k1_lr0.0001",
+      "mode": "a1b1_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.0001,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 20,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed42/k2_lr0.0001",
+      "scenario": "d0_seed42",
+      "condition": "k2_lr0.0001",
+      "mode": "a1b2_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 2
+      },
+      "eval_book": "A",
+      "lr": 0.0001,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 30,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed42/k3_lr0.0001",
+      "scenario": "d0_seed42",
+      "condition": "k3_lr0.0001",
+      "mode": "a1b3_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 3
+      },
+      "eval_book": "A",
+      "lr": 0.0001,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 40,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed42/k5_lr0.0001",
+      "scenario": "d0_seed42",
+      "condition": "k5_lr0.0001",
+      "mode": "a1b5_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 5
+      },
+      "eval_book": "A",
+      "lr": 0.0001,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 60,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed42/k9_lr0.0001",
+      "scenario": "d0_seed42",
+      "condition": "k9_lr0.0001",
+      "mode": "a1b9_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 9
+      },
+      "eval_book": "A",
+      "lr": 0.0001,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 100,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed123/k1_lr0.003",
+      "scenario": "d0_seed123",
+      "condition": "k1_lr0.003",
+      "mode": "a1b1_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.003,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 20,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed123/k2_lr0.003",
+      "scenario": "d0_seed123",
+      "condition": "k2_lr0.003",
+      "mode": "a1b2_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 2
+      },
+      "eval_book": "A",
+      "lr": 0.003,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 30,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed123/k3_lr0.003",
+      "scenario": "d0_seed123",
+      "condition": "k3_lr0.003",
+      "mode": "a1b3_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 3
+      },
+      "eval_book": "A",
+      "lr": 0.003,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 40,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed123/k5_lr0.003",
+      "scenario": "d0_seed123",
+      "condition": "k5_lr0.003",
+      "mode": "a1b5_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 5
+      },
+      "eval_book": "A",
+      "lr": 0.003,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 60,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed123/k9_lr0.003",
+      "scenario": "d0_seed123",
+      "condition": "k9_lr0.003",
+      "mode": "a1b9_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 9
+      },
+      "eval_book": "A",
+      "lr": 0.003,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 100,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed123/k1_lr0.001",
+      "scenario": "d0_seed123",
+      "condition": "k1_lr0.001",
+      "mode": "a1b1_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 20,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed123/k2_lr0.001",
+      "scenario": "d0_seed123",
+      "condition": "k2_lr0.001",
+      "mode": "a1b2_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 2
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 30,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed123/k3_lr0.001",
+      "scenario": "d0_seed123",
+      "condition": "k3_lr0.001",
+      "mode": "a1b3_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 3
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 40,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed123/k5_lr0.001",
+      "scenario": "d0_seed123",
+      "condition": "k5_lr0.001",
+      "mode": "a1b5_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 5
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 60,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed123/k9_lr0.001",
+      "scenario": "d0_seed123",
+      "condition": "k9_lr0.001",
+      "mode": "a1b9_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 9
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 100,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed123/k1_lr0.0003",
+      "scenario": "d0_seed123",
+      "condition": "k1_lr0.0003",
+      "mode": "a1b1_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.0003,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 20,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed123/k2_lr0.0003",
+      "scenario": "d0_seed123",
+      "condition": "k2_lr0.0003",
+      "mode": "a1b2_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 2
+      },
+      "eval_book": "A",
+      "lr": 0.0003,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 30,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed123/k3_lr0.0003",
+      "scenario": "d0_seed123",
+      "condition": "k3_lr0.0003",
+      "mode": "a1b3_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 3
+      },
+      "eval_book": "A",
+      "lr": 0.0003,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 40,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed123/k5_lr0.0003",
+      "scenario": "d0_seed123",
+      "condition": "k5_lr0.0003",
+      "mode": "a1b5_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 5
+      },
+      "eval_book": "A",
+      "lr": 0.0003,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 60,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed123/k9_lr0.0003",
+      "scenario": "d0_seed123",
+      "condition": "k9_lr0.0003",
+      "mode": "a1b9_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 9
+      },
+      "eval_book": "A",
+      "lr": 0.0003,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 100,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed123/k1_lr0.0001",
+      "scenario": "d0_seed123",
+      "condition": "k1_lr0.0001",
+      "mode": "a1b1_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.0001,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 20,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed123/k2_lr0.0001",
+      "scenario": "d0_seed123",
+      "condition": "k2_lr0.0001",
+      "mode": "a1b2_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 2
+      },
+      "eval_book": "A",
+      "lr": 0.0001,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 30,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed123/k3_lr0.0001",
+      "scenario": "d0_seed123",
+      "condition": "k3_lr0.0001",
+      "mode": "a1b3_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 3
+      },
+      "eval_book": "A",
+      "lr": 0.0001,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 40,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed123/k5_lr0.0001",
+      "scenario": "d0_seed123",
+      "condition": "k5_lr0.0001",
+      "mode": "a1b5_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 5
+      },
+      "eval_book": "A",
+      "lr": 0.0001,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 60,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed123/k9_lr0.0001",
+      "scenario": "d0_seed123",
+      "condition": "k9_lr0.0001",
+      "mode": "a1b9_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 9
+      },
+      "eval_book": "A",
+      "lr": 0.0001,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 100,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed999/k1_lr0.003",
+      "scenario": "d0_seed999",
+      "condition": "k1_lr0.003",
+      "mode": "a1b1_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.003,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 20,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed999/k2_lr0.003",
+      "scenario": "d0_seed999",
+      "condition": "k2_lr0.003",
+      "mode": "a1b2_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 2
+      },
+      "eval_book": "A",
+      "lr": 0.003,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 30,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed999/k3_lr0.003",
+      "scenario": "d0_seed999",
+      "condition": "k3_lr0.003",
+      "mode": "a1b3_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 3
+      },
+      "eval_book": "A",
+      "lr": 0.003,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 40,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed999/k5_lr0.003",
+      "scenario": "d0_seed999",
+      "condition": "k5_lr0.003",
+      "mode": "a1b5_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 5
+      },
+      "eval_book": "A",
+      "lr": 0.003,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 60,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed999/k9_lr0.003",
+      "scenario": "d0_seed999",
+      "condition": "k9_lr0.003",
+      "mode": "a1b9_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 9
+      },
+      "eval_book": "A",
+      "lr": 0.003,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 100,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed999/k1_lr0.001",
+      "scenario": "d0_seed999",
+      "condition": "k1_lr0.001",
+      "mode": "a1b1_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 20,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed999/k2_lr0.001",
+      "scenario": "d0_seed999",
+      "condition": "k2_lr0.001",
+      "mode": "a1b2_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 2
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 30,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed999/k3_lr0.001",
+      "scenario": "d0_seed999",
+      "condition": "k3_lr0.001",
+      "mode": "a1b3_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 3
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 40,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed999/k5_lr0.001",
+      "scenario": "d0_seed999",
+      "condition": "k5_lr0.001",
+      "mode": "a1b5_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 5
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 60,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed999/k9_lr0.001",
+      "scenario": "d0_seed999",
+      "condition": "k9_lr0.001",
+      "mode": "a1b9_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 9
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 100,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed999/k1_lr0.0003",
+      "scenario": "d0_seed999",
+      "condition": "k1_lr0.0003",
+      "mode": "a1b1_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.0003,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 20,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed999/k2_lr0.0003",
+      "scenario": "d0_seed999",
+      "condition": "k2_lr0.0003",
+      "mode": "a1b2_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 2
+      },
+      "eval_book": "A",
+      "lr": 0.0003,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 30,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed999/k3_lr0.0003",
+      "scenario": "d0_seed999",
+      "condition": "k3_lr0.0003",
+      "mode": "a1b3_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 3
+      },
+      "eval_book": "A",
+      "lr": 0.0003,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 40,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed999/k5_lr0.0003",
+      "scenario": "d0_seed999",
+      "condition": "k5_lr0.0003",
+      "mode": "a1b5_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 5
+      },
+      "eval_book": "A",
+      "lr": 0.0003,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 60,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed999/k9_lr0.0003",
+      "scenario": "d0_seed999",
+      "condition": "k9_lr0.0003",
+      "mode": "a1b9_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 9
+      },
+      "eval_book": "A",
+      "lr": 0.0003,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 100,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed999/k1_lr0.0001",
+      "scenario": "d0_seed999",
+      "condition": "k1_lr0.0001",
+      "mode": "a1b1_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.0001,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 20,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed999/k2_lr0.0001",
+      "scenario": "d0_seed999",
+      "condition": "k2_lr0.0001",
+      "mode": "a1b2_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 2
+      },
+      "eval_book": "A",
+      "lr": 0.0001,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 30,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed999/k3_lr0.0001",
+      "scenario": "d0_seed999",
+      "condition": "k3_lr0.0001",
+      "mode": "a1b3_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 3
+      },
+      "eval_book": "A",
+      "lr": 0.0001,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 40,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed999/k5_lr0.0001",
+      "scenario": "d0_seed999",
+      "condition": "k5_lr0.0001",
+      "mode": "a1b5_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 5
+      },
+      "eval_book": "A",
+      "lr": 0.0001,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 60,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed999/k9_lr0.0001",
+      "scenario": "d0_seed999",
+      "condition": "k9_lr0.0001",
+      "mode": "a1b9_evalA",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 9
+      },
+      "eval_book": "A",
+      "lr": 0.0001,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "l2sp_lambda": 0.0,
+      "adapt": true,
+      "n_train": 100,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    }
+  ]
+}

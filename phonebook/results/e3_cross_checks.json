@@ -1,0 +1,29 @@
+{
+  "k1_lr0.001_vs_e1_replay": {
+    "d0_seed42/k1_lr0.001 vs d0_seed42/replay_a1b1": {
+      "compared_epochs": 300,
+      "mismatches": []
+    },
+    "d0_seed123/k1_lr0.001 vs d0_seed123/replay_a1b1": {
+      "compared_epochs": 300,
+      "mismatches": []
+    },
+    "d0_seed999/k1_lr0.001 vs d0_seed999/replay_a1b1": {
+      "compared_epochs": 300,
+      "mismatches": []
+    }
+  },
+  "k1_lr0.0001_b_at_100_updates": {
+    "this_week": {
+      "d0_seed42": 0,
+      "d0_seed123": 1,
+      "d0_seed999": 0
+    },
+    "last_week": {
+      "d0_seed42": 0,
+      "d0_seed123": 1,
+      "d0_seed999": 0
+    },
+    "match": true
+  }
+}
