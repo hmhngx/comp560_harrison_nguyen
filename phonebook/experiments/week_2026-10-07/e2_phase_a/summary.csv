@@ -1,0 +1,4 @@
+run_id,scenario,condition,lr,epochs,batch_size,l2sp_lambda,a_copies,b_copies,A_correct,A_total,B_correct,B_total,A_token_accuracy,B_token_accuracy,A_cross_entropy,B_cross_entropy
+ds2/phase_a,ds2,phase_a,0.001,100,64,0.0,1,0,10,10,0,10,1.0,0.16153846153846155,0.0300251804292202,4.143600940704346
+ds4/phase_a,ds4,phase_a,0.001,100,64,0.0,1,0,10,10,0,10,1.0,0.09230769230769231,0.027634719386696815,4.907438278198242
+ds7/phase_a,ds7,phase_a,0.001,100,64,0.0,1,0,10,10,0,10,1.0,0.19230769230769232,0.02788955718278885,4.263764381408691

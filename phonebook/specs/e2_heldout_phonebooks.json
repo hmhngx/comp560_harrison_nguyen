@@ -1,0 +1,204 @@
+{
+  "name": "e2_heldout_phonebooks",
+  "description": "E1 repeated exactly (same 11 conditions, learning rate, updates, per-update logging) on three new 20-entry phonebooks, each with its own fresh Phase-A model.",
+  "seed": 42,
+  "model_config": "phonebook/config/phonebook.py",
+  "evaluate_books": [
+    "A",
+    "B"
+  ],
+  "require_one_update_per_epoch": true,
+  "decision_rules": {
+    "replication": "E1's conclusions replicate if, on at least 2 of the 3 new phonebooks: (i) balanced replay recalls 10/10 of both books after 100 updates; (ii) plain fine-tuning ends 300 updates with B=10/10 and at most 2 of A recalled; and (iii) the L2-SP decision rule applied to the 3 new phonebooks over the same grid gives the same verdict as E1 at both 100 and 300 updates.",
+    "lambda": "The whole grid is repeated, so no lambda is carried over from E1."
+  },
+  "scenarios": [
+    {
+      "id": "ds2",
+      "book_a": "phonebook/inputs/heldout_seed2_phonebookA.txt",
+      "book_b": "phonebook/inputs/heldout_seed2_phonebookB.txt",
+      "init": {
+        "checkpoint": "phonebook/experiments/week_2026-10-07/e2_phase_a/ds2/phase_a/model.pth",
+        "checkpoint_sha256": "5b9b88bca411ebb8ea642d5eccc697ea8e5100e5970a71767f230dd405033941",
+        "meta": "phonebook/experiments/week_2026-10-07/e2_phase_a/ds2/data_a1b0_evalB/meta.pkl",
+        "meta_sha256": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+      }
+    },
+    {
+      "id": "ds4",
+      "book_a": "phonebook/inputs/heldout_seed4_phonebookA.txt",
+      "book_b": "phonebook/inputs/heldout_seed4_phonebookB.txt",
+      "init": {
+        "checkpoint": "phonebook/experiments/week_2026-10-07/e2_phase_a/ds4/phase_a/model.pth",
+        "checkpoint_sha256": "ade3df43cd29cd47988214567c8276a4b2c947918502326122bef5a21b4ad685",
+        "meta": "phonebook/experiments/week_2026-10-07/e2_phase_a/ds4/data_a1b0_evalB/meta.pkl",
+        "meta_sha256": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+      }
+    },
+    {
+      "id": "ds7",
+      "book_a": "phonebook/inputs/heldout_seed7_phonebookA.txt",
+      "book_b": "phonebook/inputs/heldout_seed7_phonebookB.txt",
+      "init": {
+        "checkpoint": "phonebook/experiments/week_2026-10-07/e2_phase_a/ds7/phase_a/model.pth",
+        "checkpoint_sha256": "2b467d278329f93175f6825c532ea78fd704f1d726f4efcbb86097757ad515f7",
+        "meta": "phonebook/experiments/week_2026-10-07/e2_phase_a/ds7/data_a1b0_evalB/meta.pkl",
+        "meta_sha256": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+      }
+    }
+  ],
+  "conditions": [
+    {
+      "id": "plain",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 300,
+      "batch_size": 64,
+      "accuracy_interval": 1,
+      "adapt": true
+    },
+    {
+      "id": "l2sp_lam0.01",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 300,
+      "batch_size": 64,
+      "accuracy_interval": 1,
+      "adapt": true,
+      "l2sp_lambda": 0.01
+    },
+    {
+      "id": "l2sp_lam0.03",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 300,
+      "batch_size": 64,
+      "accuracy_interval": 1,
+      "adapt": true,
+      "l2sp_lambda": 0.03
+    },
+    {
+      "id": "l2sp_lam0.1",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 300,
+      "batch_size": 64,
+      "accuracy_interval": 1,
+      "adapt": true,
+      "l2sp_lambda": 0.1
+    },
+    {
+      "id": "l2sp_lam0.3",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 300,
+      "batch_size": 64,
+      "accuracy_interval": 1,
+      "adapt": true,
+      "l2sp_lambda": 0.3
+    },
+    {
+      "id": "l2sp_lam1",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 300,
+      "batch_size": 64,
+      "accuracy_interval": 1,
+      "adapt": true,
+      "l2sp_lambda": 1
+    },
+    {
+      "id": "l2sp_lam3",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 300,
+      "batch_size": 64,
+      "accuracy_interval": 1,
+      "adapt": true,
+      "l2sp_lambda": 3
+    },
+    {
+      "id": "l2sp_lam10",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 300,
+      "batch_size": 64,
+      "accuracy_interval": 1,
+      "adapt": true,
+      "l2sp_lambda": 10
+    },
+    {
+      "id": "l2sp_lam30",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 300,
+      "batch_size": 64,
+      "accuracy_interval": 1,
+      "adapt": true,
+      "l2sp_lambda": 30
+    },
+    {
+      "id": "l2sp_lam100",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 300,
+      "batch_size": 64,
+      "accuracy_interval": 1,
+      "adapt": true,
+      "l2sp_lambda": 100
+    },
+    {
+      "id": "replay_a1b1",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 300,
+      "batch_size": 64,
+      "accuracy_interval": 1,
+      "adapt": true
+    }
+  ]
+}

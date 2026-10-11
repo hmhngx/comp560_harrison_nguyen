@@ -1,0 +1,150 @@
+{
+  "created_at_utc": "2026-10-11T03:45:06.288133+00:00",
+  "git": {
+    "commit": "2a09ea3f23c76c9f032f7c8495d2f6f44bec184c",
+    "dirty": false
+  },
+  "spec_path": "phonebook/specs/e2_phase_a.json",
+  "spec_sha256": "bbdeb056f99a4d408fdde34db4fba48f72053f3392897cfa16cf80b0edde84b7",
+  "spec": {
+    "name": "e2_phase_a",
+    "description": "Fresh Phase-A models, one per held-out phonebook: train on book A, evaluate on book B, default model config and the trainer's default learning rate.",
+    "seed": 42,
+    "model_config": "phonebook/config/phonebook.py",
+    "evaluate_books": [
+      "A",
+      "B"
+    ],
+    "require_one_update_per_epoch": true,
+    "decision_rules": {
+      "gate": "Each Phase-A checkpoint must recall all ten entries of its own book A exactly. If one does not after 100 updates, that phonebook is retrained from scratch with 200 and then 400 updates (a new spec each time) and every attempt is kept as evidence."
+    },
+    "scenarios": [
+      {
+        "id": "ds2",
+        "book_a": "phonebook/inputs/heldout_seed2_phonebookA.txt",
+        "book_b": "phonebook/inputs/heldout_seed2_phonebookB.txt"
+      },
+      {
+        "id": "ds4",
+        "book_a": "phonebook/inputs/heldout_seed4_phonebookA.txt",
+        "book_b": "phonebook/inputs/heldout_seed4_phonebookB.txt"
+      },
+      {
+        "id": "ds7",
+        "book_a": "phonebook/inputs/heldout_seed7_phonebookA.txt",
+        "book_b": "phonebook/inputs/heldout_seed7_phonebookB.txt"
+      }
+    ],
+    "conditions": [
+      {
+        "id": "phase_a",
+        "train": {
+          "a_copies": 1,
+          "b_copies": 0
+        },
+        "eval_book": "B",
+        "lr": 0.001,
+        "epochs": 100,
+        "batch_size": 64,
+        "accuracy_interval": 10,
+        "adapt": false
+      }
+    ]
+  },
+  "environment": {
+    "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+    "executable": "C:\\Users\\minhh\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "packages": {
+      "torch": "2.12.0",
+      "numpy": "2.1.3",
+      "matplotlib": "3.10.9",
+      "pytest": "9.1.0"
+    },
+    "torch_version": "2.12.0+cpu",
+    "torch_num_threads": 10,
+    "device": "cpu"
+  },
+  "optimizer": {
+    "name": "AdamW",
+    "fresh_state_per_run": true,
+    "weight_decay": 0.1,
+    "grad_clip": 1.0
+  },
+  "config": {
+    "path": "phonebook/config/phonebook.py",
+    "sha256": "86aa6d3b7470c750ee02882bc1821f34e7298a91e411daaf7f75c43c7817903b"
+  },
+  "inputs": {
+    "phonebook/inputs/heldout_seed2_phonebookA.txt": "975b505007c30285cffb539aea6c3dd23ef0f104f80822c10a49dc2e26506531",
+    "phonebook/inputs/heldout_seed2_phonebookB.txt": "3087a425bceee96b557d7eed324417b12759af04091838e8ca68dae6b101bdba",
+    "phonebook/inputs/heldout_seed4_phonebookA.txt": "8f553d2f91a5c0727cdfce1f212735a19a0a216cc6f5c2df6825180cfe6e2832",
+    "phonebook/inputs/heldout_seed4_phonebookB.txt": "618307d41f8bfc0cddd90aad3e7d2efee4ede2d0e42c1696f6162c8f1a9bc927",
+    "phonebook/inputs/heldout_seed7_phonebookA.txt": "b8da5bf013eb29fa843425e4cec840a9a21580142158a0d3b2434c4f627ff858",
+    "phonebook/inputs/heldout_seed7_phonebookB.txt": "85f43829985b75c6c2ac5b0df7ef2cc18aaf04f0aee2c56c7d8acb7d54fcf751"
+  },
+  "initializations": {},
+  "runs": [
+    {
+      "id": "ds2/phase_a",
+      "scenario": "ds2",
+      "condition": "phase_a",
+      "mode": "a1b0_evalB",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 0
+      },
+      "eval_book": "B",
+      "lr": 0.001,
+      "epochs": 100,
+      "batch_size": 64,
+      "accuracy_interval": 10,
+      "l2sp_lambda": 0.0,
+      "adapt": false,
+      "n_train": 10,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "ds4/phase_a",
+      "scenario": "ds4",
+      "condition": "phase_a",
+      "mode": "a1b0_evalB",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 0
+      },
+      "eval_book": "B",
+      "lr": 0.001,
+      "epochs": 100,
+      "batch_size": 64,
+      "accuracy_interval": 10,
+      "l2sp_lambda": 0.0,
+      "adapt": false,
+      "n_train": 10,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "ds7/phase_a",
+      "scenario": "ds7",
+      "condition": "phase_a",
+      "mode": "a1b0_evalB",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 0
+      },
+      "eval_book": "B",
+      "lr": 0.001,
+      "epochs": 100,
+      "batch_size": 64,
+      "accuracy_interval": 10,
+      "l2sp_lambda": 0.0,
+      "adapt": false,
+      "n_train": 10,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    }
+  ]
+}
