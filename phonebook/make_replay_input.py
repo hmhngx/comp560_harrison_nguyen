@@ -24,10 +24,19 @@ import argparse
 from pathlib import Path
 
 
+def build_mixture_lines(a_lines: list[str], b_lines: list[str], a_copies: int, b_copies: int) -> list[str]:
+    """a_copies of phonebook A followed by b_copies of phonebook B, source order kept."""
+    if a_copies < 0 or b_copies < 0 or a_copies + b_copies < 1:
+        raise ValueError(
+            f"copies must be >= 0 with at least one copy in total, got a_copies={a_copies}, b_copies={b_copies}"
+        )
+    return a_lines * a_copies + b_lines * b_copies
+
+
 def build_replay_lines(a_lines: list[str], b_lines: list[str], k: int) -> list[str]:
     if k < 1:
         raise ValueError(f"k must be >= 1 (repeating phonebook A zero or fewer times isn't replay), got {k}")
-    return a_lines * k + b_lines
+    return build_mixture_lines(a_lines, b_lines, k, 1)
 
 
 def main() -> None:

@@ -43,6 +43,35 @@ def test_rejects_k_less_than_one(bad_k) -> None:
         _build_replay_lines(["a1"], ["b1"], k=bad_k)
 
 
+def _build_mixture_lines(*args, **kwargs) -> list[str]:
+    sys.path.insert(0, str(ROOT / "phonebook"))
+    import make_replay_input as module
+
+    return module.build_mixture_lines(*args, **kwargs)
+
+
+def test_mixture_repeats_each_book_its_own_number_of_times_a_first() -> None:
+    result = _build_mixture_lines(["a1", "a2"], ["b1"], a_copies=1, b_copies=3)
+    assert result == ["a1", "a2", "b1", "b1", "b1"]
+
+
+def test_mixture_allows_either_book_to_be_absent() -> None:
+    assert _build_mixture_lines(["a1"], ["b1"], a_copies=0, b_copies=2) == ["b1", "b1"]
+    assert _build_mixture_lines(["a1"], ["b1"], a_copies=2, b_copies=0) == ["a1", "a1"]
+
+
+@pytest.mark.parametrize("a_copies,b_copies", [(-1, 1), (1, -1), (0, 0)])
+def test_mixture_rejects_negative_or_empty_mixtures(a_copies, b_copies) -> None:
+    with pytest.raises(ValueError, match="copies"):
+        _build_mixture_lines(["a1"], ["b1"], a_copies=a_copies, b_copies=b_copies)
+
+
+def test_replay_lines_is_the_a_k_times_b_once_case_of_the_mixture() -> None:
+    a, b = ["a1", "a2"], ["b1", "b2", "b3"]
+    for k in (1, 2, 5):
+        assert _build_replay_lines(a, b, k=k) == _build_mixture_lines(a, b, a_copies=k, b_copies=1)
+
+
 def test_cli_reads_files_and_writes_expected_line_count(run_script, tmp_path: Path) -> None:
     phonebook_a = tmp_path / "phonebookA.txt"
     phonebook_b = tmp_path / "phonebookB.txt"
