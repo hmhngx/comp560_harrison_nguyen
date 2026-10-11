@@ -2,3 +2,5 @@
 phonebook/inputs/*.txt text eol=lf
 # Preserve captured experiment logs, including the trainer's trailing blank lines.
 phonebook/experiments/**/*.log -whitespace
+# Specs are hashed into every protocol; keep their bytes identical on every platform.
+phonebook/specs/*.json text eol=lf
