@@ -1,0 +1,30 @@
+{
+  "replay_full_recall": {
+    "scenarios": [
+      "ds2",
+      "ds4",
+      "ds7"
+    ],
+    "holds": true
+  },
+  "plain_forgets_a_and_learns_b": {
+    "scenarios": [
+      "ds2",
+      "ds4",
+      "ds7"
+    ],
+    "holds": true
+  },
+  "l2sp_verdict": {
+    "e1": {
+      "100": "no",
+      "300": "no"
+    },
+    "e2": {
+      "100": "no",
+      "300": "no"
+    },
+    "holds": true
+  },
+  "replicates": true
+}

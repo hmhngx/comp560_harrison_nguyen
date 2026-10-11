@@ -1,0 +1,10 @@
+{
+  "root": "phonebook\\experiments\\week_2026-10-07\\e2_heldout_phonebooks",
+  "status": "passed",
+  "spec": "e2_heldout_phonebooks",
+  "git_commit": "5f4a03486453729de5d4d30d2d1f61f79b8360e9",
+  "runs": 33,
+  "completions": 660,
+  "local_artifacts_checked": true,
+  "git_checked": true
+}
