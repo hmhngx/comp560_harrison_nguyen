@@ -13,6 +13,9 @@ replay was unsupported. The combination also changed B token accuracy,
 despite identical exact-match counts. See the corrected sections and the
 [October 4 pilot](../experiments/week_2026-09-30/README.md).
 
+**Update, 2026-10-11:** Part 11 and [`../RESULTS.md`](../RESULTS.md) report the
+pre-registered experiments that answer Part 10's open questions.
+
 ## Part 1 — the original 12 runs
 
 **The exact commands that produced these were not logged anywhere and could
@@ -713,6 +716,25 @@ The [independent audit](../experiments/week_2026-09-30/audit.json) reconciles
 training manifests, complete finite CSVs, and local input/checkpoint/data
 hashes. Teacher-forced metrics and generation counts are kept separate.
 Codex assisted with the code, experiments, audit, and writing.
+
+## Part 11 — Part 10's open questions, tested with pre-registered experiments
+
+**2026-10-11.** Part 10 left open L2-SP at a larger learning rate, other replay ratios,
+and independent datasets. The
+[October 7–13 experiments](../experiments/week_2026-10-07/README.md) test them: each has its
+rules or predictions committed before its runs, and every run is covered by an independent
+audit. [`../RESULTS.md`](../RESULTS.md) is the summary. In brief:
+
+- At lr=0.001 balanced replay recalls 10/10 of both books on the three Phase-A checkpoints
+  and on three new phonebooks, while plain fine-tuning ends with B 10/10 and A 0/10.
+- No L2-SP strength matches replay (λ from 0.01 to 100, up to 1000 updates, four phonebooks).
+  L2-SP trades A for B along λ, with the change between λ=0.3 and λ=1.
+- For the course README's replay-ratio question (A once, B repeated k times), k=2 to 5
+  reaches joint recall slightly sooner than k=1 (2 to 22 updates, 5% to 18%), k=9 does not,
+  and the temporary dip in A deepens with k.
+- One pre-registered check (E1b against E1) failed because the accuracy-logging interval
+  changes the shuffle order of the training batch; counts in the regime-change region carry
+  about one entry of numerical noise.
 
 ## Primary metric (locked in)
 
