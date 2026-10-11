@@ -275,3 +275,48 @@ python phonebook/report_experiments.py e1b --e1 phonebook/experiments/week_2026-
 python phonebook/report_experiments.py e2 --root phonebook/experiments/week_2026-10-07/e2_heldout_phonebooks --reference phonebook/results/e1_decision.json --out phonebook/results
 python phonebook/report_experiments.py e3 --root phonebook/experiments/week_2026-10-07/e3_replay_ratio --e1 phonebook/experiments/week_2026-10-07/e1_matched_lr --out phonebook/results
 ```
+
+## d1: does the logging interval change the training trajectory? (diagnostic)
+
+*Added Sunday October 11, after E1b's runs and before any d1 run. Not part of the
+original protocol.*
+
+E1b's pre-registered cross-check against E1 failed (see the E1b results). An E1b run and
+the E1 run it should repeat differ only in `--accuracy-interval` (5 versus 1) and
+`--epochs` (1000 versus 300); the code is identical. Reading `train.py`: each accuracy
+evaluation iterates two extra `DataLoader`s, and every new `DataLoader` iterator draws a
+base seed from the global random generator even with `shuffle=False` (checked directly
+with `torch.get_rng_state()`). So the interval changes the shuffle order of the single
+training batch. That order is mathematically irrelevant but changes floating-point
+rounding.
+
+**Not blind.** Before writing this spec I re-ran one E1b setting outside the repository
+(seed 42, λ=0.3, 100 updates) twice, once at interval 5 and once at interval 1; the first
+reproduced E1b's rows and the second reproduced E1's. d1 repeats the interval-5 case under
+the runner on all three checkpoints, so that the evidence is committed and audited.
+
+**Design.** λ=0.3, lr=0.001, 100 updates, logged every 5 updates, training on B only,
+the three E1 checkpoints (hash-pinned), 3 runs
+([`d1_logging_interval.json`](../../specs/d1_logging_interval.json)).
+
+**Predictions (fixed now).**
+
+- P1: each d1 run equals the first 100 updates of the corresponding E1b run (same
+  interval 5, 1000 updates in E1b) in every logged column except timing.
+- P2: each d1 run differs from E1's λ=0.3 run (interval 1) at the shared updates.
+
+If P1 holds, the number of epochs is irrelevant and the interval alone explains why runs
+are identical or not. If P2 also holds, the interval is sufficient to explain E1b's failed
+cross-check. If P1 fails, something else differs between runs and the explanation is
+wrong. Every outcome is reported.
+
+**Reproduce.**
+
+```bash
+python phonebook/run_experiment.py --spec phonebook/specs/d1_logging_interval.json --out-root phonebook/experiments/week_2026-10-07/d1_logging_interval
+python phonebook/audit_experiment.py --root phonebook/experiments/week_2026-10-07/d1_logging_interval --require-local-artifacts --output phonebook/experiments/week_2026-10-07/d1_logging_interval/audit.json
+python phonebook/report_experiments.py compare --a phonebook/experiments/week_2026-10-07/d1_logging_interval --b phonebook/experiments/week_2026-10-07/e1b_fine_grid_long_horizon --pair d0_seed42:l2sp_lam0.3_iv5_ep100:l2sp_lam0.3 --pair d0_seed123:l2sp_lam0.3_iv5_ep100:l2sp_lam0.3 --pair d0_seed999:l2sp_lam0.3_iv5_ep100:l2sp_lam0.3 --max-epoch 100 --out phonebook/experiments/week_2026-10-07/d1_logging_interval/compare_with_e1b.json
+python phonebook/report_experiments.py compare --a phonebook/experiments/week_2026-10-07/d1_logging_interval --b phonebook/experiments/week_2026-10-07/e1_matched_lr --pair d0_seed42:l2sp_lam0.3_iv5_ep100:l2sp_lam0.3 --pair d0_seed123:l2sp_lam0.3_iv5_ep100:l2sp_lam0.3 --pair d0_seed999:l2sp_lam0.3_iv5_ep100:l2sp_lam0.3 --max-epoch 100 --out phonebook/experiments/week_2026-10-07/d1_logging_interval/compare_with_e1.json
+```
+
+The last command is expected to exit with status 1 (it reports the mismatches P2 predicts).
