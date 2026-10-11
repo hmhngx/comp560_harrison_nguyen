@@ -1,0 +1,66 @@
+{
+  "name": "e1_prefix_check",
+  "description": "Short 100-update runs of three E1 conditions on one checkpoint. Their logged rows must equal the first 100 rows of the matching 300-update E1 runs, which justifies reading the 100-update endpoint from the long runs.",
+  "seed": 42,
+  "model_config": "phonebook/config/phonebook.py",
+  "evaluate_books": [
+    "A",
+    "B"
+  ],
+  "require_one_update_per_epoch": true,
+  "scenarios": [
+    {
+      "id": "d0_seed42",
+      "book_a": "phonebook/inputs/phonebookA.txt",
+      "book_b": "phonebook/inputs/phonebookB.txt",
+      "init": {
+        "checkpoint": "phonebook/out_phaseA/model.pth",
+        "checkpoint_sha256": "6b1669a5a620352512ab7d1bae1e550caa315cdc7d82f1440f6c0a22d7a94303",
+        "meta": "phonebook/data_phaseA/meta.pkl",
+        "meta_sha256": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+      }
+    }
+  ],
+  "conditions": [
+    {
+      "id": "plain_ep100",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 100,
+      "batch_size": 64,
+      "accuracy_interval": 1,
+      "adapt": true
+    },
+    {
+      "id": "l2sp_lam0.1_ep100",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 100,
+      "batch_size": 64,
+      "accuracy_interval": 1,
+      "adapt": true,
+      "l2sp_lambda": 0.1
+    },
+    {
+      "id": "replay_a1b1_ep100",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 100,
+      "batch_size": 64,
+      "accuracy_interval": 1,
+      "adapt": true
+    }
+  ]
+}
