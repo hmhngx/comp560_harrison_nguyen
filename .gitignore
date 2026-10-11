@@ -172,8 +172,10 @@ Thumbs.db
 # Temporary hacks
 unwanted/
 
-# Generated training data inputs 
+# Generated training data inputs
 inputs/
+# The phonebook books are experiment sources, hashed into every protocol: track them like code.
+!phonebook/inputs/
 
 # Prepared training data inputs
 *.bin
