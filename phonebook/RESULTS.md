@@ -32,7 +32,7 @@ number and the newline, with no length hint. Counts are entries recalled out of 
    of B's, and whenever it recalled at least 8 of B's it kept at most 4 of A's.
 3. **Repeating B (the README's question).** With one copy of A and k copies of B, the smallest median
    time to joint recall is at k = 3 for lr = 0.003 and 0.001 and at k = 5 for lr = 0.0003 and
-   0.0001, so k > 1 is faster at every learning rate, but only by 2 to 22 updates (5% to 18%): the
+   0.0001, so in the medians k > 1 is faster at every learning rate, but only by 2 to 22 updates (5% to 18%): the
    choice among k = 2, 3, 5 is not resolved, and k = 9 is not faster. The temporary dip in A deepens
    with k (at lr = 0.001 the median fewest A entries recalled is 8, 5, 3, 1, 1 for
    k = 1, 2, 3, 5, 9). The learning rate matters far more than k.
@@ -47,11 +47,11 @@ number and the newline, with no length hint. Counts are entries recalled out of 
 |---|---|---|---|
 | 1 | At lr = 0.001, balanced replay recalls both books exactly at 100 and 300 updates | Established on this task, replicated on 3 new phonebooks | [`e1_endpoints.csv`](results/e1_endpoints.csv), [`e2_endpoints.csv`](results/e2_endpoints.csv) |
 | 2 | Plain fine-tuning at lr = 0.001 ends with B 10 of 10 and A 0 of 10 | Established, replicated | same files; timing in the experiment README |
-| 3 | No tested L2-SP strength matches replay at lr = 0.001 | Established for isotropic L2-SP, λ from 0.01 to 100, 100 to 1000 updates | [`e1_decision.json`](results/e1_decision.json), [`e1b_decision.json`](results/e1b_decision.json), [`e2_decision.json`](results/e2_decision.json) |
+| 3 | No tested L2-SP strength matches replay at lr = 0.001 | Established for isotropic L2-SP: λ from 0.01 to 100 at 100 and 300 updates, and λ from 0.3 to 1 also at 1000 | [`e1_decision.json`](results/e1_decision.json), [`e1b_decision.json`](results/e1b_decision.json), [`e2_decision.json`](results/e2_decision.json) |
 | 4 | L2-SP shows a trade-off with no λ that keeps A and learns B (A ≥ 8 implies B = 0; B ≥ 8 implies A ≤ 4) | Established on these runs | [`e1b_fine_grid.png`](results/e1b_fine_grid.png), [`e2_dose_response.png`](results/e2_dose_response.png) |
-| 5 | k > 1 reaches joint recall slightly sooner than k = 1 at every learning rate; k = 9 does not | Established as a small effect; the paired sign tests are exploratory | [`e3_table.csv`](results/e3_table.csv), [`e3_cells.csv`](results/e3_cells.csv) |
+| 5 | k > 1 reaches joint recall slightly sooner than k = 1 at every learning rate; k = 9 does not | Observed in the medians at every learning rate; small; run-to-run timing noise not measured; the paired sign tests are exploratory | [`e3_table.csv`](results/e3_table.csv), [`e3_cells.csv`](results/e3_cells.csv) |
 | 6 | Any particular k among 2, 3, 5 is best | **Not established** (medians within 3 to 8 updates; timing noise not measured) | [`e3_heatmaps.png`](results/e3_heatmaps.png) |
-| 7 | Counts near the L2-SP regime change carry about one entry of numerical noise | Established (d1: the logging interval alone changes the trajectory) | [`d1_logging_interval/`](experiments/week_2026-10-07/d1_logging_interval/) |
+| 7 | Counts near the L2-SP regime change carry about one entry of numerical noise | Measured in E1b against E1; d1 shows the logging interval alone changes the trajectory | [`d1_logging_interval/`](experiments/week_2026-10-07/d1_logging_interval/) |
 | 8 | L2-SP is the more promising direction; replay's trade-off is binary | **Retracted** (see below) | [`sweep_lr/README.md`](sweep_lr/README.md) Parts 9 and 10 |
 | 9 | Other regularizers (EWC), other model sizes, larger or other kinds of data, capacity | **Not tested** | |
 
@@ -101,8 +101,8 @@ strength does (findings 1 and 2).
 ## Checking this
 
 Every experiment is a committed spec in [`specs/`](specs/) with predictions or rules fixed before
-the runs, and an independent auditor covered every run: 159 training runs and 3180
-generated answers, all consistent. From a fresh clone, the committed files alone can be re-audited
+the runs, and a separate audit script (code written apart from the runner, not a third party) covered every run:
+159 training runs and 3180 generated answers, all consistent. From a fresh clone, the committed files alone can be re-audited
 (run from the repository root):
 
 ```bash
@@ -113,7 +113,7 @@ This reconciles the manifest, protocol, the spec at its recorded commit, the sum
 metrics and the saved raw answers (each re-scored from the strings). The model weights are not
 committed; with them in place, `--require-local-artifacts` also re-generates every answer from the
 saved weights, which is how the audits recorded in each folder were run. One pre-registered check
-failed, E1b against E1; it is reported as failed in the experiment README with its verified cause
+failed, E1b against E1; it is reported as failed in the experiment README with its tested cause
 (d1).
 
 ## AI assistance

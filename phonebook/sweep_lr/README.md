@@ -722,8 +722,8 @@ Codex assisted with the code, experiments, audit, and writing.
 **2026-10-11.** Part 10 left open L2-SP at a larger learning rate, other replay ratios,
 and independent datasets. The
 [October 7–13 experiments](../experiments/week_2026-10-07/README.md) test them: each has its
-rules or predictions committed before its runs, and every run is covered by an independent
-audit. [`../RESULTS.md`](../RESULTS.md) is the summary. In brief:
+rules or predictions committed before its runs, and every run is covered by a separate
+audit script. [`../RESULTS.md`](../RESULTS.md) is the summary. In brief:
 
 - At lr=0.001 balanced replay recalls 10/10 of both books on the three Phase-A checkpoints
   and on three new phonebooks, while plain fine-tuning ends with B 10/10 and A 0/10.
