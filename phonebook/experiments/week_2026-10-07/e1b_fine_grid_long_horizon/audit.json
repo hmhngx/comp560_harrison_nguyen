@@ -1,0 +1,10 @@
+{
+  "root": "phonebook\\experiments\\week_2026-10-07\\e1b_fine_grid_long_horizon",
+  "status": "passed",
+  "spec": "e1b_fine_grid_long_horizon",
+  "git_commit": "5f4a03486453729de5d4d30d2d1f61f79b8360e9",
+  "runs": 24,
+  "completions": 480,
+  "local_artifacts_checked": true,
+  "git_checked": true
+}

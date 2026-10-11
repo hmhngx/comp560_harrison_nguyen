@@ -1,0 +1,709 @@
+{
+  "created_at_utc": "2026-10-11T03:47:17.039963+00:00",
+  "git": {
+    "commit": "5f4a03486453729de5d4d30d2d1f61f79b8360e9",
+    "dirty": false
+  },
+  "spec_path": "phonebook/specs/e1b_fine_grid_long_horizon.json",
+  "spec_sha256": "03bb47d9d0395b2e92f22215c3be52db432055cf0a38fff7cbd0e398e3986987",
+  "spec": {
+    "name": "e1b_fine_grid_long_horizon",
+    "description": "L2-SP lambda in tenth-steps across the transition where B stops being learned (0.3 to 1.0), on E1's three checkpoints, for 1000 updates logged every 5 updates. Follow-up to E1.",
+    "seed": 42,
+    "model_config": "phonebook/config/phonebook.py",
+    "evaluate_books": [
+      "A",
+      "B"
+    ],
+    "require_one_update_per_epoch": true,
+    "timeout_seconds": 1800,
+    "decision_rules": {
+      "why": "E1's half-decade grid is coarse next to the lambda range where L2-SP stops learning B, and 300 updates may be short for strong penalties. A 'no lambda matches replay' conclusion should survive a finer grid and a longer horizon.",
+      "rule": "E1's rule, unchanged: L2-SP matches replay if one lambda gives A=10/10 and B=10/10 on at least 2 of 3 checkpoints; it nearly matches with A>=9/10 and B=10/10. Applied at 100, 300 and 1000 updates over the union of E1's and E1b's lambda values; the 1000-update budget uses E1b's lambda values only.",
+      "cross_check": "The rows of the lambda=0.3 and lambda=1.0 runs at updates 5, 10, ..., 300 must equal E1's rows at the same updates.",
+      "reporting": "Every grid point is reported, including failures."
+    },
+    "scenarios": [
+      {
+        "id": "d0_seed42",
+        "book_a": "phonebook/inputs/phonebookA.txt",
+        "book_b": "phonebook/inputs/phonebookB.txt",
+        "init": {
+          "checkpoint": "phonebook/out_phaseA/model.pth",
+          "checkpoint_sha256": "6b1669a5a620352512ab7d1bae1e550caa315cdc7d82f1440f6c0a22d7a94303",
+          "meta": "phonebook/data_phaseA/meta.pkl",
+          "meta_sha256": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+        }
+      },
+      {
+        "id": "d0_seed123",
+        "book_a": "phonebook/inputs/phonebookA.txt",
+        "book_b": "phonebook/inputs/phonebookB.txt",
+        "init": {
+          "checkpoint": "phonebook/out_phaseA_seed123/model.pth",
+          "checkpoint_sha256": "2fa328825b154e36be9b43bb54845103831b80d4209c8db8f532fc0b58e49165",
+          "meta": "phonebook/data_phaseA/meta.pkl",
+          "meta_sha256": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+        }
+      },
+      {
+        "id": "d0_seed999",
+        "book_a": "phonebook/inputs/phonebookA.txt",
+        "book_b": "phonebook/inputs/phonebookB.txt",
+        "init": {
+          "checkpoint": "phonebook/out_phaseA_seed999/model.pth",
+          "checkpoint_sha256": "36d192a773f594e5e4a0f826007f3459543fe79a04ab0cd431824d1bfab8f48d",
+          "meta": "phonebook/data_phaseA/meta.pkl",
+          "meta_sha256": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+        }
+      }
+    ],
+    "conditions": [
+      {
+        "id": "l2sp_lam0.3",
+        "train": {
+          "a_copies": 0,
+          "b_copies": 1
+        },
+        "eval_book": "A",
+        "lr": 0.001,
+        "epochs": 1000,
+        "batch_size": 64,
+        "accuracy_interval": 5,
+        "adapt": true,
+        "l2sp_lambda": 0.3
+      },
+      {
+        "id": "l2sp_lam0.4",
+        "train": {
+          "a_copies": 0,
+          "b_copies": 1
+        },
+        "eval_book": "A",
+        "lr": 0.001,
+        "epochs": 1000,
+        "batch_size": 64,
+        "accuracy_interval": 5,
+        "adapt": true,
+        "l2sp_lambda": 0.4
+      },
+      {
+        "id": "l2sp_lam0.5",
+        "train": {
+          "a_copies": 0,
+          "b_copies": 1
+        },
+        "eval_book": "A",
+        "lr": 0.001,
+        "epochs": 1000,
+        "batch_size": 64,
+        "accuracy_interval": 5,
+        "adapt": true,
+        "l2sp_lambda": 0.5
+      },
+      {
+        "id": "l2sp_lam0.6",
+        "train": {
+          "a_copies": 0,
+          "b_copies": 1
+        },
+        "eval_book": "A",
+        "lr": 0.001,
+        "epochs": 1000,
+        "batch_size": 64,
+        "accuracy_interval": 5,
+        "adapt": true,
+        "l2sp_lambda": 0.6
+      },
+      {
+        "id": "l2sp_lam0.7",
+        "train": {
+          "a_copies": 0,
+          "b_copies": 1
+        },
+        "eval_book": "A",
+        "lr": 0.001,
+        "epochs": 1000,
+        "batch_size": 64,
+        "accuracy_interval": 5,
+        "adapt": true,
+        "l2sp_lambda": 0.7
+      },
+      {
+        "id": "l2sp_lam0.8",
+        "train": {
+          "a_copies": 0,
+          "b_copies": 1
+        },
+        "eval_book": "A",
+        "lr": 0.001,
+        "epochs": 1000,
+        "batch_size": 64,
+        "accuracy_interval": 5,
+        "adapt": true,
+        "l2sp_lambda": 0.8
+      },
+      {
+        "id": "l2sp_lam0.9",
+        "train": {
+          "a_copies": 0,
+          "b_copies": 1
+        },
+        "eval_book": "A",
+        "lr": 0.001,
+        "epochs": 1000,
+        "batch_size": 64,
+        "accuracy_interval": 5,
+        "adapt": true,
+        "l2sp_lambda": 0.9
+      },
+      {
+        "id": "l2sp_lam1",
+        "train": {
+          "a_copies": 0,
+          "b_copies": 1
+        },
+        "eval_book": "A",
+        "lr": 0.001,
+        "epochs": 1000,
+        "batch_size": 64,
+        "accuracy_interval": 5,
+        "adapt": true,
+        "l2sp_lambda": 1.0
+      }
+    ]
+  },
+  "environment": {
+    "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+    "executable": "C:\\Users\\minhh\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "packages": {
+      "torch": "2.12.0",
+      "numpy": "2.1.3",
+      "matplotlib": "3.10.9",
+      "pytest": "9.1.0"
+    },
+    "torch_version": "2.12.0+cpu",
+    "torch_num_threads": 10,
+    "device": "cpu"
+  },
+  "optimizer": {
+    "name": "AdamW",
+    "fresh_state_per_run": true,
+    "weight_decay": 0.1,
+    "grad_clip": 1.0
+  },
+  "config": {
+    "path": "phonebook/config/phonebook.py",
+    "sha256": "86aa6d3b7470c750ee02882bc1821f34e7298a91e411daaf7f75c43c7817903b"
+  },
+  "inputs": {
+    "phonebook/inputs/phonebookA.txt": "9c7027683ce11a253c26be52a01abdbb2db982675fea35b4f51484173af52563",
+    "phonebook/inputs/phonebookB.txt": "89930f178d693ed12250bf380ca01af11b807fd477003bb266ccb82105928858"
+  },
+  "initializations": {
+    "d0_seed42": {
+      "checkpoint": "phonebook/out_phaseA/model.pth",
+      "checkpoint_sha256": "6b1669a5a620352512ab7d1bae1e550caa315cdc7d82f1440f6c0a22d7a94303",
+      "meta": "phonebook/data_phaseA/meta.pkl",
+      "meta_sha256": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9",
+      "context_length": 29
+    },
+    "d0_seed123": {
+      "checkpoint": "phonebook/out_phaseA_seed123/model.pth",
+      "checkpoint_sha256": "2fa328825b154e36be9b43bb54845103831b80d4209c8db8f532fc0b58e49165",
+      "meta": "phonebook/data_phaseA/meta.pkl",
+      "meta_sha256": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9",
+      "context_length": 29
+    },
+    "d0_seed999": {
+      "checkpoint": "phonebook/out_phaseA_seed999/model.pth",
+      "checkpoint_sha256": "36d192a773f594e5e4a0f826007f3459543fe79a04ab0cd431824d1bfab8f48d",
+      "meta": "phonebook/data_phaseA/meta.pkl",
+      "meta_sha256": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9",
+      "context_length": 29
+    }
+  },
+  "runs": [
+    {
+      "id": "d0_seed42/l2sp_lam0.3",
+      "scenario": "d0_seed42",
+      "condition": "l2sp_lam0.3",
+      "mode": "a0b1_evalA",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 1000,
+      "batch_size": 64,
+      "accuracy_interval": 5,
+      "l2sp_lambda": 0.3,
+      "adapt": true,
+      "n_train": 10,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed42/l2sp_lam0.4",
+      "scenario": "d0_seed42",
+      "condition": "l2sp_lam0.4",
+      "mode": "a0b1_evalA",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 1000,
+      "batch_size": 64,
+      "accuracy_interval": 5,
+      "l2sp_lambda": 0.4,
+      "adapt": true,
+      "n_train": 10,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed42/l2sp_lam0.5",
+      "scenario": "d0_seed42",
+      "condition": "l2sp_lam0.5",
+      "mode": "a0b1_evalA",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 1000,
+      "batch_size": 64,
+      "accuracy_interval": 5,
+      "l2sp_lambda": 0.5,
+      "adapt": true,
+      "n_train": 10,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed42/l2sp_lam0.6",
+      "scenario": "d0_seed42",
+      "condition": "l2sp_lam0.6",
+      "mode": "a0b1_evalA",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 1000,
+      "batch_size": 64,
+      "accuracy_interval": 5,
+      "l2sp_lambda": 0.6,
+      "adapt": true,
+      "n_train": 10,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed42/l2sp_lam0.7",
+      "scenario": "d0_seed42",
+      "condition": "l2sp_lam0.7",
+      "mode": "a0b1_evalA",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 1000,
+      "batch_size": 64,
+      "accuracy_interval": 5,
+      "l2sp_lambda": 0.7,
+      "adapt": true,
+      "n_train": 10,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed42/l2sp_lam0.8",
+      "scenario": "d0_seed42",
+      "condition": "l2sp_lam0.8",
+      "mode": "a0b1_evalA",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 1000,
+      "batch_size": 64,
+      "accuracy_interval": 5,
+      "l2sp_lambda": 0.8,
+      "adapt": true,
+      "n_train": 10,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed42/l2sp_lam0.9",
+      "scenario": "d0_seed42",
+      "condition": "l2sp_lam0.9",
+      "mode": "a0b1_evalA",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 1000,
+      "batch_size": 64,
+      "accuracy_interval": 5,
+      "l2sp_lambda": 0.9,
+      "adapt": true,
+      "n_train": 10,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed42/l2sp_lam1",
+      "scenario": "d0_seed42",
+      "condition": "l2sp_lam1",
+      "mode": "a0b1_evalA",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 1000,
+      "batch_size": 64,
+      "accuracy_interval": 5,
+      "l2sp_lambda": 1.0,
+      "adapt": true,
+      "n_train": 10,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed123/l2sp_lam0.3",
+      "scenario": "d0_seed123",
+      "condition": "l2sp_lam0.3",
+      "mode": "a0b1_evalA",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 1000,
+      "batch_size": 64,
+      "accuracy_interval": 5,
+      "l2sp_lambda": 0.3,
+      "adapt": true,
+      "n_train": 10,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed123/l2sp_lam0.4",
+      "scenario": "d0_seed123",
+      "condition": "l2sp_lam0.4",
+      "mode": "a0b1_evalA",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 1000,
+      "batch_size": 64,
+      "accuracy_interval": 5,
+      "l2sp_lambda": 0.4,
+      "adapt": true,
+      "n_train": 10,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed123/l2sp_lam0.5",
+      "scenario": "d0_seed123",
+      "condition": "l2sp_lam0.5",
+      "mode": "a0b1_evalA",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 1000,
+      "batch_size": 64,
+      "accuracy_interval": 5,
+      "l2sp_lambda": 0.5,
+      "adapt": true,
+      "n_train": 10,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed123/l2sp_lam0.6",
+      "scenario": "d0_seed123",
+      "condition": "l2sp_lam0.6",
+      "mode": "a0b1_evalA",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 1000,
+      "batch_size": 64,
+      "accuracy_interval": 5,
+      "l2sp_lambda": 0.6,
+      "adapt": true,
+      "n_train": 10,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed123/l2sp_lam0.7",
+      "scenario": "d0_seed123",
+      "condition": "l2sp_lam0.7",
+      "mode": "a0b1_evalA",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 1000,
+      "batch_size": 64,
+      "accuracy_interval": 5,
+      "l2sp_lambda": 0.7,
+      "adapt": true,
+      "n_train": 10,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed123/l2sp_lam0.8",
+      "scenario": "d0_seed123",
+      "condition": "l2sp_lam0.8",
+      "mode": "a0b1_evalA",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 1000,
+      "batch_size": 64,
+      "accuracy_interval": 5,
+      "l2sp_lambda": 0.8,
+      "adapt": true,
+      "n_train": 10,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed123/l2sp_lam0.9",
+      "scenario": "d0_seed123",
+      "condition": "l2sp_lam0.9",
+      "mode": "a0b1_evalA",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 1000,
+      "batch_size": 64,
+      "accuracy_interval": 5,
+      "l2sp_lambda": 0.9,
+      "adapt": true,
+      "n_train": 10,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed123/l2sp_lam1",
+      "scenario": "d0_seed123",
+      "condition": "l2sp_lam1",
+      "mode": "a0b1_evalA",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 1000,
+      "batch_size": 64,
+      "accuracy_interval": 5,
+      "l2sp_lambda": 1.0,
+      "adapt": true,
+      "n_train": 10,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed999/l2sp_lam0.3",
+      "scenario": "d0_seed999",
+      "condition": "l2sp_lam0.3",
+      "mode": "a0b1_evalA",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 1000,
+      "batch_size": 64,
+      "accuracy_interval": 5,
+      "l2sp_lambda": 0.3,
+      "adapt": true,
+      "n_train": 10,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed999/l2sp_lam0.4",
+      "scenario": "d0_seed999",
+      "condition": "l2sp_lam0.4",
+      "mode": "a0b1_evalA",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 1000,
+      "batch_size": 64,
+      "accuracy_interval": 5,
+      "l2sp_lambda": 0.4,
+      "adapt": true,
+      "n_train": 10,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed999/l2sp_lam0.5",
+      "scenario": "d0_seed999",
+      "condition": "l2sp_lam0.5",
+      "mode": "a0b1_evalA",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 1000,
+      "batch_size": 64,
+      "accuracy_interval": 5,
+      "l2sp_lambda": 0.5,
+      "adapt": true,
+      "n_train": 10,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed999/l2sp_lam0.6",
+      "scenario": "d0_seed999",
+      "condition": "l2sp_lam0.6",
+      "mode": "a0b1_evalA",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 1000,
+      "batch_size": 64,
+      "accuracy_interval": 5,
+      "l2sp_lambda": 0.6,
+      "adapt": true,
+      "n_train": 10,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed999/l2sp_lam0.7",
+      "scenario": "d0_seed999",
+      "condition": "l2sp_lam0.7",
+      "mode": "a0b1_evalA",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 1000,
+      "batch_size": 64,
+      "accuracy_interval": 5,
+      "l2sp_lambda": 0.7,
+      "adapt": true,
+      "n_train": 10,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed999/l2sp_lam0.8",
+      "scenario": "d0_seed999",
+      "condition": "l2sp_lam0.8",
+      "mode": "a0b1_evalA",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 1000,
+      "batch_size": 64,
+      "accuracy_interval": 5,
+      "l2sp_lambda": 0.8,
+      "adapt": true,
+      "n_train": 10,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed999/l2sp_lam0.9",
+      "scenario": "d0_seed999",
+      "condition": "l2sp_lam0.9",
+      "mode": "a0b1_evalA",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 1000,
+      "batch_size": 64,
+      "accuracy_interval": 5,
+      "l2sp_lambda": 0.9,
+      "adapt": true,
+      "n_train": 10,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    },
+    {
+      "id": "d0_seed999/l2sp_lam1",
+      "scenario": "d0_seed999",
+      "condition": "l2sp_lam1",
+      "mode": "a0b1_evalA",
+      "train": {
+        "a_copies": 0,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 1000,
+      "batch_size": 64,
+      "accuracy_interval": 5,
+      "l2sp_lambda": 1.0,
+      "adapt": true,
+      "n_train": 10,
+      "updates_per_epoch": 1,
+      "seq_len": 29
+    }
+  ]
+}

@@ -1,0 +1,248 @@
+{
+  "rule": "E1's rule applied over the union of E1 and E1b lambdas (1000 updates: E1b lambdas only)",
+  "budgets": {
+    "100": {
+      "overall": "no",
+      "by_lambda": [
+        {
+          "lambda": 0.01,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 0.03,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 0.1,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 0.3,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 0.4,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 0.5,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 0.6,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 0.7,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 0.8,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 0.9,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 1.0,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 3.0,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 10.0,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 30.0,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 100.0,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        }
+      ]
+    },
+    "300": {
+      "overall": "no",
+      "by_lambda": [
+        {
+          "lambda": 0.01,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 0.03,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 0.1,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 0.3,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 0.4,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 0.5,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 0.6,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 0.7,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 0.8,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 0.9,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 1.0,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 3.0,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 10.0,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 30.0,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 100.0,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        }
+      ]
+    },
+    "1000": {
+      "overall": "no",
+      "by_lambda": [
+        {
+          "lambda": 0.3,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 0.4,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 0.5,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 0.6,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 0.7,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 0.8,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 0.9,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        },
+        {
+          "lambda": 1.0,
+          "full_scenarios": 0,
+          "near_scenarios": 0,
+          "verdict": "no"
+        }
+      ]
+    }
+  }
+}

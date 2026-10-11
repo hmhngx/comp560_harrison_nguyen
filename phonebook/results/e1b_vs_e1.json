@@ -1,0 +1,4658 @@
+{
+  "d0_seed42/l2sp_lam0.3 vs d0_seed42/l2sp_lam0.3": {
+    "compared_epochs": 60,
+    "mismatches": [
+      {
+        "epoch": 40,
+        "column": "Train Loss",
+        "a": "0.6986",
+        "b": "0.6987"
+      },
+      {
+        "epoch": 45,
+        "column": "Train Loss",
+        "a": "0.6447",
+        "b": "0.6444"
+      },
+      {
+        "epoch": 50,
+        "column": "Train Loss",
+        "a": "0.6073",
+        "b": "0.6077"
+      },
+      {
+        "epoch": 50,
+        "column": "Val Loss",
+        "a": "0.3592",
+        "b": "0.3605"
+      },
+      {
+        "epoch": 55,
+        "column": "Train Loss",
+        "a": "0.5782",
+        "b": "0.5778"
+      },
+      {
+        "epoch": 55,
+        "column": "Val Loss",
+        "a": "0.3592",
+        "b": "0.3611"
+      },
+      {
+        "epoch": 60,
+        "column": "Train Loss",
+        "a": "0.5509",
+        "b": "0.5525"
+      },
+      {
+        "epoch": 60,
+        "column": "Val Loss",
+        "a": "0.3775",
+        "b": "0.3722"
+      },
+      {
+        "epoch": 60,
+        "column": "Train Token Acc",
+        "a": "0.9077",
+        "b": "0.9231"
+      },
+      {
+        "epoch": 60,
+        "column": "Train Seq Acc",
+        "a": "0.2000",
+        "b": "0.3000"
+      },
+      {
+        "epoch": 65,
+        "column": "Train Loss",
+        "a": "0.5302",
+        "b": "0.5298"
+      },
+      {
+        "epoch": 65,
+        "column": "Val Loss",
+        "a": "0.3772",
+        "b": "0.3777"
+      },
+      {
+        "epoch": 65,
+        "column": "Train Token Acc",
+        "a": "0.9154",
+        "b": "0.9231"
+      },
+      {
+        "epoch": 70,
+        "column": "Train Loss",
+        "a": "0.5143",
+        "b": "0.5183"
+      },
+      {
+        "epoch": 70,
+        "column": "Val Loss",
+        "a": "0.3678",
+        "b": "0.3697"
+      },
+      {
+        "epoch": 75,
+        "column": "Train Loss",
+        "a": "0.5048",
+        "b": "0.5056"
+      },
+      {
+        "epoch": 75,
+        "column": "Val Loss",
+        "a": "0.3805",
+        "b": "0.3759"
+      },
+      {
+        "epoch": 80,
+        "column": "Train Loss",
+        "a": "0.4935",
+        "b": "0.4950"
+      },
+      {
+        "epoch": 80,
+        "column": "Val Loss",
+        "a": "0.3822",
+        "b": "0.3802"
+      },
+      {
+        "epoch": 85,
+        "column": "Train Loss",
+        "a": "0.4834",
+        "b": "0.4838"
+      },
+      {
+        "epoch": 85,
+        "column": "Val Loss",
+        "a": "0.3786",
+        "b": "0.3820"
+      },
+      {
+        "epoch": 85,
+        "column": "Val Token Acc",
+        "a": "0.9154",
+        "b": "0.9077"
+      },
+      {
+        "epoch": 85,
+        "column": "Val Seq Acc",
+        "a": "0.3000",
+        "b": "0.2000"
+      },
+      {
+        "epoch": 90,
+        "column": "Train Loss",
+        "a": "0.4762",
+        "b": "0.4769"
+      },
+      {
+        "epoch": 90,
+        "column": "Val Loss",
+        "a": "0.3833",
+        "b": "0.3841"
+      },
+      {
+        "epoch": 90,
+        "column": "Train Token Acc",
+        "a": "0.9308",
+        "b": "0.9231"
+      },
+      {
+        "epoch": 90,
+        "column": "Val Token Acc",
+        "a": "0.9077",
+        "b": "0.9000"
+      },
+      {
+        "epoch": 90,
+        "column": "Train Seq Acc",
+        "a": "0.3000",
+        "b": "0.2000"
+      },
+      {
+        "epoch": 95,
+        "column": "Train Loss",
+        "a": "0.4687",
+        "b": "0.4689"
+      },
+      {
+        "epoch": 95,
+        "column": "Val Loss",
+        "a": "0.3865",
+        "b": "0.3784"
+      },
+      {
+        "epoch": 100,
+        "column": "Train Loss",
+        "a": "0.4631",
+        "b": "0.4652"
+      },
+      {
+        "epoch": 100,
+        "column": "Val Loss",
+        "a": "0.3845",
+        "b": "0.3842"
+      },
+      {
+        "epoch": 105,
+        "column": "Train Loss",
+        "a": "0.4591",
+        "b": "0.4593"
+      },
+      {
+        "epoch": 105,
+        "column": "Val Loss",
+        "a": "0.3826",
+        "b": "0.3856"
+      },
+      {
+        "epoch": 110,
+        "column": "Train Loss",
+        "a": "0.4560",
+        "b": "0.4554"
+      },
+      {
+        "epoch": 110,
+        "column": "Val Loss",
+        "a": "0.3862",
+        "b": "0.3860"
+      },
+      {
+        "epoch": 110,
+        "column": "Train Token Acc",
+        "a": "0.9308",
+        "b": "0.9385"
+      },
+      {
+        "epoch": 110,
+        "column": "Train Seq Acc",
+        "a": "0.3000",
+        "b": "0.4000"
+      },
+      {
+        "epoch": 115,
+        "column": "Train Loss",
+        "a": "0.4516",
+        "b": "0.4519"
+      },
+      {
+        "epoch": 115,
+        "column": "Val Loss",
+        "a": "0.3846",
+        "b": "0.3840"
+      },
+      {
+        "epoch": 120,
+        "column": "Train Loss",
+        "a": "0.4488",
+        "b": "0.4487"
+      },
+      {
+        "epoch": 120,
+        "column": "Val Loss",
+        "a": "0.3880",
+        "b": "0.3882"
+      },
+      {
+        "epoch": 125,
+        "column": "Train Loss",
+        "a": "0.4454",
+        "b": "0.4455"
+      },
+      {
+        "epoch": 125,
+        "column": "Val Loss",
+        "a": "0.3880",
+        "b": "0.3885"
+      },
+      {
+        "epoch": 125,
+        "column": "Val Token Acc",
+        "a": "0.9077",
+        "b": "0.9000"
+      },
+      {
+        "epoch": 130,
+        "column": "Train Loss",
+        "a": "0.4426",
+        "b": "0.4423"
+      },
+      {
+        "epoch": 130,
+        "column": "Val Loss",
+        "a": "0.3928",
+        "b": "0.3901"
+      },
+      {
+        "epoch": 130,
+        "column": "Train Token Acc",
+        "a": "0.9385",
+        "b": "0.9462"
+      },
+      {
+        "epoch": 130,
+        "column": "Val Token Acc",
+        "a": "0.9077",
+        "b": "0.9000"
+      },
+      {
+        "epoch": 130,
+        "column": "Train Seq Acc",
+        "a": "0.4000",
+        "b": "0.5000"
+      },
+      {
+        "epoch": 135,
+        "column": "Train Loss",
+        "a": "0.4393",
+        "b": "0.4399"
+      },
+      {
+        "epoch": 135,
+        "column": "Val Loss",
+        "a": "0.3943",
+        "b": "0.3914"
+      },
+      {
+        "epoch": 140,
+        "column": "Train Loss",
+        "a": "0.4376",
+        "b": "0.4372"
+      },
+      {
+        "epoch": 140,
+        "column": "Val Loss",
+        "a": "0.3898",
+        "b": "0.3925"
+      },
+      {
+        "epoch": 145,
+        "column": "Train Loss",
+        "a": "0.4339",
+        "b": "0.4347"
+      },
+      {
+        "epoch": 145,
+        "column": "Val Loss",
+        "a": "0.3912",
+        "b": "0.3951"
+      },
+      {
+        "epoch": 150,
+        "column": "Train Loss",
+        "a": "0.4322",
+        "b": "0.4315"
+      },
+      {
+        "epoch": 150,
+        "column": "Val Loss",
+        "a": "0.3893",
+        "b": "0.3934"
+      },
+      {
+        "epoch": 155,
+        "column": "Train Loss",
+        "a": "0.4288",
+        "b": "0.4293"
+      },
+      {
+        "epoch": 155,
+        "column": "Val Loss",
+        "a": "0.3918",
+        "b": "0.3917"
+      },
+      {
+        "epoch": 160,
+        "column": "Train Loss",
+        "a": "0.4272",
+        "b": "0.4275"
+      },
+      {
+        "epoch": 160,
+        "column": "Val Loss",
+        "a": "0.3901",
+        "b": "0.3913"
+      },
+      {
+        "epoch": 160,
+        "column": "Train Token Acc",
+        "a": "0.9538",
+        "b": "0.9615"
+      },
+      {
+        "epoch": 160,
+        "column": "Train Seq Acc",
+        "a": "0.6000",
+        "b": "0.7000"
+      },
+      {
+        "epoch": 165,
+        "column": "Train Loss",
+        "a": "0.4248",
+        "b": "0.4253"
+      },
+      {
+        "epoch": 165,
+        "column": "Val Loss",
+        "a": "0.3882",
+        "b": "0.3905"
+      },
+      {
+        "epoch": 170,
+        "column": "Train Loss",
+        "a": "0.4249",
+        "b": "0.4241"
+      },
+      {
+        "epoch": 170,
+        "column": "Val Loss",
+        "a": "0.3895",
+        "b": "0.3896"
+      },
+      {
+        "epoch": 175,
+        "column": "Train Loss",
+        "a": "0.4238",
+        "b": "0.4224"
+      },
+      {
+        "epoch": 175,
+        "column": "Val Loss",
+        "a": "0.3935",
+        "b": "0.3874"
+      },
+      {
+        "epoch": 175,
+        "column": "Val Token Acc",
+        "a": "0.9000",
+        "b": "0.9077"
+      },
+      {
+        "epoch": 180,
+        "column": "Train Loss",
+        "a": "0.4222",
+        "b": "0.4217"
+      },
+      {
+        "epoch": 180,
+        "column": "Val Loss",
+        "a": "0.3861",
+        "b": "0.3844"
+      },
+      {
+        "epoch": 180,
+        "column": "Val Token Acc",
+        "a": "0.9077",
+        "b": "0.9154"
+      },
+      {
+        "epoch": 185,
+        "column": "Train Loss",
+        "a": "0.4190",
+        "b": "0.4200"
+      },
+      {
+        "epoch": 185,
+        "column": "Val Loss",
+        "a": "0.3836",
+        "b": "0.3814"
+      },
+      {
+        "epoch": 185,
+        "column": "Val Token Acc",
+        "a": "0.9077",
+        "b": "0.9000"
+      },
+      {
+        "epoch": 190,
+        "column": "Train Loss",
+        "a": "0.4197",
+        "b": "0.4201"
+      },
+      {
+        "epoch": 190,
+        "column": "Val Loss",
+        "a": "0.3769",
+        "b": "0.3790"
+      },
+      {
+        "epoch": 195,
+        "column": "Train Loss",
+        "a": "0.4180",
+        "b": "0.4175"
+      },
+      {
+        "epoch": 195,
+        "column": "Val Loss",
+        "a": "0.3808",
+        "b": "0.3885"
+      },
+      {
+        "epoch": 195,
+        "column": "Val Token Acc",
+        "a": "0.9077",
+        "b": "0.8923"
+      },
+      {
+        "epoch": 200,
+        "column": "Train Loss",
+        "a": "0.4168",
+        "b": "0.4177"
+      },
+      {
+        "epoch": 200,
+        "column": "Val Loss",
+        "a": "0.3773",
+        "b": "0.3743"
+      },
+      {
+        "epoch": 200,
+        "column": "Val Token Acc",
+        "a": "0.8923",
+        "b": "0.9000"
+      },
+      {
+        "epoch": 205,
+        "column": "Train Loss",
+        "a": "0.4207",
+        "b": "0.4182"
+      },
+      {
+        "epoch": 205,
+        "column": "Val Loss",
+        "a": "0.3753",
+        "b": "0.3651"
+      },
+      {
+        "epoch": 205,
+        "column": "Val Token Acc",
+        "a": "0.9154",
+        "b": "0.9077"
+      },
+      {
+        "epoch": 210,
+        "column": "Train Loss",
+        "a": "0.4184",
+        "b": "0.4174"
+      },
+      {
+        "epoch": 210,
+        "column": "Val Loss",
+        "a": "0.3926",
+        "b": "0.3772"
+      },
+      {
+        "epoch": 210,
+        "column": "Val Seq Acc",
+        "a": "0.3000",
+        "b": "0.4000"
+      },
+      {
+        "epoch": 215,
+        "column": "Train Loss",
+        "a": "0.4206",
+        "b": "0.4184"
+      },
+      {
+        "epoch": 215,
+        "column": "Val Loss",
+        "a": "0.3617",
+        "b": "0.3750"
+      },
+      {
+        "epoch": 215,
+        "column": "Val Token Acc",
+        "a": "0.9154",
+        "b": "0.9000"
+      },
+      {
+        "epoch": 215,
+        "column": "Val Seq Acc",
+        "a": "0.4000",
+        "b": "0.3000"
+      },
+      {
+        "epoch": 220,
+        "column": "Train Loss",
+        "a": "0.4282",
+        "b": "0.4228"
+      },
+      {
+        "epoch": 220,
+        "column": "Val Loss",
+        "a": "0.3574",
+        "b": "0.3694"
+      },
+      {
+        "epoch": 220,
+        "column": "Train Token Acc",
+        "a": "0.9615",
+        "b": "0.9692"
+      },
+      {
+        "epoch": 220,
+        "column": "Train Seq Acc",
+        "a": "0.6000",
+        "b": "0.7000"
+      },
+      {
+        "epoch": 220,
+        "column": "Val Seq Acc",
+        "a": "0.3000",
+        "b": "0.4000"
+      },
+      {
+        "epoch": 225,
+        "column": "Train Loss",
+        "a": "0.4207",
+        "b": "0.4141"
+      },
+      {
+        "epoch": 225,
+        "column": "Val Loss",
+        "a": "0.3786",
+        "b": "0.3882"
+      },
+      {
+        "epoch": 225,
+        "column": "Train Token Acc",
+        "a": "0.9692",
+        "b": "0.9769"
+      },
+      {
+        "epoch": 225,
+        "column": "Val Token Acc",
+        "a": "0.9000",
+        "b": "0.8923"
+      },
+      {
+        "epoch": 225,
+        "column": "Val Seq Acc",
+        "a": "0.4000",
+        "b": "0.3000"
+      },
+      {
+        "epoch": 230,
+        "column": "Train Loss",
+        "a": "0.4124",
+        "b": "0.4105"
+      },
+      {
+        "epoch": 230,
+        "column": "Val Loss",
+        "a": "0.3653",
+        "b": "0.3779"
+      },
+      {
+        "epoch": 230,
+        "column": "Val Seq Acc",
+        "a": "0.4000",
+        "b": "0.3000"
+      },
+      {
+        "epoch": 235,
+        "column": "Train Loss",
+        "a": "0.4167",
+        "b": "0.4168"
+      },
+      {
+        "epoch": 235,
+        "column": "Val Loss",
+        "a": "0.3730",
+        "b": "0.3578"
+      },
+      {
+        "epoch": 235,
+        "column": "Val Token Acc",
+        "a": "0.9077",
+        "b": "0.9154"
+      },
+      {
+        "epoch": 240,
+        "column": "Train Loss",
+        "a": "0.4154",
+        "b": "0.4171"
+      },
+      {
+        "epoch": 240,
+        "column": "Val Loss",
+        "a": "0.3598",
+        "b": "0.3579"
+      },
+      {
+        "epoch": 240,
+        "column": "Val Token Acc",
+        "a": "0.9077",
+        "b": "0.9154"
+      },
+      {
+        "epoch": 240,
+        "column": "Val Seq Acc",
+        "a": "0.4000",
+        "b": "0.5000"
+      },
+      {
+        "epoch": 245,
+        "column": "Train Loss",
+        "a": "0.4148",
+        "b": "0.4182"
+      },
+      {
+        "epoch": 245,
+        "column": "Val Loss",
+        "a": "0.3660",
+        "b": "0.3845"
+      },
+      {
+        "epoch": 245,
+        "column": "Val Token Acc",
+        "a": "0.9154",
+        "b": "0.8769"
+      },
+      {
+        "epoch": 245,
+        "column": "Val Seq Acc",
+        "a": "0.5000",
+        "b": "0.2000"
+      },
+      {
+        "epoch": 250,
+        "column": "Train Loss",
+        "a": "0.4102",
+        "b": "0.4143"
+      },
+      {
+        "epoch": 250,
+        "column": "Val Loss",
+        "a": "0.3840",
+        "b": "0.3628"
+      },
+      {
+        "epoch": 250,
+        "column": "Train Token Acc",
+        "a": "0.9692",
+        "b": "0.9769"
+      },
+      {
+        "epoch": 250,
+        "column": "Val Token Acc",
+        "a": "0.9000",
+        "b": "0.9077"
+      },
+      {
+        "epoch": 255,
+        "column": "Train Loss",
+        "a": "0.4069",
+        "b": "0.4151"
+      },
+      {
+        "epoch": 255,
+        "column": "Val Loss",
+        "a": "0.3587",
+        "b": "0.3469"
+      },
+      {
+        "epoch": 255,
+        "column": "Train Token Acc",
+        "a": "0.9769",
+        "b": "0.9692"
+      },
+      {
+        "epoch": 255,
+        "column": "Val Token Acc",
+        "a": "0.8923",
+        "b": "0.9154"
+      },
+      {
+        "epoch": 255,
+        "column": "Train Seq Acc",
+        "a": "0.8000",
+        "b": "0.6000"
+      },
+      {
+        "epoch": 255,
+        "column": "Val Seq Acc",
+        "a": "0.3000",
+        "b": "0.5000"
+      },
+      {
+        "epoch": 260,
+        "column": "Train Loss",
+        "a": "0.4081",
+        "b": "0.4214"
+      },
+      {
+        "epoch": 260,
+        "column": "Val Loss",
+        "a": "0.3706",
+        "b": "0.3623"
+      },
+      {
+        "epoch": 260,
+        "column": "Train Token Acc",
+        "a": "0.9769",
+        "b": "0.9692"
+      },
+      {
+        "epoch": 260,
+        "column": "Val Token Acc",
+        "a": "0.9000",
+        "b": "0.8923"
+      },
+      {
+        "epoch": 260,
+        "column": "Train Seq Acc",
+        "a": "0.8000",
+        "b": "0.7000"
+      },
+      {
+        "epoch": 260,
+        "column": "Val Seq Acc",
+        "a": "0.3000",
+        "b": "0.4000"
+      },
+      {
+        "epoch": 265,
+        "column": "Train Loss",
+        "a": "0.4155",
+        "b": "0.4163"
+      },
+      {
+        "epoch": 265,
+        "column": "Val Loss",
+        "a": "0.3317",
+        "b": "0.3666"
+      },
+      {
+        "epoch": 265,
+        "column": "Train Seq Acc",
+        "a": "0.8000",
+        "b": "0.7000"
+      },
+      {
+        "epoch": 265,
+        "column": "Val Seq Acc",
+        "a": "0.4000",
+        "b": "0.5000"
+      },
+      {
+        "epoch": 270,
+        "column": "Train Loss",
+        "a": "0.4034",
+        "b": "0.4046"
+      },
+      {
+        "epoch": 270,
+        "column": "Val Loss",
+        "a": "0.3621",
+        "b": "0.3501"
+      },
+      {
+        "epoch": 270,
+        "column": "Train Token Acc",
+        "a": "0.9769",
+        "b": "0.9846"
+      },
+      {
+        "epoch": 270,
+        "column": "Val Token Acc",
+        "a": "0.9077",
+        "b": "0.9154"
+      },
+      {
+        "epoch": 270,
+        "column": "Val Seq Acc",
+        "a": "0.4000",
+        "b": "0.5000"
+      },
+      {
+        "epoch": 275,
+        "column": "Train Loss",
+        "a": "0.4080",
+        "b": "0.4009"
+      },
+      {
+        "epoch": 275,
+        "column": "Val Loss",
+        "a": "0.3658",
+        "b": "0.3518"
+      },
+      {
+        "epoch": 275,
+        "column": "Val Token Acc",
+        "a": "0.9000",
+        "b": "0.9077"
+      },
+      {
+        "epoch": 275,
+        "column": "Val Seq Acc",
+        "a": "0.3000",
+        "b": "0.4000"
+      },
+      {
+        "epoch": 280,
+        "column": "Train Loss",
+        "a": "0.4086",
+        "b": "0.4052"
+      },
+      {
+        "epoch": 280,
+        "column": "Val Loss",
+        "a": "0.3849",
+        "b": "0.3474"
+      },
+      {
+        "epoch": 280,
+        "column": "Val Token Acc",
+        "a": "0.8923",
+        "b": "0.9000"
+      },
+      {
+        "epoch": 285,
+        "column": "Train Loss",
+        "a": "0.4017",
+        "b": "0.4019"
+      },
+      {
+        "epoch": 285,
+        "column": "Val Loss",
+        "a": "0.3566",
+        "b": "0.3632"
+      },
+      {
+        "epoch": 290,
+        "column": "Train Loss",
+        "a": "0.4060",
+        "b": "0.3984"
+      },
+      {
+        "epoch": 290,
+        "column": "Val Loss",
+        "a": "0.3517",
+        "b": "0.3599"
+      },
+      {
+        "epoch": 290,
+        "column": "Val Token Acc",
+        "a": "0.9154",
+        "b": "0.9000"
+      },
+      {
+        "epoch": 290,
+        "column": "Val Seq Acc",
+        "a": "0.4000",
+        "b": "0.3000"
+      },
+      {
+        "epoch": 295,
+        "column": "Train Loss",
+        "a": "0.4026",
+        "b": "0.3991"
+      },
+      {
+        "epoch": 295,
+        "column": "Val Loss",
+        "a": "0.3634",
+        "b": "0.3527"
+      },
+      {
+        "epoch": 295,
+        "column": "Val Token Acc",
+        "a": "0.8923",
+        "b": "0.9077"
+      },
+      {
+        "epoch": 295,
+        "column": "Val Seq Acc",
+        "a": "0.3000",
+        "b": "0.4000"
+      },
+      {
+        "epoch": 300,
+        "column": "Train Loss",
+        "a": "0.3995",
+        "b": "0.4028"
+      },
+      {
+        "epoch": 300,
+        "column": "Val Loss",
+        "a": "0.3434",
+        "b": "0.3496"
+      },
+      {
+        "epoch": 300,
+        "column": "Val Token Acc",
+        "a": "0.9154",
+        "b": "0.9077"
+      }
+    ]
+  },
+  "d0_seed42/l2sp_lam1 vs d0_seed42/l2sp_lam1": {
+    "compared_epochs": 60,
+    "mismatches": [
+      {
+        "epoch": 200,
+        "column": "Train Loss",
+        "a": "2.3287",
+        "b": "2.3286"
+      },
+      {
+        "epoch": 215,
+        "column": "Train Loss",
+        "a": "2.3288",
+        "b": "2.3285"
+      },
+      {
+        "epoch": 215,
+        "column": "Val Loss",
+        "a": "0.1575",
+        "b": "0.1572"
+      },
+      {
+        "epoch": 220,
+        "column": "Train Loss",
+        "a": "2.3283",
+        "b": "2.3286"
+      },
+      {
+        "epoch": 220,
+        "column": "Val Loss",
+        "a": "0.1583",
+        "b": "0.1587"
+      },
+      {
+        "epoch": 225,
+        "column": "Train Loss",
+        "a": "2.3278",
+        "b": "2.3274"
+      },
+      {
+        "epoch": 225,
+        "column": "Val Loss",
+        "a": "0.1561",
+        "b": "0.1556"
+      },
+      {
+        "epoch": 230,
+        "column": "Train Loss",
+        "a": "2.3287",
+        "b": "2.3291"
+      },
+      {
+        "epoch": 230,
+        "column": "Val Loss",
+        "a": "0.1576",
+        "b": "0.1578"
+      },
+      {
+        "epoch": 230,
+        "column": "Train Token Acc",
+        "a": "0.4000",
+        "b": "0.4077"
+      },
+      {
+        "epoch": 235,
+        "column": "Train Loss",
+        "a": "2.3277",
+        "b": "2.3275"
+      },
+      {
+        "epoch": 235,
+        "column": "Val Loss",
+        "a": "0.1554",
+        "b": "0.1556"
+      },
+      {
+        "epoch": 240,
+        "column": "Train Loss",
+        "a": "2.3266",
+        "b": "2.3286"
+      },
+      {
+        "epoch": 240,
+        "column": "Val Loss",
+        "a": "0.1538",
+        "b": "0.1554"
+      },
+      {
+        "epoch": 240,
+        "column": "Train Token Acc",
+        "a": "0.4077",
+        "b": "0.3923"
+      },
+      {
+        "epoch": 245,
+        "column": "Train Loss",
+        "a": "2.3287",
+        "b": "2.3300"
+      },
+      {
+        "epoch": 245,
+        "column": "Val Loss",
+        "a": "0.1549",
+        "b": "0.1579"
+      },
+      {
+        "epoch": 245,
+        "column": "Train Token Acc",
+        "a": "0.4077",
+        "b": "0.3846"
+      },
+      {
+        "epoch": 250,
+        "column": "Train Loss",
+        "a": "2.3299",
+        "b": "2.3308"
+      },
+      {
+        "epoch": 250,
+        "column": "Val Loss",
+        "a": "0.1577",
+        "b": "0.1602"
+      },
+      {
+        "epoch": 250,
+        "column": "Train Token Acc",
+        "a": "0.4077",
+        "b": "0.3923"
+      },
+      {
+        "epoch": 255,
+        "column": "Train Loss",
+        "a": "2.3275",
+        "b": "2.3301"
+      },
+      {
+        "epoch": 255,
+        "column": "Val Loss",
+        "a": "0.1553",
+        "b": "0.1598"
+      },
+      {
+        "epoch": 255,
+        "column": "Train Token Acc",
+        "a": "0.4000",
+        "b": "0.3923"
+      },
+      {
+        "epoch": 260,
+        "column": "Train Loss",
+        "a": "2.3281",
+        "b": "2.3292"
+      },
+      {
+        "epoch": 260,
+        "column": "Val Loss",
+        "a": "0.1579",
+        "b": "0.1582"
+      },
+      {
+        "epoch": 260,
+        "column": "Train Token Acc",
+        "a": "0.3923",
+        "b": "0.3846"
+      },
+      {
+        "epoch": 265,
+        "column": "Train Loss",
+        "a": "2.3283",
+        "b": "2.3281"
+      },
+      {
+        "epoch": 265,
+        "column": "Val Loss",
+        "a": "0.1563",
+        "b": "0.1568"
+      },
+      {
+        "epoch": 270,
+        "column": "Train Loss",
+        "a": "2.3295",
+        "b": "2.3297"
+      },
+      {
+        "epoch": 270,
+        "column": "Val Loss",
+        "a": "0.1589",
+        "b": "0.1567"
+      },
+      {
+        "epoch": 270,
+        "column": "Train Token Acc",
+        "a": "0.3923",
+        "b": "0.3846"
+      },
+      {
+        "epoch": 275,
+        "column": "Train Loss",
+        "a": "2.3300",
+        "b": "2.3286"
+      },
+      {
+        "epoch": 275,
+        "column": "Val Loss",
+        "a": "0.1587",
+        "b": "0.1563"
+      },
+      {
+        "epoch": 280,
+        "column": "Train Loss",
+        "a": "2.3288",
+        "b": "2.3277"
+      },
+      {
+        "epoch": 280,
+        "column": "Val Loss",
+        "a": "0.1571",
+        "b": "0.1557"
+      },
+      {
+        "epoch": 285,
+        "column": "Train Loss",
+        "a": "2.3292",
+        "b": "2.3273"
+      },
+      {
+        "epoch": 285,
+        "column": "Val Loss",
+        "a": "0.1570",
+        "b": "0.1553"
+      },
+      {
+        "epoch": 285,
+        "column": "Train Token Acc",
+        "a": "0.3846",
+        "b": "0.3923"
+      },
+      {
+        "epoch": 290,
+        "column": "Train Loss",
+        "a": "2.3305",
+        "b": "2.3277"
+      },
+      {
+        "epoch": 290,
+        "column": "Val Loss",
+        "a": "0.1581",
+        "b": "0.1553"
+      },
+      {
+        "epoch": 295,
+        "column": "Train Loss",
+        "a": "2.3307",
+        "b": "2.3268"
+      },
+      {
+        "epoch": 295,
+        "column": "Val Loss",
+        "a": "0.1576",
+        "b": "0.1557"
+      },
+      {
+        "epoch": 300,
+        "column": "Train Loss",
+        "a": "2.3313",
+        "b": "2.3279"
+      },
+      {
+        "epoch": 300,
+        "column": "Val Loss",
+        "a": "0.1586",
+        "b": "0.1554"
+      },
+      {
+        "epoch": 300,
+        "column": "Train Token Acc",
+        "a": "0.4000",
+        "b": "0.3923"
+      }
+    ]
+  },
+  "d0_seed123/l2sp_lam0.3 vs d0_seed123/l2sp_lam0.3": {
+    "compared_epochs": 60,
+    "mismatches": [
+      {
+        "epoch": 75,
+        "column": "Val Loss",
+        "a": "0.3320",
+        "b": "0.3321"
+      },
+      {
+        "epoch": 80,
+        "column": "Val Loss",
+        "a": "0.3302",
+        "b": "0.3310"
+      },
+      {
+        "epoch": 85,
+        "column": "Val Loss",
+        "a": "0.3296",
+        "b": "0.3303"
+      },
+      {
+        "epoch": 90,
+        "column": "Train Loss",
+        "a": "0.3973",
+        "b": "0.3975"
+      },
+      {
+        "epoch": 90,
+        "column": "Val Loss",
+        "a": "0.3348",
+        "b": "0.3365"
+      },
+      {
+        "epoch": 95,
+        "column": "Train Loss",
+        "a": "0.3941",
+        "b": "0.3933"
+      },
+      {
+        "epoch": 95,
+        "column": "Val Loss",
+        "a": "0.3329",
+        "b": "0.3323"
+      },
+      {
+        "epoch": 100,
+        "column": "Train Loss",
+        "a": "0.3906",
+        "b": "0.3902"
+      },
+      {
+        "epoch": 100,
+        "column": "Val Loss",
+        "a": "0.3415",
+        "b": "0.3336"
+      },
+      {
+        "epoch": 105,
+        "column": "Train Loss",
+        "a": "0.3885",
+        "b": "0.3907"
+      },
+      {
+        "epoch": 105,
+        "column": "Val Loss",
+        "a": "0.3411",
+        "b": "0.3501"
+      },
+      {
+        "epoch": 105,
+        "column": "Val Token Acc",
+        "a": "0.9154",
+        "b": "0.9077"
+      },
+      {
+        "epoch": 110,
+        "column": "Train Loss",
+        "a": "0.3803",
+        "b": "0.3846"
+      },
+      {
+        "epoch": 110,
+        "column": "Val Loss",
+        "a": "0.3404",
+        "b": "0.3416"
+      },
+      {
+        "epoch": 110,
+        "column": "Train Token Acc",
+        "a": "0.9538",
+        "b": "0.9692"
+      },
+      {
+        "epoch": 115,
+        "column": "Train Loss",
+        "a": "0.3724",
+        "b": "0.3746"
+      },
+      {
+        "epoch": 115,
+        "column": "Val Loss",
+        "a": "0.3387",
+        "b": "0.3449"
+      },
+      {
+        "epoch": 120,
+        "column": "Train Loss",
+        "a": "0.3658",
+        "b": "0.3674"
+      },
+      {
+        "epoch": 120,
+        "column": "Val Loss",
+        "a": "0.3427",
+        "b": "0.3391"
+      },
+      {
+        "epoch": 125,
+        "column": "Train Loss",
+        "a": "0.3644",
+        "b": "0.3623"
+      },
+      {
+        "epoch": 125,
+        "column": "Val Loss",
+        "a": "0.3392",
+        "b": "0.3456"
+      },
+      {
+        "epoch": 125,
+        "column": "Val Token Acc",
+        "a": "0.9000",
+        "b": "0.9077"
+      },
+      {
+        "epoch": 125,
+        "column": "Val Seq Acc",
+        "a": "0.2000",
+        "b": "0.3000"
+      },
+      {
+        "epoch": 130,
+        "column": "Train Loss",
+        "a": "0.3564",
+        "b": "0.3575"
+      },
+      {
+        "epoch": 130,
+        "column": "Val Loss",
+        "a": "0.3410",
+        "b": "0.3488"
+      },
+      {
+        "epoch": 135,
+        "column": "Train Loss",
+        "a": "0.3542",
+        "b": "0.3557"
+      },
+      {
+        "epoch": 135,
+        "column": "Val Loss",
+        "a": "0.3511",
+        "b": "0.3459"
+      },
+      {
+        "epoch": 135,
+        "column": "Train Token Acc",
+        "a": "0.9769",
+        "b": "0.9692"
+      },
+      {
+        "epoch": 135,
+        "column": "Val Token Acc",
+        "a": "0.9000",
+        "b": "0.8923"
+      },
+      {
+        "epoch": 135,
+        "column": "Train Seq Acc",
+        "a": "0.8000",
+        "b": "0.7000"
+      },
+      {
+        "epoch": 135,
+        "column": "Val Seq Acc",
+        "a": "0.3000",
+        "b": "0.2000"
+      },
+      {
+        "epoch": 140,
+        "column": "Train Loss",
+        "a": "0.3509",
+        "b": "0.3538"
+      },
+      {
+        "epoch": 140,
+        "column": "Val Loss",
+        "a": "0.3504",
+        "b": "0.3448"
+      },
+      {
+        "epoch": 145,
+        "column": "Train Loss",
+        "a": "0.3476",
+        "b": "0.3492"
+      },
+      {
+        "epoch": 145,
+        "column": "Val Loss",
+        "a": "0.3554",
+        "b": "0.3500"
+      },
+      {
+        "epoch": 150,
+        "column": "Train Loss",
+        "a": "0.3437",
+        "b": "0.3448"
+      },
+      {
+        "epoch": 150,
+        "column": "Val Loss",
+        "a": "0.3532",
+        "b": "0.3489"
+      },
+      {
+        "epoch": 150,
+        "column": "Val Token Acc",
+        "a": "0.8846",
+        "b": "0.8923"
+      },
+      {
+        "epoch": 150,
+        "column": "Val Seq Acc",
+        "a": "0.1000",
+        "b": "0.2000"
+      },
+      {
+        "epoch": 155,
+        "column": "Train Loss",
+        "a": "0.3402",
+        "b": "0.3443"
+      },
+      {
+        "epoch": 155,
+        "column": "Val Loss",
+        "a": "0.3512",
+        "b": "0.3520"
+      },
+      {
+        "epoch": 160,
+        "column": "Train Loss",
+        "a": "0.3405",
+        "b": "0.3407"
+      },
+      {
+        "epoch": 160,
+        "column": "Val Loss",
+        "a": "0.3502",
+        "b": "0.3443"
+      },
+      {
+        "epoch": 160,
+        "column": "Val Token Acc",
+        "a": "0.8923",
+        "b": "0.8846"
+      },
+      {
+        "epoch": 160,
+        "column": "Val Seq Acc",
+        "a": "0.2000",
+        "b": "0.1000"
+      },
+      {
+        "epoch": 165,
+        "column": "Train Loss",
+        "a": "0.3423",
+        "b": "0.3463"
+      },
+      {
+        "epoch": 165,
+        "column": "Val Loss",
+        "a": "0.3393",
+        "b": "0.3499"
+      },
+      {
+        "epoch": 165,
+        "column": "Train Token Acc",
+        "a": "0.9846",
+        "b": "0.9769"
+      },
+      {
+        "epoch": 170,
+        "column": "Train Loss",
+        "a": "0.3387",
+        "b": "0.3409"
+      },
+      {
+        "epoch": 170,
+        "column": "Val Loss",
+        "a": "0.3488",
+        "b": "0.3572"
+      },
+      {
+        "epoch": 170,
+        "column": "Val Token Acc",
+        "a": "0.8923",
+        "b": "0.8846"
+      },
+      {
+        "epoch": 175,
+        "column": "Train Loss",
+        "a": "0.3364",
+        "b": "0.3360"
+      },
+      {
+        "epoch": 175,
+        "column": "Val Loss",
+        "a": "0.3404",
+        "b": "0.3549"
+      },
+      {
+        "epoch": 175,
+        "column": "Train Token Acc",
+        "a": "0.9846",
+        "b": "0.9923"
+      },
+      {
+        "epoch": 175,
+        "column": "Train Seq Acc",
+        "a": "0.8000",
+        "b": "0.9000"
+      },
+      {
+        "epoch": 175,
+        "column": "Val Seq Acc",
+        "a": "0.2000",
+        "b": "0.3000"
+      },
+      {
+        "epoch": 180,
+        "column": "Train Loss",
+        "a": "0.3342",
+        "b": "0.3337"
+      },
+      {
+        "epoch": 180,
+        "column": "Val Loss",
+        "a": "0.3521",
+        "b": "0.3492"
+      },
+      {
+        "epoch": 180,
+        "column": "Train Token Acc",
+        "a": "0.9846",
+        "b": "0.9923"
+      },
+      {
+        "epoch": 180,
+        "column": "Val Token Acc",
+        "a": "0.8846",
+        "b": "0.8923"
+      },
+      {
+        "epoch": 180,
+        "column": "Train Seq Acc",
+        "a": "0.8000",
+        "b": "0.9000"
+      },
+      {
+        "epoch": 180,
+        "column": "Val Seq Acc",
+        "a": "0.2000",
+        "b": "0.3000"
+      },
+      {
+        "epoch": 185,
+        "column": "Train Loss",
+        "a": "0.3329",
+        "b": "0.3321"
+      },
+      {
+        "epoch": 185,
+        "column": "Val Loss",
+        "a": "0.3516",
+        "b": "0.3492"
+      },
+      {
+        "epoch": 185,
+        "column": "Val Token Acc",
+        "a": "0.8923",
+        "b": "0.9000"
+      },
+      {
+        "epoch": 190,
+        "column": "Train Loss",
+        "a": "0.3306",
+        "b": "0.3326"
+      },
+      {
+        "epoch": 190,
+        "column": "Val Loss",
+        "a": "0.3505",
+        "b": "0.3495"
+      },
+      {
+        "epoch": 190,
+        "column": "Val Token Acc",
+        "a": "0.9000",
+        "b": "0.9077"
+      },
+      {
+        "epoch": 195,
+        "column": "Train Loss",
+        "a": "0.3307",
+        "b": "0.3323"
+      },
+      {
+        "epoch": 195,
+        "column": "Val Loss",
+        "a": "0.3569",
+        "b": "0.3598"
+      },
+      {
+        "epoch": 195,
+        "column": "Train Token Acc",
+        "a": "0.9846",
+        "b": "0.9923"
+      },
+      {
+        "epoch": 195,
+        "column": "Train Seq Acc",
+        "a": "0.8000",
+        "b": "0.9000"
+      },
+      {
+        "epoch": 200,
+        "column": "Train Loss",
+        "a": "0.3329",
+        "b": "0.3321"
+      },
+      {
+        "epoch": 200,
+        "column": "Val Loss",
+        "a": "0.3472",
+        "b": "0.3583"
+      },
+      {
+        "epoch": 200,
+        "column": "Val Token Acc",
+        "a": "0.9154",
+        "b": "0.9000"
+      },
+      {
+        "epoch": 200,
+        "column": "Val Seq Acc",
+        "a": "0.4000",
+        "b": "0.3000"
+      },
+      {
+        "epoch": 205,
+        "column": "Train Loss",
+        "a": "0.3302",
+        "b": "0.3285"
+      },
+      {
+        "epoch": 205,
+        "column": "Val Loss",
+        "a": "0.3575",
+        "b": "0.3535"
+      },
+      {
+        "epoch": 205,
+        "column": "Val Token Acc",
+        "a": "0.9077",
+        "b": "0.9000"
+      },
+      {
+        "epoch": 210,
+        "column": "Train Loss",
+        "a": "0.3336",
+        "b": "0.3280"
+      },
+      {
+        "epoch": 210,
+        "column": "Val Loss",
+        "a": "0.3576",
+        "b": "0.3531"
+      },
+      {
+        "epoch": 210,
+        "column": "Val Token Acc",
+        "a": "0.9000",
+        "b": "0.9077"
+      },
+      {
+        "epoch": 215,
+        "column": "Train Loss",
+        "a": "0.3298",
+        "b": "0.3281"
+      },
+      {
+        "epoch": 215,
+        "column": "Val Loss",
+        "a": "0.3517",
+        "b": "0.3616"
+      },
+      {
+        "epoch": 215,
+        "column": "Train Token Acc",
+        "a": "0.9846",
+        "b": "0.9923"
+      },
+      {
+        "epoch": 215,
+        "column": "Val Token Acc",
+        "a": "0.9000",
+        "b": "0.9077"
+      },
+      {
+        "epoch": 215,
+        "column": "Train Seq Acc",
+        "a": "0.8000",
+        "b": "0.9000"
+      },
+      {
+        "epoch": 215,
+        "column": "Val Seq Acc",
+        "a": "0.2000",
+        "b": "0.3000"
+      },
+      {
+        "epoch": 220,
+        "column": "Train Loss",
+        "a": "0.3252",
+        "b": "0.3274"
+      },
+      {
+        "epoch": 220,
+        "column": "Val Loss",
+        "a": "0.3651",
+        "b": "0.3477"
+      },
+      {
+        "epoch": 220,
+        "column": "Val Seq Acc",
+        "a": "0.3000",
+        "b": "0.2000"
+      },
+      {
+        "epoch": 225,
+        "column": "Train Loss",
+        "a": "0.3280",
+        "b": "0.3257"
+      },
+      {
+        "epoch": 225,
+        "column": "Val Loss",
+        "a": "0.3502",
+        "b": "0.3496"
+      },
+      {
+        "epoch": 225,
+        "column": "Val Token Acc",
+        "a": "0.9077",
+        "b": "0.9000"
+      },
+      {
+        "epoch": 225,
+        "column": "Val Seq Acc",
+        "a": "0.3000",
+        "b": "0.2000"
+      },
+      {
+        "epoch": 230,
+        "column": "Train Loss",
+        "a": "0.3225",
+        "b": "0.3242"
+      },
+      {
+        "epoch": 230,
+        "column": "Val Loss",
+        "a": "0.3488",
+        "b": "0.3466"
+      },
+      {
+        "epoch": 235,
+        "column": "Val Loss",
+        "a": "0.3434",
+        "b": "0.3464"
+      },
+      {
+        "epoch": 240,
+        "column": "Train Loss",
+        "a": "0.3210",
+        "b": "0.3189"
+      },
+      {
+        "epoch": 240,
+        "column": "Val Loss",
+        "a": "0.3436",
+        "b": "0.3346"
+      },
+      {
+        "epoch": 245,
+        "column": "Train Loss",
+        "a": "0.3186",
+        "b": "0.3212"
+      },
+      {
+        "epoch": 245,
+        "column": "Val Loss",
+        "a": "0.3392",
+        "b": "0.3313"
+      },
+      {
+        "epoch": 245,
+        "column": "Val Token Acc",
+        "a": "0.9000",
+        "b": "0.9077"
+      },
+      {
+        "epoch": 245,
+        "column": "Val Seq Acc",
+        "a": "0.2000",
+        "b": "0.3000"
+      },
+      {
+        "epoch": 250,
+        "column": "Train Loss",
+        "a": "0.3187",
+        "b": "0.3177"
+      },
+      {
+        "epoch": 250,
+        "column": "Val Loss",
+        "a": "0.3392",
+        "b": "0.3418"
+      },
+      {
+        "epoch": 255,
+        "column": "Train Loss",
+        "a": "0.3163",
+        "b": "0.3156"
+      },
+      {
+        "epoch": 255,
+        "column": "Val Loss",
+        "a": "0.3380",
+        "b": "0.3426"
+      },
+      {
+        "epoch": 255,
+        "column": "Val Token Acc",
+        "a": "0.8923",
+        "b": "0.9000"
+      },
+      {
+        "epoch": 255,
+        "column": "Val Seq Acc",
+        "a": "0.1000",
+        "b": "0.2000"
+      },
+      {
+        "epoch": 260,
+        "column": "Train Loss",
+        "a": "0.3150",
+        "b": "0.3141"
+      },
+      {
+        "epoch": 260,
+        "column": "Val Loss",
+        "a": "0.3384",
+        "b": "0.3442"
+      },
+      {
+        "epoch": 260,
+        "column": "Val Token Acc",
+        "a": "0.9154",
+        "b": "0.9000"
+      },
+      {
+        "epoch": 260,
+        "column": "Val Seq Acc",
+        "a": "0.3000",
+        "b": "0.2000"
+      },
+      {
+        "epoch": 265,
+        "column": "Train Loss",
+        "a": "0.3147",
+        "b": "0.3138"
+      },
+      {
+        "epoch": 265,
+        "column": "Val Loss",
+        "a": "0.3358",
+        "b": "0.3369"
+      },
+      {
+        "epoch": 265,
+        "column": "Val Token Acc",
+        "a": "0.9154",
+        "b": "0.9077"
+      },
+      {
+        "epoch": 265,
+        "column": "Val Seq Acc",
+        "a": "0.3000",
+        "b": "0.2000"
+      },
+      {
+        "epoch": 270,
+        "column": "Train Loss",
+        "a": "0.3119",
+        "b": "0.3155"
+      },
+      {
+        "epoch": 270,
+        "column": "Val Loss",
+        "a": "0.3357",
+        "b": "0.3349"
+      },
+      {
+        "epoch": 275,
+        "column": "Val Loss",
+        "a": "0.3366",
+        "b": "0.3314"
+      },
+      {
+        "epoch": 275,
+        "column": "Val Token Acc",
+        "a": "0.9077",
+        "b": "0.9154"
+      },
+      {
+        "epoch": 280,
+        "column": "Train Loss",
+        "a": "0.3103",
+        "b": "0.3117"
+      },
+      {
+        "epoch": 280,
+        "column": "Val Loss",
+        "a": "0.3362",
+        "b": "0.3338"
+      },
+      {
+        "epoch": 285,
+        "column": "Train Loss",
+        "a": "0.3106",
+        "b": "0.3117"
+      },
+      {
+        "epoch": 285,
+        "column": "Val Loss",
+        "a": "0.3347",
+        "b": "0.3344"
+      },
+      {
+        "epoch": 290,
+        "column": "Train Loss",
+        "a": "0.3133",
+        "b": "0.3106"
+      },
+      {
+        "epoch": 290,
+        "column": "Val Loss",
+        "a": "0.3287",
+        "b": "0.3341"
+      },
+      {
+        "epoch": 290,
+        "column": "Val Token Acc",
+        "a": "0.9077",
+        "b": "0.9154"
+      },
+      {
+        "epoch": 295,
+        "column": "Train Loss",
+        "a": "0.3071",
+        "b": "0.3083"
+      },
+      {
+        "epoch": 295,
+        "column": "Val Loss",
+        "a": "0.3340",
+        "b": "0.3357"
+      },
+      {
+        "epoch": 300,
+        "column": "Train Loss",
+        "a": "0.3071",
+        "b": "0.3099"
+      },
+      {
+        "epoch": 300,
+        "column": "Val Loss",
+        "a": "0.3393",
+        "b": "0.3341"
+      },
+      {
+        "epoch": 300,
+        "column": "Train Token Acc",
+        "a": "1.0000",
+        "b": "0.9923"
+      },
+      {
+        "epoch": 300,
+        "column": "Train Seq Acc",
+        "a": "1.0000",
+        "b": "0.9000"
+      }
+    ]
+  },
+  "d0_seed123/l2sp_lam1 vs d0_seed123/l2sp_lam1": {
+    "compared_epochs": 60,
+    "mismatches": [
+      {
+        "epoch": 20,
+        "column": "Train Loss",
+        "a": "1.8336",
+        "b": "1.8335"
+      },
+      {
+        "epoch": 20,
+        "column": "Val Loss",
+        "a": "0.2146",
+        "b": "0.2148"
+      },
+      {
+        "epoch": 25,
+        "column": "Train Loss",
+        "a": "1.8341",
+        "b": "1.8344"
+      },
+      {
+        "epoch": 25,
+        "column": "Val Loss",
+        "a": "0.2063",
+        "b": "0.2061"
+      },
+      {
+        "epoch": 30,
+        "column": "Train Loss",
+        "a": "1.8288",
+        "b": "1.8292"
+      },
+      {
+        "epoch": 30,
+        "column": "Val Loss",
+        "a": "0.2022",
+        "b": "0.2023"
+      },
+      {
+        "epoch": 35,
+        "column": "Train Loss",
+        "a": "1.8210",
+        "b": "1.8207"
+      },
+      {
+        "epoch": 35,
+        "column": "Val Loss",
+        "a": "0.1964",
+        "b": "0.1966"
+      },
+      {
+        "epoch": 40,
+        "column": "Val Loss",
+        "a": "0.1947",
+        "b": "0.1945"
+      },
+      {
+        "epoch": 45,
+        "column": "Train Loss",
+        "a": "1.8024",
+        "b": "1.8026"
+      },
+      {
+        "epoch": 50,
+        "column": "Train Loss",
+        "a": "1.7995",
+        "b": "1.7993"
+      },
+      {
+        "epoch": 50,
+        "column": "Val Loss",
+        "a": "0.1895",
+        "b": "0.1884"
+      },
+      {
+        "epoch": 55,
+        "column": "Val Loss",
+        "a": "0.1881",
+        "b": "0.1892"
+      },
+      {
+        "epoch": 60,
+        "column": "Train Loss",
+        "a": "1.8010",
+        "b": "1.8022"
+      },
+      {
+        "epoch": 60,
+        "column": "Val Loss",
+        "a": "0.1857",
+        "b": "0.1899"
+      },
+      {
+        "epoch": 60,
+        "column": "Train Token Acc",
+        "a": "0.4692",
+        "b": "0.4769"
+      },
+      {
+        "epoch": 65,
+        "column": "Train Loss",
+        "a": "1.8015",
+        "b": "1.8033"
+      },
+      {
+        "epoch": 65,
+        "column": "Val Loss",
+        "a": "0.1854",
+        "b": "0.1899"
+      },
+      {
+        "epoch": 65,
+        "column": "Val Token Acc",
+        "a": "0.9692",
+        "b": "0.9615"
+      },
+      {
+        "epoch": 65,
+        "column": "Val Seq Acc",
+        "a": "0.7000",
+        "b": "0.6000"
+      },
+      {
+        "epoch": 70,
+        "column": "Train Loss",
+        "a": "1.8008",
+        "b": "1.8031"
+      },
+      {
+        "epoch": 70,
+        "column": "Val Loss",
+        "a": "0.1867",
+        "b": "0.1905"
+      },
+      {
+        "epoch": 70,
+        "column": "Train Token Acc",
+        "a": "0.4692",
+        "b": "0.4769"
+      },
+      {
+        "epoch": 70,
+        "column": "Val Token Acc",
+        "a": "0.9692",
+        "b": "0.9615"
+      },
+      {
+        "epoch": 70,
+        "column": "Val Seq Acc",
+        "a": "0.7000",
+        "b": "0.6000"
+      },
+      {
+        "epoch": 75,
+        "column": "Train Loss",
+        "a": "1.8008",
+        "b": "1.8006"
+      },
+      {
+        "epoch": 75,
+        "column": "Val Token Acc",
+        "a": "0.9615",
+        "b": "0.9692"
+      },
+      {
+        "epoch": 75,
+        "column": "Val Seq Acc",
+        "a": "0.6000",
+        "b": "0.7000"
+      },
+      {
+        "epoch": 80,
+        "column": "Train Loss",
+        "a": "1.8012",
+        "b": "1.8016"
+      },
+      {
+        "epoch": 80,
+        "column": "Val Loss",
+        "a": "0.1871",
+        "b": "0.1841"
+      },
+      {
+        "epoch": 85,
+        "column": "Train Loss",
+        "a": "1.8024",
+        "b": "1.8009"
+      },
+      {
+        "epoch": 85,
+        "column": "Val Loss",
+        "a": "0.1914",
+        "b": "0.1842"
+      },
+      {
+        "epoch": 85,
+        "column": "Train Token Acc",
+        "a": "0.4769",
+        "b": "0.4846"
+      },
+      {
+        "epoch": 85,
+        "column": "Val Token Acc",
+        "a": "0.9615",
+        "b": "0.9692"
+      },
+      {
+        "epoch": 85,
+        "column": "Val Seq Acc",
+        "a": "0.6000",
+        "b": "0.7000"
+      },
+      {
+        "epoch": 90,
+        "column": "Train Loss",
+        "a": "1.8009",
+        "b": "1.8003"
+      },
+      {
+        "epoch": 90,
+        "column": "Val Loss",
+        "a": "0.1851",
+        "b": "0.1858"
+      },
+      {
+        "epoch": 90,
+        "column": "Train Token Acc",
+        "a": "0.4692",
+        "b": "0.4769"
+      },
+      {
+        "epoch": 95,
+        "column": "Train Loss",
+        "a": "1.8012",
+        "b": "1.8006"
+      },
+      {
+        "epoch": 95,
+        "column": "Val Loss",
+        "a": "0.1907",
+        "b": "0.1874"
+      },
+      {
+        "epoch": 95,
+        "column": "Train Token Acc",
+        "a": "0.4769",
+        "b": "0.4692"
+      },
+      {
+        "epoch": 100,
+        "column": "Train Loss",
+        "a": "1.8009",
+        "b": "1.7982"
+      },
+      {
+        "epoch": 100,
+        "column": "Val Loss",
+        "a": "0.1844",
+        "b": "0.1859"
+      },
+      {
+        "epoch": 100,
+        "column": "Train Token Acc",
+        "a": "0.4692",
+        "b": "0.4769"
+      },
+      {
+        "epoch": 100,
+        "column": "Val Token Acc",
+        "a": "0.9769",
+        "b": "0.9692"
+      },
+      {
+        "epoch": 100,
+        "column": "Val Seq Acc",
+        "a": "0.8000",
+        "b": "0.7000"
+      },
+      {
+        "epoch": 105,
+        "column": "Train Loss",
+        "a": "1.7998",
+        "b": "1.7992"
+      },
+      {
+        "epoch": 105,
+        "column": "Val Loss",
+        "a": "0.1871",
+        "b": "0.1857"
+      },
+      {
+        "epoch": 105,
+        "column": "Train Token Acc",
+        "a": "0.4846",
+        "b": "0.4692"
+      },
+      {
+        "epoch": 110,
+        "column": "Train Loss",
+        "a": "1.7993",
+        "b": "1.8000"
+      },
+      {
+        "epoch": 110,
+        "column": "Val Loss",
+        "a": "0.1857",
+        "b": "0.1891"
+      },
+      {
+        "epoch": 110,
+        "column": "Val Token Acc",
+        "a": "0.9692",
+        "b": "0.9615"
+      },
+      {
+        "epoch": 110,
+        "column": "Val Seq Acc",
+        "a": "0.7000",
+        "b": "0.6000"
+      },
+      {
+        "epoch": 115,
+        "column": "Train Loss",
+        "a": "1.8018",
+        "b": "1.7999"
+      },
+      {
+        "epoch": 115,
+        "column": "Val Loss",
+        "a": "0.1882",
+        "b": "0.1864"
+      },
+      {
+        "epoch": 120,
+        "column": "Train Loss",
+        "a": "1.8008",
+        "b": "1.8002"
+      },
+      {
+        "epoch": 120,
+        "column": "Val Loss",
+        "a": "0.1929",
+        "b": "0.1928"
+      },
+      {
+        "epoch": 125,
+        "column": "Train Loss",
+        "a": "1.8005",
+        "b": "1.8003"
+      },
+      {
+        "epoch": 125,
+        "column": "Val Loss",
+        "a": "0.1846",
+        "b": "0.1815"
+      },
+      {
+        "epoch": 125,
+        "column": "Train Token Acc",
+        "a": "0.4769",
+        "b": "0.4846"
+      },
+      {
+        "epoch": 130,
+        "column": "Train Loss",
+        "a": "1.8003",
+        "b": "1.8013"
+      },
+      {
+        "epoch": 130,
+        "column": "Val Loss",
+        "a": "0.1919",
+        "b": "0.1879"
+      },
+      {
+        "epoch": 130,
+        "column": "Train Token Acc",
+        "a": "0.4769",
+        "b": "0.4846"
+      },
+      {
+        "epoch": 135,
+        "column": "Train Loss",
+        "a": "1.7993",
+        "b": "1.7979"
+      },
+      {
+        "epoch": 135,
+        "column": "Val Loss",
+        "a": "0.1859",
+        "b": "0.1855"
+      },
+      {
+        "epoch": 135,
+        "column": "Train Token Acc",
+        "a": "0.4769",
+        "b": "0.4692"
+      },
+      {
+        "epoch": 140,
+        "column": "Val Loss",
+        "a": "0.1857",
+        "b": "0.1832"
+      },
+      {
+        "epoch": 145,
+        "column": "Train Loss",
+        "a": "1.7979",
+        "b": "1.7989"
+      },
+      {
+        "epoch": 145,
+        "column": "Val Loss",
+        "a": "0.1869",
+        "b": "0.1878"
+      },
+      {
+        "epoch": 145,
+        "column": "Train Token Acc",
+        "a": "0.4769",
+        "b": "0.4846"
+      },
+      {
+        "epoch": 150,
+        "column": "Train Loss",
+        "a": "1.7989",
+        "b": "1.7976"
+      },
+      {
+        "epoch": 150,
+        "column": "Val Loss",
+        "a": "0.1801",
+        "b": "0.1797"
+      },
+      {
+        "epoch": 155,
+        "column": "Train Loss",
+        "a": "1.7992",
+        "b": "1.7990"
+      },
+      {
+        "epoch": 155,
+        "column": "Val Loss",
+        "a": "0.1871",
+        "b": "0.1861"
+      },
+      {
+        "epoch": 155,
+        "column": "Val Token Acc",
+        "a": "0.9692",
+        "b": "0.9615"
+      },
+      {
+        "epoch": 155,
+        "column": "Val Seq Acc",
+        "a": "0.7000",
+        "b": "0.6000"
+      },
+      {
+        "epoch": 160,
+        "column": "Train Loss",
+        "a": "1.7981",
+        "b": "1.7968"
+      },
+      {
+        "epoch": 160,
+        "column": "Val Loss",
+        "a": "0.1816",
+        "b": "0.1786"
+      },
+      {
+        "epoch": 160,
+        "column": "Train Token Acc",
+        "a": "0.4769",
+        "b": "0.4923"
+      },
+      {
+        "epoch": 165,
+        "column": "Train Loss",
+        "a": "1.8017",
+        "b": "1.7913"
+      },
+      {
+        "epoch": 165,
+        "column": "Val Loss",
+        "a": "0.1853",
+        "b": "0.1744"
+      },
+      {
+        "epoch": 165,
+        "column": "Train Token Acc",
+        "a": "0.4769",
+        "b": "0.4923"
+      },
+      {
+        "epoch": 165,
+        "column": "Val Token Acc",
+        "a": "0.9615",
+        "b": "0.9692"
+      },
+      {
+        "epoch": 165,
+        "column": "Val Seq Acc",
+        "a": "0.6000",
+        "b": "0.7000"
+      },
+      {
+        "epoch": 170,
+        "column": "Train Loss",
+        "a": "1.7990",
+        "b": "1.7647"
+      },
+      {
+        "epoch": 170,
+        "column": "Val Loss",
+        "a": "0.1852",
+        "b": "0.1793"
+      },
+      {
+        "epoch": 170,
+        "column": "Train Token Acc",
+        "a": "0.4769",
+        "b": "0.5000"
+      },
+      {
+        "epoch": 175,
+        "column": "Train Loss",
+        "a": "1.7972",
+        "b": "1.7447"
+      },
+      {
+        "epoch": 175,
+        "column": "Val Loss",
+        "a": "0.1828",
+        "b": "0.1798"
+      },
+      {
+        "epoch": 175,
+        "column": "Train Token Acc",
+        "a": "0.4846",
+        "b": "0.5308"
+      },
+      {
+        "epoch": 175,
+        "column": "Val Token Acc",
+        "a": "0.9615",
+        "b": "0.9692"
+      },
+      {
+        "epoch": 175,
+        "column": "Val Seq Acc",
+        "a": "0.6000",
+        "b": "0.7000"
+      },
+      {
+        "epoch": 180,
+        "column": "Train Loss",
+        "a": "1.7905",
+        "b": "1.7289"
+      },
+      {
+        "epoch": 180,
+        "column": "Val Loss",
+        "a": "0.1812",
+        "b": "0.1779"
+      },
+      {
+        "epoch": 180,
+        "column": "Train Token Acc",
+        "a": "0.5077",
+        "b": "0.5000"
+      },
+      {
+        "epoch": 185,
+        "column": "Train Loss",
+        "a": "1.7686",
+        "b": "1.7037"
+      },
+      {
+        "epoch": 185,
+        "column": "Val Loss",
+        "a": "0.1729",
+        "b": "0.1748"
+      },
+      {
+        "epoch": 185,
+        "column": "Train Token Acc",
+        "a": "0.5077",
+        "b": "0.5308"
+      },
+      {
+        "epoch": 185,
+        "column": "Val Token Acc",
+        "a": "0.9769",
+        "b": "0.9692"
+      },
+      {
+        "epoch": 185,
+        "column": "Val Seq Acc",
+        "a": "0.8000",
+        "b": "0.7000"
+      },
+      {
+        "epoch": 190,
+        "column": "Train Loss",
+        "a": "1.7524",
+        "b": "1.6906"
+      },
+      {
+        "epoch": 190,
+        "column": "Val Loss",
+        "a": "0.1763",
+        "b": "0.1969"
+      },
+      {
+        "epoch": 190,
+        "column": "Train Token Acc",
+        "a": "0.5000",
+        "b": "0.5385"
+      },
+      {
+        "epoch": 190,
+        "column": "Val Token Acc",
+        "a": "0.9692",
+        "b": "0.9538"
+      },
+      {
+        "epoch": 190,
+        "column": "Val Seq Acc",
+        "a": "0.7000",
+        "b": "0.6000"
+      },
+      {
+        "epoch": 195,
+        "column": "Train Loss",
+        "a": "1.7308",
+        "b": "1.6969"
+      },
+      {
+        "epoch": 195,
+        "column": "Val Loss",
+        "a": "0.1842",
+        "b": "0.1940"
+      },
+      {
+        "epoch": 195,
+        "column": "Train Token Acc",
+        "a": "0.5308",
+        "b": "0.5154"
+      },
+      {
+        "epoch": 195,
+        "column": "Val Token Acc",
+        "a": "0.9615",
+        "b": "0.9538"
+      },
+      {
+        "epoch": 195,
+        "column": "Val Seq Acc",
+        "a": "0.6000",
+        "b": "0.5000"
+      },
+      {
+        "epoch": 200,
+        "column": "Train Loss",
+        "a": "1.6999",
+        "b": "1.6949"
+      },
+      {
+        "epoch": 200,
+        "column": "Val Loss",
+        "a": "0.1908",
+        "b": "0.1861"
+      },
+      {
+        "epoch": 200,
+        "column": "Train Token Acc",
+        "a": "0.5077",
+        "b": "0.5154"
+      },
+      {
+        "epoch": 205,
+        "column": "Train Loss",
+        "a": "1.6973",
+        "b": "1.6952"
+      },
+      {
+        "epoch": 205,
+        "column": "Val Loss",
+        "a": "0.1936",
+        "b": "0.1944"
+      },
+      {
+        "epoch": 205,
+        "column": "Train Token Acc",
+        "a": "0.5308",
+        "b": "0.5462"
+      },
+      {
+        "epoch": 205,
+        "column": "Train Seq Acc",
+        "a": "0.0000",
+        "b": "0.1000"
+      },
+      {
+        "epoch": 210,
+        "column": "Train Loss",
+        "a": "1.6976",
+        "b": "1.6952"
+      },
+      {
+        "epoch": 210,
+        "column": "Val Loss",
+        "a": "0.1918",
+        "b": "0.1897"
+      },
+      {
+        "epoch": 210,
+        "column": "Val Seq Acc",
+        "a": "0.5000",
+        "b": "0.6000"
+      },
+      {
+        "epoch": 215,
+        "column": "Train Loss",
+        "a": "1.6969",
+        "b": "1.6962"
+      },
+      {
+        "epoch": 215,
+        "column": "Val Loss",
+        "a": "0.1861",
+        "b": "0.1869"
+      },
+      {
+        "epoch": 215,
+        "column": "Train Token Acc",
+        "a": "0.5462",
+        "b": "0.5385"
+      },
+      {
+        "epoch": 215,
+        "column": "Val Token Acc",
+        "a": "0.9538",
+        "b": "0.9615"
+      },
+      {
+        "epoch": 215,
+        "column": "Train Seq Acc",
+        "a": "0.0000",
+        "b": "0.1000"
+      },
+      {
+        "epoch": 220,
+        "column": "Train Loss",
+        "a": "1.6969",
+        "b": "1.6971"
+      },
+      {
+        "epoch": 220,
+        "column": "Val Loss",
+        "a": "0.1844",
+        "b": "0.1918"
+      },
+      {
+        "epoch": 220,
+        "column": "Train Token Acc",
+        "a": "0.5385",
+        "b": "0.5154"
+      },
+      {
+        "epoch": 220,
+        "column": "Train Seq Acc",
+        "a": "0.1000",
+        "b": "0.0000"
+      },
+      {
+        "epoch": 225,
+        "column": "Train Loss",
+        "a": "1.6978",
+        "b": "1.6965"
+      },
+      {
+        "epoch": 225,
+        "column": "Val Loss",
+        "a": "0.1910",
+        "b": "0.1903"
+      },
+      {
+        "epoch": 225,
+        "column": "Val Token Acc",
+        "a": "0.9615",
+        "b": "0.9538"
+      },
+      {
+        "epoch": 225,
+        "column": "Val Seq Acc",
+        "a": "0.6000",
+        "b": "0.5000"
+      },
+      {
+        "epoch": 230,
+        "column": "Train Loss",
+        "a": "1.6937",
+        "b": "1.6935"
+      },
+      {
+        "epoch": 230,
+        "column": "Val Loss",
+        "a": "0.1929",
+        "b": "0.1813"
+      },
+      {
+        "epoch": 230,
+        "column": "Val Token Acc",
+        "a": "0.9538",
+        "b": "0.9615"
+      },
+      {
+        "epoch": 230,
+        "column": "Val Seq Acc",
+        "a": "0.5000",
+        "b": "0.6000"
+      },
+      {
+        "epoch": 235,
+        "column": "Train Loss",
+        "a": "1.6935",
+        "b": "1.6921"
+      },
+      {
+        "epoch": 235,
+        "column": "Val Loss",
+        "a": "0.1900",
+        "b": "0.1952"
+      },
+      {
+        "epoch": 235,
+        "column": "Train Token Acc",
+        "a": "0.5462",
+        "b": "0.5385"
+      },
+      {
+        "epoch": 235,
+        "column": "Val Token Acc",
+        "a": "0.9692",
+        "b": "0.9462"
+      },
+      {
+        "epoch": 235,
+        "column": "Train Seq Acc",
+        "a": "0.1000",
+        "b": "0.0000"
+      },
+      {
+        "epoch": 235,
+        "column": "Val Seq Acc",
+        "a": "0.7000",
+        "b": "0.5000"
+      },
+      {
+        "epoch": 240,
+        "column": "Train Loss",
+        "a": "1.6935",
+        "b": "1.6925"
+      },
+      {
+        "epoch": 240,
+        "column": "Val Loss",
+        "a": "0.1887",
+        "b": "0.1878"
+      },
+      {
+        "epoch": 245,
+        "column": "Train Loss",
+        "a": "1.6937",
+        "b": "1.6939"
+      },
+      {
+        "epoch": 245,
+        "column": "Val Loss",
+        "a": "0.1916",
+        "b": "0.1900"
+      },
+      {
+        "epoch": 245,
+        "column": "Val Token Acc",
+        "a": "0.9462",
+        "b": "0.9538"
+      },
+      {
+        "epoch": 250,
+        "column": "Train Loss",
+        "a": "1.6949",
+        "b": "1.6931"
+      },
+      {
+        "epoch": 250,
+        "column": "Val Loss",
+        "a": "0.1918",
+        "b": "0.1905"
+      },
+      {
+        "epoch": 250,
+        "column": "Val Token Acc",
+        "a": "0.9538",
+        "b": "0.9615"
+      },
+      {
+        "epoch": 250,
+        "column": "Val Seq Acc",
+        "a": "0.5000",
+        "b": "0.6000"
+      },
+      {
+        "epoch": 255,
+        "column": "Train Loss",
+        "a": "1.6977",
+        "b": "1.6936"
+      },
+      {
+        "epoch": 255,
+        "column": "Val Loss",
+        "a": "0.1830",
+        "b": "0.1867"
+      },
+      {
+        "epoch": 255,
+        "column": "Train Token Acc",
+        "a": "0.5308",
+        "b": "0.5385"
+      },
+      {
+        "epoch": 255,
+        "column": "Train Seq Acc",
+        "a": "0.0000",
+        "b": "0.1000"
+      },
+      {
+        "epoch": 260,
+        "column": "Train Loss",
+        "a": "1.6969",
+        "b": "1.6931"
+      },
+      {
+        "epoch": 260,
+        "column": "Val Loss",
+        "a": "0.1881",
+        "b": "0.1932"
+      },
+      {
+        "epoch": 260,
+        "column": "Train Token Acc",
+        "a": "0.5231",
+        "b": "0.5308"
+      },
+      {
+        "epoch": 260,
+        "column": "Val Token Acc",
+        "a": "0.9615",
+        "b": "0.9538"
+      },
+      {
+        "epoch": 260,
+        "column": "Val Seq Acc",
+        "a": "0.6000",
+        "b": "0.5000"
+      },
+      {
+        "epoch": 265,
+        "column": "Train Loss",
+        "a": "1.6957",
+        "b": "1.6953"
+      },
+      {
+        "epoch": 265,
+        "column": "Val Loss",
+        "a": "0.1871",
+        "b": "0.1905"
+      },
+      {
+        "epoch": 265,
+        "column": "Train Token Acc",
+        "a": "0.5385",
+        "b": "0.5308"
+      },
+      {
+        "epoch": 265,
+        "column": "Val Token Acc",
+        "a": "0.9538",
+        "b": "0.9462"
+      },
+      {
+        "epoch": 265,
+        "column": "Train Seq Acc",
+        "a": "0.1000",
+        "b": "0.0000"
+      },
+      {
+        "epoch": 270,
+        "column": "Train Loss",
+        "a": "1.6937",
+        "b": "1.6961"
+      },
+      {
+        "epoch": 270,
+        "column": "Val Loss",
+        "a": "0.1919",
+        "b": "0.1926"
+      },
+      {
+        "epoch": 270,
+        "column": "Train Token Acc",
+        "a": "0.5308",
+        "b": "0.5385"
+      },
+      {
+        "epoch": 270,
+        "column": "Val Token Acc",
+        "a": "0.9538",
+        "b": "0.9462"
+      },
+      {
+        "epoch": 275,
+        "column": "Train Loss",
+        "a": "1.6960",
+        "b": "1.6982"
+      },
+      {
+        "epoch": 275,
+        "column": "Val Loss",
+        "a": "0.1894",
+        "b": "0.1942"
+      },
+      {
+        "epoch": 275,
+        "column": "Train Token Acc",
+        "a": "0.5231",
+        "b": "0.5385"
+      },
+      {
+        "epoch": 275,
+        "column": "Val Token Acc",
+        "a": "0.9615",
+        "b": "0.9462"
+      },
+      {
+        "epoch": 275,
+        "column": "Val Seq Acc",
+        "a": "0.6000",
+        "b": "0.5000"
+      },
+      {
+        "epoch": 280,
+        "column": "Train Loss",
+        "a": "1.6947",
+        "b": "1.6978"
+      },
+      {
+        "epoch": 280,
+        "column": "Val Loss",
+        "a": "0.1934",
+        "b": "0.1895"
+      },
+      {
+        "epoch": 280,
+        "column": "Train Token Acc",
+        "a": "0.5231",
+        "b": "0.5308"
+      },
+      {
+        "epoch": 280,
+        "column": "Val Token Acc",
+        "a": "0.9538",
+        "b": "0.9615"
+      },
+      {
+        "epoch": 280,
+        "column": "Val Seq Acc",
+        "a": "0.5000",
+        "b": "0.6000"
+      },
+      {
+        "epoch": 285,
+        "column": "Train Loss",
+        "a": "1.6970",
+        "b": "1.6953"
+      },
+      {
+        "epoch": 285,
+        "column": "Val Loss",
+        "a": "0.1953",
+        "b": "0.1929"
+      },
+      {
+        "epoch": 285,
+        "column": "Train Token Acc",
+        "a": "0.5308",
+        "b": "0.5231"
+      },
+      {
+        "epoch": 285,
+        "column": "Val Token Acc",
+        "a": "0.9462",
+        "b": "0.9538"
+      },
+      {
+        "epoch": 290,
+        "column": "Train Loss",
+        "a": "1.6948",
+        "b": "1.6935"
+      },
+      {
+        "epoch": 290,
+        "column": "Val Loss",
+        "a": "0.1878",
+        "b": "0.1921"
+      },
+      {
+        "epoch": 290,
+        "column": "Train Token Acc",
+        "a": "0.5231",
+        "b": "0.5308"
+      },
+      {
+        "epoch": 290,
+        "column": "Val Token Acc",
+        "a": "0.9615",
+        "b": "0.9538"
+      },
+      {
+        "epoch": 290,
+        "column": "Val Seq Acc",
+        "a": "0.6000",
+        "b": "0.5000"
+      },
+      {
+        "epoch": 295,
+        "column": "Train Loss",
+        "a": "1.6937",
+        "b": "1.6924"
+      },
+      {
+        "epoch": 295,
+        "column": "Val Loss",
+        "a": "0.1914",
+        "b": "0.1893"
+      },
+      {
+        "epoch": 295,
+        "column": "Val Token Acc",
+        "a": "0.9538",
+        "b": "0.9615"
+      },
+      {
+        "epoch": 295,
+        "column": "Val Seq Acc",
+        "a": "0.5000",
+        "b": "0.6000"
+      },
+      {
+        "epoch": 300,
+        "column": "Train Loss",
+        "a": "1.6954",
+        "b": "1.6944"
+      },
+      {
+        "epoch": 300,
+        "column": "Val Loss",
+        "a": "0.1859",
+        "b": "0.1905"
+      },
+      {
+        "epoch": 300,
+        "column": "Train Token Acc",
+        "a": "0.5385",
+        "b": "0.5308"
+      }
+    ]
+  },
+  "d0_seed999/l2sp_lam0.3 vs d0_seed999/l2sp_lam0.3": {
+    "compared_epochs": 60,
+    "mismatches": [
+      {
+        "epoch": 35,
+        "column": "Val Loss",
+        "a": "0.2344",
+        "b": "0.2343"
+      },
+      {
+        "epoch": 45,
+        "column": "Val Loss",
+        "a": "0.2669",
+        "b": "0.2668"
+      },
+      {
+        "epoch": 50,
+        "column": "Val Loss",
+        "a": "0.2789",
+        "b": "0.2788"
+      },
+      {
+        "epoch": 55,
+        "column": "Val Loss",
+        "a": "0.2897",
+        "b": "0.2895"
+      },
+      {
+        "epoch": 60,
+        "column": "Train Loss",
+        "a": "0.3327",
+        "b": "0.3326"
+      },
+      {
+        "epoch": 60,
+        "column": "Val Loss",
+        "a": "0.3017",
+        "b": "0.3014"
+      },
+      {
+        "epoch": 65,
+        "column": "Train Loss",
+        "a": "0.3279",
+        "b": "0.3288"
+      },
+      {
+        "epoch": 65,
+        "column": "Val Loss",
+        "a": "0.3038",
+        "b": "0.3078"
+      },
+      {
+        "epoch": 65,
+        "column": "Train Token Acc",
+        "a": "0.9769",
+        "b": "0.9923"
+      },
+      {
+        "epoch": 65,
+        "column": "Train Seq Acc",
+        "a": "0.8000",
+        "b": "0.9000"
+      },
+      {
+        "epoch": 70,
+        "column": "Train Loss",
+        "a": "0.3258",
+        "b": "0.3238"
+      },
+      {
+        "epoch": 70,
+        "column": "Val Loss",
+        "a": "0.3172",
+        "b": "0.3127"
+      },
+      {
+        "epoch": 70,
+        "column": "Train Token Acc",
+        "a": "0.9846",
+        "b": "0.9769"
+      },
+      {
+        "epoch": 70,
+        "column": "Val Token Acc",
+        "a": "0.9077",
+        "b": "0.9154"
+      },
+      {
+        "epoch": 75,
+        "column": "Train Loss",
+        "a": "0.3232",
+        "b": "0.3220"
+      },
+      {
+        "epoch": 75,
+        "column": "Val Loss",
+        "a": "0.3236",
+        "b": "0.3154"
+      },
+      {
+        "epoch": 75,
+        "column": "Train Token Acc",
+        "a": "0.9846",
+        "b": "0.9769"
+      },
+      {
+        "epoch": 80,
+        "column": "Train Loss",
+        "a": "0.3214",
+        "b": "0.3212"
+      },
+      {
+        "epoch": 80,
+        "column": "Val Loss",
+        "a": "0.3277",
+        "b": "0.3216"
+      },
+      {
+        "epoch": 80,
+        "column": "Train Token Acc",
+        "a": "0.9846",
+        "b": "0.9769"
+      },
+      {
+        "epoch": 85,
+        "column": "Train Loss",
+        "a": "0.3196",
+        "b": "0.3260"
+      },
+      {
+        "epoch": 85,
+        "column": "Val Loss",
+        "a": "0.3324",
+        "b": "0.3255"
+      },
+      {
+        "epoch": 90,
+        "column": "Train Loss",
+        "a": "0.3215",
+        "b": "0.3216"
+      },
+      {
+        "epoch": 90,
+        "column": "Val Loss",
+        "a": "0.3433",
+        "b": "0.3241"
+      },
+      {
+        "epoch": 90,
+        "column": "Val Token Acc",
+        "a": "0.9077",
+        "b": "0.9154"
+      },
+      {
+        "epoch": 90,
+        "column": "Val Seq Acc",
+        "a": "0.2000",
+        "b": "0.3000"
+      },
+      {
+        "epoch": 95,
+        "column": "Train Loss",
+        "a": "0.3270",
+        "b": "0.3222"
+      },
+      {
+        "epoch": 95,
+        "column": "Val Loss",
+        "a": "0.3355",
+        "b": "0.3320"
+      },
+      {
+        "epoch": 95,
+        "column": "Val Token Acc",
+        "a": "0.9154",
+        "b": "0.9077"
+      },
+      {
+        "epoch": 95,
+        "column": "Val Seq Acc",
+        "a": "0.3000",
+        "b": "0.2000"
+      },
+      {
+        "epoch": 100,
+        "column": "Train Loss",
+        "a": "0.3241",
+        "b": "0.3195"
+      },
+      {
+        "epoch": 100,
+        "column": "Val Loss",
+        "a": "0.3346",
+        "b": "0.3360"
+      },
+      {
+        "epoch": 105,
+        "column": "Train Loss",
+        "a": "0.3210",
+        "b": "0.3231"
+      },
+      {
+        "epoch": 105,
+        "column": "Val Loss",
+        "a": "0.3311",
+        "b": "0.3545"
+      },
+      {
+        "epoch": 105,
+        "column": "Train Token Acc",
+        "a": "0.9846",
+        "b": "0.9769"
+      },
+      {
+        "epoch": 105,
+        "column": "Val Token Acc",
+        "a": "0.9077",
+        "b": "0.9000"
+      },
+      {
+        "epoch": 110,
+        "column": "Train Loss",
+        "a": "0.3231",
+        "b": "0.3223"
+      },
+      {
+        "epoch": 110,
+        "column": "Val Loss",
+        "a": "0.3498",
+        "b": "0.3366"
+      },
+      {
+        "epoch": 110,
+        "column": "Val Token Acc",
+        "a": "0.9077",
+        "b": "0.9154"
+      },
+      {
+        "epoch": 110,
+        "column": "Val Seq Acc",
+        "a": "0.2000",
+        "b": "0.3000"
+      },
+      {
+        "epoch": 115,
+        "column": "Train Loss",
+        "a": "0.3249",
+        "b": "0.3207"
+      },
+      {
+        "epoch": 115,
+        "column": "Val Loss",
+        "a": "0.3403",
+        "b": "0.3519"
+      },
+      {
+        "epoch": 120,
+        "column": "Train Loss",
+        "a": "0.3246",
+        "b": "0.3227"
+      },
+      {
+        "epoch": 120,
+        "column": "Val Loss",
+        "a": "0.3434",
+        "b": "0.3367"
+      },
+      {
+        "epoch": 120,
+        "column": "Train Token Acc",
+        "a": "0.9846",
+        "b": "0.9769"
+      },
+      {
+        "epoch": 120,
+        "column": "Val Token Acc",
+        "a": "0.9077",
+        "b": "0.9154"
+      },
+      {
+        "epoch": 120,
+        "column": "Val Seq Acc",
+        "a": "0.2000",
+        "b": "0.3000"
+      },
+      {
+        "epoch": 125,
+        "column": "Train Loss",
+        "a": "0.3209",
+        "b": "0.3225"
+      },
+      {
+        "epoch": 125,
+        "column": "Val Loss",
+        "a": "0.3506",
+        "b": "0.3587"
+      },
+      {
+        "epoch": 125,
+        "column": "Train Token Acc",
+        "a": "0.9769",
+        "b": "0.9846"
+      },
+      {
+        "epoch": 130,
+        "column": "Train Loss",
+        "a": "0.3225",
+        "b": "0.3243"
+      },
+      {
+        "epoch": 130,
+        "column": "Val Loss",
+        "a": "0.3592",
+        "b": "0.3472"
+      },
+      {
+        "epoch": 130,
+        "column": "Train Token Acc",
+        "a": "0.9769",
+        "b": "0.9846"
+      },
+      {
+        "epoch": 135,
+        "column": "Train Loss",
+        "a": "0.3252",
+        "b": "0.3200"
+      },
+      {
+        "epoch": 135,
+        "column": "Val Loss",
+        "a": "0.3477",
+        "b": "0.3495"
+      },
+      {
+        "epoch": 140,
+        "column": "Train Loss",
+        "a": "0.3217",
+        "b": "0.3208"
+      },
+      {
+        "epoch": 140,
+        "column": "Val Loss",
+        "a": "0.3476",
+        "b": "0.3537"
+      },
+      {
+        "epoch": 145,
+        "column": "Train Loss",
+        "a": "0.3199",
+        "b": "0.3214"
+      },
+      {
+        "epoch": 145,
+        "column": "Val Loss",
+        "a": "0.3504",
+        "b": "0.3521"
+      },
+      {
+        "epoch": 145,
+        "column": "Val Token Acc",
+        "a": "0.9154",
+        "b": "0.9077"
+      },
+      {
+        "epoch": 145,
+        "column": "Val Seq Acc",
+        "a": "0.3000",
+        "b": "0.2000"
+      },
+      {
+        "epoch": 150,
+        "column": "Train Loss",
+        "a": "0.3217",
+        "b": "0.3209"
+      },
+      {
+        "epoch": 150,
+        "column": "Val Loss",
+        "a": "0.3596",
+        "b": "0.3520"
+      },
+      {
+        "epoch": 150,
+        "column": "Val Token Acc",
+        "a": "0.9077",
+        "b": "0.9154"
+      },
+      {
+        "epoch": 150,
+        "column": "Val Seq Acc",
+        "a": "0.2000",
+        "b": "0.3000"
+      },
+      {
+        "epoch": 155,
+        "column": "Train Loss",
+        "a": "0.3196",
+        "b": "0.3213"
+      },
+      {
+        "epoch": 155,
+        "column": "Val Loss",
+        "a": "0.3584",
+        "b": "0.3601"
+      },
+      {
+        "epoch": 160,
+        "column": "Train Loss",
+        "a": "0.3210",
+        "b": "0.3249"
+      },
+      {
+        "epoch": 160,
+        "column": "Val Loss",
+        "a": "0.3595",
+        "b": "0.3438"
+      },
+      {
+        "epoch": 165,
+        "column": "Train Loss",
+        "a": "0.3213",
+        "b": "0.3221"
+      },
+      {
+        "epoch": 165,
+        "column": "Val Loss",
+        "a": "0.3576",
+        "b": "0.3550"
+      },
+      {
+        "epoch": 165,
+        "column": "Train Token Acc",
+        "a": "0.9846",
+        "b": "0.9769"
+      },
+      {
+        "epoch": 170,
+        "column": "Train Loss",
+        "a": "0.3206",
+        "b": "0.3188"
+      },
+      {
+        "epoch": 170,
+        "column": "Val Loss",
+        "a": "0.3614",
+        "b": "0.3604"
+      },
+      {
+        "epoch": 170,
+        "column": "Train Token Acc",
+        "a": "0.9769",
+        "b": "0.9846"
+      },
+      {
+        "epoch": 170,
+        "column": "Val Token Acc",
+        "a": "0.9077",
+        "b": "0.9154"
+      },
+      {
+        "epoch": 175,
+        "column": "Train Loss",
+        "a": "0.3209",
+        "b": "0.3204"
+      },
+      {
+        "epoch": 175,
+        "column": "Val Loss",
+        "a": "0.3609",
+        "b": "0.3656"
+      },
+      {
+        "epoch": 175,
+        "column": "Train Token Acc",
+        "a": "0.9769",
+        "b": "0.9846"
+      },
+      {
+        "epoch": 175,
+        "column": "Val Token Acc",
+        "a": "0.9154",
+        "b": "0.9077"
+      },
+      {
+        "epoch": 175,
+        "column": "Val Seq Acc",
+        "a": "0.3000",
+        "b": "0.2000"
+      },
+      {
+        "epoch": 180,
+        "column": "Train Loss",
+        "a": "0.3210",
+        "b": "0.3211"
+      },
+      {
+        "epoch": 180,
+        "column": "Val Loss",
+        "a": "0.3589",
+        "b": "0.3628"
+      },
+      {
+        "epoch": 180,
+        "column": "Val Token Acc",
+        "a": "0.9154",
+        "b": "0.9077"
+      },
+      {
+        "epoch": 185,
+        "column": "Train Loss",
+        "a": "0.3221",
+        "b": "0.3233"
+      },
+      {
+        "epoch": 185,
+        "column": "Val Loss",
+        "a": "0.3569",
+        "b": "0.3603"
+      },
+      {
+        "epoch": 185,
+        "column": "Val Token Acc",
+        "a": "0.9154",
+        "b": "0.9077"
+      },
+      {
+        "epoch": 190,
+        "column": "Train Loss",
+        "a": "0.3200",
+        "b": "0.3234"
+      },
+      {
+        "epoch": 190,
+        "column": "Val Loss",
+        "a": "0.3672",
+        "b": "0.3562"
+      },
+      {
+        "epoch": 190,
+        "column": "Val Token Acc",
+        "a": "0.9077",
+        "b": "0.9154"
+      },
+      {
+        "epoch": 195,
+        "column": "Train Loss",
+        "a": "0.3239",
+        "b": "0.3212"
+      },
+      {
+        "epoch": 195,
+        "column": "Val Loss",
+        "a": "0.3582",
+        "b": "0.3609"
+      },
+      {
+        "epoch": 200,
+        "column": "Train Loss",
+        "a": "0.3244",
+        "b": "0.3247"
+      },
+      {
+        "epoch": 200,
+        "column": "Val Loss",
+        "a": "0.3608",
+        "b": "0.3579"
+      },
+      {
+        "epoch": 200,
+        "column": "Train Token Acc",
+        "a": "0.9846",
+        "b": "0.9769"
+      },
+      {
+        "epoch": 200,
+        "column": "Val Token Acc",
+        "a": "0.9154",
+        "b": "0.9077"
+      },
+      {
+        "epoch": 205,
+        "column": "Train Loss",
+        "a": "0.3232",
+        "b": "0.3215"
+      },
+      {
+        "epoch": 205,
+        "column": "Val Loss",
+        "a": "0.3672",
+        "b": "0.3575"
+      },
+      {
+        "epoch": 205,
+        "column": "Train Token Acc",
+        "a": "0.9846",
+        "b": "0.9769"
+      },
+      {
+        "epoch": 205,
+        "column": "Val Token Acc",
+        "a": "0.9077",
+        "b": "0.9154"
+      },
+      {
+        "epoch": 205,
+        "column": "Val Seq Acc",
+        "a": "0.2000",
+        "b": "0.3000"
+      },
+      {
+        "epoch": 210,
+        "column": "Train Loss",
+        "a": "0.3232",
+        "b": "0.3219"
+      },
+      {
+        "epoch": 210,
+        "column": "Val Loss",
+        "a": "0.3559",
+        "b": "0.3531"
+      },
+      {
+        "epoch": 210,
+        "column": "Train Token Acc",
+        "a": "0.9769",
+        "b": "0.9846"
+      },
+      {
+        "epoch": 215,
+        "column": "Train Loss",
+        "a": "0.3227",
+        "b": "0.3205"
+      },
+      {
+        "epoch": 215,
+        "column": "Val Loss",
+        "a": "0.3572",
+        "b": "0.3505"
+      },
+      {
+        "epoch": 220,
+        "column": "Train Loss",
+        "a": "0.3221",
+        "b": "0.3224"
+      },
+      {
+        "epoch": 220,
+        "column": "Val Loss",
+        "a": "0.3500",
+        "b": "0.3573"
+      },
+      {
+        "epoch": 225,
+        "column": "Train Loss",
+        "a": "0.3212",
+        "b": "0.3210"
+      },
+      {
+        "epoch": 225,
+        "column": "Val Loss",
+        "a": "0.3563",
+        "b": "0.3556"
+      },
+      {
+        "epoch": 230,
+        "column": "Train Loss",
+        "a": "0.3206",
+        "b": "0.3212"
+      },
+      {
+        "epoch": 230,
+        "column": "Val Loss",
+        "a": "0.3586",
+        "b": "0.3594"
+      },
+      {
+        "epoch": 230,
+        "column": "Val Token Acc",
+        "a": "0.9154",
+        "b": "0.9077"
+      },
+      {
+        "epoch": 235,
+        "column": "Train Loss",
+        "a": "0.3221",
+        "b": "0.3250"
+      },
+      {
+        "epoch": 235,
+        "column": "Val Loss",
+        "a": "0.3568",
+        "b": "0.3578"
+      },
+      {
+        "epoch": 240,
+        "column": "Train Loss",
+        "a": "0.3217",
+        "b": "0.3224"
+      },
+      {
+        "epoch": 240,
+        "column": "Val Loss",
+        "a": "0.3554",
+        "b": "0.3520"
+      },
+      {
+        "epoch": 240,
+        "column": "Train Token Acc",
+        "a": "0.9769",
+        "b": "0.9846"
+      },
+      {
+        "epoch": 245,
+        "column": "Train Loss",
+        "a": "0.3208",
+        "b": "0.3219"
+      },
+      {
+        "epoch": 245,
+        "column": "Val Loss",
+        "a": "0.3589",
+        "b": "0.3622"
+      },
+      {
+        "epoch": 245,
+        "column": "Train Token Acc",
+        "a": "0.9769",
+        "b": "0.9846"
+      },
+      {
+        "epoch": 250,
+        "column": "Train Loss",
+        "a": "0.3220",
+        "b": "0.3200"
+      },
+      {
+        "epoch": 250,
+        "column": "Val Loss",
+        "a": "0.3574",
+        "b": "0.3621"
+      },
+      {
+        "epoch": 250,
+        "column": "Val Token Acc",
+        "a": "0.9154",
+        "b": "0.9077"
+      },
+      {
+        "epoch": 255,
+        "column": "Train Loss",
+        "a": "0.3213",
+        "b": "0.3211"
+      },
+      {
+        "epoch": 255,
+        "column": "Val Loss",
+        "a": "0.3615",
+        "b": "0.3628"
+      },
+      {
+        "epoch": 255,
+        "column": "Val Token Acc",
+        "a": "0.9154",
+        "b": "0.9077"
+      },
+      {
+        "epoch": 255,
+        "column": "Val Seq Acc",
+        "a": "0.3000",
+        "b": "0.2000"
+      },
+      {
+        "epoch": 260,
+        "column": "Train Loss",
+        "a": "0.3206",
+        "b": "0.3253"
+      },
+      {
+        "epoch": 260,
+        "column": "Val Loss",
+        "a": "0.3631",
+        "b": "0.3637"
+      },
+      {
+        "epoch": 265,
+        "column": "Train Loss",
+        "a": "0.3213",
+        "b": "0.3207"
+      },
+      {
+        "epoch": 265,
+        "column": "Val Loss",
+        "a": "0.3615",
+        "b": "0.3571"
+      },
+      {
+        "epoch": 270,
+        "column": "Train Loss",
+        "a": "0.3223",
+        "b": "0.3219"
+      },
+      {
+        "epoch": 270,
+        "column": "Val Loss",
+        "a": "0.3596",
+        "b": "0.3636"
+      },
+      {
+        "epoch": 275,
+        "column": "Train Loss",
+        "a": "0.3222",
+        "b": "0.3204"
+      },
+      {
+        "epoch": 275,
+        "column": "Val Loss",
+        "a": "0.3606",
+        "b": "0.3552"
+      },
+      {
+        "epoch": 275,
+        "column": "Train Token Acc",
+        "a": "0.9846",
+        "b": "0.9769"
+      },
+      {
+        "epoch": 280,
+        "column": "Train Loss",
+        "a": "0.3201",
+        "b": "0.3227"
+      },
+      {
+        "epoch": 280,
+        "column": "Val Loss",
+        "a": "0.3635",
+        "b": "0.3564"
+      },
+      {
+        "epoch": 285,
+        "column": "Train Loss",
+        "a": "0.3217",
+        "b": "0.3227"
+      },
+      {
+        "epoch": 285,
+        "column": "Val Loss",
+        "a": "0.3598",
+        "b": "0.3509"
+      },
+      {
+        "epoch": 285,
+        "column": "Train Token Acc",
+        "a": "0.9846",
+        "b": "0.9769"
+      },
+      {
+        "epoch": 285,
+        "column": "Val Token Acc",
+        "a": "0.9077",
+        "b": "0.9154"
+      },
+      {
+        "epoch": 290,
+        "column": "Train Loss",
+        "a": "0.3205",
+        "b": "0.3204"
+      },
+      {
+        "epoch": 290,
+        "column": "Val Loss",
+        "a": "0.3592",
+        "b": "0.3553"
+      },
+      {
+        "epoch": 295,
+        "column": "Train Loss",
+        "a": "0.3227",
+        "b": "0.3254"
+      },
+      {
+        "epoch": 295,
+        "column": "Val Loss",
+        "a": "0.3574",
+        "b": "0.3571"
+      },
+      {
+        "epoch": 295,
+        "column": "Train Token Acc",
+        "a": "0.9923",
+        "b": "0.9769"
+      },
+      {
+        "epoch": 295,
+        "column": "Train Seq Acc",
+        "a": "0.9000",
+        "b": "0.8000"
+      },
+      {
+        "epoch": 300,
+        "column": "Train Loss",
+        "a": "0.3200",
+        "b": "0.3205"
+      },
+      {
+        "epoch": 300,
+        "column": "Val Loss",
+        "a": "0.3569",
+        "b": "0.3502"
+      }
+    ]
+  },
+  "d0_seed999/l2sp_lam1 vs d0_seed999/l2sp_lam1": {
+    "compared_epochs": 60,
+    "mismatches": [
+      {
+        "epoch": 130,
+        "column": "Train Loss",
+        "a": "1.5269",
+        "b": "1.5268"
+      },
+      {
+        "epoch": 135,
+        "column": "Val Loss",
+        "a": "0.1177",
+        "b": "0.1176"
+      },
+      {
+        "epoch": 140,
+        "column": "Train Loss",
+        "a": "1.5289",
+        "b": "1.5287"
+      },
+      {
+        "epoch": 140,
+        "column": "Val Loss",
+        "a": "0.1170",
+        "b": "0.1169"
+      },
+      {
+        "epoch": 145,
+        "column": "Train Loss",
+        "a": "1.5268",
+        "b": "1.5270"
+      },
+      {
+        "epoch": 145,
+        "column": "Val Loss",
+        "a": "0.1167",
+        "b": "0.1168"
+      },
+      {
+        "epoch": 150,
+        "column": "Train Loss",
+        "a": "1.5294",
+        "b": "1.5293"
+      },
+      {
+        "epoch": 150,
+        "column": "Val Loss",
+        "a": "0.1165",
+        "b": "0.1171"
+      },
+      {
+        "epoch": 155,
+        "column": "Train Loss",
+        "a": "1.5286",
+        "b": "1.5278"
+      },
+      {
+        "epoch": 155,
+        "column": "Val Loss",
+        "a": "0.1166",
+        "b": "0.1177"
+      },
+      {
+        "epoch": 160,
+        "column": "Train Loss",
+        "a": "1.5296",
+        "b": "1.5280"
+      },
+      {
+        "epoch": 160,
+        "column": "Val Loss",
+        "a": "0.1171",
+        "b": "0.1164"
+      },
+      {
+        "epoch": 165,
+        "column": "Train Loss",
+        "a": "1.5282",
+        "b": "1.5275"
+      },
+      {
+        "epoch": 165,
+        "column": "Val Loss",
+        "a": "0.1169",
+        "b": "0.1167"
+      },
+      {
+        "epoch": 165,
+        "column": "Train Token Acc",
+        "a": "0.5385",
+        "b": "0.5462"
+      },
+      {
+        "epoch": 170,
+        "column": "Train Loss",
+        "a": "1.5277",
+        "b": "1.5269"
+      },
+      {
+        "epoch": 170,
+        "column": "Val Loss",
+        "a": "0.1169",
+        "b": "0.1167"
+      },
+      {
+        "epoch": 170,
+        "column": "Train Token Acc",
+        "a": "0.5462",
+        "b": "0.5538"
+      },
+      {
+        "epoch": 175,
+        "column": "Train Loss",
+        "a": "1.5268",
+        "b": "1.5283"
+      },
+      {
+        "epoch": 175,
+        "column": "Val Loss",
+        "a": "0.1166",
+        "b": "0.1170"
+      },
+      {
+        "epoch": 175,
+        "column": "Train Token Acc",
+        "a": "0.5538",
+        "b": "0.5462"
+      },
+      {
+        "epoch": 180,
+        "column": "Train Loss",
+        "a": "1.5277",
+        "b": "1.5291"
+      },
+      {
+        "epoch": 180,
+        "column": "Val Loss",
+        "a": "0.1167",
+        "b": "0.1163"
+      },
+      {
+        "epoch": 185,
+        "column": "Train Loss",
+        "a": "1.5297",
+        "b": "1.5286"
+      },
+      {
+        "epoch": 185,
+        "column": "Val Loss",
+        "a": "0.1168",
+        "b": "0.1170"
+      },
+      {
+        "epoch": 190,
+        "column": "Train Loss",
+        "a": "1.5299",
+        "b": "1.5283"
+      },
+      {
+        "epoch": 190,
+        "column": "Val Loss",
+        "a": "0.1166",
+        "b": "0.1177"
+      },
+      {
+        "epoch": 190,
+        "column": "Train Token Acc",
+        "a": "0.5462",
+        "b": "0.5385"
+      },
+      {
+        "epoch": 195,
+        "column": "Train Loss",
+        "a": "1.5294",
+        "b": "1.5277"
+      },
+      {
+        "epoch": 195,
+        "column": "Val Loss",
+        "a": "0.1172",
+        "b": "0.1168"
+      },
+      {
+        "epoch": 200,
+        "column": "Train Loss",
+        "a": "1.5268",
+        "b": "1.5275"
+      },
+      {
+        "epoch": 200,
+        "column": "Val Loss",
+        "a": "0.1160",
+        "b": "0.1169"
+      },
+      {
+        "epoch": 200,
+        "column": "Train Token Acc",
+        "a": "0.5385",
+        "b": "0.5462"
+      },
+      {
+        "epoch": 205,
+        "column": "Train Loss",
+        "a": "1.5277",
+        "b": "1.5269"
+      },
+      {
+        "epoch": 205,
+        "column": "Val Loss",
+        "a": "0.1170",
+        "b": "0.1164"
+      },
+      {
+        "epoch": 210,
+        "column": "Train Loss",
+        "a": "1.5273",
+        "b": "1.5279"
+      },
+      {
+        "epoch": 210,
+        "column": "Val Loss",
+        "a": "0.1162",
+        "b": "0.1171"
+      },
+      {
+        "epoch": 215,
+        "column": "Train Loss",
+        "a": "1.5275",
+        "b": "1.5297"
+      },
+      {
+        "epoch": 215,
+        "column": "Val Loss",
+        "a": "0.1171",
+        "b": "0.1163"
+      },
+      {
+        "epoch": 220,
+        "column": "Train Loss",
+        "a": "1.5301",
+        "b": "1.5277"
+      },
+      {
+        "epoch": 220,
+        "column": "Val Loss",
+        "a": "0.1167",
+        "b": "0.1170"
+      },
+      {
+        "epoch": 225,
+        "column": "Train Loss",
+        "a": "1.5282",
+        "b": "1.5275"
+      },
+      {
+        "epoch": 225,
+        "column": "Val Loss",
+        "a": "0.1163",
+        "b": "0.1170"
+      },
+      {
+        "epoch": 225,
+        "column": "Train Token Acc",
+        "a": "0.5385",
+        "b": "0.5462"
+      },
+      {
+        "epoch": 230,
+        "column": "Val Loss",
+        "a": "0.1163",
+        "b": "0.1160"
+      },
+      {
+        "epoch": 235,
+        "column": "Train Loss",
+        "a": "1.5268",
+        "b": "1.5278"
+      },
+      {
+        "epoch": 235,
+        "column": "Val Loss",
+        "a": "0.1163",
+        "b": "0.1173"
+      },
+      {
+        "epoch": 240,
+        "column": "Train Loss",
+        "a": "1.5278",
+        "b": "1.5286"
+      },
+      {
+        "epoch": 240,
+        "column": "Val Loss",
+        "a": "0.1173",
+        "b": "0.1158"
+      },
+      {
+        "epoch": 245,
+        "column": "Train Loss",
+        "a": "1.5281",
+        "b": "1.5308"
+      },
+      {
+        "epoch": 245,
+        "column": "Val Loss",
+        "a": "0.1160",
+        "b": "0.1170"
+      },
+      {
+        "epoch": 250,
+        "column": "Train Loss",
+        "a": "1.5303",
+        "b": "1.5279"
+      },
+      {
+        "epoch": 250,
+        "column": "Val Loss",
+        "a": "0.1170",
+        "b": "0.1175"
+      },
+      {
+        "epoch": 255,
+        "column": "Train Loss",
+        "a": "1.5292",
+        "b": "1.5272"
+      },
+      {
+        "epoch": 255,
+        "column": "Val Loss",
+        "a": "0.1173",
+        "b": "0.1161"
+      },
+      {
+        "epoch": 255,
+        "column": "Train Token Acc",
+        "a": "0.5462",
+        "b": "0.5538"
+      },
+      {
+        "epoch": 260,
+        "column": "Train Loss",
+        "a": "1.5285",
+        "b": "1.5279"
+      },
+      {
+        "epoch": 260,
+        "column": "Val Loss",
+        "a": "0.1175",
+        "b": "0.1169"
+      },
+      {
+        "epoch": 260,
+        "column": "Train Token Acc",
+        "a": "0.5385",
+        "b": "0.5462"
+      },
+      {
+        "epoch": 265,
+        "column": "Train Loss",
+        "a": "1.5289",
+        "b": "1.5265"
+      },
+      {
+        "epoch": 265,
+        "column": "Val Loss",
+        "a": "0.1158",
+        "b": "0.1163"
+      },
+      {
+        "epoch": 270,
+        "column": "Train Loss",
+        "a": "1.5276",
+        "b": "1.5284"
+      },
+      {
+        "epoch": 270,
+        "column": "Val Loss",
+        "a": "0.1173",
+        "b": "0.1163"
+      },
+      {
+        "epoch": 275,
+        "column": "Train Loss",
+        "a": "1.5269",
+        "b": "1.5298"
+      },
+      {
+        "epoch": 275,
+        "column": "Val Loss",
+        "a": "0.1164",
+        "b": "0.1170"
+      },
+      {
+        "epoch": 275,
+        "column": "Train Token Acc",
+        "a": "0.5462",
+        "b": "0.5385"
+      },
+      {
+        "epoch": 280,
+        "column": "Train Loss",
+        "a": "1.5287",
+        "b": "1.5288"
+      },
+      {
+        "epoch": 280,
+        "column": "Val Loss",
+        "a": "0.1168",
+        "b": "0.1174"
+      },
+      {
+        "epoch": 280,
+        "column": "Train Token Acc",
+        "a": "0.5462",
+        "b": "0.5385"
+      },
+      {
+        "epoch": 285,
+        "column": "Train Loss",
+        "a": "1.5299",
+        "b": "1.5285"
+      },
+      {
+        "epoch": 285,
+        "column": "Val Loss",
+        "a": "0.1169",
+        "b": "0.1168"
+      },
+      {
+        "epoch": 290,
+        "column": "Train Loss",
+        "a": "1.5281",
+        "b": "1.5266"
+      },
+      {
+        "epoch": 290,
+        "column": "Val Loss",
+        "a": "0.1170",
+        "b": "0.1165"
+      },
+      {
+        "epoch": 290,
+        "column": "Train Token Acc",
+        "a": "0.5385",
+        "b": "0.5462"
+      },
+      {
+        "epoch": 295,
+        "column": "Train Loss",
+        "a": "1.5268",
+        "b": "1.5278"
+      },
+      {
+        "epoch": 295,
+        "column": "Val Loss",
+        "a": "0.1162",
+        "b": "0.1169"
+      },
+      {
+        "epoch": 295,
+        "column": "Train Token Acc",
+        "a": "0.5462",
+        "b": "0.5538"
+      },
+      {
+        "epoch": 300,
+        "column": "Train Loss",
+        "a": "1.5265",
+        "b": "1.5271"
+      },
+      {
+        "epoch": 300,
+        "column": "Val Loss",
+        "a": "0.1162",
+        "b": "0.1163"
+      }
+    ]
+  }
+}
