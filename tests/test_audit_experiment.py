@@ -260,6 +260,57 @@ def test_adapting_from_a_different_checkpoint_is_detected(copy_of_evidence) -> N
         audit(copy_of_evidence)
 
 
+def adaptation_case(adapt_from: str, recorded_cwd: str, declared: str = "phonebook/out_phaseA/model.pth"):
+    run = {"id": "s1/plain", "scenario": "s1", "condition": "plain", "mode": "a0b1_evalA", "lr": 0.001,
+           "l2sp_lambda": 0.0, "epochs": 3, "batch_size": 8, "accuracy_interval": 1, "adapt": True}
+    protocol = {"spec": {"model_config": "cfg.py", "seed": 42}, "initializations": {"s1": {"checkpoint": declared}}}
+    command = ["python", "train.py", "cfg.py", "--device", "cpu", "--data-dir", "out/s1/data_a0b1_evalA",
+               "--out-dir", "out/s1/plain", "--seed", "42", "--lr", "0.001", "--epochs", "3", "--batch-size", "8",
+               "--accuracy-interval", "1", "--l2sp-lambda", "0.0", "--adapt-from", adapt_from]
+    return run, {"command": command, "cwd": recorded_cwd}, protocol
+
+
+@pytest.mark.parametrize("adapt_from,recorded_cwd", [
+    ("C:\\Users\\someone\\proj\\phonebook\\out_phaseA\\model.pth", "C:\\Users\\someone\\proj"),
+    ("c:/users/someone/proj/phonebook/out_phaseA/model.pth", "C:\\Users\\someone\\proj"),
+    ("/home/a/repo/phonebook/out_phaseA/model.pth", "/home/a/repo"),
+    ("\\\\SERVER\\share\\repo\\phonebook\\out_phaseA\\model.pth", "\\\\server\\share\\repo"),  # a drive-less Windows (UNC) root
+])
+def test_evidence_recorded_in_another_checkout_location_still_audits(adapt_from, recorded_cwd, tmp_path) -> None:
+    run, record, protocol = adaptation_case(adapt_from, recorded_cwd)
+    audit_mod._audit_command(run, record, protocol, tmp_path)  # the repository now lives somewhere else; no error
+
+
+def test_a_run_on_this_machine_is_still_compared_exactly(tmp_path) -> None:
+    run, record, protocol = adaptation_case(str(tmp_path / "phonebook/out_phaseA/model.pth"), "/anywhere/else")
+    audit_mod._audit_command(run, record, protocol, tmp_path)
+
+
+@pytest.mark.parametrize("adapt_from,recorded_cwd,declared", [
+    ("/home/a/repo/phonebook/out_phaseA_seed123/model.pth", "/home/a/repo", "phonebook/out_phaseA/model.pth"),  # other checkpoint
+    ("/elsewhere/phonebook/out_phaseA/model.pth", "/home/a/repo", "phonebook/out_phaseA/model.pth"),  # outside the recorded root
+    ("/home/a/repo2/phonebook/out_phaseA/model.pth", "/home/a/repo", "phonebook/out_phaseA/model.pth"),  # look-alike folder name
+    ("/home/a/repo/phonebook/out_phaseA/model.pth", "/home/a/repo", "/abs/elsewhere/model.pth"),  # absolute declaration cannot relocate
+    ("/home/a/repo/other/phonebook/out_phaseA/model.pth", "/home/a/repo", "phonebook/out_phaseA/model.pth"),  # extra folder
+    ("/home/a/REPO/phonebook/out_phaseA/model.pth", "/home/a/repo", "phonebook/out_phaseA/model.pth"),  # POSIX paths are case-sensitive
+])
+def test_a_recorded_path_that_is_not_the_declared_checkpoint_is_detected(adapt_from, recorded_cwd, declared, tmp_path) -> None:
+    run, record, protocol = adaptation_case(adapt_from, recorded_cwd, declared)
+    with pytest.raises(ValueError, match="did not adapt from the declared Phase-A checkpoint"):
+        audit_mod._audit_command(run, record, protocol, tmp_path)
+
+
+@pytest.mark.parametrize("missing", [None, ""])
+def test_a_record_that_lost_its_repository_root_cannot_vouch_for_a_foreign_path(missing, tmp_path) -> None:
+    run, record, protocol = adaptation_case("/home/a/repo/phonebook/out_phaseA/model.pth", "/home/a/repo")
+    if missing is None:
+        del record["cwd"]
+    else:
+        record["cwd"] = missing
+    with pytest.raises(ValueError, match="did not adapt from the declared Phase-A checkpoint"):
+        audit_mod._audit_command(run, record, protocol, tmp_path)
+
+
 def test_dropping_the_adaptation_flag_is_detected(copy_of_evidence) -> None:
     def change(records):
         command = records[0]["command"]

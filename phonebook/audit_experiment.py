@@ -16,6 +16,7 @@ import hashlib
 import json
 import math
 from pathlib import Path
+import posixpath
 import subprocess
 import sys
 
@@ -48,6 +49,26 @@ def _flag(command: list[str], name: str, where: str) -> str:
     return command[command.index(name) + 1]
 
 
+def _adapted_from_declared_checkpoint(used: str, declared: str, recorded_cwd: str | None, repo_root: Path) -> bool:
+    """Whether the training command adapted from the checkpoint the spec declares.
+
+    On the machine that ran it the paths are compared exactly. Elsewhere (the repository cloned to another folder)
+    the recorded absolute path must equal the repository root the run itself recorded joined with the spec's
+    repository-relative declaration; an absolute declaration cannot be relocated.
+    """
+    if Path(used).resolve() == resolve(repo_root, declared).resolve():
+        return True
+    if not recorded_cwd:
+        return False
+    fold = ":" in recorded_cwd[:3] or "\\" in recorded_cwd  # a Windows path: its file names are case-insensitive
+
+    def flat(text: str) -> str:
+        text = posixpath.normpath(str(text).replace("\\", "/"))
+        return text.lower() if fold else text
+
+    return flat(used) == f"{flat(recorded_cwd)}/{flat(declared)}"
+
+
 def _audit_command(run: dict, record: dict, protocol: dict, repo_root: Path) -> None:
     spec, command, where = protocol["spec"], record["command"], run["id"]
     require(command[1] == "train.py" and command[2] == spec["model_config"], f"command for {where} does not train with the spec's config")
@@ -61,8 +82,7 @@ def _audit_command(run: dict, record: dict, protocol: dict, repo_root: Path) -> 
     require(("--adapt-from" in command) == run["adapt"], f"command for {where} differs from the protocol in its initialization mode")
     if run["adapt"]:
         init = protocol["initializations"][run["scenario"]]
-        used = Path(_flag(command, "--adapt-from", where)).resolve()
-        require(used == resolve(repo_root, init["checkpoint"]).resolve(),
+        require(_adapted_from_declared_checkpoint(_flag(command, "--adapt-from", where), init["checkpoint"], record.get("cwd"), repo_root),
                 f"command for {where} did not adapt from the declared Phase-A checkpoint")
     data_dir, out_dir = Path(_flag(command, "--data-dir", where)), Path(_flag(command, "--out-dir", where))
     require(data_dir.name == f"data_{run['mode']}" and data_dir.parent.name == run["scenario"], f"command for {where} reads the wrong data folder")
