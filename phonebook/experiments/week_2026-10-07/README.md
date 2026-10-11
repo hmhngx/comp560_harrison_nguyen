@@ -182,3 +182,96 @@ learning rate; the trainer's AdamW defaults including weight decay 0.1; ten entr
 per book, so counts move in tenths. L2-SP here is the isotropic penalty from the
 mitigation notes; a Fisher-weighted penalty (EWC) was not tested. A "no" for L2-SP
 at these settings is not a claim about every regularizer.
+
+## E1b: a finer λ grid and a longer horizon (follow-up to E1)
+
+*Added Saturday October 10, after E1's runs finished and before any E1b run. Not part of E1's original protocol.*
+
+E1's half-decade λ grid is coarse next to the range where L2-SP stops learning B,
+and 300 updates may be short for strong penalties. A "no L2-SP setting matches
+replay" conclusion should survive a finer grid and a longer horizon. E1b runs
+λ ∈ {0.3, 0.4, …, 1.0} on the same three checkpoints for 1000 updates, logged every
+5 updates ([`e1b_fine_grid_long_horizon.json`](../../specs/e1b_fine_grid_long_horizon.json)).
+
+**Decision rule.** E1's rule, unchanged, applied at 100, 300 and 1000 updates. The
+100- and 300-update budgets use the union of E1's and E1b's λ values; the 1000-update
+budget uses E1b's. **Cross-check:** the λ=0.3 and λ=1.0 rows at updates 5, 10, …, 300
+must equal E1's rows at the same updates.
+
+## E2: does E1 hold on new phonebooks?
+
+*Added Saturday October 10, before any E2 run.*
+
+E1 used one fixed pair of phonebooks. E2 repeats E1 exactly (same 11 conditions,
+learning rate, updates, per-update logging and decision rules) on three new 20-entry
+phonebooks. The whole grid is repeated, so no λ is carried over and E1's
+"λ for replication" rule is not needed. This changes no E1 result or rule.
+
+**Phonebooks.** Made with the README's own generator (`create_phonebook.py 20 --seed S`);
+the first ten entries are book A and the last ten book B. A seed qualifies only if A
+and B have the same longest line, because the trainer sizes its context from the
+training book alone. Seed 1 crashes Phase A (longest lines 28 and 31); seed 3 trains,
+but its checkpoint cannot be loaded for Phase B (28 versus 29). Seeds 2, 4 and 7 are
+the first three that qualify; the choice depends only on name lengths, never on a
+result. [`make_heldout_dataset.py`](../../make_heldout_dataset.py) enforces the rule.
+
+**Phase A.** One fresh Phase-A model per phonebook (default config, lr=0.001, 100
+updates, seed 42): [`e2_phase_a.json`](../../specs/e2_phase_a.json). Gate: each must
+recall all ten entries of its own book A exactly; otherwise it is retrained from
+scratch with 200, then 400 updates, keeping every attempt. The E2 spec pins the
+resulting checkpoint hashes.
+
+**Replication criteria (fixed now).** E1's conclusions replicate if, on at least 2 of
+the 3 new phonebooks: (i) balanced replay recalls 10/10 of both books after 100
+updates; (ii) plain fine-tuning ends 300 updates with B=10/10 and at most 2 of A
+recalled; and (iii) the L2-SP decision rule, applied to the 3 new phonebooks over the
+same grid, gives the same verdict as E1 at both 100 and 300 updates.
+
+## E3: the README's replay question, A once plus B repeated k times
+
+*Added Saturday October 10, before any E3 run.*
+
+The phonebook README asks: if the replay data holds one copy of A and k copies of B,
+how does k affect forgetting, and which k permits the fastest learning of 100%
+accuracy on all data? E1's `replay_a1b1` is the k=1 case.
+
+**Design.** The three E1 checkpoints (hash-pinned) × k ∈ {1, 2, 3, 5, 9} ×
+lr ∈ {0.003, 0.001, 0.0003, 0.0001} = 60 runs, 500 updates, batch size 128 (so even
+k=9, 100 sequences, is one update per epoch), per-update logging
+([`e3_replay_ratio.json`](../../specs/e3_replay_ratio.json)).
+
+**Metrics and rules (fixed now).**
+
+- *first_joint*: first update at which every training sequence, hence both books, is
+  recalled exactly. *stable_joint*: first update from which every logged update through
+  update 500 has both books recalled exactly; runs that never get there are censored and
+  count as infinitely slow.
+- For each lr, k\* is the k with the smallest median stable_joint over the three
+  checkpoints; ties go to the smaller k; if every k is censored there is no k\*. The
+  question is whether k\*>1 for any lr.
+- *Dip*: the minimum number of A entries recalled at any update, and the update where it
+  first occurs.
+- **Cross-checks.** k=1 at lr=0.001 must reproduce E1's `replay_a1b1` curves exactly
+  (batch size 64 versus 128 is irrelevant for a single batch). k=1 at lr=0.0001 must
+  reproduce last week's 100-update results: B recalled 0/10, 1/10 and 0/10 on the three
+  checkpoints.
+- Every cell is reported, including censored ones.
+
+**Reproduce.**
+
+```bash
+python phonebook/run_experiment.py --spec phonebook/specs/e1b_fine_grid_long_horizon.json --out-root phonebook/experiments/week_2026-10-07/e1b_fine_grid_long_horizon
+python phonebook/run_experiment.py --spec phonebook/specs/e2_phase_a.json --out-root phonebook/experiments/week_2026-10-07/e2_phase_a
+python phonebook/run_experiment.py --spec phonebook/specs/e2_heldout_phonebooks.json --out-root phonebook/experiments/week_2026-10-07/e2_heldout_phonebooks
+python phonebook/run_experiment.py --spec phonebook/specs/e3_replay_ratio.json --out-root phonebook/experiments/week_2026-10-07/e3_replay_ratio
+```
+
+**Audit and derived results** (after the runs; every command reads only the evidence folders):
+
+```bash
+python phonebook/audit_experiment.py --root phonebook/experiments/week_2026-10-07/e1_matched_lr --require-local-artifacts
+python phonebook/report_experiments.py grid --root phonebook/experiments/week_2026-10-07/e1_matched_lr --out phonebook/results --prefix e1
+python phonebook/report_experiments.py e1b --e1 phonebook/experiments/week_2026-10-07/e1_matched_lr --e1b phonebook/experiments/week_2026-10-07/e1b_fine_grid_long_horizon --out phonebook/results
+python phonebook/report_experiments.py e2 --root phonebook/experiments/week_2026-10-07/e2_heldout_phonebooks --reference phonebook/results/e1_decision.json --out phonebook/results
+python phonebook/report_experiments.py e3 --root phonebook/experiments/week_2026-10-07/e3_replay_ratio --e1 phonebook/experiments/week_2026-10-07/e1_matched_lr --out phonebook/results
+```

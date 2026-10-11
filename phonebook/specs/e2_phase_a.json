@@ -1,0 +1,46 @@
+{
+  "name": "e2_phase_a",
+  "description": "Fresh Phase-A models, one per held-out phonebook: train on book A, evaluate on book B, default model config and the trainer's default learning rate.",
+  "seed": 42,
+  "model_config": "phonebook/config/phonebook.py",
+  "evaluate_books": [
+    "A",
+    "B"
+  ],
+  "require_one_update_per_epoch": true,
+  "decision_rules": {
+    "gate": "Each Phase-A checkpoint must recall all ten entries of its own book A exactly. If one does not after 100 updates, that phonebook is retrained from scratch with 200 and then 400 updates (a new spec each time) and every attempt is kept as evidence."
+  },
+  "scenarios": [
+    {
+      "id": "ds2",
+      "book_a": "phonebook/inputs/heldout_seed2_phonebookA.txt",
+      "book_b": "phonebook/inputs/heldout_seed2_phonebookB.txt"
+    },
+    {
+      "id": "ds4",
+      "book_a": "phonebook/inputs/heldout_seed4_phonebookA.txt",
+      "book_b": "phonebook/inputs/heldout_seed4_phonebookB.txt"
+    },
+    {
+      "id": "ds7",
+      "book_a": "phonebook/inputs/heldout_seed7_phonebookA.txt",
+      "book_b": "phonebook/inputs/heldout_seed7_phonebookB.txt"
+    }
+  ],
+  "conditions": [
+    {
+      "id": "phase_a",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 0
+      },
+      "eval_book": "B",
+      "lr": 0.001,
+      "epochs": 100,
+      "batch_size": 64,
+      "accuracy_interval": 10,
+      "adapt": false
+    }
+  ]
+}
