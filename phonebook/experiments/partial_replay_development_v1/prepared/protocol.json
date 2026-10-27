@@ -1,0 +1,405 @@
+{
+  "schema": "phonebook-replay-membership-v1",
+  "selection": {
+    "algorithm": "sha256-rank-v1",
+    "probe_size": 3,
+    "probe_seed": 1733,
+    "subset_seeds": [
+      1701
+    ],
+    "memory_sizes": [
+      1,
+      2,
+      5
+    ]
+  },
+  "books": {
+    "A": {
+      "source": "phonebook/inputs/phonebookA.txt",
+      "normalized_sha256": "9c7027683ce11a253c26be52a01abdbb2db982675fea35b4f51484173af52563",
+      "records": [
+        {
+          "id": "ace61da22cd0b942a7419ea62ee0f9f066a9bcff41c26a635170a88d027845c2",
+          "prompt": "Anra Blackmore",
+          "target": "970-720-1840"
+        },
+        {
+          "id": "599be7afce06af94d6cde9abba161e1d1264ac6f50413297a41e235ccc2e9f58",
+          "prompt": "Camra Blackley",
+          "target": "686-488-8613"
+        },
+        {
+          "id": "4ee770901656b55f5e23af1cd283f0c54f64de98088aca4a2e3fab9e51c94f4e",
+          "prompt": "Gilan Brandford",
+          "target": "945-628-0750"
+        },
+        {
+          "id": "f7277408509ece105adb4248aa33cf5a2eb0d8edce8c749ba664a0b48c76e7d1",
+          "prompt": "Aret Deanner",
+          "target": "830-425-7283"
+        },
+        {
+          "id": "c34a3ca48fa323ea9eae6ace99df6a75bda8beb53f051c9218def819823659c7",
+          "prompt": "Giayn Cranesen",
+          "target": "679-566-2183"
+        },
+        {
+          "id": "cc4211b8767a33f8fde11a0482eb4296583a4bf4cef757f4b45b2499d7ab5dcd",
+          "prompt": "Briar Cooksen",
+          "target": "493-370-4795"
+        },
+        {
+          "id": "56692899cdc2101b7e7bcac0d6629b6102ffb79492bc077988b936a1c592acfb",
+          "prompt": "Delry Cainston",
+          "target": "222-879-6064"
+        },
+        {
+          "id": "ce49b8d613d88ad008c42ecb8658976941f541439ce4eff5b8f67f10330adeeb",
+          "prompt": "Beaie Cookley",
+          "target": "680-472-5428"
+        },
+        {
+          "id": "bbb6ec8417b42305108645e277b7b7916c76e8295f8f66a57231750248491145",
+          "prompt": "Casra Cranewood",
+          "target": "305-547-2896"
+        },
+        {
+          "id": "d45988a8d5886a451c6596c00e2f2624c90420773f010ddf15b076fea6b1dada",
+          "prompt": "Beaar Dalemore",
+          "target": "992-492-9684"
+        }
+      ]
+    },
+    "B": {
+      "source": "phonebook/inputs/phonebookB.txt",
+      "normalized_sha256": "89930f178d693ed12250bf380ca01af11b807fd477003bb266ccb82105928858",
+      "records": [
+        {
+          "id": "88cb4674d28b80e93129326caaca2580876fb6b8412bac74834b42bb5f65ffc6",
+          "prompt": "Ashra Dellis",
+          "target": "333-512-9823"
+        },
+        {
+          "id": "a985f2a82d4711ec2b9dc0188dab0dd0d2f743b3cd2799092cffc129789886b5",
+          "prompt": "Calio Blackham",
+          "target": "644-383-9643"
+        },
+        {
+          "id": "2e2b0f22082c89236813bacb17d7761f8ab72c2a9a26cdd4c13dec0589a248ff",
+          "prompt": "Brie Brownby",
+          "target": "403-662-3854"
+        },
+        {
+          "id": "7d0e039305b3cb4f1a65104ac5255dde0a7f8a0f51b6eb7ae516f504a5543580",
+          "prompt": "Iano Carers",
+          "target": "713-441-0043"
+        },
+        {
+          "id": "35d29884d00cd1916a3bab813f26c1638223c5958c7c557443d0881ceea1567f",
+          "prompt": "Danay Dellby",
+          "target": "405-250-2639"
+        },
+        {
+          "id": "a86495d9efc5367f00cda7471e570bec850cb8bb7641263bf3338c489de3edfc",
+          "prompt": "Cela Cooker",
+          "target": "400-377-3079"
+        },
+        {
+          "id": "8d9d478e7cc5fb4dc1859f72fa1ae21d97aa790c93c0abd34ff386182f710b5f",
+          "prompt": "Devus Craneham",
+          "target": "764-617-8175"
+        },
+        {
+          "id": "b9af2262b1642439cb132cdf5163489da1ca0281df33ebbe14da731a98ff74a8",
+          "prompt": "Giaas Blairmore",
+          "target": "441-661-4853"
+        },
+        {
+          "id": "3109c110e26da7c70b918050cef427f5a4c8e1207ef93fe5dd74cc4b4083b692",
+          "prompt": "Isaas Birchwood",
+          "target": "529-218-2718"
+        },
+        {
+          "id": "153418c0246c81e48cb608e713ac8b580f8f7a021ba2be8890891a0afd2cdffa",
+          "prompt": "Gilar Cassmore",
+          "target": "688-486-4298"
+        }
+      ]
+    }
+  },
+  "probe_ids": [
+    "ace61da22cd0b942a7419ea62ee0f9f066a9bcff41c26a635170a88d027845c2",
+    "599be7afce06af94d6cde9abba161e1d1264ac6f50413297a41e235ccc2e9f58",
+    "c34a3ca48fa323ea9eae6ace99df6a75bda8beb53f051c9218def819823659c7"
+  ],
+  "replay_pool_ids": [
+    "4ee770901656b55f5e23af1cd283f0c54f64de98088aca4a2e3fab9e51c94f4e",
+    "f7277408509ece105adb4248aa33cf5a2eb0d8edce8c749ba664a0b48c76e7d1",
+    "cc4211b8767a33f8fde11a0482eb4296583a4bf4cef757f4b45b2499d7ab5dcd",
+    "56692899cdc2101b7e7bcac0d6629b6102ffb79492bc077988b936a1c592acfb",
+    "ce49b8d613d88ad008c42ecb8658976941f541439ce4eff5b8f67f10330adeeb",
+    "bbb6ec8417b42305108645e277b7b7916c76e8295f8f66a57231750248491145",
+    "d45988a8d5886a451c6596c00e2f2624c90420773f010ddf15b076fea6b1dada"
+  ],
+  "draws": [
+    {
+      "seed": 1701,
+      "permutation": [
+        "56692899cdc2101b7e7bcac0d6629b6102ffb79492bc077988b936a1c592acfb",
+        "cc4211b8767a33f8fde11a0482eb4296583a4bf4cef757f4b45b2499d7ab5dcd",
+        "bbb6ec8417b42305108645e277b7b7916c76e8295f8f66a57231750248491145",
+        "4ee770901656b55f5e23af1cd283f0c54f64de98088aca4a2e3fab9e51c94f4e",
+        "d45988a8d5886a451c6596c00e2f2624c90420773f010ddf15b076fea6b1dada",
+        "f7277408509ece105adb4248aa33cf5a2eb0d8edce8c749ba664a0b48c76e7d1",
+        "ce49b8d613d88ad008c42ecb8658976941f541439ce4eff5b8f67f10330adeeb"
+      ]
+    }
+  ],
+  "context_length": 29,
+  "vocabulary": {
+    "\n": 0,
+    " ": 1,
+    "-": 2,
+    "0": 3,
+    "1": 4,
+    "2": 5,
+    "3": 6,
+    "4": 7,
+    "5": 8,
+    "6": 9,
+    "7": 10,
+    "8": 11,
+    "9": 12,
+    "=": 13,
+    "A": 14,
+    "B": 15,
+    "C": 16,
+    "D": 17,
+    "E": 18,
+    "F": 19,
+    "G": 20,
+    "H": 21,
+    "I": 22,
+    "J": 23,
+    "K": 24,
+    "L": 25,
+    "M": 26,
+    "N": 27,
+    "O": 28,
+    "P": 29,
+    "Q": 30,
+    "R": 31,
+    "S": 32,
+    "T": 33,
+    "U": 34,
+    "V": 35,
+    "W": 36,
+    "X": 37,
+    "Y": 38,
+    "Z": 39,
+    "a": 40,
+    "b": 41,
+    "c": 42,
+    "d": 43,
+    "e": 44,
+    "f": 45,
+    "g": 46,
+    "h": 47,
+    "i": 48,
+    "j": 49,
+    "k": 50,
+    "l": 51,
+    "m": 52,
+    "n": 53,
+    "o": 54,
+    "p": 55,
+    "q": 56,
+    "r": 57,
+    "s": 58,
+    "t": 59,
+    "u": 60,
+    "v": 61,
+    "w": 62,
+    "x": 63,
+    "y": 64,
+    "z": 65,
+    "_": 66
+  },
+  "conditions": [
+    {
+      "id": "plain_b",
+      "kind": "b_only",
+      "initialization": "phase_a",
+      "replay_ids": [],
+      "training_ids": [
+        "88cb4674d28b80e93129326caaca2580876fb6b8412bac74834b42bb5f65ffc6",
+        "a985f2a82d4711ec2b9dc0188dab0dd0d2f743b3cd2799092cffc129789886b5",
+        "2e2b0f22082c89236813bacb17d7761f8ab72c2a9a26cdd4c13dec0589a248ff",
+        "7d0e039305b3cb4f1a65104ac5255dde0a7f8a0f51b6eb7ae516f504a5543580",
+        "35d29884d00cd1916a3bab813f26c1638223c5958c7c557443d0881ceea1567f",
+        "a86495d9efc5367f00cda7471e570bec850cb8bb7641263bf3338c489de3edfc",
+        "8d9d478e7cc5fb4dc1859f72fa1ae21d97aa790c93c0abd34ff386182f710b5f",
+        "b9af2262b1642439cb132cdf5163489da1ca0281df33ebbe14da731a98ff74a8",
+        "3109c110e26da7c70b918050cef427f5a4c8e1207ef93fe5dd74cc4b4083b692",
+        "153418c0246c81e48cb608e713ac8b580f8f7a021ba2be8890891a0afd2cdffa"
+      ],
+      "training_sha256": "89930f178d693ed12250bf380ca01af11b807fd477003bb266ccb82105928858"
+    },
+    {
+      "id": "partial_m1_seed1701",
+      "kind": "partial",
+      "initialization": "phase_a",
+      "replay_ids": [
+        "56692899cdc2101b7e7bcac0d6629b6102ffb79492bc077988b936a1c592acfb"
+      ],
+      "training_ids": [
+        "56692899cdc2101b7e7bcac0d6629b6102ffb79492bc077988b936a1c592acfb",
+        "88cb4674d28b80e93129326caaca2580876fb6b8412bac74834b42bb5f65ffc6",
+        "a985f2a82d4711ec2b9dc0188dab0dd0d2f743b3cd2799092cffc129789886b5",
+        "2e2b0f22082c89236813bacb17d7761f8ab72c2a9a26cdd4c13dec0589a248ff",
+        "7d0e039305b3cb4f1a65104ac5255dde0a7f8a0f51b6eb7ae516f504a5543580",
+        "35d29884d00cd1916a3bab813f26c1638223c5958c7c557443d0881ceea1567f",
+        "a86495d9efc5367f00cda7471e570bec850cb8bb7641263bf3338c489de3edfc",
+        "8d9d478e7cc5fb4dc1859f72fa1ae21d97aa790c93c0abd34ff386182f710b5f",
+        "b9af2262b1642439cb132cdf5163489da1ca0281df33ebbe14da731a98ff74a8",
+        "3109c110e26da7c70b918050cef427f5a4c8e1207ef93fe5dd74cc4b4083b692",
+        "153418c0246c81e48cb608e713ac8b580f8f7a021ba2be8890891a0afd2cdffa"
+      ],
+      "training_sha256": "dcddac0d4b237e9659fde0234c4c45536395bc9e1484e38412ad7187eb088ec8"
+    },
+    {
+      "id": "partial_m2_seed1701",
+      "kind": "partial",
+      "initialization": "phase_a",
+      "replay_ids": [
+        "56692899cdc2101b7e7bcac0d6629b6102ffb79492bc077988b936a1c592acfb",
+        "cc4211b8767a33f8fde11a0482eb4296583a4bf4cef757f4b45b2499d7ab5dcd"
+      ],
+      "training_ids": [
+        "56692899cdc2101b7e7bcac0d6629b6102ffb79492bc077988b936a1c592acfb",
+        "cc4211b8767a33f8fde11a0482eb4296583a4bf4cef757f4b45b2499d7ab5dcd",
+        "88cb4674d28b80e93129326caaca2580876fb6b8412bac74834b42bb5f65ffc6",
+        "a985f2a82d4711ec2b9dc0188dab0dd0d2f743b3cd2799092cffc129789886b5",
+        "2e2b0f22082c89236813bacb17d7761f8ab72c2a9a26cdd4c13dec0589a248ff",
+        "7d0e039305b3cb4f1a65104ac5255dde0a7f8a0f51b6eb7ae516f504a5543580",
+        "35d29884d00cd1916a3bab813f26c1638223c5958c7c557443d0881ceea1567f",
+        "a86495d9efc5367f00cda7471e570bec850cb8bb7641263bf3338c489de3edfc",
+        "8d9d478e7cc5fb4dc1859f72fa1ae21d97aa790c93c0abd34ff386182f710b5f",
+        "b9af2262b1642439cb132cdf5163489da1ca0281df33ebbe14da731a98ff74a8",
+        "3109c110e26da7c70b918050cef427f5a4c8e1207ef93fe5dd74cc4b4083b692",
+        "153418c0246c81e48cb608e713ac8b580f8f7a021ba2be8890891a0afd2cdffa"
+      ],
+      "training_sha256": "66e67c270000799ebe0f8638327488c00587c3ccdfb65a70f08524e50a49afb0"
+    },
+    {
+      "id": "partial_m5_seed1701",
+      "kind": "partial",
+      "initialization": "phase_a",
+      "replay_ids": [
+        "56692899cdc2101b7e7bcac0d6629b6102ffb79492bc077988b936a1c592acfb",
+        "cc4211b8767a33f8fde11a0482eb4296583a4bf4cef757f4b45b2499d7ab5dcd",
+        "bbb6ec8417b42305108645e277b7b7916c76e8295f8f66a57231750248491145",
+        "4ee770901656b55f5e23af1cd283f0c54f64de98088aca4a2e3fab9e51c94f4e",
+        "d45988a8d5886a451c6596c00e2f2624c90420773f010ddf15b076fea6b1dada"
+      ],
+      "training_ids": [
+        "56692899cdc2101b7e7bcac0d6629b6102ffb79492bc077988b936a1c592acfb",
+        "cc4211b8767a33f8fde11a0482eb4296583a4bf4cef757f4b45b2499d7ab5dcd",
+        "bbb6ec8417b42305108645e277b7b7916c76e8295f8f66a57231750248491145",
+        "4ee770901656b55f5e23af1cd283f0c54f64de98088aca4a2e3fab9e51c94f4e",
+        "d45988a8d5886a451c6596c00e2f2624c90420773f010ddf15b076fea6b1dada",
+        "88cb4674d28b80e93129326caaca2580876fb6b8412bac74834b42bb5f65ffc6",
+        "a985f2a82d4711ec2b9dc0188dab0dd0d2f743b3cd2799092cffc129789886b5",
+        "2e2b0f22082c89236813bacb17d7761f8ab72c2a9a26cdd4c13dec0589a248ff",
+        "7d0e039305b3cb4f1a65104ac5255dde0a7f8a0f51b6eb7ae516f504a5543580",
+        "35d29884d00cd1916a3bab813f26c1638223c5958c7c557443d0881ceea1567f",
+        "a86495d9efc5367f00cda7471e570bec850cb8bb7641263bf3338c489de3edfc",
+        "8d9d478e7cc5fb4dc1859f72fa1ae21d97aa790c93c0abd34ff386182f710b5f",
+        "b9af2262b1642439cb132cdf5163489da1ca0281df33ebbe14da731a98ff74a8",
+        "3109c110e26da7c70b918050cef427f5a4c8e1207ef93fe5dd74cc4b4083b692",
+        "153418c0246c81e48cb608e713ac8b580f8f7a021ba2be8890891a0afd2cdffa"
+      ],
+      "training_sha256": "3031e2901fb1ec49fc07912913a0e8a9e685c421ad66401afd3e5a6a19c1f405"
+    },
+    {
+      "id": "full_replay",
+      "kind": "full_replay",
+      "initialization": "phase_a",
+      "replay_ids": [
+        "ace61da22cd0b942a7419ea62ee0f9f066a9bcff41c26a635170a88d027845c2",
+        "599be7afce06af94d6cde9abba161e1d1264ac6f50413297a41e235ccc2e9f58",
+        "4ee770901656b55f5e23af1cd283f0c54f64de98088aca4a2e3fab9e51c94f4e",
+        "f7277408509ece105adb4248aa33cf5a2eb0d8edce8c749ba664a0b48c76e7d1",
+        "c34a3ca48fa323ea9eae6ace99df6a75bda8beb53f051c9218def819823659c7",
+        "cc4211b8767a33f8fde11a0482eb4296583a4bf4cef757f4b45b2499d7ab5dcd",
+        "56692899cdc2101b7e7bcac0d6629b6102ffb79492bc077988b936a1c592acfb",
+        "ce49b8d613d88ad008c42ecb8658976941f541439ce4eff5b8f67f10330adeeb",
+        "bbb6ec8417b42305108645e277b7b7916c76e8295f8f66a57231750248491145",
+        "d45988a8d5886a451c6596c00e2f2624c90420773f010ddf15b076fea6b1dada"
+      ],
+      "training_ids": [
+        "ace61da22cd0b942a7419ea62ee0f9f066a9bcff41c26a635170a88d027845c2",
+        "599be7afce06af94d6cde9abba161e1d1264ac6f50413297a41e235ccc2e9f58",
+        "4ee770901656b55f5e23af1cd283f0c54f64de98088aca4a2e3fab9e51c94f4e",
+        "f7277408509ece105adb4248aa33cf5a2eb0d8edce8c749ba664a0b48c76e7d1",
+        "c34a3ca48fa323ea9eae6ace99df6a75bda8beb53f051c9218def819823659c7",
+        "cc4211b8767a33f8fde11a0482eb4296583a4bf4cef757f4b45b2499d7ab5dcd",
+        "56692899cdc2101b7e7bcac0d6629b6102ffb79492bc077988b936a1c592acfb",
+        "ce49b8d613d88ad008c42ecb8658976941f541439ce4eff5b8f67f10330adeeb",
+        "bbb6ec8417b42305108645e277b7b7916c76e8295f8f66a57231750248491145",
+        "d45988a8d5886a451c6596c00e2f2624c90420773f010ddf15b076fea6b1dada",
+        "88cb4674d28b80e93129326caaca2580876fb6b8412bac74834b42bb5f65ffc6",
+        "a985f2a82d4711ec2b9dc0188dab0dd0d2f743b3cd2799092cffc129789886b5",
+        "2e2b0f22082c89236813bacb17d7761f8ab72c2a9a26cdd4c13dec0589a248ff",
+        "7d0e039305b3cb4f1a65104ac5255dde0a7f8a0f51b6eb7ae516f504a5543580",
+        "35d29884d00cd1916a3bab813f26c1638223c5958c7c557443d0881ceea1567f",
+        "a86495d9efc5367f00cda7471e570bec850cb8bb7641263bf3338c489de3edfc",
+        "8d9d478e7cc5fb4dc1859f72fa1ae21d97aa790c93c0abd34ff386182f710b5f",
+        "b9af2262b1642439cb132cdf5163489da1ca0281df33ebbe14da731a98ff74a8",
+        "3109c110e26da7c70b918050cef427f5a4c8e1207ef93fe5dd74cc4b4083b692",
+        "153418c0246c81e48cb608e713ac8b580f8f7a021ba2be8890891a0afd2cdffa"
+      ],
+      "training_sha256": "45578f43311380b427e89221cf2af51a95c8ad39ae8096c4ce605b1b9eee5d0c"
+    },
+    {
+      "id": "fresh_joint",
+      "kind": "fresh_joint",
+      "initialization": "fresh",
+      "replay_ids": [
+        "ace61da22cd0b942a7419ea62ee0f9f066a9bcff41c26a635170a88d027845c2",
+        "599be7afce06af94d6cde9abba161e1d1264ac6f50413297a41e235ccc2e9f58",
+        "4ee770901656b55f5e23af1cd283f0c54f64de98088aca4a2e3fab9e51c94f4e",
+        "f7277408509ece105adb4248aa33cf5a2eb0d8edce8c749ba664a0b48c76e7d1",
+        "c34a3ca48fa323ea9eae6ace99df6a75bda8beb53f051c9218def819823659c7",
+        "cc4211b8767a33f8fde11a0482eb4296583a4bf4cef757f4b45b2499d7ab5dcd",
+        "56692899cdc2101b7e7bcac0d6629b6102ffb79492bc077988b936a1c592acfb",
+        "ce49b8d613d88ad008c42ecb8658976941f541439ce4eff5b8f67f10330adeeb",
+        "bbb6ec8417b42305108645e277b7b7916c76e8295f8f66a57231750248491145",
+        "d45988a8d5886a451c6596c00e2f2624c90420773f010ddf15b076fea6b1dada"
+      ],
+      "training_ids": [
+        "ace61da22cd0b942a7419ea62ee0f9f066a9bcff41c26a635170a88d027845c2",
+        "599be7afce06af94d6cde9abba161e1d1264ac6f50413297a41e235ccc2e9f58",
+        "4ee770901656b55f5e23af1cd283f0c54f64de98088aca4a2e3fab9e51c94f4e",
+        "f7277408509ece105adb4248aa33cf5a2eb0d8edce8c749ba664a0b48c76e7d1",
+        "c34a3ca48fa323ea9eae6ace99df6a75bda8beb53f051c9218def819823659c7",
+        "cc4211b8767a33f8fde11a0482eb4296583a4bf4cef757f4b45b2499d7ab5dcd",
+        "56692899cdc2101b7e7bcac0d6629b6102ffb79492bc077988b936a1c592acfb",
+        "ce49b8d613d88ad008c42ecb8658976941f541439ce4eff5b8f67f10330adeeb",
+        "bbb6ec8417b42305108645e277b7b7916c76e8295f8f66a57231750248491145",
+        "d45988a8d5886a451c6596c00e2f2624c90420773f010ddf15b076fea6b1dada",
+        "88cb4674d28b80e93129326caaca2580876fb6b8412bac74834b42bb5f65ffc6",
+        "a985f2a82d4711ec2b9dc0188dab0dd0d2f743b3cd2799092cffc129789886b5",
+        "2e2b0f22082c89236813bacb17d7761f8ab72c2a9a26cdd4c13dec0589a248ff",
+        "7d0e039305b3cb4f1a65104ac5255dde0a7f8a0f51b6eb7ae516f504a5543580",
+        "35d29884d00cd1916a3bab813f26c1638223c5958c7c557443d0881ceea1567f",
+        "a86495d9efc5367f00cda7471e570bec850cb8bb7641263bf3338c489de3edfc",
+        "8d9d478e7cc5fb4dc1859f72fa1ae21d97aa790c93c0abd34ff386182f710b5f",
+        "b9af2262b1642439cb132cdf5163489da1ca0281df33ebbe14da731a98ff74a8",
+        "3109c110e26da7c70b918050cef427f5a4c8e1207ef93fe5dd74cc4b4083b692",
+        "153418c0246c81e48cb608e713ac8b580f8f7a021ba2be8890891a0afd2cdffa"
+      ],
+      "training_sha256": "45578f43311380b427e89221cf2af51a95c8ad39ae8096c4ce605b1b9eee5d0c"
+    }
+  ]
+}

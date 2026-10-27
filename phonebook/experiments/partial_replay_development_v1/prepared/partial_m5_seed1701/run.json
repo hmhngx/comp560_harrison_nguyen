@@ -1,0 +1,79 @@
+{
+  "condition": "partial_m5_seed1701",
+  "initialization": "phase_a",
+  "initial_state_sha256": "dbe633116c62f6371042f1a592a1bb14791a6208f217c976595297d510260f30",
+  "optimizer_started_empty": true,
+  "row_weights": [
+    0.007692307699471712,
+    0.007692307699471712,
+    0.007692307699471712,
+    0.007692307699471712,
+    0.007692307699471712,
+    0.003846153849735856,
+    0.003846153849735856,
+    0.003846153849735856,
+    0.003846153849735856,
+    0.003846153849735856,
+    0.003846153849735856,
+    0.003846153849735856,
+    0.003846153849735856,
+    0.003846153849735856,
+    0.003846153849735856
+  ],
+  "binary_sha256": "001342ff3e6b073a1b9f69720cd91ecafec80286c595eb785996c270d832560a",
+  "training_text_sha256": "3031e2901fb1ec49fc07912913a0e8a9e685c421ad66401afd3e5a6a19c1f405",
+  "work": {
+    "updates": 400,
+    "training_sequences": 6000,
+    "supervised_tokens": 78000,
+    "padded_input_tokens": 168000
+  },
+  "sequence_budget_unused": 0,
+  "training_seconds": 19.46085670060711,
+  "evaluation_seconds": 26.574300400097854,
+  "diagnostic_seconds": 0.22527319996152073,
+  "diagnostics": [
+    {
+      "update": 1,
+      "partition": "A_probe",
+      "analyst_only": true,
+      "loss_before": 0.028570961207151413,
+      "loss_after": 0.03841116279363632,
+      "actual_loss_change": 0.009840201586484909,
+      "linear_term": 0.000976740033365786,
+      "quadratic_term": 0.006037305109202862,
+      "second_order_residual": 0.002826156443916261,
+      "delta_l2": 0.32953742146492004
+    },
+    {
+      "update": 100,
+      "partition": "A_probe",
+      "analyst_only": true,
+      "loss_before": 1.359332799911499,
+      "loss_after": 1.3613948822021484,
+      "actual_loss_change": 0.002062082290649414,
+      "linear_term": 0.0020554247312247753,
+      "quadratic_term": 6.367255991790444e-06,
+      "second_order_residual": 2.903034328483045e-07,
+      "delta_l2": 0.01849486492574215
+    },
+    {
+      "update": 300,
+      "partition": "A_probe",
+      "analyst_only": true,
+      "loss_before": 1.5752135515213013,
+      "loss_after": 1.5758708715438843,
+      "actual_loss_change": 0.0006573200225830078,
+      "linear_term": 0.0006570796249434352,
+      "quadratic_term": 4.90988782075874e-07,
+      "second_order_residual": -2.5059114250325365e-07,
+      "delta_l2": 0.00942476000636816
+    }
+  ],
+  "parameter_count": 110528,
+  "parameter_bytes": 442112,
+  "optimizer_tensor_bytes": 884340,
+  "retained_replay_records": 5,
+  "anchor_tensor_bytes": 0,
+  "retained_replay_utf8_bytes": 141
+}

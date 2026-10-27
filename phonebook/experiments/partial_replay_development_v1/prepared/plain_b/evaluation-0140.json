@@ -1,0 +1,801 @@
+{
+  "work": {
+    "updates": 140,
+    "training_sequences": 1400,
+    "supervised_tokens": 18200,
+    "padded_input_tokens": 39200
+  },
+  "evaluation": {
+    "schema": "phonebook-replay-evaluation-v1",
+    "protocol_sha256": "8bd47398f7ea33564e646dbcf04e6e9c84aa6344bf778a642b2b9f4b8093bd30",
+    "condition": "plain_b",
+    "kind": "b_only",
+    "context_length": 29,
+    "vocabulary_sha256": "21f19aa445a4d9deab82c652972c413f7ce5b127e1066a22891be5d151206b25",
+    "generation_budget": "automatic_context_limit",
+    "training_execution_verified": false,
+    "probe_exposed": false,
+    "training_input": {
+      "sha256": "89930f178d693ed12250bf380ca01af11b807fd477003bb266ccb82105928858",
+      "normalized_sha256": "89930f178d693ed12250bf380ca01af11b807fd477003bb266ccb82105928858",
+      "entry_ids": [
+        "88cb4674d28b80e93129326caaca2580876fb6b8412bac74834b42bb5f65ffc6",
+        "a985f2a82d4711ec2b9dc0188dab0dd0d2f743b3cd2799092cffc129789886b5",
+        "2e2b0f22082c89236813bacb17d7761f8ab72c2a9a26cdd4c13dec0589a248ff",
+        "7d0e039305b3cb4f1a65104ac5255dde0a7f8a0f51b6eb7ae516f504a5543580",
+        "35d29884d00cd1916a3bab813f26c1638223c5958c7c557443d0881ceea1567f",
+        "a86495d9efc5367f00cda7471e570bec850cb8bb7641263bf3338c489de3edfc",
+        "8d9d478e7cc5fb4dc1859f72fa1ae21d97aa790c93c0abd34ff386182f710b5f",
+        "b9af2262b1642439cb132cdf5163489da1ca0281df33ebbe14da731a98ff74a8",
+        "3109c110e26da7c70b918050cef427f5a4c8e1207ef93fe5dd74cc4b4083b692",
+        "153418c0246c81e48cb608e713ac8b580f8f7a021ba2be8890891a0afd2cdffa"
+      ]
+    },
+    "records": [
+      {
+        "id": "ace61da22cd0b942a7419ea62ee0f9f066a9bcff41c26a635170a88d027845c2",
+        "prompt": "Anra Blackmore",
+        "expected": "970-720-1840",
+        "teacher": {
+          "loss_sum": 32.246583530679345,
+          "token_total": 13,
+          "token_correct": 7,
+          "sequence_correct": 0
+        },
+        "generation": {
+          "prediction": "3-0-480483",
+          "token_ids": [
+            6,
+            2,
+            3,
+            2,
+            7,
+            11,
+            3,
+            7,
+            11,
+            6,
+            0
+          ],
+          "stop_reason": "newline",
+          "correct": false
+        }
+      },
+      {
+        "id": "599be7afce06af94d6cde9abba161e1d1264ac6f50413297a41e235ccc2e9f58",
+        "prompt": "Camra Blackley",
+        "expected": "686-488-8613",
+        "teacher": {
+          "loss_sum": 26.288553904742002,
+          "token_total": 13,
+          "token_correct": 5,
+          "sequence_correct": 0
+        },
+        "generation": {
+          "prediction": "644-3881-2713",
+          "token_ids": [
+            9,
+            7,
+            7,
+            2,
+            6,
+            11,
+            11,
+            4,
+            2,
+            5,
+            10,
+            4,
+            6,
+            0
+          ],
+          "stop_reason": "newline",
+          "correct": false
+        }
+      },
+      {
+        "id": "4ee770901656b55f5e23af1cd283f0c54f64de98088aca4a2e3fab9e51c94f4e",
+        "prompt": "Gilan Brandford",
+        "expected": "945-628-0750",
+        "teacher": {
+          "loss_sum": 24.475389685947448,
+          "token_total": 13,
+          "token_correct": 5,
+          "sequence_correct": 0
+        },
+        "generation": {
+          "prediction": "44-3838-2713",
+          "token_ids": [
+            7,
+            7,
+            2,
+            6,
+            11,
+            6,
+            11,
+            2,
+            5,
+            10,
+            4,
+            6,
+            0
+          ],
+          "stop_reason": "newline",
+          "correct": false
+        }
+      },
+      {
+        "id": "f7277408509ece105adb4248aa33cf5a2eb0d8edce8c749ba664a0b48c76e7d1",
+        "prompt": "Aret Deanner",
+        "expected": "830-425-7283",
+        "teacher": {
+          "loss_sum": 27.262236257083714,
+          "token_total": 13,
+          "token_correct": 9,
+          "sequence_correct": 0
+        },
+        "generation": {
+          "prediction": "333-425-7281718",
+          "token_ids": [
+            6,
+            6,
+            6,
+            2,
+            7,
+            5,
+            8,
+            2,
+            10,
+            5,
+            11,
+            4,
+            10,
+            4,
+            11,
+            0
+          ],
+          "stop_reason": "newline",
+          "correct": false
+        }
+      },
+      {
+        "id": "c34a3ca48fa323ea9eae6ace99df6a75bda8beb53f051c9218def819823659c7",
+        "prompt": "Giayn Cranesen",
+        "expected": "679-566-2183",
+        "teacher": {
+          "loss_sum": 34.06180020282045,
+          "token_total": 13,
+          "token_correct": 3,
+          "sequence_correct": 0
+        },
+        "generation": {
+          "prediction": "3-662-61-4-3",
+          "token_ids": [
+            6,
+            2,
+            9,
+            9,
+            5,
+            2,
+            9,
+            4,
+            2,
+            7,
+            2,
+            6,
+            0
+          ],
+          "stop_reason": "newline",
+          "correct": false
+        }
+      },
+      {
+        "id": "cc4211b8767a33f8fde11a0482eb4296583a4bf4cef757f4b45b2499d7ab5dcd",
+        "prompt": "Briar Cooksen",
+        "expected": "493-370-4795",
+        "teacher": {
+          "loss_sum": 42.94687279872596,
+          "token_total": 13,
+          "token_correct": 5,
+          "sequence_correct": 0
+        },
+        "generation": {
+          "prediction": "33-3",
+          "token_ids": [
+            6,
+            6,
+            2,
+            6,
+            0
+          ],
+          "stop_reason": "newline",
+          "correct": false
+        }
+      },
+      {
+        "id": "56692899cdc2101b7e7bcac0d6629b6102ffb79492bc077988b936a1c592acfb",
+        "prompt": "Delry Cainston",
+        "expected": "222-879-6064",
+        "teacher": {
+          "loss_sum": 23.32251409208402,
+          "token_total": 13,
+          "token_correct": 7,
+          "sequence_correct": 0
+        },
+        "generation": {
+          "prediction": "7-2-700",
+          "token_ids": [
+            10,
+            2,
+            5,
+            2,
+            10,
+            3,
+            3,
+            0
+          ],
+          "stop_reason": "newline",
+          "correct": false
+        }
+      },
+      {
+        "id": "ce49b8d613d88ad008c42ecb8658976941f541439ce4eff5b8f67f10330adeeb",
+        "prompt": "Beaie Cookley",
+        "expected": "680-472-5428",
+        "teacher": {
+          "loss_sum": 36.12798318313435,
+          "token_total": 13,
+          "token_correct": 6,
+          "sequence_correct": 0
+        },
+        "generation": {
+          "prediction": "63-66-54-23",
+          "token_ids": [
+            9,
+            6,
+            2,
+            9,
+            9,
+            2,
+            8,
+            7,
+            2,
+            5,
+            6,
+            0
+          ],
+          "stop_reason": "newline",
+          "correct": false
+        }
+      },
+      {
+        "id": "bbb6ec8417b42305108645e277b7b7916c76e8295f8f66a57231750248491145",
+        "prompt": "Casra Cranewood",
+        "expected": "305-547-2896",
+        "teacher": {
+          "loss_sum": 33.83763442747295,
+          "token_total": 13,
+          "token_correct": 4,
+          "sequence_correct": 0
+        },
+        "generation": {
+          "prediction": "54-2-243",
+          "token_ids": [
+            8,
+            7,
+            2,
+            5,
+            2,
+            5,
+            7,
+            6,
+            0
+          ],
+          "stop_reason": "newline",
+          "correct": false
+        }
+      },
+      {
+        "id": "d45988a8d5886a451c6596c00e2f2624c90420773f010ddf15b076fea6b1dada",
+        "prompt": "Beaar Dalemore",
+        "expected": "992-492-9684",
+        "teacher": {
+          "loss_sum": 50.313027285039425,
+          "token_total": 13,
+          "token_correct": 3,
+          "sequence_correct": 0
+        },
+        "generation": {
+          "prediction": "488-483854853",
+          "token_ids": [
+            7,
+            11,
+            11,
+            2,
+            7,
+            11,
+            6,
+            11,
+            8,
+            7,
+            11,
+            8,
+            6,
+            0
+          ],
+          "stop_reason": "newline",
+          "correct": false
+        }
+      },
+      {
+        "id": "88cb4674d28b80e93129326caaca2580876fb6b8412bac74834b42bb5f65ffc6",
+        "prompt": "Ashra Dellis",
+        "expected": "333-512-9823",
+        "teacher": {
+          "loss_sum": 0.08583118207752705,
+          "token_total": 13,
+          "token_correct": 13,
+          "sequence_correct": 1
+        },
+        "generation": {
+          "prediction": "333-512-9823",
+          "token_ids": [
+            6,
+            6,
+            6,
+            2,
+            8,
+            4,
+            5,
+            2,
+            12,
+            11,
+            5,
+            6,
+            0
+          ],
+          "stop_reason": "newline",
+          "correct": true
+        }
+      },
+      {
+        "id": "a985f2a82d4711ec2b9dc0188dab0dd0d2f743b3cd2799092cffc129789886b5",
+        "prompt": "Calio Blackham",
+        "expected": "644-383-9643",
+        "teacher": {
+          "loss_sum": 0.07344668707810342,
+          "token_total": 13,
+          "token_correct": 13,
+          "sequence_correct": 1
+        },
+        "generation": {
+          "prediction": "644-383-9643",
+          "token_ids": [
+            9,
+            7,
+            7,
+            2,
+            6,
+            11,
+            6,
+            2,
+            12,
+            9,
+            7,
+            6,
+            0
+          ],
+          "stop_reason": "newline",
+          "correct": true
+        }
+      },
+      {
+        "id": "2e2b0f22082c89236813bacb17d7761f8ab72c2a9a26cdd4c13dec0589a248ff",
+        "prompt": "Brie Brownby",
+        "expected": "403-662-3854",
+        "teacher": {
+          "loss_sum": 0.08661156892776489,
+          "token_total": 13,
+          "token_correct": 13,
+          "sequence_correct": 1
+        },
+        "generation": {
+          "prediction": "403-662-3854",
+          "token_ids": [
+            7,
+            3,
+            6,
+            2,
+            9,
+            9,
+            5,
+            2,
+            6,
+            11,
+            8,
+            7,
+            0
+          ],
+          "stop_reason": "newline",
+          "correct": true
+        }
+      },
+      {
+        "id": "7d0e039305b3cb4f1a65104ac5255dde0a7f8a0f51b6eb7ae516f504a5543580",
+        "prompt": "Iano Carers",
+        "expected": "713-441-0043",
+        "teacher": {
+          "loss_sum": 0.08082129876129329,
+          "token_total": 13,
+          "token_correct": 13,
+          "sequence_correct": 1
+        },
+        "generation": {
+          "prediction": "713-441-0043",
+          "token_ids": [
+            10,
+            4,
+            6,
+            2,
+            7,
+            7,
+            4,
+            2,
+            3,
+            3,
+            7,
+            6,
+            0
+          ],
+          "stop_reason": "newline",
+          "correct": true
+        }
+      },
+      {
+        "id": "35d29884d00cd1916a3bab813f26c1638223c5958c7c557443d0881ceea1567f",
+        "prompt": "Danay Dellby",
+        "expected": "405-250-2639",
+        "teacher": {
+          "loss_sum": 0.08697604481130838,
+          "token_total": 13,
+          "token_correct": 13,
+          "sequence_correct": 1
+        },
+        "generation": {
+          "prediction": "405-250-2639",
+          "token_ids": [
+            7,
+            3,
+            8,
+            2,
+            5,
+            8,
+            3,
+            2,
+            5,
+            9,
+            6,
+            12,
+            0
+          ],
+          "stop_reason": "newline",
+          "correct": true
+        }
+      },
+      {
+        "id": "a86495d9efc5367f00cda7471e570bec850cb8bb7641263bf3338c489de3edfc",
+        "prompt": "Cela Cooker",
+        "expected": "400-377-3079",
+        "teacher": {
+          "loss_sum": 0.10246706008911133,
+          "token_total": 13,
+          "token_correct": 13,
+          "sequence_correct": 1
+        },
+        "generation": {
+          "prediction": "400-377-3079",
+          "token_ids": [
+            7,
+            3,
+            3,
+            2,
+            6,
+            10,
+            10,
+            2,
+            6,
+            3,
+            10,
+            12,
+            0
+          ],
+          "stop_reason": "newline",
+          "correct": true
+        }
+      },
+      {
+        "id": "8d9d478e7cc5fb4dc1859f72fa1ae21d97aa790c93c0abd34ff386182f710b5f",
+        "prompt": "Devus Craneham",
+        "expected": "764-617-8175",
+        "teacher": {
+          "loss_sum": 0.10074461391195655,
+          "token_total": 13,
+          "token_correct": 13,
+          "sequence_correct": 1
+        },
+        "generation": {
+          "prediction": "764-617-8175",
+          "token_ids": [
+            10,
+            9,
+            7,
+            2,
+            9,
+            4,
+            10,
+            2,
+            11,
+            4,
+            10,
+            8,
+            0
+          ],
+          "stop_reason": "newline",
+          "correct": true
+        }
+      },
+      {
+        "id": "b9af2262b1642439cb132cdf5163489da1ca0281df33ebbe14da731a98ff74a8",
+        "prompt": "Giaas Blairmore",
+        "expected": "441-661-4853",
+        "teacher": {
+          "loss_sum": 0.08091445127502084,
+          "token_total": 13,
+          "token_correct": 13,
+          "sequence_correct": 1
+        },
+        "generation": {
+          "prediction": "441-661-4853",
+          "token_ids": [
+            7,
+            7,
+            4,
+            2,
+            9,
+            9,
+            4,
+            2,
+            7,
+            11,
+            8,
+            6,
+            0
+          ],
+          "stop_reason": "newline",
+          "correct": true
+        }
+      },
+      {
+        "id": "3109c110e26da7c70b918050cef427f5a4c8e1207ef93fe5dd74cc4b4083b692",
+        "prompt": "Isaas Birchwood",
+        "expected": "529-218-2718",
+        "teacher": {
+          "loss_sum": 0.10866370936855674,
+          "token_total": 13,
+          "token_correct": 13,
+          "sequence_correct": 1
+        },
+        "generation": {
+          "prediction": "529-218-2718",
+          "token_ids": [
+            8,
+            5,
+            12,
+            2,
+            5,
+            4,
+            11,
+            2,
+            5,
+            10,
+            4,
+            11,
+            0
+          ],
+          "stop_reason": "newline",
+          "correct": true
+        }
+      },
+      {
+        "id": "153418c0246c81e48cb608e713ac8b580f8f7a021ba2be8890891a0afd2cdffa",
+        "prompt": "Gilar Cassmore",
+        "expected": "688-486-4298",
+        "teacher": {
+          "loss_sum": 0.08754441188648343,
+          "token_total": 13,
+          "token_correct": 13,
+          "sequence_correct": 1
+        },
+        "generation": {
+          "prediction": "688-486-4298",
+          "token_ids": [
+            9,
+            11,
+            11,
+            2,
+            7,
+            11,
+            9,
+            2,
+            7,
+            5,
+            12,
+            11,
+            0
+          ],
+          "stop_reason": "newline",
+          "correct": true
+        }
+      }
+    ],
+    "partitions": {
+      "A_all": {
+        "status": "ok",
+        "entry_ids": [
+          "ace61da22cd0b942a7419ea62ee0f9f066a9bcff41c26a635170a88d027845c2",
+          "599be7afce06af94d6cde9abba161e1d1264ac6f50413297a41e235ccc2e9f58",
+          "4ee770901656b55f5e23af1cd283f0c54f64de98088aca4a2e3fab9e51c94f4e",
+          "f7277408509ece105adb4248aa33cf5a2eb0d8edce8c749ba664a0b48c76e7d1",
+          "c34a3ca48fa323ea9eae6ace99df6a75bda8beb53f051c9218def819823659c7",
+          "cc4211b8767a33f8fde11a0482eb4296583a4bf4cef757f4b45b2499d7ab5dcd",
+          "56692899cdc2101b7e7bcac0d6629b6102ffb79492bc077988b936a1c592acfb",
+          "ce49b8d613d88ad008c42ecb8658976941f541439ce4eff5b8f67f10330adeeb",
+          "bbb6ec8417b42305108645e277b7b7916c76e8295f8f66a57231750248491145",
+          "d45988a8d5886a451c6596c00e2f2624c90420773f010ddf15b076fea6b1dada"
+        ],
+        "generation": {
+          "correct": 0,
+          "total": 10,
+          "accuracy": 0.0,
+          "stop_counts": {
+            "newline": 10,
+            "budget": 0,
+            "context": 0
+          }
+        },
+        "teacher_forced": {
+          "loss": 2.5452507335979204,
+          "loss_sum": 330.88259536772966,
+          "token_correct": 54,
+          "token_total": 130,
+          "token_accuracy": 0.4153846153846154,
+          "sequence_correct": 0,
+          "sequence_total": 10,
+          "sequence_accuracy": 0.0
+        }
+      },
+      "A_replayed": {
+        "status": "not_applicable",
+        "entry_ids": [],
+        "generation": {
+          "correct": 0,
+          "total": 0,
+          "accuracy": null,
+          "stop_counts": {
+            "newline": 0,
+            "budget": 0,
+            "context": 0
+          }
+        },
+        "teacher_forced": {
+          "loss": null,
+          "loss_sum": 0,
+          "token_correct": 0,
+          "token_total": 0,
+          "token_accuracy": null,
+          "sequence_correct": 0,
+          "sequence_total": 0,
+          "sequence_accuracy": null
+        }
+      },
+      "A_unreplayed": {
+        "status": "ok",
+        "entry_ids": [
+          "ace61da22cd0b942a7419ea62ee0f9f066a9bcff41c26a635170a88d027845c2",
+          "599be7afce06af94d6cde9abba161e1d1264ac6f50413297a41e235ccc2e9f58",
+          "4ee770901656b55f5e23af1cd283f0c54f64de98088aca4a2e3fab9e51c94f4e",
+          "f7277408509ece105adb4248aa33cf5a2eb0d8edce8c749ba664a0b48c76e7d1",
+          "c34a3ca48fa323ea9eae6ace99df6a75bda8beb53f051c9218def819823659c7",
+          "cc4211b8767a33f8fde11a0482eb4296583a4bf4cef757f4b45b2499d7ab5dcd",
+          "56692899cdc2101b7e7bcac0d6629b6102ffb79492bc077988b936a1c592acfb",
+          "ce49b8d613d88ad008c42ecb8658976941f541439ce4eff5b8f67f10330adeeb",
+          "bbb6ec8417b42305108645e277b7b7916c76e8295f8f66a57231750248491145",
+          "d45988a8d5886a451c6596c00e2f2624c90420773f010ddf15b076fea6b1dada"
+        ],
+        "generation": {
+          "correct": 0,
+          "total": 10,
+          "accuracy": 0.0,
+          "stop_counts": {
+            "newline": 10,
+            "budget": 0,
+            "context": 0
+          }
+        },
+        "teacher_forced": {
+          "loss": 2.5452507335979204,
+          "loss_sum": 330.88259536772966,
+          "token_correct": 54,
+          "token_total": 130,
+          "token_accuracy": 0.4153846153846154,
+          "sequence_correct": 0,
+          "sequence_total": 10,
+          "sequence_accuracy": 0.0
+        }
+      },
+      "A_probe": {
+        "status": "ok",
+        "entry_ids": [
+          "ace61da22cd0b942a7419ea62ee0f9f066a9bcff41c26a635170a88d027845c2",
+          "599be7afce06af94d6cde9abba161e1d1264ac6f50413297a41e235ccc2e9f58",
+          "c34a3ca48fa323ea9eae6ace99df6a75bda8beb53f051c9218def819823659c7"
+        ],
+        "generation": {
+          "correct": 0,
+          "total": 3,
+          "accuracy": 0.0,
+          "stop_counts": {
+            "newline": 3,
+            "budget": 0,
+            "context": 0
+          }
+        },
+        "teacher_forced": {
+          "loss": 2.37428045226261,
+          "loss_sum": 92.5969376382418,
+          "token_correct": 15,
+          "token_total": 39,
+          "token_accuracy": 0.38461538461538464,
+          "sequence_correct": 0,
+          "sequence_total": 3,
+          "sequence_accuracy": 0.0
+        }
+      },
+      "B": {
+        "status": "ok",
+        "entry_ids": [
+          "88cb4674d28b80e93129326caaca2580876fb6b8412bac74834b42bb5f65ffc6",
+          "a985f2a82d4711ec2b9dc0188dab0dd0d2f743b3cd2799092cffc129789886b5",
+          "2e2b0f22082c89236813bacb17d7761f8ab72c2a9a26cdd4c13dec0589a248ff",
+          "7d0e039305b3cb4f1a65104ac5255dde0a7f8a0f51b6eb7ae516f504a5543580",
+          "35d29884d00cd1916a3bab813f26c1638223c5958c7c557443d0881ceea1567f",
+          "a86495d9efc5367f00cda7471e570bec850cb8bb7641263bf3338c489de3edfc",
+          "8d9d478e7cc5fb4dc1859f72fa1ae21d97aa790c93c0abd34ff386182f710b5f",
+          "b9af2262b1642439cb132cdf5163489da1ca0281df33ebbe14da731a98ff74a8",
+          "3109c110e26da7c70b918050cef427f5a4c8e1207ef93fe5dd74cc4b4083b692",
+          "153418c0246c81e48cb608e713ac8b580f8f7a021ba2be8890891a0afd2cdffa"
+        ],
+        "generation": {
+          "correct": 10,
+          "total": 10,
+          "accuracy": 1.0,
+          "stop_counts": {
+            "newline": 10,
+            "budget": 0,
+            "context": 0
+          }
+        },
+        "teacher_forced": {
+          "loss": 0.006877084832208661,
+          "loss_sum": 0.8940210281871259,
+          "token_correct": 130,
+          "token_total": 130,
+          "token_accuracy": 1.0,
+          "sequence_correct": 10,
+          "sequence_total": 10,
+          "sequence_accuracy": 1.0
+        }
+      }
+    }
+  }
+}

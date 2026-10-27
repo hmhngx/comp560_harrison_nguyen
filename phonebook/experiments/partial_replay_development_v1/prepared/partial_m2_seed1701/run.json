@@ -1,0 +1,76 @@
+{
+  "condition": "partial_m2_seed1701",
+  "initialization": "phase_a",
+  "initial_state_sha256": "dbe633116c62f6371042f1a592a1bb14791a6208f217c976595297d510260f30",
+  "optimizer_started_empty": true,
+  "row_weights": [
+    0.01923076994717121,
+    0.01923076994717121,
+    0.003846153849735856,
+    0.003846153849735856,
+    0.003846153849735856,
+    0.003846153849735856,
+    0.003846153849735856,
+    0.003846153849735856,
+    0.003846153849735856,
+    0.003846153849735856,
+    0.003846153849735856,
+    0.003846153849735856
+  ],
+  "binary_sha256": "ff95e9a67f4ab0b2588f4a8691bfb6dc5abde0c75fe01d961bbd53af21e60f8d",
+  "training_text_sha256": "66e67c270000799ebe0f8638327488c00587c3ccdfb65a70f08524e50a49afb0",
+  "work": {
+    "updates": 500,
+    "training_sequences": 6000,
+    "supervised_tokens": 78000,
+    "padded_input_tokens": 168000
+  },
+  "sequence_budget_unused": 0,
+  "training_seconds": 21.75642319902545,
+  "evaluation_seconds": 32.59314880007878,
+  "diagnostic_seconds": 0.25199259998044,
+  "diagnostics": [
+    {
+      "update": 1,
+      "partition": "A_probe",
+      "analyst_only": true,
+      "loss_before": 0.028570961207151413,
+      "loss_after": 0.03844573348760605,
+      "actual_loss_change": 0.009874772280454636,
+      "linear_term": 0.0009712998289614916,
+      "quadratic_term": 0.0060585737228393555,
+      "second_order_residual": 0.0028448987286537886,
+      "delta_l2": 0.3294478952884674
+    },
+    {
+      "update": 100,
+      "partition": "A_probe",
+      "analyst_only": true,
+      "loss_before": 1.680071473121643,
+      "loss_after": 1.6808947324752808,
+      "actual_loss_change": 0.0008232593536376953,
+      "linear_term": 0.0008247458608821034,
+      "quadratic_term": 3.0685296223964542e-06,
+      "second_order_residual": -4.555036866804585e-06,
+      "delta_l2": 0.01764851063489914
+    },
+    {
+      "update": 300,
+      "partition": "A_probe",
+      "analyst_only": true,
+      "loss_before": 1.7353177070617676,
+      "loss_after": 1.7355411052703857,
+      "actual_loss_change": 0.00022339820861816406,
+      "linear_term": 0.00022294712834991515,
+      "quadratic_term": 4.5908728907306795e-07,
+      "second_order_residual": -8.007020824152278e-09,
+      "delta_l2": 0.009391563944518566
+    }
+  ],
+  "parameter_count": 110528,
+  "parameter_bytes": 442112,
+  "optimizer_tensor_bytes": 884340,
+  "retained_replay_records": 2,
+  "anchor_tensor_bytes": 0,
+  "retained_replay_utf8_bytes": 55
+}

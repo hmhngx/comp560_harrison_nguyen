@@ -1,0 +1,74 @@
+{
+  "condition": "plain_b",
+  "initialization": "phase_a",
+  "initial_state_sha256": "dbe633116c62f6371042f1a592a1bb14791a6208f217c976595297d510260f30",
+  "optimizer_started_empty": true,
+  "row_weights": [
+    0.007692307699471712,
+    0.007692307699471712,
+    0.007692307699471712,
+    0.007692307699471712,
+    0.007692307699471712,
+    0.007692307699471712,
+    0.007692307699471712,
+    0.007692307699471712,
+    0.007692307699471712,
+    0.007692307699471712
+  ],
+  "binary_sha256": "2202349bc6b510893d02b0e740f641a757c9ef78cdfb2b5176097f9eac8ed41e",
+  "training_text_sha256": "89930f178d693ed12250bf380ca01af11b807fd477003bb266ccb82105928858",
+  "work": {
+    "updates": 600,
+    "training_sequences": 6000,
+    "supervised_tokens": 78000,
+    "padded_input_tokens": 168000
+  },
+  "sequence_budget_unused": 0,
+  "training_seconds": 26.787283298675902,
+  "evaluation_seconds": 43.3144881001208,
+  "diagnostic_seconds": 0.262941499997396,
+  "diagnostics": [
+    {
+      "update": 1,
+      "partition": "A_probe",
+      "analyst_only": true,
+      "loss_before": 0.028570961207151413,
+      "loss_after": 0.03838394582271576,
+      "actual_loss_change": 0.009812984615564346,
+      "linear_term": 0.0009823004947975278,
+      "quadratic_term": 0.006040644831955433,
+      "second_order_residual": 0.0027900392888113856,
+      "delta_l2": 0.32935816049575806
+    },
+    {
+      "update": 100,
+      "partition": "A_probe",
+      "analyst_only": true,
+      "loss_before": 2.275989055633545,
+      "loss_after": 2.2795021533966064,
+      "actual_loss_change": 0.0035130977630615234,
+      "linear_term": 0.0035145417787134647,
+      "quadratic_term": 7.3552564572310075e-06,
+      "second_order_residual": -8.799272109172307e-06,
+      "delta_l2": 0.017600560560822487
+    },
+    {
+      "update": 300,
+      "partition": "A_probe",
+      "analyst_only": true,
+      "loss_before": 2.5766446590423584,
+      "loss_after": 2.577618360519409,
+      "actual_loss_change": 0.0009737014770507812,
+      "linear_term": 0.0009772019693627954,
+      "quadratic_term": 3.9639735405216925e-07,
+      "second_order_residual": -3.896889666066272e-06,
+      "delta_l2": 0.00950024276971817
+    }
+  ],
+  "parameter_count": 110528,
+  "parameter_bytes": 442112,
+  "optimizer_tensor_bytes": 884340,
+  "retained_replay_records": 0,
+  "anchor_tensor_bytes": 0,
+  "retained_replay_utf8_bytes": 0
+}

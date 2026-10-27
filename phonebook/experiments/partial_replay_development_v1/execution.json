@@ -1,0 +1,31 @@
+{
+  "started_at_utc": "2026-10-21T03:51:13.191519+00:00",
+  "argv": [
+    "phonebook/run_partial_replay.py",
+    "run",
+    "--protocol",
+    "phonebook/docs/review-2026-10-20/replay-membership-evidence/prepared/protocol.json",
+    "--protocol-sha256",
+    "8bd47398f7ea33564e646dbcf04e6e9c84aa6344bf778a642b2b9f4b8093bd30",
+    "--checkpoint",
+    "phonebook/out_phaseA/model.pth",
+    "--checkpoint-sha256",
+    "6b1669a5a620352512ab7d1bae1e550caa315cdc7d82f1440f6c0a22d7a94303",
+    "--meta",
+    "phonebook/data_phaseA/meta.pkl",
+    "--meta-sha256",
+    "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9",
+    "--out-root",
+    "phonebook/experiments/partial_replay_development_v1"
+  ],
+  "python_executable": "C:\\Users\\minhh\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+  "python": "3.12.10",
+  "torch": "2.12.0+cpu",
+  "numpy": "2.1.3",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "threads": 1,
+  "specification_sha256": "d54a941e5cd794e590eadfc197395e55d4954988fdf5b030d8787f2af911d2f3",
+  "git_status_before": " M README.md\n M completion_core/training.py\n M phonebook/audit_experiment.py\n M phonebook/run_experiment.py\n M phonebook/run_lr_sweep.py\n M train.py\n?? completion_core/objectives.py\n?? completion_core/validation.py\n?? phonebook/docs/replay-membership-protocol.md\n?? phonebook/docs/review-2026-10-20/\n?? phonebook/docs/week-2026-10-12-to-20.md\n?? phonebook/docs/weighted-objective-analysis.md\n?? phonebook/evaluate_replay.py\n?? phonebook/replay_protocol.py\n?? phonebook/run_partial_replay.py\n?? phonebook/verify_weighted_objective.py\n?? tests/test_audit_initializations.py\n?? tests/test_logging_invariance.py\n?? tests/test_loss_aggregation.py\n?? tests/test_numeric_validation.py\n?? tests/test_partial_replay.py\n?? tests/test_replay_evaluation.py\n?? tests/test_replay_protocol.py\n?? tests/test_weighted_objective.py\n",
+  "device": "cpu",
+  "dtype": "float32"
+}

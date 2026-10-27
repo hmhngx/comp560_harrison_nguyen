@@ -1,0 +1,13 @@
+{
+  "status": "training_completed_pending_audit",
+  "specification_sha256": "d54a941e5cd794e590eadfc197395e55d4954988fdf5b030d8787f2af911d2f3",
+  "completed_at_utc": "2026-10-21T03:56:34.093781+00:00",
+  "conditions": [
+    "plain_b",
+    "partial_m1_seed1701",
+    "partial_m2_seed1701",
+    "partial_m5_seed1701",
+    "full_replay",
+    "fresh_joint"
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "schema": "phonebook-development-pilot-v1",
+  "stage": "development_only",
+  "protocol_sha256": "8bd47398f7ea33564e646dbcf04e6e9c84aa6344bf778a642b2b9f4b8093bd30",
+  "initial_checkpoint_sha256": "6b1669a5a620352512ab7d1bae1e550caa315cdc7d82f1440f6c0a22d7a94303",
+  "initial_meta_sha256": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9",
+  "model_config": {
+    "seq_len": 29,
+    "d_model": 64,
+    "n_heads": 2,
+    "n_layers": 2
+  },
+  "settings": {
+    "seed": 42,
+    "lr": 0.001,
+    "weight_decay": 0.1,
+    "grad_clip": 1.0,
+    "primary_updates": 300,
+    "secondary_updates": 100,
+    "sequence_budget": 6000,
+    "evaluation_interval": 10,
+    "diagnostic_updates": [
+      1,
+      100,
+      300
+    ]
+  },
+  "source_sha256": {
+    "completion_core/__init__.py": "5d2b102a5a2ccff9e54bf2e24b46b52e1ee1e1d33d691ff1330b22d496642073",
+    "completion_core/cli.py": "f625ba67f32757bf79abc7ff17233aa5b9e5a5d43eaff3892bb73f5ea5172b83",
+    "completion_core/dataset_generators.py": "5a999b3e52246e0b69e01908f324d36e4607b2d726d698ae295b1d8f77b79d71",
+    "completion_core/inference.py": "e83f7913fd6d8ee2ed97d65250f4be1a0663e8d7f2b46c029040d8582dd2a9a8",
+    "completion_core/modeling.py": "00eb808fe66b11b4279685699af16ec98ba19cd949bcb081bdc25061fc80b00b",
+    "completion_core/objectives.py": "8e26b073ced8d8ed2795923a0f4647fb19b3c9241431f33110f56e8f9265e382",
+    "completion_core/prep.py": "b496afb3022da1f099aef243ffc103a070da0115d2f8b5f6feeef79d95040b5f",
+    "completion_core/training.py": "65f53b93e67588f103e2ff9314debf7d2028cac09690d5c73e5830f987d6f82b",
+    "completion_core/validation.py": "3a3e1ebb22574688c212713f96c33bb4586ce2129950cbca3e2f7e9ab7f8c169",
+    "completion_core/vocabulary.py": "1b25bf5755a528bb97ce8d84a9f4f0e1d7fbe70ad9a54a9ebad0311faefca2f3",
+    "phonebook/evaluate_replay.py": "24d73f8a4956093dd166699333dd036c4cd20502690e264fe0ce33f77de7347b",
+    "phonebook/prepare_phonebook.py": "da1d847428bf8f5c06b8d23b4046f0e27503d032cab0bc2be74308008cba48a6",
+    "phonebook/replay_protocol.py": "ab56ae719a9eaa73b0ca6e9f6b8a6948f14489b9f29eb557259927acb298fe65",
+    "phonebook/run_partial_replay.py": "da60e3b32ec9639fbe74ad1d29fee9a0f633bf842a1609906c3a0114307a8025"
+  },
+  "base_commit": "8b4ccf34ca6351f7914596e8138da3a358cce1db",
+  "working_tree_dirty": true,
+  "objective": "B-only: L_B; replay/joint: 0.5 token-mean L_A_subset + 0.5 token-mean L_B",
+  "order": "protocol training IDs, unique ordered full batch, no shuffle",
+  "optimizer": {
+    "name": "AdamW",
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "amsgrad": false,
+    "foreach": false,
+    "fused": false,
+    "l2sp_lambda": 0.0
+  },
+  "sampling_limit": "Recall, minima, first/sustained recall and integral measured only at declared evaluation updates",
+  "confirmation_ready": false
+}
