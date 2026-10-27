@@ -121,6 +121,41 @@ Notice that overall accuracy exceeds 30% (with default settings, accuracy reache
 
 ## Running the Test Suite
 
+New training runs use separate DataLoader random generators for training and
+evaluation. Changing `--accuracy-interval` therefore does not change the training
+shuffle stream. The policy and seed are saved in the checkpoint's
+`training_config` and the policy is printed in the training log.
+
+Use `--loader-rng legacy` when reproducing the earlier shared-RNG training
+behavior, with its recorded accuracy interval, environment, and other settings.
+New default runs may produce different weights and metrics from historical runs;
+use a new output directory and record the new code revision. This mode controls
+the loaders only; it does not promise cross-device or cross-version determinism.
+For original checkpoint bytes or historical artifact hashes, use the recorded
+code revision too: new checkpoints include additional training metadata.
+
+Epoch losses in new runs are mean task cross-entropy over supervised target
+tokens, excluding masked targets and the L2-SP penalty. `Train Loss` is an online
+mean measured before each batch's update; validation loss evaluates the fixed
+post-epoch model. Progress lines show individual batch means. Earlier code
+averaged batch means equally, so loss curves and CSV values can change when
+batches have different target-token counts, even with `--loader-rng legacy`.
+Use the recorded code revision to reproduce those historical metrics. The epoch
+helpers require unweighted mean cross-entropy with `ignore_index=-100`; other
+reductions or class weights need their own explicit reporting denominator.
+
+The phonebook [replay-objective derivation](phonebook/docs/weighted-objective-analysis.md)
+and [numerical verification](phonebook/docs/review-2026-10-20/weighted-objective-review.md)
+explain literal duplication versus fixed book-mass weighting. Run its source-only
+checks with `python -m pytest tests/test_weighted_objective.py -q -m "not integration"`.
+The separate `phonebook/run_partial_replay.py` CLI now executes the bounded weighted development pilot; see its [execution report](phonebook/docs/review-2026-10-20/partial-replay-execution.md).
+
+The versioned [replay-membership protocol](phonebook/docs/replay-membership-protocol.md)
+prepares pinned subsets and fixed probes, checks the prepared training text, and
+reports replayed/unreplayed/probe scores with readable and fresh-inference audits.
+Standalone partition reports explicitly leave training execution unverified. The separate runner audit verifies the saved development recipe by deterministically rerunning training.
+Run its self-contained checks with `python -m pytest tests/test_replay_protocol.py tests/test_replay_evaluation.py -q`.
+
 The project includes a lightweight `pytest` suite with fast unit checks and slower integration checks. Get into the habit of running these tests so you can verify changes as you refactor the codebase.
 
 ### Fast tests (recommended during active refactoring)

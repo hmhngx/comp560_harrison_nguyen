@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "candidate_score_cells_checked": 420,
+  "correct_target_rows_checked": 21,
+  "focused_tests_passed": 10,
+  "accepted_source_evidence_hashes_unchanged": 13,
+  "local_links_checked": 4,
+  "sha256": {
+    "phonebook/docs/review-2026-10-21/probe-specificity-exploration/diagnostic.json": "e1e24db8f64df4dcfb6a682766f063a4b91482921cac5507ae70ff228772f10c",
+    "phonebook/docs/review-2026-10-21/analyze_probe_specificity.py": "a1817208bc687e64ec1a02d4ddb99b78d9227aa933f83c027b597a9a1890acf3",
+    "tests/test_probe_specificity_analysis.py": "8ec29e349ed52e7fbef5ce627038000ad655667004e2b9e83f30f3b9d9f60628",
+    "phonebook/docs/review-2026-10-21/probe-analysis-tests.xml": "cc3527e86ce4b5828ba7e7aaf623ad8e5307f79c2443fcc5d5da6faf496f64d0",
+    "phonebook/docs/review-2026-10-21/probe-analysis-tests.txt": "8b40acbdbde41a115a96963e6656d3b6f656d85a7fde28c4e247ff923d72f065",
+    "phonebook/docs/next-step-decision-2026-10-21.md": "a835bee1789d736ce1ab0b0dc29f69d0ceffeea423c74afb9c333e6b9f988a2c"
+  },
+  "final_document_check_at_utc": "2026-10-21T04:34:37.092019+00:00"
+}

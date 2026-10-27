@@ -1,0 +1,7 @@
+phase_a_reference free recall 3 /3; candidate rank intervals [(1, 1), (1, 1), (1, 1)] ; name advantages [35.077, 16.272, 29.524]
+plain_b free recall 0 /3; candidate rank intervals [(3, 3), (4, 4), (4, 4)] ; name advantages [26.718, 16.864, 14.125]
+partial_m1_seed1701 free recall 0 /3; candidate rank intervals [(2, 2), (3, 3), (4, 4)] ; name advantages [24.225, 17.637, 22.026]
+partial_m2_seed1701 free recall 0 /3; candidate rank intervals [(2, 2), (2, 2), (4, 4)] ; name advantages [35.697, 16.655, 22.301]
+partial_m5_seed1701 free recall 0 /3; candidate rank intervals [(1, 1), (1, 1), (4, 4)] ; name advantages [42.519, 25.426, 22.254]
+full_replay free recall 3 /3; candidate rank intervals [(1, 1), (1, 1), (1, 1)] ; name advantages [51.375, 31.18, 48.733]
+fresh_joint free recall 3 /3; candidate rank intervals [(1, 1), (1, 1), (1, 1)] ; name advantages [35.802, 19.545, 31.107]
