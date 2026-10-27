@@ -23,6 +23,11 @@ import time
 from pathlib import Path
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
+
+from completion_core.validation import is_finite_number, is_torch_seed
+
 DEFAULT_ADAPT_FROM = Path("phonebook/out_phaseA/model.pth")
 DEFAULT_DATA_DIR = Path("phonebook/data_phaseB")
 DEFAULT_CONFIG = Path("phonebook/config/phonebook.py")
@@ -141,8 +146,14 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    if any(l2sp_lambda < 0 for l2sp_lambda in args.l2sp_lambdas):
-        parser.error("--l2sp-lambdas values must all be >= 0")
+    if any(not is_finite_number(lr) or lr <= 0 for lr in args.lrs):
+        parser.error("--lrs values must all be finite and > 0")
+    if any(not is_finite_number(value) or value < 0 for value in args.l2sp_lambdas):
+        parser.error("--l2sp-lambdas values must all be finite and >= 0")
+    if args.epochs < 1 or args.timeout < 1:
+        parser.error("--epochs and --timeout must be integers >= 1")
+    if any(not is_torch_seed(seed) for seed in args.seeds):
+        parser.error("--seeds must all be integers in [-2**63, 2**64 - 1]")
 
     args.out_root.mkdir(parents=True, exist_ok=True)
     manifest_path = args.out_root / "manifest.jsonl"
@@ -201,7 +212,7 @@ def main() -> None:
             "git_dirty": git_state["dirty"],
         }
         with manifest_path.open("a", encoding="utf-8") as fh:
-            fh.write(json.dumps(record) + "\n")
+            fh.write(json.dumps(record, allow_nan=False) + "\n")
 
         if timed_out:
             print(f"  TIMED OUT after {args.timeout}s -- treating as a failure, moving on")

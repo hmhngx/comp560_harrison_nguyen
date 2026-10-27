@@ -25,6 +25,7 @@ from completion_core.modeling import (
     make_checkpoint_payload,
 )
 from completion_core.training import SequenceDataset, evaluate_epoch_metrics, run_epoch
+from completion_core.validation import is_finite_number, is_torch_seed
 from completion_core.vocabulary import Vocabulary
 
 
@@ -54,6 +55,7 @@ class TrainConfig:
     log_interval: int = 50  # batches between progress prints
     accuracy_interval: int = 10  # epochs between no-grad train/val accuracy checks
     l2sp_lambda: float = 0.0  # L2-SP penalty strength; 0.0 means off
+    loader_rng: str = "isolated"  # "legacy" reproduces the historical shared RNG
 
 
 # ---------------------------------------------------------------------------
@@ -82,6 +84,11 @@ def parse_args() -> TrainConfig:
     parser.add_argument("--epochs", type=int, default=argparse.SUPPRESS)
     parser.add_argument("--lr", type=float, default=argparse.SUPPRESS)
     parser.add_argument("--seed", type=int, default=argparse.SUPPRESS, help="Random seed (default: 42)")
+    parser.add_argument(
+        "--loader-rng", choices=("isolated", "legacy"), default=argparse.SUPPRESS,
+        help="DataLoader RNG policy: isolated training/evaluation streams (default), "
+             "or the historical shared global stream for reproduction",
+    )
     parser.add_argument(
         "--accuracy-interval",
         type=int,
@@ -132,19 +139,30 @@ def parse_args() -> TrainConfig:
     if hasattr(args, "epochs"): cfg.epochs = args.epochs
     if hasattr(args, "lr"): cfg.lr = args.lr
     if hasattr(args, "seed"): cfg.seed = args.seed
+    if hasattr(args, "loader_rng"): cfg.loader_rng = args.loader_rng
     if hasattr(args, "accuracy_interval"): cfg.accuracy_interval = args.accuracy_interval
     if hasattr(args, "adapt_from"): cfg.adapt_from = args.adapt_from
     if hasattr(args, "l2sp_lambda"): cfg.l2sp_lambda = args.l2sp_lambda
 
-    if cfg.accuracy_interval < 1:
-        raise ValueError("--accuracy-interval must be >= 1")
+    for field in ("embedding_dim", "n_heads", "n_layers", "batch_size", "epochs",
+                  "log_interval", "accuracy_interval"):
+        value = getattr(cfg, field)
+        if isinstance(value, bool) or not isinstance(value, int) or value < 1:
+            raise ValueError(f"--{field.replace('_', '-')} must be an integer >= 1")
 
-    if cfg.l2sp_lambda < 0:
-        raise ValueError(
-            "--l2sp-lambda must be >= 0 (a negative value has no valid "
-            "interpretation -- it would reward drift from the checkpoint "
-            "instead of penalizing it)."
-        )
+    if cfg.embedding_dim % cfg.n_heads != 0:
+        raise ValueError("--embedding-dim must be divisible by --n-heads")
+    if not is_torch_seed(cfg.seed):
+        raise ValueError("--seed must be an integer in [-2**63, 2**64 - 1]")
+
+    for field in ("lr", "weight_decay", "grad_clip", "l2sp_lambda"):
+        value = getattr(cfg, field)
+        if not is_finite_number(value) or value < 0 or (field == "lr" and value == 0):
+            bound = "> 0" if field == "lr" else ">= 0"
+            raise ValueError(f"--{field.replace('_', '-')} must be a finite number {bound}")
+
+    if cfg.loader_rng not in ("isolated", "legacy"):
+        raise ValueError("--loader-rng must be isolated or legacy")
 
     if cfg.l2sp_lambda > 0 and cfg.adapt_from is None:
         raise ValueError(
@@ -173,6 +191,28 @@ def load_adapt_state_dict(checkpoint_path: Path, device: str) -> dict[str, torch
     return state_dict
 
 
+def build_data_loaders(
+    train_dataset, val_dataset, *, batch_size: int, seed: int, loader_rng: str = "isolated",
+) -> tuple[DataLoader, DataLoader, DataLoader]:
+    """Keep evaluation iterator creation from advancing the training shuffle.
+
+    Even shuffle=False iterators draw a base seed. Give each loader a separate
+    generator without drawing from the model's global RNG. Legacy mode supplies
+    no generator, matching the original DataLoader construction exactly.
+    """
+    if loader_rng not in ("isolated", "legacy"):
+        raise ValueError("loader_rng must be isolated or legacy")
+
+    def generator():
+        return torch.Generator().manual_seed(seed) if loader_rng == "isolated" else None
+
+    return (
+        DataLoader(train_dataset, batch_size=batch_size, shuffle=True, generator=generator()),
+        DataLoader(train_dataset, batch_size=batch_size, shuffle=False, generator=generator()),
+        DataLoader(val_dataset, batch_size=batch_size, shuffle=False, generator=generator()),
+    )
+
+
 def main() -> None:
     cfg = parse_args()
     
@@ -195,15 +235,11 @@ def main() -> None:
     # inputs are tokens [0..n-2] and targets are shifted tokens [1..n-1].
     print(f"Batch shape     : ({cfg.batch_size}, {seq_len - 1})")
 
-    train_loader = DataLoader(
-        train_dataset, batch_size=cfg.batch_size, shuffle=True
+    train_loader, train_eval_loader, val_loader = build_data_loaders(
+        train_dataset, val_dataset, batch_size=cfg.batch_size, seed=cfg.seed,
+        loader_rng=cfg.loader_rng,
     )
-    train_eval_loader = DataLoader(
-        train_dataset, batch_size=cfg.batch_size, shuffle=False
-    )
-    val_loader = DataLoader(
-        val_dataset, batch_size=cfg.batch_size, shuffle=False
-    )
+    print(f"DataLoader RNG policy: {cfg.loader_rng}")
 
     # --- Model, optimiser, loss ---
     model = CompletionTransformer(
@@ -377,7 +413,9 @@ def main() -> None:
         n_heads=cfg.n_heads,
         n_layers=cfg.n_layers,
     )
-    torch.save(make_checkpoint_payload(model, model_cfg), weights_path)
+    checkpoint = make_checkpoint_payload(model, model_cfg)
+    checkpoint["training_config"] = {"seed": cfg.seed, "loader_rng": cfg.loader_rng}
+    torch.save(checkpoint, weights_path)
     print(f"Weights saved to {weights_path}")
 
     # --- Final Statistics ---

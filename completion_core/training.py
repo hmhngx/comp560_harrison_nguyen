@@ -94,6 +94,20 @@ def l2sp_penalty(model: nn.Module, old_params: dict[str, torch.Tensor]) -> torch
     )
 
 
+def _check_task_criterion(criterion: nn.Module) -> None:
+    # The reporting denominator and completion masks below assume this contract.
+    if not isinstance(criterion, nn.CrossEntropyLoss) or criterion.reduction != "mean" \
+            or criterion.weight is not None or criterion.ignore_index != -100:
+        raise ValueError("Expected unweighted mean CrossEntropyLoss with ignore_index=-100")
+
+
+def _supervised_tokens(targets: torch.Tensor) -> int:
+    count = (targets != -100).sum().item()
+    if count == 0:
+        raise ValueError("Each batch must contain at least one supervised target token")
+    return count
+
+
 def run_epoch(
     model: nn.Module,
     loader: DataLoader,
@@ -108,15 +122,23 @@ def run_epoch(
     old_params: Optional[dict[str, torch.Tensor]] = None,
     l2sp_lambda: float = 0.0,
 ) -> float:
+    """Mean task CE per supervised token, measured before each batch update.
+
+    In training this is an online mean for the changing model, not a final-model
+    dataset evaluation. Reporting weights do not rescale batch gradients or L2-SP.
+    """
+    _check_task_criterion(criterion)
     is_train = optimizer is not None
     model.train(is_train)
 
     total_loss = 0.0
+    token_total = 0
     ctx = torch.enable_grad() if is_train else torch.no_grad()
 
     with ctx:
         for batch_idx, (x_batch, y_batch) in enumerate(loader):
             x_batch, y_batch = x_batch.to(device), y_batch.to(device)
+            batch_tokens = _supervised_tokens(y_batch)
             logits = model(x_batch)
             loss = criterion(logits.view(-1, vocab_size), y_batch.view(-1))
 
@@ -138,9 +160,12 @@ def run_epoch(
                         f"Loss: {loss.item():.4f}"
                     )
 
-            total_loss += loss.item()
+            total_loss += loss.item() * batch_tokens
+            token_total += batch_tokens
 
-    return total_loss / len(loader)
+    if token_total == 0:
+        raise ValueError("Cannot compute epoch loss from an empty loader")
+    return total_loss / token_total
 
 
 def evaluate_epoch_metrics(
@@ -150,6 +175,8 @@ def evaluate_epoch_metrics(
     criterion: nn.Module,
     device: str,
 ) -> EpochMetrics:
+    """Evaluate the fixed model; loss is mean CE per supervised target token."""
+    _check_task_criterion(criterion)
     model.eval()
 
     total_loss = 0.0
@@ -161,26 +188,29 @@ def evaluate_epoch_metrics(
     with torch.no_grad():
         for x_batch, y_batch in loader:
             x_batch, y_batch = x_batch.to(device), y_batch.to(device)
+            batch_tokens = _supervised_tokens(y_batch)
             logits = model(x_batch)
             loss = criterion(logits.view(-1, vocab_size), y_batch.view(-1))
-            total_loss += loss.item()
+            total_loss += loss.item() * batch_tokens
 
             preds = torch.argmax(logits, dim=-1)
             supervised_mask = y_batch != -100
 
             token_correct += ((preds == y_batch) & supervised_mask).sum().item()
-            token_total += supervised_mask.sum().item()
+            token_total += batch_tokens
 
             has_supervised = supervised_mask.any(dim=1)
             masked_match = ((preds == y_batch) | (~supervised_mask)).all(dim=1)
             sequence_correct += (masked_match & has_supervised).sum().item()
             sequence_total += has_supervised.sum().item()
 
-    token_accuracy = (token_correct / token_total) if token_total > 0 else 0.0
+    if token_total == 0:
+        raise ValueError("Cannot compute epoch metrics from an empty loader")
+    token_accuracy = token_correct / token_total
     sequence_accuracy = (sequence_correct / sequence_total) if sequence_total > 0 else 0.0
 
     return EpochMetrics(
-        loss=total_loss / len(loader),
+        loss=total_loss / token_total,
         token_accuracy=token_accuracy,
         sequence_accuracy=sequence_accuracy,
         token_correct=token_correct,

@@ -31,6 +31,7 @@ if str(ROOT_DIR) not in sys.path:
 import torch
 
 from completion_core.vocabulary import Vocabulary
+from completion_core.validation import is_finite_number, is_torch_seed
 from phonebook.evaluate_checkpoint import evaluate_checkpoint, sha256
 from phonebook.make_replay_input import build_mixture_lines
 from phonebook.prepare_phonebook import load_phonebook_lines
@@ -53,10 +54,6 @@ def _is_int(value) -> bool:
     return isinstance(value, int) and not isinstance(value, bool)
 
 
-def _is_number(value) -> bool:
-    return isinstance(value, (int, float)) and not isinstance(value, bool)
-
-
 def _check_keys(obj, required: set, optional: set, where: str) -> None:
     if not isinstance(obj, dict):
         raise ValueError(f"{where} must be an object")
@@ -76,8 +73,8 @@ def validate_spec(spec: dict) -> None:
                 {"description", "decision_rules", "evaluate_books", "require_one_update_per_epoch",
                  "timeout_seconds"}, "spec")
     _check_id(spec["name"], "spec")
-    if not _is_int(spec["seed"]):
-        raise ValueError("spec seed must be an integer")
+    if not is_torch_seed(spec["seed"]):
+        raise ValueError("spec seed must be an integer in [-2**63, 2**64 - 1]")
     if not isinstance(spec["model_config"], str):
         raise ValueError("spec model_config must be a path string")
     books = spec.get("evaluate_books", ["A", "B"])
@@ -121,16 +118,16 @@ def validate_spec(spec: dict) -> None:
             raise ValueError(f"{where} train copies must be integers >= 0 with at least one copy in total")
         if condition["eval_book"] not in ("A", "B"):
             raise ValueError(f"{where} eval_book must be A or B")
-        if not _is_number(condition["lr"]) or condition["lr"] <= 0:
-            raise ValueError(f"{where} lr must be a positive number")
+        if not is_finite_number(condition["lr"]) or condition["lr"] <= 0:
+            raise ValueError(f"{where} lr must be a finite positive number")
         for field in ("epochs", "batch_size", "accuracy_interval"):
             if not _is_int(condition[field]) or condition[field] < 1:
                 raise ValueError(f"{where} {field} must be an integer >= 1")
         if not isinstance(condition["adapt"], bool):
             raise ValueError(f"{where} adapt must be a boolean")
         l2sp = condition.get("l2sp_lambda", 0.0)
-        if not _is_number(l2sp) or l2sp < 0:
-            raise ValueError(f"{where} l2sp_lambda must be a number >= 0")
+        if not is_finite_number(l2sp) or l2sp < 0:
+            raise ValueError(f"{where} l2sp_lambda must be a finite number >= 0")
         if l2sp > 0 and not condition["adapt"]:
             raise ValueError(f"{where}: l2sp_lambda > 0 requires adapt=true (there is no anchor otherwise)")
         if condition["adapt"] and any("init" not in scenario for scenario in spec["scenarios"]):
@@ -140,13 +137,22 @@ def validate_spec(spec: dict) -> None:
     if uses_b and any("book_b" not in scenario for scenario in spec["scenarios"]):
         raise ValueError("book_b is required in every scenario because a condition or evaluate_books uses book B")
 
+    # Also cover arbitrary nested metadata such as decision_rules, before I/O.
+    json.dumps(spec, allow_nan=False)
+
 
 def load_spec(path: Path) -> dict:
-    return json.loads(Path(path).read_text(encoding="utf-8"))
+    def reject_constant(value):
+        raise ValueError(f"Nonfinite JSON constant is not allowed: {value}")
+
+    spec = json.loads(Path(path).read_text(encoding="utf-8"), parse_constant=reject_constant)
+    # Valid JSON numeric syntax such as 1e999 can still overflow Python floats.
+    json.dumps(spec, allow_nan=False)
+    return spec
 
 
 def canonical_sha256(obj) -> str:
-    return hashlib.sha256(json.dumps(obj, sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()
+    return hashlib.sha256(json.dumps(obj, sort_keys=True, separators=(",", ":"), allow_nan=False).encode("utf-8")).hexdigest()
 
 
 def mode_name(train: dict, eval_book: str) -> str:
@@ -221,7 +227,7 @@ def write_text_lf(path: Path, text: str) -> None:
 
 
 def write_json(path: Path, obj) -> None:
-    write_text_lf(path, json.dumps(obj, indent=2) + "\n")
+    write_text_lf(path, json.dumps(obj, indent=2, allow_nan=False) + "\n")
 
 
 def read_metrics(path: Path) -> list[dict]:
@@ -409,7 +415,7 @@ def run_spec(spec: dict, out_root: Path, *, repo_root: Path, provenance_fn=git_s
                   "timestamp_utc": datetime.now(timezone.utc).isoformat(), "returncode": returncode,
                   "timed_out": timed_out, "elapsed_seconds": elapsed, "log_sha256": sha256(log_path)}
         with (out_root / "manifest.jsonl").open("a", encoding="utf-8", newline="\n") as file:
-            file.write(json.dumps(record) + "\n")
+            file.write(json.dumps(record, allow_nan=False) + "\n")
         if timed_out:
             raise RuntimeError(f"Training timed out: {run['id']}; the failure is recorded in the manifest.")
         if returncode != 0:
@@ -443,7 +449,7 @@ def main() -> None:
     spec_path = str(args.spec.resolve().relative_to(ROOT_DIR)).replace("\\", "/") \
         if args.spec.resolve().is_relative_to(ROOT_DIR) else str(args.spec)
     if args.dry_run:
-        print(json.dumps(plan(spec, repo_root=ROOT_DIR, provenance=git_state(), spec_path=spec_path), indent=2))
+        print(json.dumps(plan(spec, repo_root=ROOT_DIR, provenance=git_state(), spec_path=spec_path), indent=2, allow_nan=False))
         return
     if args.out_root is None:
         parser.error("--out-root is required unless --dry-run is given")
