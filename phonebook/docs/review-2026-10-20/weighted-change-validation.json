@@ -1,0 +1,104 @@
+{
+  "base_commit": "8b4ccf34ca6351f7914596e8138da3a358cce1db",
+  "working_tree_changes_uncommitted": true,
+  "source_and_evidence_sha256": {
+    "README.md": "9d24c0f13c7979257a183392f715ac8292e1f5ef4e25ed78a9dabc4d24a5616a",
+    "phonebook/docs/review-2026-10-20/README.md": "a1d8ecba10193c339f221e3740f54c49118ea4cc7b5301e431fbcf5155debc06",
+    "phonebook/docs/review-2026-10-20/weighted-matrix-output.txt": "54169da0566de376d39de1ab850c735b693e17748f26a4d5d85f361ee72833ae",
+    "phonebook/docs/review-2026-10-20/weighted-objective-evidence/parameter-comparisons.csv": "aea4204318808f96429786ceff65cd16b411cb629a8965da13a739392fdffd38",
+    "phonebook/docs/review-2026-10-20/weighted-objective-evidence/summary.json": "90e770d5a6df2148fb579a158bcfd7921e69451cb0808228d77eade848f1f89a",
+    "phonebook/docs/review-2026-10-20/weighted-objective-evidence/verification.json": "716bc1c63cd87edd9659f70bbd85579f29c263fedf05be3e7184d20496a87012",
+    "phonebook/docs/review-2026-10-20/weighted-objective-preservation.json": "43f941b020f9b72257fc4f03a2e43eb94125e2758c56e8f2471ef22513e68874",
+    "phonebook/docs/review-2026-10-20/weighted-objective-review.md": "6c2f929785cd0f2092189801e06fb2bafbc7dcaed17d2e6e3ad3e452ede20666",
+    "phonebook/docs/review-2026-10-20/weighted-tests-focused.txt": "9463a99d097de1acb8190313612b9ac504806666b5e135ecb866e0e6223f627f",
+    "phonebook/docs/review-2026-10-20/weighted-tests-focused.xml": "1253c71424bcc298eaa1e0770ab0f037e3d90c4b1b88b51ecf0fb8cd85c99b2d",
+    "phonebook/docs/review-2026-10-20/weighted-tests-full.txt": "9fe2fa75053990e978e7444a80c3731f812f612c3bc272db8c9ce53063357b27",
+    "phonebook/docs/review-2026-10-20/weighted-tests-full.xml": "fdc9687aefc79eeeff8190bc2cbb2ed55146c8a6044605841fa4ae276e9572a5",
+    "phonebook/docs/review-2026-10-20/weighted-tests-initial.txt": "745a105db75c699d35ae6c7b6af63dad357d1cf86a40207eddba3a25df365377",
+    "phonebook/docs/review-2026-10-20/weighted-tests-provenance.txt": "b37ebe7f2aaf54488cf412c844bda29725a917308fc0a0b20988bc35128c361c",
+    "phonebook/docs/review-2026-10-20/weighted-tests-source-only.txt": "ca5842b5b527c319447a01d156dcba2bd98374403583bb85476398166c8765de",
+    "phonebook/docs/week-2026-10-12-to-20.md": "43ad4d782bfeb152070b0121c9f4573458aadb51ede0e4e5936624cf6510f6e7",
+    "phonebook/docs/weighted-objective-analysis.md": "5926983d687d6b20e9059a709f486fcdfdd709808be9080edb5f813bc4f075d1",
+    "phonebook/verify_weighted_objective.py": "8e6fd2b0e70ceb92f291f246755aab205088d5521cc962c4afb7ef100f7b5a0a",
+    "tests/test_weighted_objective.py": "00827b54cb70470dce3cbe6dcd494d587aae354ab3cb4caaa53c7511a04b2985"
+  },
+  "matrix": {
+    "status": "passed",
+    "cases": 81,
+    "model_config": {
+      "seq_len": 29,
+      "d_model": 64,
+      "n_heads": 2,
+      "n_layers": 2
+    },
+    "vocab_size": 67,
+    "parameter_tensors_per_model": 29,
+    "gradient_tensor_comparisons": 4698,
+    "analytic_penalty_tensor_checks": 2349,
+    "coordinate_checks_including_analytic_penalty": 26858304,
+    "max_scalar_absolute_error": 1.7763568394002505e-15,
+    "max_abs_error_by_kind": {
+      "task": 2.7755575615628914e-16,
+      "with_l2sp": 2.7755575615628914e-16,
+      "l2sp_derivative": 1.6696713456276768e-17
+    },
+    "max_gradient_tolerance_fraction": 1.7882886856187366e-06,
+    "token_totals": {
+      "original_phonebooks": [
+        130,
+        130
+      ],
+      "unequal_target_lengths": [
+        29,
+        23
+      ],
+      "unequal_book_sizes": [
+        26,
+        130
+      ]
+    },
+    "atol": 1e-10,
+    "rtol": 1e-09
+  },
+  "initial_test_suite": {
+    "failed": 10,
+    "passed": 30,
+    "missing_analytic_coverage_cases": 8,
+    "numeric_conversion_and_failure_serialization_defects": 2
+  },
+  "focused_suite": {
+    "tests": "50",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "54.337"
+  },
+  "additional_provenance_cases_passed": 3,
+  "source_only_suite": {
+    "passed": 49,
+    "deselected": 4,
+    "checkpoint_loading_forbidden": true
+  },
+  "full_suite": {
+    "tests": "498",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "566.199"
+  },
+  "new_test_cases": 53,
+  "unchanged_prior_python_files": 10,
+  "original_artifact_files_rehashed_after_all_checks": 1337,
+  "changed_original_artifacts": [],
+  "historical_full_local_audit_reused_from": "finite-loss-historical-validation.json",
+  "research_training_runs": 0,
+  "optimizer_steps": 0,
+  "training_cli_changed_in_this_gate": false,
+  "next_gate": "Immutable replay/probe membership and partitioned evaluation, then integration of the checked objective before the development pilot",
+  "limits": [
+    "Numerical checks use CPU float64; no float32/GPU/long-trajectory identity claim",
+    "Full historical-state matrix requires pinned local checkpoint and vocabulary",
+    "Source-only checks use the actual transformer with synthetic data",
+    "No retention or novelty result is established"
+  ]
+}

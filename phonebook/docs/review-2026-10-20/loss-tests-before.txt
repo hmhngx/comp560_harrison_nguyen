@@ -1,0 +1,164 @@
+FF.FFFFFFFFFFFFFF                                                        [100%]
+================================== FAILURES ===================================
+_________ test_evaluation_loss_is_mean_over_all_supervised_tokens[1] __________
+tests\test_loss_aggregation.py:43: in test_evaluation_loss_is_mean_over_all_supervised_tokens
+    assert epoch(model, loader) == pytest.approx(expected, abs=1e-12)
+E   assert 2.2222676211214396 == 2.857188256042074 � 1.0e-12
+E     
+E     comparison failed
+E     Obtained: 2.2222676211214396
+E     Expected: 2.857188256042074 � 1.0e-12
+_________ test_evaluation_loss_is_mean_over_all_supervised_tokens[2] __________
+tests\test_loss_aggregation.py:43: in test_evaluation_loss_is_mean_over_all_supervised_tokens
+    assert epoch(model, loader) == pytest.approx(expected, abs=1e-12)
+E   assert 3.3333787322325508 == 2.857188256042074 � 1.0e-12
+E     
+E     comparison failed
+E     Obtained: 3.3333787322325508
+E     Expected: 2.857188256042074 � 1.0e-12
+_ test_training_reports_online_token_loss_without_changing_any_updates[0.0-SGD] _
+tests\test_loss_aggregation.py:74: in test_training_reports_online_token_loss_without_changing_any_updates
+    assert reported == pytest.approx(weighted_loss / tokens, abs=1e-12)
+E   assert 3.316713607634214 == 2.8429038635292145 � 1.0e-12
+E     
+E     comparison failed
+E     Obtained: 3.316713607634214
+E     Expected: 2.8429038635292145 � 1.0e-12
+---------------------------- Captured stdout call -----------------------------
+Epoch 1/1 | Loss: 0.0000
+_ test_training_reports_online_token_loss_without_changing_any_updates[0.0-AdamW] _
+tests\test_loss_aggregation.py:74: in test_training_reports_online_token_loss_without_changing_any_updates
+    assert reported == pytest.approx(weighted_loss / tokens, abs=1e-12)
+E   assert 3.350014949237126 == 2.8714478706174247 � 1.0e-12
+E     
+E     comparison failed
+E     Obtained: 3.350014949237126
+E     Expected: 2.8714478706174247 � 1.0e-12
+---------------------------- Captured stdout call -----------------------------
+Epoch 1/1 | Loss: 0.0000
+_ test_training_reports_online_token_loss_without_changing_any_updates[0.3-SGD] _
+tests\test_loss_aggregation.py:74: in test_training_reports_online_token_loss_without_changing_any_updates
+    assert reported == pytest.approx(weighted_loss / tokens, abs=1e-12)
+E   assert 3.316713607634214 == 2.8429038635292145 � 1.0e-12
+E     
+E     comparison failed
+E     Obtained: 3.316713607634214
+E     Expected: 2.8429038635292145 � 1.0e-12
+---------------------------- Captured stdout call -----------------------------
+Epoch 1/1 | Loss: 0.0000
+_ test_training_reports_online_token_loss_without_changing_any_updates[0.3-AdamW] _
+tests\test_loss_aggregation.py:74: in test_training_reports_online_token_loss_without_changing_any_updates
+    assert reported == pytest.approx(weighted_loss / tokens, abs=1e-12)
+E   assert 3.316713229363948 == 2.842903539297558 � 1.0e-12
+E     
+E     comparison failed
+E     Obtained: 3.316713229363948
+E     Expected: 2.842903539297558 � 1.0e-12
+---------------------------- Captured stdout call -----------------------------
+Epoch 1/1 | Loss: 0.0000
+_ test_undefined_means_and_unsupported_criteria_fail_explicitly[empty-epoch] __
+tests\test_loss_aggregation.py:106: in test_undefined_means_and_unsupported_criteria_fail_explicitly
+    epoch(model, loader, criterion=criterion, optimizer=torch.optim.AdamW(model.parameters()))
+tests\test_loss_aggregation.py:32: in epoch
+    return run_epoch(model, loader, 2, criterion or nn.CrossEntropyLoss(ignore_index=-100),
+completion_core\training.py:143: in run_epoch
+    return total_loss / len(loader)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+E   ZeroDivisionError: float division by zero
+_ test_undefined_means_and_unsupported_criteria_fail_explicitly[empty-metrics] _
+tests\test_loss_aggregation.py:108: in test_undefined_means_and_unsupported_criteria_fail_explicitly
+    evaluate_epoch_metrics(model, loader, 2, criterion, "cpu")
+completion_core\training.py:183: in evaluate_epoch_metrics
+    loss=total_loss / len(loader),
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+E   ZeroDivisionError: float division by zero
+_ test_undefined_means_and_unsupported_criteria_fail_explicitly[all_masked-epoch] _
+tests\test_loss_aggregation.py:104: in test_undefined_means_and_unsupported_criteria_fail_explicitly
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+---------------------------- Captured stdout call -----------------------------
+Epoch 1/1 | Loss: nan
+_ test_undefined_means_and_unsupported_criteria_fail_explicitly[all_masked-metrics] _
+tests\test_loss_aggregation.py:104: in test_undefined_means_and_unsupported_criteria_fail_explicitly
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+__ test_undefined_means_and_unsupported_criteria_fail_explicitly[sum-epoch] ___
+tests\test_loss_aggregation.py:104: in test_undefined_means_and_unsupported_criteria_fail_explicitly
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+---------------------------- Captured stdout call -----------------------------
+Epoch 1/1 | Loss: 0.0002
+_ test_undefined_means_and_unsupported_criteria_fail_explicitly[sum-metrics] __
+tests\test_loss_aggregation.py:104: in test_undefined_means_and_unsupported_criteria_fail_explicitly
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_ test_undefined_means_and_unsupported_criteria_fail_explicitly[weighted-epoch] _
+tests\test_loss_aggregation.py:104: in test_undefined_means_and_unsupported_criteria_fail_explicitly
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+---------------------------- Captured stdout call -----------------------------
+Epoch 1/1 | Loss: 0.0000
+_ test_undefined_means_and_unsupported_criteria_fail_explicitly[weighted-metrics] _
+tests\test_loss_aggregation.py:104: in test_undefined_means_and_unsupported_criteria_fail_explicitly
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_ test_undefined_means_and_unsupported_criteria_fail_explicitly[other_ignore_index-epoch] _
+tests\test_loss_aggregation.py:106: in test_undefined_means_and_unsupported_criteria_fail_explicitly
+    epoch(model, loader, criterion=criterion, optimizer=torch.optim.AdamW(model.parameters()))
+tests\test_loss_aggregation.py:32: in epoch
+    return run_epoch(model, loader, 2, criterion or nn.CrossEntropyLoss(ignore_index=-100),
+completion_core\training.py:121: in run_epoch
+    loss = criterion(logits.view(-1, vocab_size), y_batch.view(-1))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python312\Lib\site-packages\torch\nn\modules\module.py:1778: in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python312\Lib\site-packages\torch\nn\modules\module.py:1789: in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python312\Lib\site-packages\torch\nn\modules\loss.py:1394: in forward
+    return F.cross_entropy(
+..\..\AppData\Local\Programs\Python\Python312\Lib\site-packages\torch\nn\functional.py:3507: in cross_entropy
+    return torch._C._nn.cross_entropy_loss(
+E   IndexError: Target -100 is out of bounds.
+_ test_undefined_means_and_unsupported_criteria_fail_explicitly[other_ignore_index-metrics] _
+tests\test_loss_aggregation.py:108: in test_undefined_means_and_unsupported_criteria_fail_explicitly
+    evaluate_epoch_metrics(model, loader, 2, criterion, "cpu")
+completion_core\training.py:165: in evaluate_epoch_metrics
+    loss = criterion(logits.view(-1, vocab_size), y_batch.view(-1))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python312\Lib\site-packages\torch\nn\modules\module.py:1778: in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python312\Lib\site-packages\torch\nn\modules\module.py:1789: in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python312\Lib\site-packages\torch\nn\modules\loss.py:1394: in forward
+    return F.cross_entropy(
+..\..\AppData\Local\Programs\Python\Python312\Lib\site-packages\torch\nn\functional.py:3507: in cross_entropy
+    return torch._C._nn.cross_entropy_loss(
+E   IndexError: Target -100 is out of bounds.
+=========================== short test summary info ===========================
+FAILED tests/test_loss_aggregation.py::test_evaluation_loss_is_mean_over_all_supervised_tokens[1]
+FAILED tests/test_loss_aggregation.py::test_evaluation_loss_is_mean_over_all_supervised_tokens[2]
+FAILED tests/test_loss_aggregation.py::test_training_reports_online_token_loss_without_changing_any_updates[0.0-SGD]
+FAILED tests/test_loss_aggregation.py::test_training_reports_online_token_loss_without_changing_any_updates[0.0-AdamW]
+FAILED tests/test_loss_aggregation.py::test_training_reports_online_token_loss_without_changing_any_updates[0.3-SGD]
+FAILED tests/test_loss_aggregation.py::test_training_reports_online_token_loss_without_changing_any_updates[0.3-AdamW]
+FAILED tests/test_loss_aggregation.py::test_undefined_means_and_unsupported_criteria_fail_explicitly[empty-epoch]
+FAILED tests/test_loss_aggregation.py::test_undefined_means_and_unsupported_criteria_fail_explicitly[empty-metrics]
+FAILED tests/test_loss_aggregation.py::test_undefined_means_and_unsupported_criteria_fail_explicitly[all_masked-epoch]
+FAILED tests/test_loss_aggregation.py::test_undefined_means_and_unsupported_criteria_fail_explicitly[all_masked-metrics]
+FAILED tests/test_loss_aggregation.py::test_undefined_means_and_unsupported_criteria_fail_explicitly[sum-epoch]
+FAILED tests/test_loss_aggregation.py::test_undefined_means_and_unsupported_criteria_fail_explicitly[sum-metrics]
+FAILED tests/test_loss_aggregation.py::test_undefined_means_and_unsupported_criteria_fail_explicitly[weighted-epoch]
+FAILED tests/test_loss_aggregation.py::test_undefined_means_and_unsupported_criteria_fail_explicitly[weighted-metrics]
+FAILED tests/test_loss_aggregation.py::test_undefined_means_and_unsupported_criteria_fail_explicitly[other_ignore_index-epoch]
+FAILED tests/test_loss_aggregation.py::test_undefined_means_and_unsupported_criteria_fail_explicitly[other_ignore_index-metrics]
+16 failed, 1 passed in 4.52s

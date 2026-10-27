@@ -1,0 +1,98 @@
+{
+  "status": "passed",
+  "verified_at_utc": "2026-10-21T04:05:32.719041+00:00",
+  "final_full_suite": {
+    "tests": 613,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "artifact_seal": {
+    "status": "passed",
+    "files": 337,
+    "manifest_sha256": "7552d5fd34ca9e52497b52f310d19c683720b1a8fb7a78a8f6ddc0f424256720"
+  },
+  "full_training_replay": {
+    "status": "passed",
+    "specification_sha256": "d54a941e5cd794e590eadfc197395e55d4954988fdf5b030d8787f2af911d2f3",
+    "training_recipe_reproduced": true,
+    "conditions": [
+      {
+        "condition": "plain_b",
+        "updates": 600,
+        "evaluation_points": 61,
+        "training_replayed": true
+      },
+      {
+        "condition": "partial_m1_seed1701",
+        "updates": 545,
+        "evaluation_points": 56,
+        "training_replayed": true
+      },
+      {
+        "condition": "partial_m2_seed1701",
+        "updates": 500,
+        "evaluation_points": 51,
+        "training_replayed": true
+      },
+      {
+        "condition": "partial_m5_seed1701",
+        "updates": 400,
+        "evaluation_points": 41,
+        "training_replayed": true
+      },
+      {
+        "condition": "full_replay",
+        "updates": 300,
+        "evaluation_points": 31,
+        "training_replayed": true
+      },
+      {
+        "condition": "fresh_joint",
+        "updates": 300,
+        "evaluation_points": 31,
+        "training_replayed": true
+      }
+    ],
+    "limitation": "Local deterministic recipe verification; external provenance and scientific validity remain separate"
+  },
+  "historical_artifacts_unchanged": 1337,
+  "prior_python_files_unchanged": 58,
+  "intentional_prior_python_change": {
+    "phonebook/verify_weighted_objective.py": {
+      "before": "8e6fd2b0e70ceb92f291f246755aab205088d5521cc962c4afb7ef100f7b5a0a",
+      "after": "8a837250fa5c7e7cbedf26601efc7be6482a0588ad9b67704f759773db034e42"
+    }
+  },
+  "historical_local_audit_runs": 159,
+  "historical_fresh_answers": 3180,
+  "reports_rebuilt_identically": [
+    "endpoints.csv",
+    "sampled-observations.csv",
+    "curves.csv",
+    "recall.png"
+  ],
+  "local_markdown_links_checked": 43,
+  "source_sha256": {
+    "completion_core/objectives.py": "8e26b073ced8d8ed2795923a0f4647fb19b3c9241431f33110f56e8f9265e382",
+    "phonebook/run_partial_replay.py": "da60e3b32ec9639fbe74ad1d29fee9a0f633bf842a1609906c3a0114307a8025",
+    "phonebook/report_partial_replay.py": "ee5c6eeecf2feea2896c6ce370b2dc9e1aecb1fdbfadfdea189ac5f6e77694da",
+    "tests/test_partial_replay.py": "26b9e83c9dae5627fa6d2437647a980125c79cc0a2d6da3c8ac1400a7953d016",
+    "phonebook/verify_weighted_objective.py": "8a837250fa5c7e7cbedf26601efc7be6482a0588ad9b67704f759773db034e42",
+    "phonebook/docs/review-2026-10-20/verify_partial_optimizer.py": "206a72dfd20b0e0bc465face14378e06e9a1b7aa7243282d0fb9c9540b59e41c",
+    "phonebook/docs/review-2026-10-20/verify_partial_delivery.py": "b6bd837fe4d41b2b04612d959172fe62295287725e9631db0e4c2d91b7eee273"
+  },
+  "evidence_sha256": {
+    "phonebook/docs/review-2026-10-20/partial-tests-final.xml": "987e5beb2e961cec4fc5aacbf24e751790f7f79fcce15d682f7c2626e22f146c",
+    "phonebook/docs/review-2026-10-20/partial-tests-final.txt": "e97e9a1c60d51186deac78cd3d40d4f9640b5b46f297b6cd1aa4db3d86ea1b17",
+    "phonebook/docs/review-2026-10-20/partial-pilot-replay-audit.txt": "c0e0f87ac3473c4969bf237126d80e4dae707f581d4ac23ccb556409fbd9eae2",
+    "phonebook/docs/review-2026-10-20/partial-historical-audits.json": "034dbf1054a553d2a264f9a0428fae2d7bc1d4764eae5e602a5442d32914602d",
+    "phonebook/docs/review-2026-10-20/partial-optimizer-verification.json": "31b81995db899a5d98f09e6649bb4c418533c66fb1eeec72905695075ad738ab",
+    "phonebook/docs/review-2026-10-20/partial-replay-results/artifact-manifest.json": "438ff545c5ec23acd8a7e08602d2692934963e7c33189ccfbe4f5eafa619955c"
+  },
+  "limitations": [
+    "Development only; one original dataset, initialization seed and subset draw",
+    "No confirmation data/training, professor meeting or exhaustive novelty review",
+    "Source hashes support reproducibility; no guarantee of 100% correctness"
+  ]
+}

@@ -1,0 +1,10 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+___ test_coedited_context_and_run_lengths_are_checked_against_training_text ___
+tests\test_audit_initializations.py:179: in test_coedited_context_and_run_lengths_are_checked_against_training_text
+    with pytest.raises(ValueError, match="(?i)initialization.*context"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+=========================== short test summary info ===========================
+FAILED tests/test_audit_initializations.py::test_coedited_context_and_run_lengths_are_checked_against_training_text
+1 failed, 40 deselected in 10.08s

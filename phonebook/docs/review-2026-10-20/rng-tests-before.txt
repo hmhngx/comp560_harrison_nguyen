@@ -1,0 +1,340 @@
+FF.                                                                      [100%]
+================================== FAILURES ===================================
+_ test_accuracy_interval_changes_neither_batches_nor_any_epoch_weights[full_batch] _
+tests\test_logging_invariance.py:75: in test_accuracy_interval_changes_neither_batches_nor_any_epoch_weights
+    assert candidate[0] == reference[0], f"logging every {interval} epochs changed training batches"
+E   AssertionError: logging every 5 epochs changed training batches
+E   assert [[[[7, 3, 2, ...], ...]], ...] == [[[[7, 3, 2, ...], ...]], ...]
+E     
+E     At index 1 diff: [[[10, 3, 1, 1], [7, 3, 2, 2], [9, 3, 2, 1], [8, 3, 1, 2], [4, 3, 1, 2], [11, 3, 2, 2], [5, 3, 2, 1], [6, 3, 1, 1]]] != [[[4, 3, 1, 2], [7, 3, 2, 2], [11, 3, 2, 2], [6, 3, 1, 1], [5, 3, 2, 1], [9, 3, 2, 1], [10, 3, 1, 1], [8, 3, 1, 2]]]
+E     Use -v to get more diff
+---------------------------- Captured stdout call -----------------------------
+Sequence length : 5 tokens
+Batch shape     : (16, 4)
+Trainable Model Parameters: 1,136
+Training on device: cpu
+Epoch 1/10 | Loss: 2.6161
+
+============================================================
+Epoch 1 summary | Time: 0.24s
+  Train loss : 2.6161
+  Val loss   : 2.4287
+  Train acc  : token=4.17% seq=0.00%
+  Val acc    : token=4.17% seq=0.00%
+============================================================
+
+Epoch 2/10 | Loss: 2.4287
+
+============================================================
+Epoch 2 summary | Time: 0.02s
+  Train loss : 2.4287
+  Val loss   : 2.2623
+  Train acc  : token=16.67% seq=0.00%
+  Val acc    : token=16.67% seq=0.00%
+============================================================
+
+Epoch 3/10 | Loss: 2.2623
+
+============================================================
+Epoch 3 summary | Time: 0.02s
+  Train loss : 2.2623
+  Val loss   : 2.1131
+  Train acc  : token=50.00% seq=0.00%
+  Val acc    : token=50.00% seq=0.00%
+============================================================
+
+Epoch 4/10 | Loss: 2.1131
+
+============================================================
+Epoch 4 summary | Time: 0.02s
+  Train loss : 2.1131
+  Val loss   : 1.9799
+  Train acc  : token=58.33% seq=0.00%
+  Val acc    : token=58.33% seq=0.00%
+============================================================
+
+Epoch 5/10 | Loss: 1.9799
+
+============================================================
+Epoch 5 summary | Time: 0.02s
+  Train loss : 1.9799
+  Val loss   : 1.8607
+  Train acc  : token=66.67% seq=25.00%
+  Val acc    : token=66.67% seq=25.00%
+============================================================
+
+Epoch 6/10 | Loss: 1.8607
+
+============================================================
+Epoch 6 summary | Time: 0.01s
+  Train loss : 1.8607
+  Val loss   : 1.7543
+  Train acc  : token=70.83% seq=25.00%
+  Val acc    : token=70.83% seq=25.00%
+============================================================
+
+Epoch 7/10 | Loss: 1.7543
+
+============================================================
+Epoch 7 summary | Time: 0.01s
+  Train loss : 1.7543
+  Val loss   : 1.6579
+  Train acc  : token=66.67% seq=25.00%
+  Val acc    : token=66.67% seq=25.00%
+============================================================
+
+Epoch 8/10 | Loss: 1.6579
+
+============================================================
+Epoch 8 summary | Time: 0.02s
+  Train loss : 1.6579
+  Val loss   : 1.5684
+  Train acc  : token=62.50% seq=25.00%
+  Val acc    : token=62.50% seq=25.00%
+============================================================
+
+Epoch 9/10 | Loss: 1.5684
+
+============================================================
+Epoch 9 summary | Time: 0.02s
+  Train loss : 1.5684
+  Val loss   : 1.4831
+  Train acc  : token=66.67% seq=37.50%
+  Val acc    : token=66.67% seq=37.50%
+============================================================
+
+Epoch 10/10 | Loss: 1.4831
+
+============================================================
+Epoch 10 summary | Time: 0.01s
+  Train loss : 1.4831
+  Val loss   : 1.4004
+  Train acc  : token=75.00% seq=37.50%
+  Val acc    : token=75.00% seq=37.50%
+============================================================
+
+Metrics table log updated successfully at: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-319\test_accuracy_interval_changes0\interval1\metrics.csv
+Loss plot chart saved successfully at: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-319\test_accuracy_interval_changes0\interval1\loss_chart.png
+Weights saved to C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-319\test_accuracy_interval_changes0\interval1\model.pth
+
+============================================================
+TRAINING COMPLETE
+  Total Runtime    : 11.57 seconds
+  Final Train Loss : 1.4831
+  Final Val Loss   : 1.4004
+============================================================
+
+Sequence length : 5 tokens
+Batch shape     : (16, 4)
+Trainable Model Parameters: 1,136
+Training on device: cpu
+Epoch 1/10 | Loss: 2.6161
+Epoch 2/10 | Loss: 2.4287
+Epoch 3/10 | Loss: 2.2623
+Epoch 4/10 | Loss: 2.1131
+Epoch 5/10 | Loss: 1.9799
+
+============================================================
+Epoch 5 summary | Time: 0.02s
+  Train loss : 1.9799
+  Val loss   : 1.8607
+  Train acc  : token=66.67% seq=25.00%
+  Val acc    : token=66.67% seq=25.00%
+============================================================
+
+Epoch 6/10 | Loss: 1.8607
+Epoch 7/10 | Loss: 1.7543
+Epoch 8/10 | Loss: 1.6579
+Epoch 9/10 | Loss: 1.5684
+Epoch 10/10 | Loss: 1.4831
+
+============================================================
+Epoch 10 summary | Time: 0.01s
+  Train loss : 1.4831
+  Val loss   : 1.4004
+  Train acc  : token=75.00% seq=37.50%
+  Val acc    : token=75.00% seq=37.50%
+============================================================
+
+Metrics table log updated successfully at: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-319\test_accuracy_interval_changes0\interval5\metrics.csv
+Loss plot chart saved successfully at: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-319\test_accuracy_interval_changes0\interval5\loss_chart.png
+Weights saved to C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-319\test_accuracy_interval_changes0\interval5\model.pth
+
+============================================================
+TRAINING COMPLETE
+  Total Runtime    : 0.64 seconds
+  Final Train Loss : 1.4831
+  Final Val Loss   : 1.4004
+============================================================
+
+_ test_accuracy_interval_changes_neither_batches_nor_any_epoch_weights[partial_last_batch] _
+tests\test_logging_invariance.py:75: in test_accuracy_interval_changes_neither_batches_nor_any_epoch_weights
+    assert candidate[0] == reference[0], f"logging every {interval} epochs changed training batches"
+E   AssertionError: logging every 5 epochs changed training batches
+E   assert [[[[7, 3, 2, ... 2, 2]]], ...] == [[[[7, 3, 2, ... 1, 1]]], ...]
+E     
+E     At index 1 diff: [[[10, 3, 1, 1], [7, 3, 2, 2], [9, 3, 2, 1]], [[8, 3, 1, 2], [4, 3, 1, 2], [11, 3, 2, 2]], [[5, 3, 2, 1], [6, 3, 1, 1]]] != [[[4, 3, 1, 2], [7, 3, 2, 2], [11, 3, 2, 2]], [[6, 3, 1, 1], [5, 3, 2, 1], [9, 3, 2, 1]], [[10, 3, 1, 1], [8, 3, 1, 2]]]
+E     Use -v to get more diff
+---------------------------- Captured stdout call -----------------------------
+Sequence length : 5 tokens
+Batch shape     : (3, 4)
+Trainable Model Parameters: 1,136
+Training on device: cpu
+Epoch 1/10 | Loss: 2.6809
+
+============================================================
+Epoch 1 summary | Time: 0.05s
+  Train loss : 2.4543
+  Val loss   : 2.1332
+  Train acc  : token=50.00% seq=0.00%
+  Val acc    : token=50.00% seq=0.00%
+============================================================
+
+Epoch 2/10 | Loss: 2.2268
+
+============================================================
+Epoch 2 summary | Time: 0.04s
+  Train loss : 2.0367
+  Val loss   : 1.8006
+  Train acc  : token=66.67% seq=25.00%
+  Val acc    : token=66.67% seq=25.00%
+============================================================
+
+Epoch 3/10 | Loss: 1.8480
+
+============================================================
+Epoch 3 summary | Time: 0.04s
+  Train loss : 1.7076
+  Val loss   : 1.5409
+  Train acc  : token=66.67% seq=25.00%
+  Val acc    : token=66.67% seq=25.00%
+============================================================
+
+Epoch 4/10 | Loss: 1.5241
+
+============================================================
+Epoch 4 summary | Time: 0.04s
+  Train loss : 1.4722
+  Val loss   : 1.3223
+  Train acc  : token=70.83% seq=37.50%
+  Val acc    : token=70.83% seq=37.50%
+============================================================
+
+Epoch 5/10 | Loss: 1.3476
+
+============================================================
+Epoch 5 summary | Time: 0.05s
+  Train loss : 1.2541
+  Val loss   : 1.1205
+  Train acc  : token=79.17% seq=50.00%
+  Val acc    : token=79.17% seq=50.00%
+============================================================
+
+Epoch 6/10 | Loss: 1.1344
+
+============================================================
+Epoch 6 summary | Time: 0.04s
+  Train loss : 1.0582
+  Val loss   : 0.9380
+  Train acc  : token=70.83% seq=37.50%
+  Val acc    : token=70.83% seq=37.50%
+============================================================
+
+Epoch 7/10 | Loss: 0.9283
+
+============================================================
+Epoch 7 summary | Time: 0.04s
+  Train loss : 0.8884
+  Val loss   : 0.7847
+  Train acc  : token=75.00% seq=37.50%
+  Val acc    : token=75.00% seq=37.50%
+============================================================
+
+Epoch 8/10 | Loss: 0.7901
+
+============================================================
+Epoch 8 summary | Time: 0.04s
+  Train loss : 0.7455
+  Val loss   : 0.6740
+  Train acc  : token=75.00% seq=37.50%
+  Val acc    : token=75.00% seq=37.50%
+============================================================
+
+Epoch 9/10 | Loss: 0.7184
+
+============================================================
+Epoch 9 summary | Time: 0.03s
+  Train loss : 0.6554
+  Val loss   : 0.5972
+  Train acc  : token=75.00% seq=37.50%
+  Val acc    : token=75.00% seq=37.50%
+============================================================
+
+Epoch 10/10 | Loss: 0.6307
+
+============================================================
+Epoch 10 summary | Time: 0.04s
+  Train loss : 0.5845
+  Val loss   : 0.5399
+  Train acc  : token=79.17% seq=50.00%
+  Val acc    : token=79.17% seq=50.00%
+============================================================
+
+Metrics table log updated successfully at: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-319\test_accuracy_interval_changes1\interval1\metrics.csv
+Loss plot chart saved successfully at: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-319\test_accuracy_interval_changes1\interval1\loss_chart.png
+Weights saved to C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-319\test_accuracy_interval_changes1\interval1\model.pth
+
+============================================================
+TRAINING COMPLETE
+  Total Runtime    : 1.38 seconds
+  Final Train Loss : 0.5845
+  Final Val Loss   : 0.5399
+============================================================
+
+Sequence length : 5 tokens
+Batch shape     : (3, 4)
+Trainable Model Parameters: 1,136
+Training on device: cpu
+Epoch 1/10 | Loss: 2.6809
+Epoch 2/10 | Loss: 2.0980
+Epoch 3/10 | Loss: 1.7979
+Epoch 4/10 | Loss: 1.5445
+Epoch 5/10 | Loss: 1.3589
+
+============================================================
+Epoch 5 summary | Time: 0.03s
+  Train loss : 1.2428
+  Val loss   : 1.1115
+  Train acc  : token=79.17% seq=50.00%
+  Val acc    : token=79.17% seq=50.00%
+============================================================
+
+Epoch 6/10 | Loss: 1.1335
+Epoch 7/10 | Loss: 0.9436
+Epoch 8/10 | Loss: 0.8169
+Epoch 9/10 | Loss: 0.6664
+Epoch 10/10 | Loss: 0.5888
+
+============================================================
+Epoch 10 summary | Time: 0.04s
+  Train loss : 0.5857
+  Val loss   : 0.5331
+  Train acc  : token=83.33% seq=50.00%
+  Val acc    : token=83.33% seq=50.00%
+============================================================
+
+Metrics table log updated successfully at: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-319\test_accuracy_interval_changes1\interval5\metrics.csv
+Loss plot chart saved successfully at: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-319\test_accuracy_interval_changes1\interval5\loss_chart.png
+Weights saved to C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-319\test_accuracy_interval_changes1\interval5\model.pth
+
+============================================================
+TRAINING COMPLETE
+  Total Runtime    : 0.92 seconds
+  Final Train Loss : 0.5857
+  Final Val Loss   : 0.5331
+============================================================
+
+=========================== short test summary info ===========================
+FAILED tests/test_logging_invariance.py::test_accuracy_interval_changes_neither_batches_nor_any_epoch_weights[full_batch]
+FAILED tests/test_logging_invariance.py::test_accuracy_interval_changes_neither_batches_nor_any_epoch_weights[partial_last_batch]
+2 failed, 1 passed in 29.79s

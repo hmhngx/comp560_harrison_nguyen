@@ -1,0 +1,10 @@
+phase_a_float32_promoted_to_float64: original_phonebooks, 9 comparisons completed
+phase_a_float32_promoted_to_float64: unequal_target_lengths, 9 comparisons completed
+phase_a_float32_promoted_to_float64: unequal_book_sizes, 9 comparisons completed
+random_seed42: original_phonebooks, 9 comparisons completed
+random_seed42: unequal_target_lengths, 9 comparisons completed
+random_seed42: unequal_book_sizes, 9 comparisons completed
+random_seed123: original_phonebooks, 9 comparisons completed
+random_seed123: unequal_target_lengths, 9 comparisons completed
+random_seed123: unequal_book_sizes, 9 comparisons completed
+passed: 81 objective comparisons; phonebook\docs\review-2026-10-20\weighted-objective-evidence

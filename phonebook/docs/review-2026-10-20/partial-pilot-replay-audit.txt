@@ -1,0 +1,50 @@
+Audited plain_b (training replay: True)
+Audited partial_m1_seed1701 (training replay: True)
+Audited partial_m2_seed1701 (training replay: True)
+Audited partial_m5_seed1701 (training replay: True)
+Audited full_replay (training replay: True)
+Audited fresh_joint (training replay: True)
+{
+  "status": "passed",
+  "specification_sha256": "d54a941e5cd794e590eadfc197395e55d4954988fdf5b030d8787f2af911d2f3",
+  "training_recipe_reproduced": true,
+  "conditions": [
+    {
+      "condition": "plain_b",
+      "updates": 600,
+      "evaluation_points": 61,
+      "training_replayed": true
+    },
+    {
+      "condition": "partial_m1_seed1701",
+      "updates": 545,
+      "evaluation_points": 56,
+      "training_replayed": true
+    },
+    {
+      "condition": "partial_m2_seed1701",
+      "updates": 500,
+      "evaluation_points": 51,
+      "training_replayed": true
+    },
+    {
+      "condition": "partial_m5_seed1701",
+      "updates": 400,
+      "evaluation_points": 41,
+      "training_replayed": true
+    },
+    {
+      "condition": "full_replay",
+      "updates": 300,
+      "evaluation_points": 31,
+      "training_replayed": true
+    },
+    {
+      "condition": "fresh_joint",
+      "updates": 300,
+      "evaluation_points": 31,
+      "training_replayed": true
+    }
+  ],
+  "limitation": "Local deterministic recipe verification; external provenance and scientific validity remain separate"
+}

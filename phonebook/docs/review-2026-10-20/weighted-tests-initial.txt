@@ -1,0 +1,151 @@
+...............F..........FFFFFFFF....F.                                 [100%]
+================================== FAILURES ===================================
+______ test_conversion_to_float32_does_not_hide_invalid_weights[-1e-300] ______
+tests\test_weighted_objective.py:84: in test_conversion_to_float32_does_not_hide_invalid_weights
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_ test_actual_transformer_checks_every_parameter_for_both_objectives[choice0] _
+tests\test_weighted_objective.py:149: in test_actual_transformer_checks_every_parameter_for_both_objectives
+    assert {p["parameter"] for p in rows} == names
+E   AssertionError: assert set() == {'lm_head.wei...r1.bias', ...}
+E     
+E     Extra items in the right set:
+E     'transformer.layers.0.norm1.bias'
+E     'transformer.layers.1.self_attn.in_proj_weight'
+E     'transformer.layers.1.linear2.bias'
+E     'transformer.layers.0.norm2.weight'
+E     'transformer.layers.1.norm2.bias'...
+E     
+E     ...Full output truncated (25 lines hidden), use '-vv' to show
+_ test_actual_transformer_checks_every_parameter_for_both_objectives[choice1] _
+tests\test_weighted_objective.py:149: in test_actual_transformer_checks_every_parameter_for_both_objectives
+    assert {p["parameter"] for p in rows} == names
+E   AssertionError: assert set() == {'lm_head.wei...r1.bias', ...}
+E     
+E     Extra items in the right set:
+E     'transformer.layers.0.norm1.bias'
+E     'transformer.layers.1.self_attn.in_proj_weight'
+E     'transformer.layers.1.linear2.bias'
+E     'transformer.layers.0.norm2.weight'
+E     'transformer.layers.1.norm2.bias'...
+E     
+E     ...Full output truncated (25 lines hidden), use '-vv' to show
+_ test_actual_transformer_checks_every_parameter_for_both_objectives[choice2] _
+tests\test_weighted_objective.py:149: in test_actual_transformer_checks_every_parameter_for_both_objectives
+    assert {p["parameter"] for p in rows} == names
+E   AssertionError: assert set() == {'lm_head.wei...r1.bias', ...}
+E     
+E     Extra items in the right set:
+E     'transformer.layers.0.norm1.bias'
+E     'transformer.layers.1.self_attn.in_proj_weight'
+E     'transformer.layers.1.linear2.bias'
+E     'transformer.layers.0.norm2.weight'
+E     'transformer.layers.1.norm2.bias'...
+E     
+E     ...Full output truncated (25 lines hidden), use '-vv' to show
+_ test_actual_transformer_checks_every_parameter_for_both_objectives[choice3] _
+tests\test_weighted_objective.py:149: in test_actual_transformer_checks_every_parameter_for_both_objectives
+    assert {p["parameter"] for p in rows} == names
+E   AssertionError: assert set() == {'lm_head.wei...r1.bias', ...}
+E     
+E     Extra items in the right set:
+E     'transformer.layers.0.norm1.bias'
+E     'transformer.layers.1.self_attn.in_proj_weight'
+E     'transformer.layers.1.linear2.bias'
+E     'transformer.layers.0.norm2.weight'
+E     'transformer.layers.1.norm2.bias'...
+E     
+E     ...Full output truncated (25 lines hidden), use '-vv' to show
+_ test_actual_transformer_checks_every_parameter_for_both_objectives[choice4] _
+tests\test_weighted_objective.py:149: in test_actual_transformer_checks_every_parameter_for_both_objectives
+    assert {p["parameter"] for p in rows} == names
+E   AssertionError: assert set() == {'lm_head.wei...r1.bias', ...}
+E     
+E     Extra items in the right set:
+E     'transformer.layers.0.norm1.bias'
+E     'transformer.layers.1.self_attn.in_proj_weight'
+E     'transformer.layers.1.linear2.bias'
+E     'transformer.layers.0.norm2.weight'
+E     'transformer.layers.1.norm2.bias'...
+E     
+E     ...Full output truncated (25 lines hidden), use '-vv' to show
+_ test_actual_transformer_checks_every_parameter_for_both_objectives[choice5] _
+tests\test_weighted_objective.py:149: in test_actual_transformer_checks_every_parameter_for_both_objectives
+    assert {p["parameter"] for p in rows} == names
+E   AssertionError: assert set() == {'lm_head.wei...r1.bias', ...}
+E     
+E     Extra items in the right set:
+E     'transformer.layers.0.norm1.bias'
+E     'transformer.layers.1.self_attn.in_proj_weight'
+E     'transformer.layers.1.linear2.bias'
+E     'transformer.layers.0.norm2.weight'
+E     'transformer.layers.1.norm2.bias'...
+E     
+E     ...Full output truncated (25 lines hidden), use '-vv' to show
+_ test_actual_transformer_checks_every_parameter_for_both_objectives[choice6] _
+tests\test_weighted_objective.py:149: in test_actual_transformer_checks_every_parameter_for_both_objectives
+    assert {p["parameter"] for p in rows} == names
+E   AssertionError: assert set() == {'lm_head.wei...r1.bias', ...}
+E     
+E     Extra items in the right set:
+E     'transformer.layers.0.norm1.bias'
+E     'transformer.layers.1.self_attn.in_proj_weight'
+E     'transformer.layers.1.linear2.bias'
+E     'transformer.layers.0.norm2.weight'
+E     'transformer.layers.1.norm2.bias'...
+E     
+E     ...Full output truncated (25 lines hidden), use '-vv' to show
+_ test_actual_transformer_checks_every_parameter_for_both_objectives[choice7] _
+tests\test_weighted_objective.py:149: in test_actual_transformer_checks_every_parameter_for_both_objectives
+    assert {p["parameter"] for p in rows} == names
+E   AssertionError: assert set() == {'lm_head.wei...r1.bias', ...}
+E     
+E     Extra items in the right set:
+E     'transformer.layers.0.norm1.bias'
+E     'transformer.layers.1.self_attn.in_proj_weight'
+E     'transformer.layers.1.linear2.bias'
+E     'transformer.layers.0.norm2.weight'
+E     'transformer.layers.1.norm2.bias'...
+E     
+E     ...Full output truncated (25 lines hidden), use '-vv' to show
+________ test_failed_nonfinite_comparison_can_be_saved_as_strict_json _________
+tests\test_weighted_objective.py:193: in test_failed_nonfinite_comparison_can_be_saved_as_strict_json
+    verify.write_verification({"cases": [{"state": "unit", "fixture": "unit", **result}]}, tmp_path / "failure")
+phonebook\verify_weighted_objective.py:226: in write_verification
+    encoded = json.dumps(report, indent=2, allow_nan=False) + "\n"
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python312\Lib\json\__init__.py:238: in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python312\Lib\json\encoder.py:202: in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python312\Lib\json\encoder.py:432: in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+..\..\AppData\Local\Programs\Python\Python312\Lib\json\encoder.py:406: in _iterencode_dict
+    yield from chunks
+..\..\AppData\Local\Programs\Python\Python312\Lib\json\encoder.py:326: in _iterencode_list
+    yield from chunks
+..\..\AppData\Local\Programs\Python\Python312\Lib\json\encoder.py:406: in _iterencode_dict
+    yield from chunks
+..\..\AppData\Local\Programs\Python\Python312\Lib\json\encoder.py:406: in _iterencode_dict
+    yield from chunks
+..\..\AppData\Local\Programs\Python\Python312\Lib\json\encoder.py:398: in _iterencode_dict
+    yield _floatstr(value)
+          ^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python312\Lib\json\encoder.py:240: in floatstr
+    raise ValueError(
+E   ValueError: Out of range float values are not JSON compliant: nan
+=========================== short test summary info ===========================
+FAILED tests/test_weighted_objective.py::test_conversion_to_float32_does_not_hide_invalid_weights[-1e-300]
+FAILED tests/test_weighted_objective.py::test_actual_transformer_checks_every_parameter_for_both_objectives[choice0]
+FAILED tests/test_weighted_objective.py::test_actual_transformer_checks_every_parameter_for_both_objectives[choice1]
+FAILED tests/test_weighted_objective.py::test_actual_transformer_checks_every_parameter_for_both_objectives[choice2]
+FAILED tests/test_weighted_objective.py::test_actual_transformer_checks_every_parameter_for_both_objectives[choice3]
+FAILED tests/test_weighted_objective.py::test_actual_transformer_checks_every_parameter_for_both_objectives[choice4]
+FAILED tests/test_weighted_objective.py::test_actual_transformer_checks_every_parameter_for_both_objectives[choice5]
+FAILED tests/test_weighted_objective.py::test_actual_transformer_checks_every_parameter_for_both_objectives[choice6]
+FAILED tests/test_weighted_objective.py::test_actual_transformer_checks_every_parameter_for_both_objectives[choice7]
+FAILED tests/test_weighted_objective.py::test_failed_nonfinite_comparison_can_be_saved_as_strict_json
+10 failed, 30 passed in 33.26s

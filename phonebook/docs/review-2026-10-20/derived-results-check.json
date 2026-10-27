@@ -1,0 +1,50 @@
+[
+  {
+    "file": "e1_decision.json",
+    "same_content": true
+  },
+  {
+    "file": "e1_endpoints.csv",
+    "same_content": true
+  },
+  {
+    "file": "e1b_decision.json",
+    "same_content": true
+  },
+  {
+    "file": "e1b_endpoints.csv",
+    "same_content": true
+  },
+  {
+    "file": "e1b_vs_e1.json",
+    "same_content": true
+  },
+  {
+    "file": "e2_decision.json",
+    "same_content": true
+  },
+  {
+    "file": "e2_endpoints.csv",
+    "same_content": true
+  },
+  {
+    "file": "e2_replication.json",
+    "same_content": true
+  },
+  {
+    "file": "e3_best_k.json",
+    "same_content": true
+  },
+  {
+    "file": "e3_cells.csv",
+    "same_content": true
+  },
+  {
+    "file": "e3_cross_checks.json",
+    "same_content": true
+  },
+  {
+    "file": "e3_table.csv",
+    "same_content": true
+  }
+]

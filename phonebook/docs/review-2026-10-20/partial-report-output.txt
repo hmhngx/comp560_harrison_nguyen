@@ -1,0 +1,8 @@
+Audited plain_b (training replay: False)
+Audited partial_m1_seed1701 (training replay: False)
+Audited partial_m2_seed1701 (training replay: False)
+Audited partial_m5_seed1701 (training replay: False)
+Audited full_replay (training replay: False)
+Audited fresh_joint (training replay: False)
+Artifact manifest pin: 7552d5fd34ca9e52497b52f310d19c683720b1a8fb7a78a8f6ddc0f424256720
+Rebuilt 18 endpoint rows; controls pass: True

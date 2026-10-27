@@ -1,0 +1,10 @@
+......F.........................................                         [100%]
+================================== FAILURES ===================================
+_ test_rehashing_an_edited_manifest_cannot_bypass_source_and_selection_reconstruction[vocabulary_type] _
+tests\test_replay_protocol.py:90: in test_rehashing_an_edited_manifest_cannot_bypass_source_and_selection_reconstruction
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+=========================== short test summary info ===========================
+FAILED tests/test_replay_protocol.py::test_rehashing_an_edited_manifest_cannot_bypass_source_and_selection_reconstruction[vocabulary_type]
+1 failed, 47 passed in 5.25s

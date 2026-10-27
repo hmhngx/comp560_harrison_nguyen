@@ -1,0 +1,19 @@
+{
+  "unchanged_prior_python_sources": {
+    "train.py": "9b8adcb7df3e60e82c645b018307051cc11a12a97fdf90c1528b13fcb5c6c13f",
+    "completion_core/training.py": "65f53b93e67588f103e2ff9314debf7d2028cac09690d5c73e5830f987d6f82b",
+    "completion_core/validation.py": "3a3e1ebb22574688c212713f96c33bb4586ce2129950cbca3e2f7e9ab7f8c169",
+    "phonebook/run_experiment.py": "4a200f3d43dfcf33b3111ad90636c5308da0b23c181fb007140c34910eba60a6",
+    "phonebook/run_lr_sweep.py": "995db0f392698299861c1ae434a1603d6bea7c81e5aa4b95f1b3d26727069365",
+    "phonebook/audit_experiment.py": "d9acd28494c88b784d53d3f40974601205af47bab386c65068fa11feb1397d3b",
+    "tests/test_numeric_validation.py": "1fb01f3115ae6e755636f7e3800c13d672789b486d6d9a00196b0905b59c1bd9",
+    "tests/test_loss_aggregation.py": "755708db98da7f89bd960220a8ff56ac1ac323f705b64affdb36ddcacb0295ca",
+    "tests/test_logging_invariance.py": "bbd5975bb2f6dd47b9edcba03ad42324fb8a10d4df454d56bbd2035b2479e44b",
+    "tests/test_audit_initializations.py": "f98c20c7b19e6a1da0f48f310efc094c12b6fca518552d27ffd9a1f7646e59c1"
+  },
+  "prior_python_files_checked": 10,
+  "original_artifact_files_checked": 1337,
+  "changed_original_artifacts": [],
+  "historical_audit_reused": "finite-loss-historical-validation.json",
+  "fresh_historical_audits_not_repeated": "Training, evaluation and auditor implementations are unchanged from the preceding validated gate."
+}

@@ -1,0 +1,113 @@
+{
+  "nonfinite_spec_values": [
+    {
+      "field": "lr",
+      "value": "nan",
+      "accepted": true
+    },
+    {
+      "field": "lr",
+      "value": "inf",
+      "accepted": true
+    },
+    {
+      "field": "l2sp_lambda",
+      "value": "nan",
+      "accepted": true
+    },
+    {
+      "field": "l2sp_lambda",
+      "value": "inf",
+      "accepted": true
+    }
+  ],
+  "nonfinite_train_cli": {
+    "lambda": "nan",
+    "penalty_enabled": false
+  },
+  "evaluation_rng_coupling": {
+    "without_eval": [
+      [
+        8,
+        0,
+        9,
+        1,
+        4,
+        5,
+        6,
+        3,
+        2,
+        7
+      ],
+      [
+        4,
+        6,
+        9,
+        3,
+        7,
+        5,
+        2,
+        0,
+        1,
+        8
+      ]
+    ],
+    "with_eval": [
+      [
+        8,
+        0,
+        9,
+        1,
+        4,
+        5,
+        6,
+        3,
+        2,
+        7
+      ],
+      [
+        6,
+        9,
+        3,
+        2,
+        0,
+        8,
+        4,
+        7,
+        1,
+        5
+      ]
+    ],
+    "same_first": true,
+    "different_second": true
+  },
+  "unequal_batch_loss": {
+    "reported": 5.00004559703666,
+    "all_tokens_mean": 3.333379030227661,
+    "token_accuracy": 0.6666666666666666
+  },
+  "audit_initialization_pin_mutation": {
+    "status": "passed",
+    "changed_protocol_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "spec_pinned_sha256": "6b1669a5a620352512ab7d1bae1e550caa315cdc7d82f1440f6c0a22d7a94303",
+    "original": "6b1669a5a620352512ab7d1bae1e550caa315cdc7d82f1440f6c0a22d7a94303"
+  },
+  "out_phaseA_metadata": {
+    "seq_len": 29,
+    "d_model": 64,
+    "n_heads": 2,
+    "n_layers": 2
+  },
+  "out_phaseA_seed123_metadata": {
+    "seq_len": 29,
+    "d_model": 64,
+    "n_heads": 2,
+    "n_layers": 2
+  },
+  "out_phaseA_seed999_metadata": {
+    "seq_len": 29,
+    "d_model": 64,
+    "n_heads": 2,
+    "n_layers": 2
+  }
+}

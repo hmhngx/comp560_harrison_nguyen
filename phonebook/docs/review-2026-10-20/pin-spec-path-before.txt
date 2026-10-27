@@ -1,0 +1,22 @@
+FFF.                                                                     [100%]
+================================== FAILURES ===================================
+____ test_missing_spec_path_cannot_count_as_a_git_verified_audit[missing] _____
+tests\test_audit_initializations.py:176: in test_missing_spec_path_cannot_count_as_a_git_verified_audit
+    with pytest.raises(ValueError, match="spec path"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+______ test_missing_spec_path_cannot_count_as_a_git_verified_audit[null] ______
+tests\test_audit_initializations.py:176: in test_missing_spec_path_cannot_count_as_a_git_verified_audit
+    with pytest.raises(ValueError, match="spec path"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_____ test_missing_spec_path_cannot_count_as_a_git_verified_audit[empty] ______
+tests\test_audit_initializations.py:176: in test_missing_spec_path_cannot_count_as_a_git_verified_audit
+    with pytest.raises(ValueError, match="spec path"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+=========================== short test summary info ===========================
+FAILED tests/test_audit_initializations.py::test_missing_spec_path_cannot_count_as_a_git_verified_audit[missing]
+FAILED tests/test_audit_initializations.py::test_missing_spec_path_cannot_count_as_a_git_verified_audit[null]
+FAILED tests/test_audit_initializations.py::test_missing_spec_path_cannot_count_as_a_git_verified_audit[empty]
+3 failed, 1 passed, 36 deselected in 8.19s

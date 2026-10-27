@@ -1,0 +1,7 @@
+plain_b prepared membership, both audits, and legacy-score comparison passed
+partial_m1_seed1701 prepared membership, both audits, and legacy-score comparison passed
+partial_m2_seed1701 prepared membership, both audits, and legacy-score comparison passed
+partial_m5_seed1701 prepared membership, both audits, and legacy-score comparison passed
+full_replay prepared membership, both audits, and legacy-score comparison passed
+fresh_joint prepared membership, both audits, and legacy-score comparison passed
+passed 6 partition views; zero optimizer steps

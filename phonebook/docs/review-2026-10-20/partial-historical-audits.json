@@ -1,0 +1,163 @@
+[
+  {
+    "root": "phonebook/experiments/week_2026-10-07/d1_logging_interval",
+    "readable": {
+      "root": "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-07\\d1_logging_interval",
+      "status": "passed",
+      "spec": "d1_logging_interval",
+      "git_commit": "d555d4cd840f444ced25c85fd5d62957ec08dc4f",
+      "runs": 3,
+      "completions": 60,
+      "local_artifacts_checked": false,
+      "git_checked": true
+    },
+    "local": {
+      "root": "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-07\\d1_logging_interval",
+      "status": "passed",
+      "spec": "d1_logging_interval",
+      "git_commit": "d555d4cd840f444ced25c85fd5d62957ec08dc4f",
+      "runs": 3,
+      "completions": 60,
+      "local_artifacts_checked": true,
+      "git_checked": true
+    }
+  },
+  {
+    "root": "phonebook/experiments/week_2026-10-07/e1_matched_lr",
+    "readable": {
+      "root": "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-07\\e1_matched_lr",
+      "status": "passed",
+      "spec": "e1_matched_lr",
+      "git_commit": "e877957d63a99be0047c740c4b18fcd0f6ac28dc",
+      "runs": 33,
+      "completions": 660,
+      "local_artifacts_checked": false,
+      "git_checked": true
+    },
+    "local": {
+      "root": "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-07\\e1_matched_lr",
+      "status": "passed",
+      "spec": "e1_matched_lr",
+      "git_commit": "e877957d63a99be0047c740c4b18fcd0f6ac28dc",
+      "runs": 33,
+      "completions": 660,
+      "local_artifacts_checked": true,
+      "git_checked": true
+    }
+  },
+  {
+    "root": "phonebook/experiments/week_2026-10-07/e1_prefix_check",
+    "readable": {
+      "root": "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-07\\e1_prefix_check",
+      "status": "passed",
+      "spec": "e1_prefix_check",
+      "git_commit": "e877957d63a99be0047c740c4b18fcd0f6ac28dc",
+      "runs": 3,
+      "completions": 60,
+      "local_artifacts_checked": false,
+      "git_checked": true
+    },
+    "local": {
+      "root": "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-07\\e1_prefix_check",
+      "status": "passed",
+      "spec": "e1_prefix_check",
+      "git_commit": "e877957d63a99be0047c740c4b18fcd0f6ac28dc",
+      "runs": 3,
+      "completions": 60,
+      "local_artifacts_checked": true,
+      "git_checked": true
+    }
+  },
+  {
+    "root": "phonebook/experiments/week_2026-10-07/e1b_fine_grid_long_horizon",
+    "readable": {
+      "root": "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-07\\e1b_fine_grid_long_horizon",
+      "status": "passed",
+      "spec": "e1b_fine_grid_long_horizon",
+      "git_commit": "5f4a03486453729de5d4d30d2d1f61f79b8360e9",
+      "runs": 24,
+      "completions": 480,
+      "local_artifacts_checked": false,
+      "git_checked": true
+    },
+    "local": {
+      "root": "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-07\\e1b_fine_grid_long_horizon",
+      "status": "passed",
+      "spec": "e1b_fine_grid_long_horizon",
+      "git_commit": "5f4a03486453729de5d4d30d2d1f61f79b8360e9",
+      "runs": 24,
+      "completions": 480,
+      "local_artifacts_checked": true,
+      "git_checked": true
+    }
+  },
+  {
+    "root": "phonebook/experiments/week_2026-10-07/e2_heldout_phonebooks",
+    "readable": {
+      "root": "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-07\\e2_heldout_phonebooks",
+      "status": "passed",
+      "spec": "e2_heldout_phonebooks",
+      "git_commit": "5f4a03486453729de5d4d30d2d1f61f79b8360e9",
+      "runs": 33,
+      "completions": 660,
+      "local_artifacts_checked": false,
+      "git_checked": true
+    },
+    "local": {
+      "root": "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-07\\e2_heldout_phonebooks",
+      "status": "passed",
+      "spec": "e2_heldout_phonebooks",
+      "git_commit": "5f4a03486453729de5d4d30d2d1f61f79b8360e9",
+      "runs": 33,
+      "completions": 660,
+      "local_artifacts_checked": true,
+      "git_checked": true
+    }
+  },
+  {
+    "root": "phonebook/experiments/week_2026-10-07/e2_phase_a",
+    "readable": {
+      "root": "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-07\\e2_phase_a",
+      "status": "passed",
+      "spec": "e2_phase_a",
+      "git_commit": "2a09ea3f23c76c9f032f7c8495d2f6f44bec184c",
+      "runs": 3,
+      "completions": 60,
+      "local_artifacts_checked": false,
+      "git_checked": true
+    },
+    "local": {
+      "root": "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-07\\e2_phase_a",
+      "status": "passed",
+      "spec": "e2_phase_a",
+      "git_commit": "2a09ea3f23c76c9f032f7c8495d2f6f44bec184c",
+      "runs": 3,
+      "completions": 60,
+      "local_artifacts_checked": true,
+      "git_checked": true
+    }
+  },
+  {
+    "root": "phonebook/experiments/week_2026-10-07/e3_replay_ratio",
+    "readable": {
+      "root": "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-07\\e3_replay_ratio",
+      "status": "passed",
+      "spec": "e3_replay_ratio",
+      "git_commit": "5f4a03486453729de5d4d30d2d1f61f79b8360e9",
+      "runs": 60,
+      "completions": 1200,
+      "local_artifacts_checked": false,
+      "git_checked": true
+    },
+    "local": {
+      "root": "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-07\\e3_replay_ratio",
+      "status": "passed",
+      "spec": "e3_replay_ratio",
+      "git_commit": "5f4a03486453729de5d4d30d2d1f61f79b8360e9",
+      "runs": 60,
+      "completions": 1200,
+      "local_artifacts_checked": true,
+      "git_checked": true
+    }
+  }
+]

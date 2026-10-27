@@ -1,0 +1,28 @@
+.FFFF                                                                    [100%]
+================================== FAILURES ===================================
+_ test_recorded_initialization_hash_must_match_committed_pin[checkpoint_sha256] _
+tests\test_audit_initializations.py:58: in test_recorded_initialization_hash_must_match_committed_pin
+    with pytest.raises(ValueError, match="(?i)initialization.*pin"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+___ test_recorded_initialization_hash_must_match_committed_pin[meta_sha256] ___
+tests\test_audit_initializations.py:58: in test_recorded_initialization_hash_must_match_committed_pin
+    with pytest.raises(ValueError, match="(?i)initialization.*pin"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_____ test_declared_initialization_path_cannot_be_substituted[checkpoint] _____
+tests\test_audit_initializations.py:76: in test_declared_initialization_path_cannot_be_substituted
+    with pytest.raises(ValueError, match="(?i)initialization.*path"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+________ test_declared_initialization_path_cannot_be_substituted[meta] ________
+tests\test_audit_initializations.py:76: in test_declared_initialization_path_cannot_be_substituted
+    with pytest.raises(ValueError, match="(?i)initialization.*path"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+=========================== short test summary info ===========================
+FAILED tests/test_audit_initializations.py::test_recorded_initialization_hash_must_match_committed_pin[checkpoint_sha256]
+FAILED tests/test_audit_initializations.py::test_recorded_initialization_hash_must_match_committed_pin[meta_sha256]
+FAILED tests/test_audit_initializations.py::test_declared_initialization_path_cannot_be_substituted[checkpoint]
+FAILED tests/test_audit_initializations.py::test_declared_initialization_path_cannot_be_substituted[meta]
+4 failed, 1 passed, 28 deselected in 8.35s

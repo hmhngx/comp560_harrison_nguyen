@@ -1,0 +1,14 @@
+{
+  "status": "passed",
+  "verified_at_utc": "2026-10-21T04:13:57.985879+00:00",
+  "local_links_checked": 73,
+  "documents_sha256": {
+    "phonebook/docs/review-2026-10-20/partial-replay-execution.md": "fef1300c240ee099cfa021da07aa74986e967ba1b878298b61865b7578ec5a4c",
+    "phonebook/docs/review-2026-10-20/README.md": "2ab864414b1b3dd0e483ad2fb165b1a8b6fce11d29cc041b4ad9ed0963a8e2eb",
+    "README.md": "ee6aa6babf0e30ff72cd335e7815af4c13182edd184bbf8b7c57cd51768408ea",
+    "phonebook/docs/professor-discussion-packet.md": "bf0e9e19baefbb9f4fd784c6f1b9df0b5e60c3f7bc9a9f2585ca80cbc197bfc9",
+    "phonebook/docs/week-2026-10-12-to-20.md": "e0760a51282343b32a6b17400b4403d41ee61bbc21d5f50e75d3d83c28fb5393",
+    "phonebook/docs/weighted-objective-analysis.md": "a881e7fd8202b4120d13904b37edb935c0d3229cf9d5235248b1df1b1b259a50",
+    "phonebook/docs/replay-membership-protocol.md": "f99bc56cdfbe3ffbe570245668e07c582c03272c881e5ffaede050123f591458"
+  }
+}

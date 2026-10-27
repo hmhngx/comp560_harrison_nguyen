@@ -1,0 +1,30 @@
+{
+  "head": "8b4ccf34ca6351f7914596e8138da3a358cce1db",
+  "files": 1446,
+  "tracked_files": 643,
+  "inventoried_tracked_files": 643,
+  "bytes": 133363377,
+  "extensions": {
+    "<none>": 5,
+    ".tag": 1,
+    ".md": 10,
+    ".pyc": 40,
+    ".py": 52,
+    ".pkl": 46,
+    ".bin": 92,
+    ".json": 225,
+    ".jsonl": 11,
+    ".png": 241,
+    ".csv": 250,
+    ".pth": 212,
+    ".log": 168,
+    ".xml": 1,
+    ".txt": 91,
+    ".ini": 1
+  },
+  "python_lines": 7657,
+  "other_text_lines": 580941,
+  "checkpoint_tensors": 6148,
+  "errors": [],
+  "scope": "All working-directory files except .git internals; parse/hash checks are not a line-by-line semantic review or visual inspection of each plot."
+}

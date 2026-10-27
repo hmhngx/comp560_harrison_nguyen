@@ -1,0 +1,53 @@
+path,lines,review_role,follow_up
+completion_core/__init__.py,1,package marker,No specific finding identified
+completion_core/cli.py,8,CLI display helper,No specific finding identified
+completion_core/dataset_generators.py,45,shared generator helpers,Follow-up: validate sizes and document random sampling/replacement
+completion_core/inference.py,122,structured generation and strict exact evaluation,Strength: strict newline/token matching; compatibility cleaned-string API is weaker
+completion_core/modeling.py,133,causal transformer and checkpoint load/save,Strength: saved architecture metadata; follow-up: fail ambiguous legacy head-count defaults
+completion_core/prep.py,85,token encoding and artifact preparation,Strength: reject empty splits before writes; document Python 3.12 minimum
+completion_core/training.py,190,"dataset, masked targets, task loss, L2-SP and metrics",P2 unequal-batch loss averaging; preserve task/penalty distinction
+completion_core/vocabulary.py,44,vocabulary loading and char/pair tokenization,Follow-up: persist/check vocabulary identity during direct adaptation
+config/config.py,22,executable model/training configuration,Reviewed defaults and CLI override interaction; pin effective values in protocols
+config/config_tiny_test.py,14,executable model/training configuration,Reviewed defaults and CLI override interaction; pin effective values in protocols
+generate.py,99,strict file evaluation CLI,Strength: context-limited automatic generation and nonpositive-budget guard
+generate_all.py,71,addition exhaustive evaluation,P2 target-length budget/cleaned-string success; duplicate of generate_all_additions.py
+generate_all_additions.py,71,addition exhaustive evaluation,P2 target-length budget/cleaned-string success; report train-excluded accuracy separately
+generate_one.py,77,interactive completion CLI,Display-only cleaned string and 20-token budget; not a strict research score
+generate_reverse.py,80,reverse-task exhaustive evaluation,"P2 --train-file unused, training prompts counted as unseen; strict termination needed"
+make_inputs_add.py,34,modular addition data generator,Sampling with replacement; no guaranteed unique coverage or seed CLI
+make_inputs_capital.py,60,capitalization data generator,Review input validation and reproducible seed interface before using for new research
+make_inputs_comp_data.py,56,deterministic arbitrary string mapping generator,Fixed seed reviewed; exponential domain enumeration and size validation limit scale
+make_inputs_rev.py,60,even-length reverse data generator,Review input validation and reproducible seed interface before using for new research
+phonebook/analyze_experiment.py,134,"count recovery, curve summaries and decisions",Follow-up: direct integer counts at larger denominators; explicit missing/censored endpoints
+phonebook/audit_experiment.py,286,saved-evidence and local inference auditor,P1 reconcile initialization metadata/hash pins with committed spec in readable mode
+phonebook/config/phonebook.py,9,executable model/training configuration,Reviewed defaults and CLI override interaction; pin effective values in protocols
+phonebook/create_phonebook.py,97,deterministic names/numbers generator,"Strength: local RNG, unique name and number sampling; retain source-name hashes"
+phonebook/evaluate_checkpoint.py,88,separate A/B strict and teacher-forced evaluation,"Strength: rejects context overflow, retains raw predictions; preserve monitoring RNG isolation"
+phonebook/experiments/week_2026-09-30/audit_results.py,143,historical saved-score and local-hash auditor,Audit passes; local mode does not regenerate model answers
+phonebook/make_heldout_dataset.py,93,independent-book generation and length qualification,Length-conditioned sampling limits scope; record all attempted seeds; validate requested count
+phonebook/make_replay_input.py,63,whole-book replay mixture generation,Strength: separate A/B copy direction; follow-up: subset provenance and correct shuffle-order prose
+phonebook/prepare_phonebook.py,151,validated phonebook lines and fixed alphanumeric vocabulary,"Strength: explicit train/eval, malformed-record/empty-data guards"
+phonebook/report_experiments.py,516,"derived tables, decisions, comparisons and figures",All 12 committed machine-readable reports reproduce; plots currently specific to ten-entry books
+phonebook/run_experiment.py,454,"validated spec planning, immutable runs, manifests",Strength: clean tree/output protections and pinned initialization at planning; P2 nonfinite numeric validation
+phonebook/run_lr_sweep.py,218,legacy sweep driver,Completion-by-final-CSV and parent-name checkpoint tag are limited; use declarative runner for new studies
+phonebook/run_replay_pilot.py,238,bounded historical replay/joint pilot,Historical scope and conditional extension policy reviewed; no new design features implied
+phonebook/sweep_lr/analyze_matched_progress.py,74,historical nearest-progress comparison,"Reproduced by existing regression; nearest-loss matching is descriptive, not causal proof"
+prepare_inputs.py,98,general character data preparation,Follow-up: consistent split/record/newline validation for non-phonebook tasks
+tests/conftest.py,33,shared subprocess and dependency fixtures,Included in 302-pass suite; uncovered review probes are documented separately
+tests/test_analyze_experiment.py,199,regression/integration tests: test_analyze_experiment,Included in 302-pass suite; uncovered review probes are documented separately
+tests/test_analyze_matched_progress.py,49,regression/integration tests: test_analyze_matched_progress,Included in 302-pass suite; uncovered review probes are documented separately
+tests/test_audit_experiment.py,573,regression/integration tests: test_audit_experiment,Included in 302-pass suite; uncovered review probes are documented separately
+tests/test_cli_smoke.py,136,regression/integration tests: test_cli_smoke,Included in 302-pass suite; uncovered review probes are documented separately
+tests/test_dataset_integrity.py,77,regression/integration tests: test_dataset_integrity,Included in 302-pass suite; uncovered review probes are documented separately
+tests/test_inference.py,110,regression/integration tests: test_inference,Included in 302-pass suite; uncovered review probes are documented separately
+tests/test_l2sp.py,355,regression/integration tests: test_l2sp,Included in 302-pass suite; uncovered review probes are documented separately
+tests/test_make_heldout_dataset.py,95,regression/integration tests: test_make_heldout_dataset,Included in 302-pass suite; uncovered review probes are documented separately
+tests/test_make_replay_input.py,119,regression/integration tests: test_make_replay_input,Included in 302-pass suite; uncovered review probes are documented separately
+tests/test_phonebook_evaluation.py,46,regression/integration tests: test_phonebook_evaluation,Included in 302-pass suite; uncovered review probes are documented separately
+tests/test_replay_pilot.py,34,regression/integration tests: test_replay_pilot,Included in 302-pass suite; uncovered review probes are documented separately
+tests/test_report_experiments.py,527,regression/integration tests: test_report_experiments,Included in 302-pass suite; uncovered review probes are documented separately
+tests/test_run_experiment.py,328,regression/integration tests: test_run_experiment,Included in 302-pass suite; uncovered review probes are documented separately
+tests/test_run_lr_sweep.py,225,regression/integration tests: test_run_lr_sweep,Included in 302-pass suite; uncovered review probes are documented separately
+tests/test_tiny_data_logic.py,165,regression/integration tests: test_tiny_data_logic,Included in 302-pass suite; uncovered review probes are documented separately
+tests/test_tiny_pipeline.py,255,regression/integration tests: test_tiny_pipeline,Passed locally including real-phonebook case; that case may skip when ignored artifacts are absent
+train.py,397,training entry point,P1 RNG coupling; P2 finite values/context and adaptation metadata

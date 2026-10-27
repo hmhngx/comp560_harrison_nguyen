@@ -1,0 +1,24 @@
+{
+  "status": "passed",
+  "verified_at_utc": "2026-10-21T04:13:11.348752+00:00",
+  "final_full_suite": {
+    "tests": 614,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "artifact_seal": {
+    "status": "passed",
+    "files": 337,
+    "manifest_sha256": "7552d5fd34ca9e52497b52f310d19c683720b1a8fb7a78a8f6ddc0f424256720"
+  },
+  "historical_artifacts_unchanged": 1337,
+  "prior_python_files_unchanged": 58,
+  "reports_rebuilt_identically": [
+    "endpoints.csv",
+    "sampled-observations.csv",
+    "curves.csv",
+    "recall.png"
+  ],
+  "local_markdown_links_checked": 47
+}

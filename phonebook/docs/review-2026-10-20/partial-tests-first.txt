@@ -1,0 +1,50 @@
+..........................F
+================================== FAILURES ===================================
+_ test_float32_loss_every_gradient_and_adamw_update_against_separate_book_means[partial_m1_seed1701] _
+
+fixture = (WindowsPath('C:/Users/minhh/AppData/Local/Temp/pytest-of-minhh/pytest-343/pilot-fixture0'), {'schema': 'phonebook-rep...'d_model': 8, 'n_heads': 2, 'n_layers': 1}, {'seed': 42, 'lr': 0.001, 'weight_decay': 0.1, 'grad_clip': 1.0, ...}, ...)
+condition = 'partial_m1_seed1701'
+
+    @pytest.mark.parametrize("condition", ["plain_b", "partial_m1_seed1701", "full_replay"])
+    def test_float32_loss_every_gradient_and_adamw_update_against_separate_book_means(fixture, condition):
+        _, protocol, _, vocab, cfg, settings, _, _ = fixture
+        selected = membership(protocol, condition, canonical_digest(protocol))
+        rows = {r.id: r for r in selected.a + selected.b}
+        x, y = pilot.tensor_batch([rows[i] for i in selected.training_ids], vocab, selected.context_length)
+        n_a = len(selected.replay_ids)
+        counts = (y != -100).sum(1)
+        weights = torch.ones(len(x)) / counts[n_a:].sum() * (0.5 if n_a else 1)
+        if n_a:
+            weights[:n_a] = 0.5 / counts[:n_a].sum()
+        with torch.random.fork_rng(devices=[]):
+            torch.manual_seed(71)
+            actual = pilot.new_model(vocab, cfg).train()
+            reference = copy.deepcopy(actual)
+            actual_loss = pilot.weighted_token_cross_entropy(actual(x), y, weights)
+            b_logits = reference(x[n_a:])
+            reference_loss = F.cross_entropy(b_logits.reshape(-1, vocab.vocab_size), y[n_a:].reshape(-1))
+            if n_a:
+                a_logits = reference(x[:n_a])
+                reference_loss = 0.5 * reference_loss + 0.5 * F.cross_entropy(a_logits.reshape(-1, vocab.vocab_size), y[:n_a].reshape(-1))
+            # Declared float32 tolerances; this does not assert long-trajectory identity.
+            torch.testing.assert_close(actual_loss, reference_loss, atol=1e-6, rtol=1e-5)
+            actual_loss.backward()
+            reference_loss.backward()
+            for a, b in zip(actual.parameters(), reference.parameters(), strict=True):
+                torch.testing.assert_close(a.grad, b.grad, atol=1e-6, rtol=1e-4)
+            for model in (actual, reference):
+                torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0, foreach=False)
+                pilot.optimizer_for(model, settings).step()
+            for a, b in zip(actual.parameters(), reference.parameters(), strict=True):
+>               torch.testing.assert_close(a, b, atol=2e-5, rtol=1e-4)
+E               AssertionError: Tensor-likes are not close!
+E               
+E               Mismatched elements: 6 / 24 (25.0%)
+E               Greatest absolute difference: 0.0001572002365719527 at index (13,) (up to 2e-05 allowed)
+E               Greatest relative difference: inf at index (12,) (up to 0.0001 allowed)
+
+tests\test_partial_replay.py:207: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_partial_replay.py::test_float32_loss_every_gradient_and_adamw_update_against_separate_book_means[partial_m1_seed1701]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 26 passed in 32.02s

@@ -1,0 +1,673 @@
+FFF.F.F.FFFFF.FFF.FFFFFFFFFFFFFFFFFFFFF....FFFF......FFFF.FFFFFFFFFFFFFF [ 75%]
+F.FFF.F......FFFFFFFFFF                                                  [100%]
+================================== FAILURES ===================================
+_____ test_nonfinite_training_cli_fails_before_touching_outputs[nan---lr] _____
+tests\test_numeric_validation.py:29: in test_nonfinite_training_cli_fails_before_touching_outputs
+    train.main()
+train.py:218: in main
+    vocab = Vocabulary.from_pickle(cfg.data_dir / "meta.pkl")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+completion_core\vocabulary.py:28: in from_pickle
+    raise FileNotFoundError(
+E   FileNotFoundError: Vocabulary file not found: data\meta.pkl. Run prepare.py first.
+_ test_nonfinite_training_cli_fails_before_touching_outputs[nan---l2sp-lambda] _
+tests\test_numeric_validation.py:29: in test_nonfinite_training_cli_fails_before_touching_outputs
+    train.main()
+train.py:218: in main
+    vocab = Vocabulary.from_pickle(cfg.data_dir / "meta.pkl")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+completion_core\vocabulary.py:28: in from_pickle
+    raise FileNotFoundError(
+E   FileNotFoundError: Vocabulary file not found: data\meta.pkl. Run prepare.py first.
+_____ test_nonfinite_training_cli_fails_before_touching_outputs[inf---lr] _____
+tests\test_numeric_validation.py:29: in test_nonfinite_training_cli_fails_before_touching_outputs
+    train.main()
+train.py:218: in main
+    vocab = Vocabulary.from_pickle(cfg.data_dir / "meta.pkl")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+completion_core\vocabulary.py:28: in from_pickle
+    raise FileNotFoundError(
+E   FileNotFoundError: Vocabulary file not found: data\meta.pkl. Run prepare.py first.
+____ test_nonfinite_training_cli_fails_before_touching_outputs[-inf---lr] _____
+tests\test_numeric_validation.py:29: in test_nonfinite_training_cli_fails_before_touching_outputs
+    train.main()
+train.py:218: in main
+    vocab = Vocabulary.from_pickle(cfg.data_dir / "meta.pkl")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+completion_core\vocabulary.py:28: in from_pickle
+    raise FileNotFoundError(
+E   FileNotFoundError: Vocabulary file not found: data\meta.pkl. Run prepare.py first.
+____ test_nonfinite_training_cli_fails_before_touching_outputs[1e999---lr] ____
+tests\test_numeric_validation.py:29: in test_nonfinite_training_cli_fails_before_touching_outputs
+    train.main()
+train.py:218: in main
+    vocab = Vocabulary.from_pickle(cfg.data_dir / "meta.pkl")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+completion_core\vocabulary.py:28: in from_pickle
+    raise FileNotFoundError(
+E   FileNotFoundError: Vocabulary file not found: data\meta.pkl. Run prepare.py first.
+__ test_invalid_numeric_config_fails_before_creating_output[float('nan')-lr] __
+tests\test_numeric_validation.py:42: in test_invalid_numeric_config_fails_before_creating_output
+    train.main()
+train.py:218: in main
+    vocab = Vocabulary.from_pickle(cfg.data_dir / "meta.pkl")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+completion_core\vocabulary.py:28: in from_pickle
+    raise FileNotFoundError(
+E   FileNotFoundError: Vocabulary file not found: data\meta.pkl. Run prepare.py first.
+---------------------------- Captured stdout call -----------------------------
+Overriding config using nanoGPT-style file: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_invalid_numeric_config_fa0\bad.py
+_ test_invalid_numeric_config_fails_before_creating_output[float('nan')-l2sp_lambda] _
+tests\test_numeric_validation.py:42: in test_invalid_numeric_config_fails_before_creating_output
+    train.main()
+train.py:218: in main
+    vocab = Vocabulary.from_pickle(cfg.data_dir / "meta.pkl")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+completion_core\vocabulary.py:28: in from_pickle
+    raise FileNotFoundError(
+E   FileNotFoundError: Vocabulary file not found: data\meta.pkl. Run prepare.py first.
+---------------------------- Captured stdout call -----------------------------
+Overriding config using nanoGPT-style file: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_invalid_numeric_config_fa1\bad.py
+_ test_invalid_numeric_config_fails_before_creating_output[float('nan')-weight_decay] _
+tests\test_numeric_validation.py:42: in test_invalid_numeric_config_fails_before_creating_output
+    train.main()
+train.py:218: in main
+    vocab = Vocabulary.from_pickle(cfg.data_dir / "meta.pkl")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+completion_core\vocabulary.py:28: in from_pickle
+    raise FileNotFoundError(
+E   FileNotFoundError: Vocabulary file not found: data\meta.pkl. Run prepare.py first.
+---------------------------- Captured stdout call -----------------------------
+Overriding config using nanoGPT-style file: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_invalid_numeric_config_fa2\bad.py
+_ test_invalid_numeric_config_fails_before_creating_output[float('nan')-grad_clip] _
+tests\test_numeric_validation.py:42: in test_invalid_numeric_config_fails_before_creating_output
+    train.main()
+train.py:218: in main
+    vocab = Vocabulary.from_pickle(cfg.data_dir / "meta.pkl")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+completion_core\vocabulary.py:28: in from_pickle
+    raise FileNotFoundError(
+E   FileNotFoundError: Vocabulary file not found: data\meta.pkl. Run prepare.py first.
+---------------------------- Captured stdout call -----------------------------
+Overriding config using nanoGPT-style file: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_invalid_numeric_config_fa3\bad.py
+__ test_invalid_numeric_config_fails_before_creating_output[float('inf')-lr] __
+tests\test_numeric_validation.py:42: in test_invalid_numeric_config_fails_before_creating_output
+    train.main()
+train.py:218: in main
+    vocab = Vocabulary.from_pickle(cfg.data_dir / "meta.pkl")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+completion_core\vocabulary.py:28: in from_pickle
+    raise FileNotFoundError(
+E   FileNotFoundError: Vocabulary file not found: data\meta.pkl. Run prepare.py first.
+---------------------------- Captured stdout call -----------------------------
+Overriding config using nanoGPT-style file: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_invalid_numeric_config_fa4\bad.py
+_ test_invalid_numeric_config_fails_before_creating_output[float('inf')-weight_decay] _
+tests\test_numeric_validation.py:42: in test_invalid_numeric_config_fails_before_creating_output
+    train.main()
+train.py:218: in main
+    vocab = Vocabulary.from_pickle(cfg.data_dir / "meta.pkl")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+completion_core\vocabulary.py:28: in from_pickle
+    raise FileNotFoundError(
+E   FileNotFoundError: Vocabulary file not found: data\meta.pkl. Run prepare.py first.
+---------------------------- Captured stdout call -----------------------------
+Overriding config using nanoGPT-style file: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_invalid_numeric_config_fa6\bad.py
+_ test_invalid_numeric_config_fails_before_creating_output[float('inf')-grad_clip] _
+tests\test_numeric_validation.py:42: in test_invalid_numeric_config_fails_before_creating_output
+    train.main()
+train.py:218: in main
+    vocab = Vocabulary.from_pickle(cfg.data_dir / "meta.pkl")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+completion_core\vocabulary.py:28: in from_pickle
+    raise FileNotFoundError(
+E   FileNotFoundError: Vocabulary file not found: data\meta.pkl. Run prepare.py first.
+---------------------------- Captured stdout call -----------------------------
+Overriding config using nanoGPT-style file: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_invalid_numeric_config_fa7\bad.py
+______ test_invalid_numeric_config_fails_before_creating_output[True-lr] ______
+tests\test_numeric_validation.py:42: in test_invalid_numeric_config_fails_before_creating_output
+    train.main()
+train.py:218: in main
+    vocab = Vocabulary.from_pickle(cfg.data_dir / "meta.pkl")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+completion_core\vocabulary.py:28: in from_pickle
+    raise FileNotFoundError(
+E   FileNotFoundError: Vocabulary file not found: data\meta.pkl. Run prepare.py first.
+---------------------------- Captured stdout call -----------------------------
+Overriding config using nanoGPT-style file: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_invalid_numeric_config_fa8\bad.py
+_ test_invalid_numeric_config_fails_before_creating_output[True-weight_decay] _
+tests\test_numeric_validation.py:42: in test_invalid_numeric_config_fails_before_creating_output
+    train.main()
+train.py:218: in main
+    vocab = Vocabulary.from_pickle(cfg.data_dir / "meta.pkl")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+completion_core\vocabulary.py:28: in from_pickle
+    raise FileNotFoundError(
+E   FileNotFoundError: Vocabulary file not found: data\meta.pkl. Run prepare.py first.
+---------------------------- Captured stdout call -----------------------------
+Overriding config using nanoGPT-style file: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_invalid_numeric_config_fa10\bad.py
+__ test_invalid_numeric_config_fails_before_creating_output[True-grad_clip] ___
+tests\test_numeric_validation.py:42: in test_invalid_numeric_config_fails_before_creating_output
+    train.main()
+train.py:218: in main
+    vocab = Vocabulary.from_pickle(cfg.data_dir / "meta.pkl")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+completion_core\vocabulary.py:28: in from_pickle
+    raise FileNotFoundError(
+E   FileNotFoundError: Vocabulary file not found: data\meta.pkl. Run prepare.py first.
+---------------------------- Captured stdout call -----------------------------
+Overriding config using nanoGPT-style file: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_invalid_numeric_config_fa11\bad.py
+_____ test_invalid_numeric_config_fails_before_creating_output['0.01'-lr] _____
+tests\test_numeric_validation.py:42: in test_invalid_numeric_config_fails_before_creating_output
+    train.main()
+train.py:218: in main
+    vocab = Vocabulary.from_pickle(cfg.data_dir / "meta.pkl")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+completion_core\vocabulary.py:28: in from_pickle
+    raise FileNotFoundError(
+E   FileNotFoundError: Vocabulary file not found: data\meta.pkl. Run prepare.py first.
+---------------------------- Captured stdout call -----------------------------
+Overriding config using nanoGPT-style file: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_invalid_numeric_config_fa12\bad.py
+_ test_invalid_numeric_config_fails_before_creating_output['0.01'-l2sp_lambda] _
+tests\test_numeric_validation.py:42: in test_invalid_numeric_config_fails_before_creating_output
+    train.main()
+train.py:209: in main
+    cfg = parse_args()
+          ^^^^^^^^^^^^
+train.py:152: in parse_args
+    if cfg.l2sp_lambda < 0:
+       ^^^^^^^^^^^^^^^^^^^
+E   TypeError: '<' not supported between instances of 'str' and 'int'
+---------------------------- Captured stdout call -----------------------------
+Overriding config using nanoGPT-style file: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_invalid_numeric_config_fa13\bad.py
+_ test_invalid_numeric_config_fails_before_creating_output['0.01'-weight_decay] _
+tests\test_numeric_validation.py:42: in test_invalid_numeric_config_fails_before_creating_output
+    train.main()
+train.py:218: in main
+    vocab = Vocabulary.from_pickle(cfg.data_dir / "meta.pkl")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+completion_core\vocabulary.py:28: in from_pickle
+    raise FileNotFoundError(
+E   FileNotFoundError: Vocabulary file not found: data\meta.pkl. Run prepare.py first.
+---------------------------- Captured stdout call -----------------------------
+Overriding config using nanoGPT-style file: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_invalid_numeric_config_fa14\bad.py
+_ test_invalid_numeric_config_fails_before_creating_output['0.01'-grad_clip] __
+tests\test_numeric_validation.py:42: in test_invalid_numeric_config_fails_before_creating_output
+    train.main()
+train.py:218: in main
+    vocab = Vocabulary.from_pickle(cfg.data_dir / "meta.pkl")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+completion_core\vocabulary.py:28: in from_pickle
+    raise FileNotFoundError(
+E   FileNotFoundError: Vocabulary file not found: data\meta.pkl. Run prepare.py first.
+---------------------------- Captured stdout call -----------------------------
+Overriding config using nanoGPT-style file: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_invalid_numeric_config_fa15\bad.py
+_________ test_invalid_sizes_budgets_and_seed_are_rejected[epochs-0] __________
+tests\test_numeric_validation.py:56: in test_invalid_sizes_budgets_and_seed_are_rejected
+    with pytest.raises(ValueError, match=field.replace("_", "-")):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+---------------------------- Captured stdout call -----------------------------
+Overriding config using nanoGPT-style file: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_invalid_sizes_budgets_and0\bad.py
+_______ test_invalid_sizes_budgets_and_seed_are_rejected[batch_size--1] _______
+tests\test_numeric_validation.py:56: in test_invalid_sizes_budgets_and_seed_are_rejected
+    with pytest.raises(ValueError, match=field.replace("_", "-")):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+---------------------------- Captured stdout call -----------------------------
+Overriding config using nanoGPT-style file: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_invalid_sizes_budgets_and1\bad.py
+______ test_invalid_sizes_budgets_and_seed_are_rejected[log_interval-0] _______
+tests\test_numeric_validation.py:56: in test_invalid_sizes_budgets_and_seed_are_rejected
+    with pytest.raises(ValueError, match=field.replace("_", "-")):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+---------------------------- Captured stdout call -----------------------------
+Overriding config using nanoGPT-style file: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_invalid_sizes_budgets_and2\bad.py
+__ test_invalid_sizes_budgets_and_seed_are_rejected[accuracy_interval-True] ___
+tests\test_numeric_validation.py:56: in test_invalid_sizes_budgets_and_seed_are_rejected
+    with pytest.raises(ValueError, match=field.replace("_", "-")):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+---------------------------- Captured stdout call -----------------------------
+Overriding config using nanoGPT-style file: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_invalid_sizes_budgets_and3\bad.py
+_____ test_invalid_sizes_budgets_and_seed_are_rejected[embedding_dim-3.5] _____
+tests\test_numeric_validation.py:56: in test_invalid_sizes_budgets_and_seed_are_rejected
+    with pytest.raises(ValueError, match=field.replace("_", "-")):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+---------------------------- Captured stdout call -----------------------------
+Overriding config using nanoGPT-style file: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_invalid_sizes_budgets_and4\bad.py
+_________ test_invalid_sizes_budgets_and_seed_are_rejected[n_heads-0] _________
+tests\test_numeric_validation.py:56: in test_invalid_sizes_budgets_and_seed_are_rejected
+    with pytest.raises(ValueError, match=field.replace("_", "-")):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+---------------------------- Captured stdout call -----------------------------
+Overriding config using nanoGPT-style file: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_invalid_sizes_budgets_and5\bad.py
+______ test_invalid_sizes_budgets_and_seed_are_rejected[n_layers-False] _______
+tests\test_numeric_validation.py:56: in test_invalid_sizes_budgets_and_seed_are_rejected
+    with pytest.raises(ValueError, match=field.replace("_", "-")):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+---------------------------- Captured stdout call -----------------------------
+Overriding config using nanoGPT-style file: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_invalid_sizes_budgets_and6\bad.py
+_________ test_invalid_sizes_budgets_and_seed_are_rejected[seed-True] _________
+tests\test_numeric_validation.py:56: in test_invalid_sizes_budgets_and_seed_are_rejected
+    with pytest.raises(ValueError, match=field.replace("_", "-")):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+---------------------------- Captured stdout call -----------------------------
+Overriding config using nanoGPT-style file: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_invalid_sizes_budgets_and7\bad.py
+_________ test_invalid_sizes_budgets_and_seed_are_rejected[seed-1.5] __________
+tests\test_numeric_validation.py:56: in test_invalid_sizes_budgets_and_seed_are_rejected
+    with pytest.raises(ValueError, match=field.replace("_", "-")):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+---------------------------- Captured stdout call -----------------------------
+Overriding config using nanoGPT-style file: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_invalid_sizes_budgets_and8\bad.py
+_ test_invalid_sizes_budgets_and_seed_are_rejected[seed--9223372036854775809] _
+tests\test_numeric_validation.py:56: in test_invalid_sizes_budgets_and_seed_are_rejected
+    with pytest.raises(ValueError, match=field.replace("_", "-")):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+---------------------------- Captured stdout call -----------------------------
+Overriding config using nanoGPT-style file: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_invalid_sizes_budgets_and9\bad.py
+_ test_invalid_sizes_budgets_and_seed_are_rejected[seed-18446744073709551616] _
+tests\test_numeric_validation.py:56: in test_invalid_sizes_budgets_and_seed_are_rejected
+    with pytest.raises(ValueError, match=field.replace("_", "-")):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+---------------------------- Captured stdout call -----------------------------
+Overriding config using nanoGPT-style file: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_invalid_sizes_budgets_and10\bad.py
+___________ test_invalid_sizes_budgets_and_seed_are_rejected[lr-0] ____________
+tests\test_numeric_validation.py:56: in test_invalid_sizes_budgets_and_seed_are_rejected
+    with pytest.raises(ValueError, match=field.replace("_", "-")):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+---------------------------- Captured stdout call -----------------------------
+Overriding config using nanoGPT-style file: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_invalid_sizes_budgets_and11\bad.py
+_____ test_invalid_sizes_budgets_and_seed_are_rejected[weight_decay--0.1] _____
+tests\test_numeric_validation.py:56: in test_invalid_sizes_budgets_and_seed_are_rejected
+    with pytest.raises(ValueError, match=field.replace("_", "-")):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+---------------------------- Captured stdout call -----------------------------
+Overriding config using nanoGPT-style file: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_invalid_sizes_budgets_and12\bad.py
+_______ test_invalid_sizes_budgets_and_seed_are_rejected[grad_clip--1] ________
+tests\test_numeric_validation.py:56: in test_invalid_sizes_budgets_and_seed_are_rejected
+    with pytest.raises(ValueError, match=field.replace("_", "-")):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+---------------------------- Captured stdout call -----------------------------
+Overriding config using nanoGPT-style file: C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_invalid_sizes_budgets_and13\bad.py
+_______ test_incompatible_head_dimensions_fail_during_config_validation _______
+tests\test_numeric_validation.py:62: in test_incompatible_head_dimensions_fail_during_config_validation
+    with pytest.raises(ValueError, match="divisible"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+__ test_spec_numeric_fields_reject_nonfinite_and_non_numeric_values[nan-lr] ___
+tests\test_numeric_validation.py:80: in test_spec_numeric_fields_reject_nonfinite_and_non_numeric_values
+    with pytest.raises(ValueError, match=field):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_ test_spec_numeric_fields_reject_nonfinite_and_non_numeric_values[nan-l2sp_lambda] _
+tests\test_numeric_validation.py:80: in test_spec_numeric_fields_reject_nonfinite_and_non_numeric_values
+    with pytest.raises(ValueError, match=field):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+__ test_spec_numeric_fields_reject_nonfinite_and_non_numeric_values[inf-lr] ___
+tests\test_numeric_validation.py:80: in test_spec_numeric_fields_reject_nonfinite_and_non_numeric_values
+    with pytest.raises(ValueError, match=field):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_ test_spec_numeric_fields_reject_nonfinite_and_non_numeric_values[inf-l2sp_lambda] _
+tests\test_numeric_validation.py:80: in test_spec_numeric_fields_reject_nonfinite_and_non_numeric_values
+    with pytest.raises(ValueError, match=field):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_ test_spec_numeric_fields_reject_nonfinite_and_non_numeric_values[10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000-lr] _
+tests\test_numeric_validation.py:80: in test_spec_numeric_fields_reject_nonfinite_and_non_numeric_values
+    with pytest.raises(ValueError, match=field):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_ test_spec_numeric_fields_reject_nonfinite_and_non_numeric_values[10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000-l2sp_lambda] _
+tests\test_numeric_validation.py:80: in test_spec_numeric_fields_reject_nonfinite_and_non_numeric_values
+    with pytest.raises(ValueError, match=field):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_______ test_spec_seed_must_be_supported_by_torch[-9223372036854775809] _______
+tests\test_numeric_validation.py:88: in test_spec_seed_must_be_supported_by_torch
+    with pytest.raises(ValueError, match="seed"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_______ test_spec_seed_must_be_supported_by_torch[18446744073709551616] _______
+tests\test_numeric_validation.py:88: in test_spec_seed_must_be_supported_by_torch
+    with pytest.raises(ValueError, match="seed"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_ test_spec_json_rejects_nonstandard_constants_and_overflow_even_when_nested[NaN] _
+tests\test_numeric_validation.py:96: in test_spec_json_rejects_nonstandard_constants_and_overflow_even_when_nested
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_ test_spec_json_rejects_nonstandard_constants_and_overflow_even_when_nested[Infinity] _
+tests\test_numeric_validation.py:96: in test_spec_json_rejects_nonstandard_constants_and_overflow_even_when_nested
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_ test_spec_json_rejects_nonstandard_constants_and_overflow_even_when_nested[-Infinity] _
+tests\test_numeric_validation.py:96: in test_spec_json_rejects_nonstandard_constants_and_overflow_even_when_nested
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_ test_spec_json_rejects_nonstandard_constants_and_overflow_even_when_nested[1e999] _
+tests\test_numeric_validation.py:96: in test_spec_json_rejects_nonstandard_constants_and_overflow_even_when_nested
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_ test_spec_json_rejects_nonstandard_constants_and_overflow_even_when_nested[-1e999] _
+tests\test_numeric_validation.py:96: in test_spec_json_rejects_nonstandard_constants_and_overflow_even_when_nested
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+___ test_json_hashing_and_writing_reject_nonfinite_without_overwriting[nan] ___
+tests\test_numeric_validation.py:103: in test_json_hashing_and_writing_reject_nonfinite_without_overwriting
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+___ test_json_hashing_and_writing_reject_nonfinite_without_overwriting[inf] ___
+tests\test_numeric_validation.py:103: in test_json_hashing_and_writing_reject_nonfinite_without_overwriting
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+__ test_json_hashing_and_writing_reject_nonfinite_without_overwriting[-inf] ___
+tests\test_numeric_validation.py:103: in test_json_hashing_and_writing_reject_nonfinite_without_overwriting
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_ test_nonfinite_programmatic_metadata_fails_before_experiment_output_creation _
+tests\test_numeric_validation.py:116: in test_nonfinite_programmatic_metadata_fails_before_experiment_output_creation
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+---------------------------- Captured stdout call -----------------------------
+[1/3] d0_seed42/plain_ep100: A 0/10 B 10/10 (10s)
+[2/3] d0_seed42/l2sp_lam0.1_ep100: A 1/10 B 10/10 (10s)
+[3/3] d0_seed42/replay_a1b1_ep100: A 10/10 B 10/10 (9s)
+Evidence saved to C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_nonfinite_programmatic_me0\experiment
+_____ test_legacy_sweep_rejects_bad_inputs_before_creating_output[args0] ______
+tests\test_numeric_validation.py:129: in test_legacy_sweep_rejects_bad_inputs_before_creating_output
+    with pytest.raises(SystemExit) as exc:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE SystemExit
+---------------------------- Captured stdout call -----------------------------
+Planned runs: 1 (1 lr x 1 seeds x 1 l2sp-lambdas, 100 epochs each)
+WARNING: working tree has uncommitted changes -- results below won't be tied to a clean commit.
+
+[1/1] C:\Users\minhh\AppData\Local\Programs\Python\Python312\python.exe train.py --data-dir phonebook\data_phaseB --out-dir C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_legacy_sweep_rejects_bad_0\sweep\lrnan_ep100_seed42 --adapt-from phonebook\out_phaseA\model.pth phonebook\config\phonebook.py --lr nan --epochs 100 --seed 42 --l2sp-lambda 0.0
+
+Manifest written to C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_legacy_sweep_rejects_bad_0\sweep\manifest.jsonl
+_____ test_legacy_sweep_rejects_bad_inputs_before_creating_output[args1] ______
+tests\test_numeric_validation.py:129: in test_legacy_sweep_rejects_bad_inputs_before_creating_output
+    with pytest.raises(SystemExit) as exc:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE SystemExit
+---------------------------- Captured stdout call -----------------------------
+Planned runs: 1 (1 lr x 1 seeds x 1 l2sp-lambdas, 100 epochs each)
+WARNING: working tree has uncommitted changes -- results below won't be tied to a clean commit.
+
+[1/1] C:\Users\minhh\AppData\Local\Programs\Python\Python312\python.exe train.py --data-dir phonebook\data_phaseB --out-dir C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_legacy_sweep_rejects_bad_1\sweep\lrinf_ep100_seed42 --adapt-from phonebook\out_phaseA\model.pth phonebook\config\phonebook.py --lr inf --epochs 100 --seed 42 --l2sp-lambda 0.0
+
+Manifest written to C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_legacy_sweep_rejects_bad_1\sweep\manifest.jsonl
+_____ test_legacy_sweep_rejects_bad_inputs_before_creating_output[args2] ______
+tests\test_numeric_validation.py:129: in test_legacy_sweep_rejects_bad_inputs_before_creating_output
+    with pytest.raises(SystemExit) as exc:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE SystemExit
+---------------------------- Captured stdout call -----------------------------
+Planned runs: 1 (1 lr x 1 seeds x 1 l2sp-lambdas, 100 epochs each)
+WARNING: working tree has uncommitted changes -- results below won't be tied to a clean commit.
+
+[1/1] C:\Users\minhh\AppData\Local\Programs\Python\Python312\python.exe train.py --data-dir phonebook\data_phaseB --out-dir C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_legacy_sweep_rejects_bad_2\sweep\lr-inf_ep100_seed42 --adapt-from phonebook\out_phaseA\model.pth phonebook\config\phonebook.py --lr -inf --epochs 100 --seed 42 --l2sp-lambda 0.0
+
+Manifest written to C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_legacy_sweep_rejects_bad_2\sweep\manifest.jsonl
+_____ test_legacy_sweep_rejects_bad_inputs_before_creating_output[args3] ______
+tests\test_numeric_validation.py:129: in test_legacy_sweep_rejects_bad_inputs_before_creating_output
+    with pytest.raises(SystemExit) as exc:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE SystemExit
+---------------------------- Captured stdout call -----------------------------
+Planned runs: 1 (1 lr x 1 seeds x 1 l2sp-lambdas, 100 epochs each)
+WARNING: working tree has uncommitted changes -- results below won't be tied to a clean commit.
+
+[1/1] C:\Users\minhh\AppData\Local\Programs\Python\Python312\python.exe train.py --data-dir phonebook\data_phaseB --out-dir C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_legacy_sweep_rejects_bad_3\sweep\lr0.0_ep100_seed42 --adapt-from phonebook\out_phaseA\model.pth phonebook\config\phonebook.py --lr 0.0 --epochs 100 --seed 42 --l2sp-lambda 0.0
+
+Manifest written to C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_legacy_sweep_rejects_bad_3\sweep\manifest.jsonl
+_____ test_legacy_sweep_rejects_bad_inputs_before_creating_output[args4] ______
+tests\test_numeric_validation.py:129: in test_legacy_sweep_rejects_bad_inputs_before_creating_output
+    with pytest.raises(SystemExit) as exc:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE SystemExit
+---------------------------- Captured stdout call -----------------------------
+Planned runs: 1 (1 lr x 1 seeds x 1 l2sp-lambdas, 100 epochs each)
+WARNING: working tree has uncommitted changes -- results below won't be tied to a clean commit.
+
+[1/1] C:\Users\minhh\AppData\Local\Programs\Python\Python312\python.exe train.py --data-dir phonebook\data_phaseB --out-dir C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_legacy_sweep_rejects_bad_4\sweep\lr0.001_ep100_seed42_l2spnan --adapt-from phonebook\out_phaseA\model.pth phonebook\config\phonebook.py --lr 0.001 --epochs 100 --seed 42 --l2sp-lambda nan
+
+Manifest written to C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_legacy_sweep_rejects_bad_4\sweep\manifest.jsonl
+_____ test_legacy_sweep_rejects_bad_inputs_before_creating_output[args5] ______
+tests\test_numeric_validation.py:129: in test_legacy_sweep_rejects_bad_inputs_before_creating_output
+    with pytest.raises(SystemExit) as exc:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE SystemExit
+---------------------------- Captured stdout call -----------------------------
+Planned runs: 1 (1 lr x 1 seeds x 1 l2sp-lambdas, 100 epochs each)
+WARNING: working tree has uncommitted changes -- results below won't be tied to a clean commit.
+
+[1/1] C:\Users\minhh\AppData\Local\Programs\Python\Python312\python.exe train.py --data-dir phonebook\data_phaseB --out-dir C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_legacy_sweep_rejects_bad_5\sweep\lr0.001_ep100_seed42_l2spinf --adapt-from phonebook\out_phaseA\model.pth phonebook\config\phonebook.py --lr 0.001 --epochs 100 --seed 42 --l2sp-lambda inf
+
+Manifest written to C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_legacy_sweep_rejects_bad_5\sweep\manifest.jsonl
+_____ test_legacy_sweep_rejects_bad_inputs_before_creating_output[args7] ______
+tests\test_numeric_validation.py:129: in test_legacy_sweep_rejects_bad_inputs_before_creating_output
+    with pytest.raises(SystemExit) as exc:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE SystemExit
+---------------------------- Captured stdout call -----------------------------
+Planned runs: 1 (1 lr x 1 seeds x 1 l2sp-lambdas, 0 epochs each)
+WARNING: working tree has uncommitted changes -- results below won't be tied to a clean commit.
+
+[1/1] C:\Users\minhh\AppData\Local\Programs\Python\Python312\python.exe train.py --data-dir phonebook\data_phaseB --out-dir C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_legacy_sweep_rejects_bad_7\sweep\lr0.001_ep0_seed42 --adapt-from phonebook\out_phaseA\model.pth phonebook\config\phonebook.py --lr 0.001 --epochs 0 --seed 42 --l2sp-lambda 0.0
+
+Manifest written to C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_legacy_sweep_rejects_bad_7\sweep\manifest.jsonl
+_____ test_legacy_sweep_rejects_bad_inputs_before_creating_output[args8] ______
+tests\test_numeric_validation.py:129: in test_legacy_sweep_rejects_bad_inputs_before_creating_output
+    with pytest.raises(SystemExit) as exc:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE SystemExit
+---------------------------- Captured stdout call -----------------------------
+Planned runs: 1 (1 lr x 1 seeds x 1 l2sp-lambdas, 100 epochs each)
+WARNING: working tree has uncommitted changes -- results below won't be tied to a clean commit.
+
+[1/1] C:\Users\minhh\AppData\Local\Programs\Python\Python312\python.exe train.py --data-dir phonebook\data_phaseB --out-dir C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_legacy_sweep_rejects_bad_8\sweep\lr0.001_ep100_seed42 --adapt-from phonebook\out_phaseA\model.pth phonebook\config\phonebook.py --lr 0.001 --epochs 100 --seed 42 --l2sp-lambda 0.0
+
+Manifest written to C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_legacy_sweep_rejects_bad_8\sweep\manifest.jsonl
+_____ test_legacy_sweep_rejects_bad_inputs_before_creating_output[args9] ______
+tests\test_numeric_validation.py:129: in test_legacy_sweep_rejects_bad_inputs_before_creating_output
+    with pytest.raises(SystemExit) as exc:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE SystemExit
+---------------------------- Captured stdout call -----------------------------
+Planned runs: 1 (1 lr x 1 seeds x 1 l2sp-lambdas, 100 epochs each)
+WARNING: working tree has uncommitted changes -- results below won't be tied to a clean commit.
+
+[1/1] C:\Users\minhh\AppData\Local\Programs\Python\Python312\python.exe train.py --data-dir phonebook\data_phaseB --out-dir C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_legacy_sweep_rejects_bad_9\sweep\lr0.001_ep100_seed18446744073709551616 --adapt-from phonebook\out_phaseA\model.pth phonebook\config\phonebook.py --lr 0.001 --epochs 100 --seed 18446744073709551616 --l2sp-lambda 0.0
+
+Manifest written to C:\Users\minhh\AppData\Local\Temp\pytest-of-minhh\pytest-329\test_legacy_sweep_rejects_bad_9\sweep\manifest.jsonl
+_________ test_evaluation_loss_is_mean_over_all_supervised_tokens[1] __________
+tests\test_loss_aggregation.py:43: in test_evaluation_loss_is_mean_over_all_supervised_tokens
+    assert epoch(model, loader) == pytest.approx(expected, abs=1e-12)
+E   assert 2.2222676211214396 == 3.3333787322325503 � 1.0e-12
+E     
+E     comparison failed
+E     Obtained: 2.2222676211214396
+E     Expected: 3.3333787322325503 � 1.0e-12
+_ test_undefined_means_and_unsupported_criteria_fail_explicitly[empty-epoch] __
+tests\test_loss_aggregation.py:106: in test_undefined_means_and_unsupported_criteria_fail_explicitly
+    epoch(model, loader, criterion=criterion, optimizer=torch.optim.AdamW(model.parameters()))
+tests\test_loss_aggregation.py:32: in epoch
+    return run_epoch(model, loader, 2, criterion or nn.CrossEntropyLoss(ignore_index=-100),
+completion_core\training.py:143: in run_epoch
+    return total_loss / len(loader)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+E   ZeroDivisionError: float division by zero
+_ test_undefined_means_and_unsupported_criteria_fail_explicitly[empty-metrics] _
+tests\test_loss_aggregation.py:108: in test_undefined_means_and_unsupported_criteria_fail_explicitly
+    evaluate_epoch_metrics(model, loader, 2, criterion, "cpu")
+completion_core\training.py:183: in evaluate_epoch_metrics
+    loss=total_loss / len(loader),
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+E   ZeroDivisionError: float division by zero
+_ test_undefined_means_and_unsupported_criteria_fail_explicitly[all_masked-epoch] _
+tests\test_loss_aggregation.py:104: in test_undefined_means_and_unsupported_criteria_fail_explicitly
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+---------------------------- Captured stdout call -----------------------------
+Epoch 1/1 | Loss: nan
+_ test_undefined_means_and_unsupported_criteria_fail_explicitly[all_masked-metrics] _
+tests\test_loss_aggregation.py:104: in test_undefined_means_and_unsupported_criteria_fail_explicitly
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+__ test_undefined_means_and_unsupported_criteria_fail_explicitly[sum-epoch] ___
+tests\test_loss_aggregation.py:104: in test_undefined_means_and_unsupported_criteria_fail_explicitly
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+---------------------------- Captured stdout call -----------------------------
+Epoch 1/1 | Loss: 0.0001
+_ test_undefined_means_and_unsupported_criteria_fail_explicitly[sum-metrics] __
+tests\test_loss_aggregation.py:104: in test_undefined_means_and_unsupported_criteria_fail_explicitly
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_ test_undefined_means_and_unsupported_criteria_fail_explicitly[weighted-epoch] _
+tests\test_loss_aggregation.py:104: in test_undefined_means_and_unsupported_criteria_fail_explicitly
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+---------------------------- Captured stdout call -----------------------------
+Epoch 1/1 | Loss: 0.0000
+_ test_undefined_means_and_unsupported_criteria_fail_explicitly[weighted-metrics] _
+tests\test_loss_aggregation.py:104: in test_undefined_means_and_unsupported_criteria_fail_explicitly
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_ test_undefined_means_and_unsupported_criteria_fail_explicitly[other_ignore_index-epoch] _
+tests\test_loss_aggregation.py:106: in test_undefined_means_and_unsupported_criteria_fail_explicitly
+    epoch(model, loader, criterion=criterion, optimizer=torch.optim.AdamW(model.parameters()))
+tests\test_loss_aggregation.py:32: in epoch
+    return run_epoch(model, loader, 2, criterion or nn.CrossEntropyLoss(ignore_index=-100),
+completion_core\training.py:121: in run_epoch
+    loss = criterion(logits.view(-1, vocab_size), y_batch.view(-1))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python312\Lib\site-packages\torch\nn\modules\module.py:1778: in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python312\Lib\site-packages\torch\nn\modules\module.py:1789: in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python312\Lib\site-packages\torch\nn\modules\loss.py:1394: in forward
+    return F.cross_entropy(
+..\..\AppData\Local\Programs\Python\Python312\Lib\site-packages\torch\nn\functional.py:3507: in cross_entropy
+    return torch._C._nn.cross_entropy_loss(
+E   IndexError: Target -100 is out of bounds.
+_ test_undefined_means_and_unsupported_criteria_fail_explicitly[other_ignore_index-metrics] _
+tests\test_loss_aggregation.py:108: in test_undefined_means_and_unsupported_criteria_fail_explicitly
+    evaluate_epoch_metrics(model, loader, 2, criterion, "cpu")
+completion_core\training.py:165: in evaluate_epoch_metrics
+    loss = criterion(logits.view(-1, vocab_size), y_batch.view(-1))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python312\Lib\site-packages\torch\nn\modules\module.py:1778: in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python312\Lib\site-packages\torch\nn\modules\module.py:1789: in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python312\Lib\site-packages\torch\nn\modules\loss.py:1394: in forward
+    return F.cross_entropy(
+..\..\AppData\Local\Programs\Python\Python312\Lib\site-packages\torch\nn\functional.py:3507: in cross_entropy
+    return torch._C._nn.cross_entropy_loss(
+E   IndexError: Target -100 is out of bounds.
+=========================== short test summary info ===========================
+FAILED tests/test_numeric_validation.py::test_nonfinite_training_cli_fails_before_touching_outputs[nan---lr]
+FAILED tests/test_numeric_validation.py::test_nonfinite_training_cli_fails_before_touching_outputs[nan---l2sp-lambda]
+FAILED tests/test_numeric_validation.py::test_nonfinite_training_cli_fails_before_touching_outputs[inf---lr]
+FAILED tests/test_numeric_validation.py::test_nonfinite_training_cli_fails_before_touching_outputs[-inf---lr]
+FAILED tests/test_numeric_validation.py::test_nonfinite_training_cli_fails_before_touching_outputs[1e999---lr]
+FAILED tests/test_numeric_validation.py::test_invalid_numeric_config_fails_before_creating_output[float('nan')-lr]
+FAILED tests/test_numeric_validation.py::test_invalid_numeric_config_fails_before_creating_output[float('nan')-l2sp_lambda]
+FAILED tests/test_numeric_validation.py::test_invalid_numeric_config_fails_before_creating_output[float('nan')-weight_decay]
+FAILED tests/test_numeric_validation.py::test_invalid_numeric_config_fails_before_creating_output[float('nan')-grad_clip]
+FAILED tests/test_numeric_validation.py::test_invalid_numeric_config_fails_before_creating_output[float('inf')-lr]
+FAILED tests/test_numeric_validation.py::test_invalid_numeric_config_fails_before_creating_output[float('inf')-weight_decay]
+FAILED tests/test_numeric_validation.py::test_invalid_numeric_config_fails_before_creating_output[float('inf')-grad_clip]
+FAILED tests/test_numeric_validation.py::test_invalid_numeric_config_fails_before_creating_output[True-lr]
+FAILED tests/test_numeric_validation.py::test_invalid_numeric_config_fails_before_creating_output[True-weight_decay]
+FAILED tests/test_numeric_validation.py::test_invalid_numeric_config_fails_before_creating_output[True-grad_clip]
+FAILED tests/test_numeric_validation.py::test_invalid_numeric_config_fails_before_creating_output['0.01'-lr]
+FAILED tests/test_numeric_validation.py::test_invalid_numeric_config_fails_before_creating_output['0.01'-l2sp_lambda]
+FAILED tests/test_numeric_validation.py::test_invalid_numeric_config_fails_before_creating_output['0.01'-weight_decay]
+FAILED tests/test_numeric_validation.py::test_invalid_numeric_config_fails_before_creating_output['0.01'-grad_clip]
+FAILED tests/test_numeric_validation.py::test_invalid_sizes_budgets_and_seed_are_rejected[epochs-0]
+FAILED tests/test_numeric_validation.py::test_invalid_sizes_budgets_and_seed_are_rejected[batch_size--1]
+FAILED tests/test_numeric_validation.py::test_invalid_sizes_budgets_and_seed_are_rejected[log_interval-0]
+FAILED tests/test_numeric_validation.py::test_invalid_sizes_budgets_and_seed_are_rejected[accuracy_interval-True]
+FAILED tests/test_numeric_validation.py::test_invalid_sizes_budgets_and_seed_are_rejected[embedding_dim-3.5]
+FAILED tests/test_numeric_validation.py::test_invalid_sizes_budgets_and_seed_are_rejected[n_heads-0]
+FAILED tests/test_numeric_validation.py::test_invalid_sizes_budgets_and_seed_are_rejected[n_layers-False]
+FAILED tests/test_numeric_validation.py::test_invalid_sizes_budgets_and_seed_are_rejected[seed-True]
+FAILED tests/test_numeric_validation.py::test_invalid_sizes_budgets_and_seed_are_rejected[seed-1.5]
+FAILED tests/test_numeric_validation.py::test_invalid_sizes_budgets_and_seed_are_rejected[seed--9223372036854775809]
+FAILED tests/test_numeric_validation.py::test_invalid_sizes_budgets_and_seed_are_rejected[seed-18446744073709551616]
+FAILED tests/test_numeric_validation.py::test_invalid_sizes_budgets_and_seed_are_rejected[lr-0]
+FAILED tests/test_numeric_validation.py::test_invalid_sizes_budgets_and_seed_are_rejected[weight_decay--0.1]
+FAILED tests/test_numeric_validation.py::test_invalid_sizes_budgets_and_seed_are_rejected[grad_clip--1]
+FAILED tests/test_numeric_validation.py::test_incompatible_head_dimensions_fail_during_config_validation
+FAILED tests/test_numeric_validation.py::test_spec_numeric_fields_reject_nonfinite_and_non_numeric_values[nan-lr]
+FAILED tests/test_numeric_validation.py::test_spec_numeric_fields_reject_nonfinite_and_non_numeric_values[nan-l2sp_lambda]
+FAILED tests/test_numeric_validation.py::test_spec_numeric_fields_reject_nonfinite_and_non_numeric_values[inf-lr]
+FAILED tests/test_numeric_validation.py::test_spec_numeric_fields_reject_nonfinite_and_non_numeric_values[inf-l2sp_lambda]
+FAILED tests/test_numeric_validation.py::test_spec_numeric_fields_reject_nonfinite_and_non_numeric_values[10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000-lr]
+FAILED tests/test_numeric_validation.py::test_spec_numeric_fields_reject_nonfinite_and_non_numeric_values[10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000-l2sp_lambda]
+FAILED tests/test_numeric_validation.py::test_spec_seed_must_be_supported_by_torch[-9223372036854775809]
+FAILED tests/test_numeric_validation.py::test_spec_seed_must_be_supported_by_torch[18446744073709551616]
+FAILED tests/test_numeric_validation.py::test_spec_json_rejects_nonstandard_constants_and_overflow_even_when_nested[NaN]
+FAILED tests/test_numeric_validation.py::test_spec_json_rejects_nonstandard_constants_and_overflow_even_when_nested[Infinity]
+FAILED tests/test_numeric_validation.py::test_spec_json_rejects_nonstandard_constants_and_overflow_even_when_nested[-Infinity]
+FAILED tests/test_numeric_validation.py::test_spec_json_rejects_nonstandard_constants_and_overflow_even_when_nested[1e999]
+FAILED tests/test_numeric_validation.py::test_spec_json_rejects_nonstandard_constants_and_overflow_even_when_nested[-1e999]
+FAILED tests/test_numeric_validation.py::test_json_hashing_and_writing_reject_nonfinite_without_overwriting[nan]
+FAILED tests/test_numeric_validation.py::test_json_hashing_and_writing_reject_nonfinite_without_overwriting[inf]
+FAILED tests/test_numeric_validation.py::test_json_hashing_and_writing_reject_nonfinite_without_overwriting[-inf]
+FAILED tests/test_numeric_validation.py::test_nonfinite_programmatic_metadata_fails_before_experiment_output_creation
+FAILED tests/test_numeric_validation.py::test_legacy_sweep_rejects_bad_inputs_before_creating_output[args0]
+FAILED tests/test_numeric_validation.py::test_legacy_sweep_rejects_bad_inputs_before_creating_output[args1]
+FAILED tests/test_numeric_validation.py::test_legacy_sweep_rejects_bad_inputs_before_creating_output[args2]
+FAILED tests/test_numeric_validation.py::test_legacy_sweep_rejects_bad_inputs_before_creating_output[args3]
+FAILED tests/test_numeric_validation.py::test_legacy_sweep_rejects_bad_inputs_before_creating_output[args4]
+FAILED tests/test_numeric_validation.py::test_legacy_sweep_rejects_bad_inputs_before_creating_output[args5]
+FAILED tests/test_numeric_validation.py::test_legacy_sweep_rejects_bad_inputs_before_creating_output[args7]
+FAILED tests/test_numeric_validation.py::test_legacy_sweep_rejects_bad_inputs_before_creating_output[args8]
+FAILED tests/test_numeric_validation.py::test_legacy_sweep_rejects_bad_inputs_before_creating_output[args9]
+FAILED tests/test_loss_aggregation.py::test_evaluation_loss_is_mean_over_all_supervised_tokens[1]
+FAILED tests/test_loss_aggregation.py::test_undefined_means_and_unsupported_criteria_fail_explicitly[empty-epoch]
+FAILED tests/test_loss_aggregation.py::test_undefined_means_and_unsupported_criteria_fail_explicitly[empty-metrics]
+FAILED tests/test_loss_aggregation.py::test_undefined_means_and_unsupported_criteria_fail_explicitly[all_masked-epoch]
+FAILED tests/test_loss_aggregation.py::test_undefined_means_and_unsupported_criteria_fail_explicitly[all_masked-metrics]
+FAILED tests/test_loss_aggregation.py::test_undefined_means_and_unsupported_criteria_fail_explicitly[sum-epoch]
+FAILED tests/test_loss_aggregation.py::test_undefined_means_and_unsupported_criteria_fail_explicitly[sum-metrics]
+FAILED tests/test_loss_aggregation.py::test_undefined_means_and_unsupported_criteria_fail_explicitly[weighted-epoch]
+FAILED tests/test_loss_aggregation.py::test_undefined_means_and_unsupported_criteria_fail_explicitly[weighted-metrics]
+FAILED tests/test_loss_aggregation.py::test_undefined_means_and_unsupported_criteria_fail_explicitly[other_ignore_index-epoch]
+FAILED tests/test_loss_aggregation.py::test_undefined_means_and_unsupported_criteria_fail_explicitly[other_ignore_index-metrics]
+71 failed, 24 passed in 38.71s

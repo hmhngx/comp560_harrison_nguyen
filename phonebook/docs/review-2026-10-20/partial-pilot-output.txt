@@ -1,0 +1,7 @@
+Training plain_b: 600 updates
+Training partial_m1_seed1701: 545 updates
+Training partial_m2_seed1701: 500 updates
+Training partial_m5_seed1701: 400 updates
+Training full_replay: 300 updates
+Training fresh_joint: 300 updates
+Training complete. Specification pin: d54a941e5cd794e590eadfc197395e55d4954988fdf5b030d8787f2af911d2f3

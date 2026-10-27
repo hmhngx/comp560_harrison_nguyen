@@ -1,0 +1,1126 @@
+{
+  "status": "passed",
+  "dtype": "float32",
+  "device": "cpu",
+  "model_config": {
+    "seq_len": 29,
+    "d_model": 64,
+    "n_heads": 2,
+    "n_layers": 2
+  },
+  "loss_tolerance": {
+    "atol": 1e-06,
+    "rtol": 1e-05
+  },
+  "gradient_tolerance": {
+    "atol": 1e-06,
+    "rtol": 0.0001
+  },
+  "analytic_first_step_tolerance": {
+    "atol": 2e-07,
+    "rtol": 1e-05
+  },
+  "cross_implementation_step_identity_asserted": false,
+  "cases": [
+    {
+      "condition": "plain_b",
+      "scalar_difference": 4.76837158203125e-07,
+      "loss_and_all_gradients_pass": true,
+      "both_analytic_AdamW_checks_pass": true,
+      "maximum_logit_difference_after_step": 2.86102294921875e-06,
+      "parameters": [
+        {
+          "parameter": "token_embedding.weight",
+          "elements": 4288,
+          "max_abs_gradient_difference": 8.381903171539307e-09,
+          "max_abs_parameter_difference_after_step": 8.940696716308594e-08
+        },
+        {
+          "parameter": "position_embedding.weight",
+          "elements": 1856,
+          "max_abs_gradient_difference": 5.587935447692871e-09,
+          "max_abs_parameter_difference_after_step": 1.4901161193847656e-08
+        },
+        {
+          "parameter": "transformer.layers.0.self_attn.in_proj_weight",
+          "elements": 12288,
+          "max_abs_gradient_difference": 2.60770320892334e-08,
+          "max_abs_parameter_difference_after_step": 2.9802322387695312e-08
+        },
+        {
+          "parameter": "transformer.layers.0.self_attn.in_proj_bias",
+          "elements": 192,
+          "max_abs_gradient_difference": 2.2351741790771484e-08,
+          "max_abs_parameter_difference_after_step": 0.00015375194197986275
+        },
+        {
+          "parameter": "transformer.layers.0.self_attn.out_proj.weight",
+          "elements": 4096,
+          "max_abs_gradient_difference": 1.4901161193847656e-08,
+          "max_abs_parameter_difference_after_step": 1.4901161193847656e-08
+        },
+        {
+          "parameter": "transformer.layers.0.self_attn.out_proj.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 1.4901161193847656e-08,
+          "max_abs_parameter_difference_after_step": 1.862645149230957e-09
+        },
+        {
+          "parameter": "transformer.layers.0.linear1.weight",
+          "elements": 16384,
+          "max_abs_gradient_difference": 9.313225746154785e-09,
+          "max_abs_parameter_difference_after_step": 1.5124678611755371e-06
+        },
+        {
+          "parameter": "transformer.layers.0.linear1.bias",
+          "elements": 256,
+          "max_abs_gradient_difference": 5.587935447692871e-09,
+          "max_abs_parameter_difference_after_step": 3.725290298461914e-09
+        },
+        {
+          "parameter": "transformer.layers.0.linear2.weight",
+          "elements": 16384,
+          "max_abs_gradient_difference": 1.4901161193847656e-08,
+          "max_abs_parameter_difference_after_step": 4.0978193283081055e-08
+        },
+        {
+          "parameter": "transformer.layers.0.linear2.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 1.1175870895385742e-08,
+          "max_abs_parameter_difference_after_step": 9.313225746154785e-10
+        },
+        {
+          "parameter": "transformer.layers.0.norm1.weight",
+          "elements": 64,
+          "max_abs_gradient_difference": 2.2351741790771484e-08,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "transformer.layers.0.norm1.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 2.9802322387695312e-08,
+          "max_abs_parameter_difference_after_step": 4.656612873077393e-10
+        },
+        {
+          "parameter": "transformer.layers.0.norm2.weight",
+          "elements": 64,
+          "max_abs_gradient_difference": 1.1175870895385742e-08,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "transformer.layers.0.norm2.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 1.30385160446167e-08,
+          "max_abs_parameter_difference_after_step": 9.313225746154785e-10
+        },
+        {
+          "parameter": "transformer.layers.1.self_attn.in_proj_weight",
+          "elements": 12288,
+          "max_abs_gradient_difference": 1.4901161193847656e-08,
+          "max_abs_parameter_difference_after_step": 1.4901161193847656e-08
+        },
+        {
+          "parameter": "transformer.layers.1.self_attn.in_proj_bias",
+          "elements": 192,
+          "max_abs_gradient_difference": 9.313225746154785e-09,
+          "max_abs_parameter_difference_after_step": 0.00010230994666926563
+        },
+        {
+          "parameter": "transformer.layers.1.self_attn.out_proj.weight",
+          "elements": 4096,
+          "max_abs_gradient_difference": 9.313225746154785e-09,
+          "max_abs_parameter_difference_after_step": 1.4901161193847656e-08
+        },
+        {
+          "parameter": "transformer.layers.1.self_attn.out_proj.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 7.450580596923828e-09,
+          "max_abs_parameter_difference_after_step": 9.313225746154785e-10
+        },
+        {
+          "parameter": "transformer.layers.1.linear1.weight",
+          "elements": 16384,
+          "max_abs_gradient_difference": 3.725290298461914e-09,
+          "max_abs_parameter_difference_after_step": 2.998858690261841e-07
+        },
+        {
+          "parameter": "transformer.layers.1.linear1.bias",
+          "elements": 256,
+          "max_abs_gradient_difference": 1.862645149230957e-09,
+          "max_abs_parameter_difference_after_step": 7.450580596923828e-09
+        },
+        {
+          "parameter": "transformer.layers.1.linear2.weight",
+          "elements": 16384,
+          "max_abs_gradient_difference": 7.450580596923828e-09,
+          "max_abs_parameter_difference_after_step": 8.940696716308594e-08
+        },
+        {
+          "parameter": "transformer.layers.1.linear2.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 3.725290298461914e-09,
+          "max_abs_parameter_difference_after_step": 9.313225746154785e-10
+        },
+        {
+          "parameter": "transformer.layers.1.norm1.weight",
+          "elements": 64,
+          "max_abs_gradient_difference": 1.30385160446167e-08,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "transformer.layers.1.norm1.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 1.4901161193847656e-08,
+          "max_abs_parameter_difference_after_step": 9.313225746154785e-10
+        },
+        {
+          "parameter": "transformer.layers.1.norm2.weight",
+          "elements": 64,
+          "max_abs_gradient_difference": 7.450580596923828e-09,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "transformer.layers.1.norm2.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 4.6566128730773926e-09,
+          "max_abs_parameter_difference_after_step": 1.862645149230957e-09
+        },
+        {
+          "parameter": "ln_f.weight",
+          "elements": 64,
+          "max_abs_gradient_difference": 3.725290298461914e-08,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "ln_f.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 1.4901161193847656e-08,
+          "max_abs_parameter_difference_after_step": 7.450580596923828e-09
+        },
+        {
+          "parameter": "lm_head.weight",
+          "elements": 4288,
+          "max_abs_gradient_difference": 4.470348358154297e-08,
+          "max_abs_parameter_difference_after_step": 1.4901161193847656e-08
+        }
+      ]
+    },
+    {
+      "condition": "partial_m1_seed1701",
+      "scalar_difference": 0.0,
+      "loss_and_all_gradients_pass": true,
+      "both_analytic_AdamW_checks_pass": true,
+      "maximum_logit_difference_after_step": 2.384185791015625e-06,
+      "parameters": [
+        {
+          "parameter": "token_embedding.weight",
+          "elements": 4288,
+          "max_abs_gradient_difference": 2.2118911147117615e-09,
+          "max_abs_parameter_difference_after_step": 2.9802322387695312e-08
+        },
+        {
+          "parameter": "position_embedding.weight",
+          "elements": 1856,
+          "max_abs_gradient_difference": 1.862645149230957e-09,
+          "max_abs_parameter_difference_after_step": 1.1920928955078125e-07
+        },
+        {
+          "parameter": "transformer.layers.0.self_attn.in_proj_weight",
+          "elements": 12288,
+          "max_abs_gradient_difference": 1.0244548320770264e-08,
+          "max_abs_parameter_difference_after_step": 1.7136335372924805e-07
+        },
+        {
+          "parameter": "transformer.layers.0.self_attn.in_proj_bias",
+          "elements": 192,
+          "max_abs_gradient_difference": 4.6566128730773926e-09,
+          "max_abs_parameter_difference_after_step": 8.777980838203803e-05
+        },
+        {
+          "parameter": "transformer.layers.0.self_attn.out_proj.weight",
+          "elements": 4096,
+          "max_abs_gradient_difference": 9.313225746154785e-09,
+          "max_abs_parameter_difference_after_step": 1.4901161193847656e-08
+        },
+        {
+          "parameter": "transformer.layers.0.self_attn.out_proj.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 7.450580596923828e-09,
+          "max_abs_parameter_difference_after_step": 1.862645149230957e-09
+        },
+        {
+          "parameter": "transformer.layers.0.linear1.weight",
+          "elements": 16384,
+          "max_abs_gradient_difference": 3.725290298461914e-09,
+          "max_abs_parameter_difference_after_step": 1.210719347000122e-07
+        },
+        {
+          "parameter": "transformer.layers.0.linear1.bias",
+          "elements": 256,
+          "max_abs_gradient_difference": 1.862645149230957e-09,
+          "max_abs_parameter_difference_after_step": 3.725290298461914e-09
+        },
+        {
+          "parameter": "transformer.layers.0.linear2.weight",
+          "elements": 16384,
+          "max_abs_gradient_difference": 6.51925802230835e-09,
+          "max_abs_parameter_difference_after_step": 2.8870999813079834e-08
+        },
+        {
+          "parameter": "transformer.layers.0.linear2.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 5.587935447692871e-09,
+          "max_abs_parameter_difference_after_step": 3.725290298461914e-09
+        },
+        {
+          "parameter": "transformer.layers.0.norm1.weight",
+          "elements": 64,
+          "max_abs_gradient_difference": 9.313225746154785e-09,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "transformer.layers.0.norm1.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 1.1175870895385742e-08,
+          "max_abs_parameter_difference_after_step": 4.656612873077393e-10
+        },
+        {
+          "parameter": "transformer.layers.0.norm2.weight",
+          "elements": 64,
+          "max_abs_gradient_difference": 2.7939677238464355e-09,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "transformer.layers.0.norm2.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 3.725290298461914e-09,
+          "max_abs_parameter_difference_after_step": 2.3283064365386963e-10
+        },
+        {
+          "parameter": "transformer.layers.1.self_attn.in_proj_weight",
+          "elements": 12288,
+          "max_abs_gradient_difference": 5.587935447692871e-09,
+          "max_abs_parameter_difference_after_step": 2.421438694000244e-08
+        },
+        {
+          "parameter": "transformer.layers.1.self_attn.in_proj_bias",
+          "elements": 192,
+          "max_abs_gradient_difference": 1.862645149230957e-09,
+          "max_abs_parameter_difference_after_step": 4.920712672173977e-05
+        },
+        {
+          "parameter": "transformer.layers.1.self_attn.out_proj.weight",
+          "elements": 4096,
+          "max_abs_gradient_difference": 2.7939677238464355e-09,
+          "max_abs_parameter_difference_after_step": 1.4901161193847656e-08
+        },
+        {
+          "parameter": "transformer.layers.1.self_attn.out_proj.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 3.725290298461914e-09,
+          "max_abs_parameter_difference_after_step": 1.862645149230957e-09
+        },
+        {
+          "parameter": "transformer.layers.1.linear1.weight",
+          "elements": 16384,
+          "max_abs_gradient_difference": 1.3969838619232178e-09,
+          "max_abs_parameter_difference_after_step": 7.450580596923828e-08
+        },
+        {
+          "parameter": "transformer.layers.1.linear1.bias",
+          "elements": 256,
+          "max_abs_gradient_difference": 1.3969838619232178e-09,
+          "max_abs_parameter_difference_after_step": 2.3283064365386963e-10
+        },
+        {
+          "parameter": "transformer.layers.1.linear2.weight",
+          "elements": 16384,
+          "max_abs_gradient_difference": 1.862645149230957e-09,
+          "max_abs_parameter_difference_after_step": 2.2351741790771484e-08
+        },
+        {
+          "parameter": "transformer.layers.1.linear2.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 1.3969838619232178e-09,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "transformer.layers.1.norm1.weight",
+          "elements": 64,
+          "max_abs_gradient_difference": 2.7939677238464355e-09,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "transformer.layers.1.norm1.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 3.026798367500305e-09,
+          "max_abs_parameter_difference_after_step": 9.313225746154785e-10
+        },
+        {
+          "parameter": "transformer.layers.1.norm2.weight",
+          "elements": 64,
+          "max_abs_gradient_difference": 1.862645149230957e-09,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "transformer.layers.1.norm2.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 9.313225746154785e-10,
+          "max_abs_parameter_difference_after_step": 1.862645149230957e-09
+        },
+        {
+          "parameter": "ln_f.weight",
+          "elements": 64,
+          "max_abs_gradient_difference": 1.4901161193847656e-08,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "ln_f.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 3.725290298461914e-09,
+          "max_abs_parameter_difference_after_step": 7.450580596923828e-09
+        },
+        {
+          "parameter": "lm_head.weight",
+          "elements": 4288,
+          "max_abs_gradient_difference": 2.2351741790771484e-08,
+          "max_abs_parameter_difference_after_step": 7.450580596923828e-09
+        }
+      ]
+    },
+    {
+      "condition": "partial_m2_seed1701",
+      "scalar_difference": 0.0,
+      "loss_and_all_gradients_pass": true,
+      "both_analytic_AdamW_checks_pass": true,
+      "maximum_logit_difference_after_step": 1.4781951904296875e-05,
+      "parameters": [
+        {
+          "parameter": "token_embedding.weight",
+          "elements": 4288,
+          "max_abs_gradient_difference": 2.7939677238464355e-09,
+          "max_abs_parameter_difference_after_step": 5.960464477539063e-08
+        },
+        {
+          "parameter": "position_embedding.weight",
+          "elements": 1856,
+          "max_abs_gradient_difference": 1.6298145055770874e-09,
+          "max_abs_parameter_difference_after_step": 7.450580596923828e-09
+        },
+        {
+          "parameter": "transformer.layers.0.self_attn.in_proj_weight",
+          "elements": 12288,
+          "max_abs_gradient_difference": 9.313225746154785e-09,
+          "max_abs_parameter_difference_after_step": 6.109476089477539e-07
+        },
+        {
+          "parameter": "transformer.layers.0.self_attn.in_proj_bias",
+          "elements": 192,
+          "max_abs_gradient_difference": 3.725290298461914e-09,
+          "max_abs_parameter_difference_after_step": 0.0001540804805699736
+        },
+        {
+          "parameter": "transformer.layers.0.self_attn.out_proj.weight",
+          "elements": 4096,
+          "max_abs_gradient_difference": 7.450580596923828e-09,
+          "max_abs_parameter_difference_after_step": 1.4901161193847656e-08
+        },
+        {
+          "parameter": "transformer.layers.0.self_attn.out_proj.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 3.725290298461914e-09,
+          "max_abs_parameter_difference_after_step": 9.313225746154785e-10
+        },
+        {
+          "parameter": "transformer.layers.0.linear1.weight",
+          "elements": 16384,
+          "max_abs_gradient_difference": 3.725290298461914e-09,
+          "max_abs_parameter_difference_after_step": 3.3915042877197266e-05
+        },
+        {
+          "parameter": "transformer.layers.0.linear1.bias",
+          "elements": 256,
+          "max_abs_gradient_difference": 1.862645149230957e-09,
+          "max_abs_parameter_difference_after_step": 7.450580596923828e-09
+        },
+        {
+          "parameter": "transformer.layers.0.linear2.weight",
+          "elements": 16384,
+          "max_abs_gradient_difference": 7.450580596923828e-09,
+          "max_abs_parameter_difference_after_step": 2.312473952770233e-06
+        },
+        {
+          "parameter": "transformer.layers.0.linear2.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 3.725290298461914e-09,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "transformer.layers.0.norm1.weight",
+          "elements": 64,
+          "max_abs_gradient_difference": 9.313225746154785e-09,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "transformer.layers.0.norm1.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 1.1175870895385742e-08,
+          "max_abs_parameter_difference_after_step": 3.725290298461914e-09
+        },
+        {
+          "parameter": "transformer.layers.0.norm2.weight",
+          "elements": 64,
+          "max_abs_gradient_difference": 3.259629011154175e-09,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "transformer.layers.0.norm2.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 5.587935447692871e-09,
+          "max_abs_parameter_difference_after_step": 9.313225746154785e-10
+        },
+        {
+          "parameter": "transformer.layers.1.self_attn.in_proj_weight",
+          "elements": 12288,
+          "max_abs_gradient_difference": 6.51925802230835e-09,
+          "max_abs_parameter_difference_after_step": 1.5832483768463135e-08
+        },
+        {
+          "parameter": "transformer.layers.1.self_attn.in_proj_bias",
+          "elements": 192,
+          "max_abs_gradient_difference": 2.7939677238464355e-09,
+          "max_abs_parameter_difference_after_step": 5.040894029662013e-05
+        },
+        {
+          "parameter": "transformer.layers.1.self_attn.out_proj.weight",
+          "elements": 4096,
+          "max_abs_gradient_difference": 4.6566128730773926e-09,
+          "max_abs_parameter_difference_after_step": 1.4901161193847656e-08
+        },
+        {
+          "parameter": "transformer.layers.1.self_attn.out_proj.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 3.725290298461914e-09,
+          "max_abs_parameter_difference_after_step": 4.656612873077393e-10
+        },
+        {
+          "parameter": "transformer.layers.1.linear1.weight",
+          "elements": 16384,
+          "max_abs_gradient_difference": 1.3969838619232178e-09,
+          "max_abs_parameter_difference_after_step": 2.9802322387695312e-08
+        },
+        {
+          "parameter": "transformer.layers.1.linear1.bias",
+          "elements": 256,
+          "max_abs_gradient_difference": 1.862645149230957e-09,
+          "max_abs_parameter_difference_after_step": 4.656612873077393e-10
+        },
+        {
+          "parameter": "transformer.layers.1.linear2.weight",
+          "elements": 16384,
+          "max_abs_gradient_difference": 2.7939677238464355e-09,
+          "max_abs_parameter_difference_after_step": 9.357929229736328e-06
+        },
+        {
+          "parameter": "transformer.layers.1.linear2.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 1.862645149230957e-09,
+          "max_abs_parameter_difference_after_step": 9.313225746154785e-10
+        },
+        {
+          "parameter": "transformer.layers.1.norm1.weight",
+          "elements": 64,
+          "max_abs_gradient_difference": 3.725290298461914e-09,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "transformer.layers.1.norm1.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 3.725290298461914e-09,
+          "max_abs_parameter_difference_after_step": 9.313225746154785e-10
+        },
+        {
+          "parameter": "transformer.layers.1.norm2.weight",
+          "elements": 64,
+          "max_abs_gradient_difference": 1.862645149230957e-09,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "transformer.layers.1.norm2.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 1.862645149230957e-09,
+          "max_abs_parameter_difference_after_step": 2.3283064365386963e-10
+        },
+        {
+          "parameter": "ln_f.weight",
+          "elements": 64,
+          "max_abs_gradient_difference": 1.1175870895385742e-08,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "ln_f.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 3.725290298461914e-09,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "lm_head.weight",
+          "elements": 4288,
+          "max_abs_gradient_difference": 2.2351741790771484e-08,
+          "max_abs_parameter_difference_after_step": 1.280568540096283e-08
+        }
+      ]
+    },
+    {
+      "condition": "partial_m5_seed1701",
+      "scalar_difference": 2.384185791015625e-07,
+      "loss_and_all_gradients_pass": true,
+      "both_analytic_AdamW_checks_pass": true,
+      "maximum_logit_difference_after_step": 2.4318695068359375e-05,
+      "parameters": [
+        {
+          "parameter": "token_embedding.weight",
+          "elements": 4288,
+          "max_abs_gradient_difference": 4.6566128730773926e-09,
+          "max_abs_parameter_difference_after_step": 1.1920928955078125e-07
+        },
+        {
+          "parameter": "position_embedding.weight",
+          "elements": 1856,
+          "max_abs_gradient_difference": 3.725290298461914e-09,
+          "max_abs_parameter_difference_after_step": 5.960464477539063e-08
+        },
+        {
+          "parameter": "transformer.layers.0.self_attn.in_proj_weight",
+          "elements": 12288,
+          "max_abs_gradient_difference": 1.6763806343078613e-08,
+          "max_abs_parameter_difference_after_step": 6.863847374916077e-07
+        },
+        {
+          "parameter": "transformer.layers.0.self_attn.in_proj_bias",
+          "elements": 192,
+          "max_abs_gradient_difference": 1.1175870895385742e-08,
+          "max_abs_parameter_difference_after_step": 0.0002834315528161824
+        },
+        {
+          "parameter": "transformer.layers.0.self_attn.out_proj.weight",
+          "elements": 4096,
+          "max_abs_gradient_difference": 9.313225746154785e-09,
+          "max_abs_parameter_difference_after_step": 1.4901161193847656e-08
+        },
+        {
+          "parameter": "transformer.layers.0.self_attn.out_proj.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 7.450580596923828e-09,
+          "max_abs_parameter_difference_after_step": 9.313225746154785e-10
+        },
+        {
+          "parameter": "transformer.layers.0.linear1.weight",
+          "elements": 16384,
+          "max_abs_gradient_difference": 4.6566128730773926e-09,
+          "max_abs_parameter_difference_after_step": 1.043081283569336e-07
+        },
+        {
+          "parameter": "transformer.layers.0.linear1.bias",
+          "elements": 256,
+          "max_abs_gradient_difference": 2.7939677238464355e-09,
+          "max_abs_parameter_difference_after_step": 7.450580596923828e-09
+        },
+        {
+          "parameter": "transformer.layers.0.linear2.weight",
+          "elements": 16384,
+          "max_abs_gradient_difference": 8.381903171539307e-09,
+          "max_abs_parameter_difference_after_step": 3.5393983125686646e-05
+        },
+        {
+          "parameter": "transformer.layers.0.linear2.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 7.450580596923828e-09,
+          "max_abs_parameter_difference_after_step": 9.313225746154785e-10
+        },
+        {
+          "parameter": "transformer.layers.0.norm1.weight",
+          "elements": 64,
+          "max_abs_gradient_difference": 1.6763806343078613e-08,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "transformer.layers.0.norm1.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 2.2351741790771484e-08,
+          "max_abs_parameter_difference_after_step": 2.3283064365386963e-10
+        },
+        {
+          "parameter": "transformer.layers.0.norm2.weight",
+          "elements": 64,
+          "max_abs_gradient_difference": 5.587935447692871e-09,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "transformer.layers.0.norm2.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 5.587935447692871e-09,
+          "max_abs_parameter_difference_after_step": 3.725290298461914e-09
+        },
+        {
+          "parameter": "transformer.layers.1.self_attn.in_proj_weight",
+          "elements": 12288,
+          "max_abs_gradient_difference": 7.450580596923828e-09,
+          "max_abs_parameter_difference_after_step": 2.9802322387695312e-08
+        },
+        {
+          "parameter": "transformer.layers.1.self_attn.in_proj_bias",
+          "elements": 192,
+          "max_abs_gradient_difference": 5.587935447692871e-09,
+          "max_abs_parameter_difference_after_step": 0.00010686270252335817
+        },
+        {
+          "parameter": "transformer.layers.1.self_attn.out_proj.weight",
+          "elements": 4096,
+          "max_abs_gradient_difference": 5.587935447692871e-09,
+          "max_abs_parameter_difference_after_step": 1.4901161193847656e-08
+        },
+        {
+          "parameter": "transformer.layers.1.self_attn.out_proj.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 3.725290298461914e-09,
+          "max_abs_parameter_difference_after_step": 4.656612873077393e-10
+        },
+        {
+          "parameter": "transformer.layers.1.linear1.weight",
+          "elements": 16384,
+          "max_abs_gradient_difference": 2.0954757928848267e-09,
+          "max_abs_parameter_difference_after_step": 4.842877388000488e-08
+        },
+        {
+          "parameter": "transformer.layers.1.linear1.bias",
+          "elements": 256,
+          "max_abs_gradient_difference": 1.3969838619232178e-09,
+          "max_abs_parameter_difference_after_step": 7.450580596923828e-09
+        },
+        {
+          "parameter": "transformer.layers.1.linear2.weight",
+          "elements": 16384,
+          "max_abs_gradient_difference": 3.725290298461914e-09,
+          "max_abs_parameter_difference_after_step": 4.637986421585083e-07
+        },
+        {
+          "parameter": "transformer.layers.1.linear2.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 2.7939677238464355e-09,
+          "max_abs_parameter_difference_after_step": 3.725290298461914e-09
+        },
+        {
+          "parameter": "transformer.layers.1.norm1.weight",
+          "elements": 64,
+          "max_abs_gradient_difference": 8.381903171539307e-09,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "transformer.layers.1.norm1.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 7.450580596923828e-09,
+          "max_abs_parameter_difference_after_step": 9.313225746154785e-10
+        },
+        {
+          "parameter": "transformer.layers.1.norm2.weight",
+          "elements": 64,
+          "max_abs_gradient_difference": 5.587935447692871e-09,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "transformer.layers.1.norm2.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 2.3283064365386963e-09,
+          "max_abs_parameter_difference_after_step": 1.862645149230957e-09
+        },
+        {
+          "parameter": "ln_f.weight",
+          "elements": 64,
+          "max_abs_gradient_difference": 2.2351741790771484e-08,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "ln_f.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 9.313225746154785e-09,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "lm_head.weight",
+          "elements": 4288,
+          "max_abs_gradient_difference": 4.470348358154297e-08,
+          "max_abs_parameter_difference_after_step": 1.4901161193847656e-08
+        }
+      ]
+    },
+    {
+      "condition": "full_replay",
+      "scalar_difference": 2.384185791015625e-07,
+      "loss_and_all_gradients_pass": true,
+      "both_analytic_AdamW_checks_pass": true,
+      "maximum_logit_difference_after_step": 3.0994415283203125e-06,
+      "parameters": [
+        {
+          "parameter": "token_embedding.weight",
+          "elements": 4288,
+          "max_abs_gradient_difference": 4.190951585769653e-09,
+          "max_abs_parameter_difference_after_step": 1.1920928955078125e-07
+        },
+        {
+          "parameter": "position_embedding.weight",
+          "elements": 1856,
+          "max_abs_gradient_difference": 3.259629011154175e-09,
+          "max_abs_parameter_difference_after_step": 1.4901161193847656e-08
+        },
+        {
+          "parameter": "transformer.layers.0.self_attn.in_proj_weight",
+          "elements": 12288,
+          "max_abs_gradient_difference": 1.6763806343078613e-08,
+          "max_abs_parameter_difference_after_step": 1.4901161193847656e-08
+        },
+        {
+          "parameter": "transformer.layers.0.self_attn.in_proj_bias",
+          "elements": 192,
+          "max_abs_gradient_difference": 9.313225746154785e-09,
+          "max_abs_parameter_difference_after_step": 0.0002690063847694546
+        },
+        {
+          "parameter": "transformer.layers.0.self_attn.out_proj.weight",
+          "elements": 4096,
+          "max_abs_gradient_difference": 8.381903171539307e-09,
+          "max_abs_parameter_difference_after_step": 1.4901161193847656e-08
+        },
+        {
+          "parameter": "transformer.layers.0.self_attn.out_proj.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 9.313225746154785e-09,
+          "max_abs_parameter_difference_after_step": 9.313225746154785e-10
+        },
+        {
+          "parameter": "transformer.layers.0.linear1.weight",
+          "elements": 16384,
+          "max_abs_gradient_difference": 7.450580596923828e-09,
+          "max_abs_parameter_difference_after_step": 3.475695848464966e-06
+        },
+        {
+          "parameter": "transformer.layers.0.linear1.bias",
+          "elements": 256,
+          "max_abs_gradient_difference": 2.3283064365386963e-09,
+          "max_abs_parameter_difference_after_step": 1.816079020500183e-08
+        },
+        {
+          "parameter": "transformer.layers.0.linear2.weight",
+          "elements": 16384,
+          "max_abs_gradient_difference": 9.313225746154785e-09,
+          "max_abs_parameter_difference_after_step": 1.1175870895385742e-07
+        },
+        {
+          "parameter": "transformer.layers.0.linear2.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 7.450580596923828e-09,
+          "max_abs_parameter_difference_after_step": 9.313225746154785e-10
+        },
+        {
+          "parameter": "transformer.layers.0.norm1.weight",
+          "elements": 64,
+          "max_abs_gradient_difference": 1.862645149230957e-08,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "transformer.layers.0.norm1.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 2.60770320892334e-08,
+          "max_abs_parameter_difference_after_step": 4.656612873077393e-10
+        },
+        {
+          "parameter": "transformer.layers.0.norm2.weight",
+          "elements": 64,
+          "max_abs_gradient_difference": 5.587935447692871e-09,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "transformer.layers.0.norm2.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 6.51925802230835e-09,
+          "max_abs_parameter_difference_after_step": 9.313225746154785e-10
+        },
+        {
+          "parameter": "transformer.layers.1.self_attn.in_proj_weight",
+          "elements": 12288,
+          "max_abs_gradient_difference": 9.313225746154785e-09,
+          "max_abs_parameter_difference_after_step": 7.450580596923828e-08
+        },
+        {
+          "parameter": "transformer.layers.1.self_attn.in_proj_bias",
+          "elements": 192,
+          "max_abs_gradient_difference": 3.725290298461914e-09,
+          "max_abs_parameter_difference_after_step": 0.00013114491594024003
+        },
+        {
+          "parameter": "transformer.layers.1.self_attn.out_proj.weight",
+          "elements": 4096,
+          "max_abs_gradient_difference": 4.6566128730773926e-09,
+          "max_abs_parameter_difference_after_step": 1.4901161193847656e-08
+        },
+        {
+          "parameter": "transformer.layers.1.self_attn.out_proj.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 3.725290298461914e-09,
+          "max_abs_parameter_difference_after_step": 4.656612873077393e-10
+        },
+        {
+          "parameter": "transformer.layers.1.linear1.weight",
+          "elements": 16384,
+          "max_abs_gradient_difference": 2.7939677238464355e-09,
+          "max_abs_parameter_difference_after_step": 5.781650543212891e-06
+        },
+        {
+          "parameter": "transformer.layers.1.linear1.bias",
+          "elements": 256,
+          "max_abs_gradient_difference": 1.3969838619232178e-09,
+          "max_abs_parameter_difference_after_step": 3.725290298461914e-09
+        },
+        {
+          "parameter": "transformer.layers.1.linear2.weight",
+          "elements": 16384,
+          "max_abs_gradient_difference": 3.725290298461914e-09,
+          "max_abs_parameter_difference_after_step": 6.332993507385254e-08
+        },
+        {
+          "parameter": "transformer.layers.1.linear2.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 2.7939677238464355e-09,
+          "max_abs_parameter_difference_after_step": 3.725290298461914e-09
+        },
+        {
+          "parameter": "transformer.layers.1.norm1.weight",
+          "elements": 64,
+          "max_abs_gradient_difference": 8.381903171539307e-09,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "transformer.layers.1.norm1.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 7.450580596923828e-09,
+          "max_abs_parameter_difference_after_step": 1.862645149230957e-09
+        },
+        {
+          "parameter": "transformer.layers.1.norm2.weight",
+          "elements": 64,
+          "max_abs_gradient_difference": 3.725290298461914e-09,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "transformer.layers.1.norm2.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 1.979060471057892e-09,
+          "max_abs_parameter_difference_after_step": 4.656612873077393e-10
+        },
+        {
+          "parameter": "ln_f.weight",
+          "elements": 64,
+          "max_abs_gradient_difference": 1.862645149230957e-08,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "ln_f.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 7.450580596923828e-09,
+          "max_abs_parameter_difference_after_step": 3.725290298461914e-09
+        },
+        {
+          "parameter": "lm_head.weight",
+          "elements": 4288,
+          "max_abs_gradient_difference": 2.9802322387695312e-08,
+          "max_abs_parameter_difference_after_step": 1.4901161193847656e-08
+        }
+      ]
+    },
+    {
+      "condition": "fresh_joint",
+      "scalar_difference": 4.76837158203125e-07,
+      "loss_and_all_gradients_pass": true,
+      "both_analytic_AdamW_checks_pass": true,
+      "maximum_logit_difference_after_step": 7.152557373046875e-07,
+      "parameters": [
+        {
+          "parameter": "token_embedding.weight",
+          "elements": 4288,
+          "max_abs_gradient_difference": 1.3969838619232178e-09,
+          "max_abs_parameter_difference_after_step": 1.1920928955078125e-07
+        },
+        {
+          "parameter": "position_embedding.weight",
+          "elements": 1856,
+          "max_abs_gradient_difference": 9.313225746154785e-10,
+          "max_abs_parameter_difference_after_step": 1.1920928955078125e-07
+        },
+        {
+          "parameter": "transformer.layers.0.self_attn.in_proj_weight",
+          "elements": 12288,
+          "max_abs_gradient_difference": 3.725290298461914e-09,
+          "max_abs_parameter_difference_after_step": 2.123415470123291e-07
+        },
+        {
+          "parameter": "transformer.layers.0.self_attn.in_proj_bias",
+          "elements": 192,
+          "max_abs_gradient_difference": 3.725290298461914e-09,
+          "max_abs_parameter_difference_after_step": 1.3611348549602553e-05
+        },
+        {
+          "parameter": "transformer.layers.0.self_attn.out_proj.weight",
+          "elements": 4096,
+          "max_abs_gradient_difference": 4.6566128730773926e-09,
+          "max_abs_parameter_difference_after_step": 1.4901161193847656e-08
+        },
+        {
+          "parameter": "transformer.layers.0.self_attn.out_proj.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 5.587935447692871e-09,
+          "max_abs_parameter_difference_after_step": 1.1641532182693481e-10
+        },
+        {
+          "parameter": "transformer.layers.0.linear1.weight",
+          "elements": 16384,
+          "max_abs_gradient_difference": 1.3969838619232178e-09,
+          "max_abs_parameter_difference_after_step": 8.158385753631592e-07
+        },
+        {
+          "parameter": "transformer.layers.0.linear1.bias",
+          "elements": 256,
+          "max_abs_gradient_difference": 1.862645149230957e-09,
+          "max_abs_parameter_difference_after_step": 1.862645149230957e-09
+        },
+        {
+          "parameter": "transformer.layers.0.linear2.weight",
+          "elements": 16384,
+          "max_abs_gradient_difference": 5.587935447692871e-09,
+          "max_abs_parameter_difference_after_step": 3.725290298461914e-08
+        },
+        {
+          "parameter": "transformer.layers.0.linear2.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 7.450580596923828e-09,
+          "max_abs_parameter_difference_after_step": 1.862645149230957e-09
+        },
+        {
+          "parameter": "transformer.layers.0.norm1.weight",
+          "elements": 64,
+          "max_abs_gradient_difference": 2.0954757928848267e-09,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "transformer.layers.0.norm1.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 9.313225746154785e-09,
+          "max_abs_parameter_difference_after_step": 1.1641532182693481e-10
+        },
+        {
+          "parameter": "transformer.layers.0.norm2.weight",
+          "elements": 64,
+          "max_abs_gradient_difference": 2.7939677238464355e-09,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "transformer.layers.0.norm2.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 3.026798367500305e-09,
+          "max_abs_parameter_difference_after_step": 1.1641532182693481e-10
+        },
+        {
+          "parameter": "transformer.layers.1.self_attn.in_proj_weight",
+          "elements": 12288,
+          "max_abs_gradient_difference": 2.7939677238464355e-09,
+          "max_abs_parameter_difference_after_step": 4.470348358154297e-08
+        },
+        {
+          "parameter": "transformer.layers.1.self_attn.in_proj_bias",
+          "elements": 192,
+          "max_abs_gradient_difference": 3.725290298461914e-09,
+          "max_abs_parameter_difference_after_step": 1.1267948138993233e-05
+        },
+        {
+          "parameter": "transformer.layers.1.self_attn.out_proj.weight",
+          "elements": 4096,
+          "max_abs_gradient_difference": 5.587935447692871e-09,
+          "max_abs_parameter_difference_after_step": 1.341104507446289e-07
+        },
+        {
+          "parameter": "transformer.layers.1.self_attn.out_proj.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 5.587935447692871e-09,
+          "max_abs_parameter_difference_after_step": 1.1641532182693481e-10
+        },
+        {
+          "parameter": "transformer.layers.1.linear1.weight",
+          "elements": 16384,
+          "max_abs_gradient_difference": 1.3969838619232178e-09,
+          "max_abs_parameter_difference_after_step": 2.9802322387695312e-08
+        },
+        {
+          "parameter": "transformer.layers.1.linear1.bias",
+          "elements": 256,
+          "max_abs_gradient_difference": 1.3969838619232178e-09,
+          "max_abs_parameter_difference_after_step": 7.450580596923828e-09
+        },
+        {
+          "parameter": "transformer.layers.1.linear2.weight",
+          "elements": 16384,
+          "max_abs_gradient_difference": 5.587935447692871e-09,
+          "max_abs_parameter_difference_after_step": 9.685754776000977e-08
+        },
+        {
+          "parameter": "transformer.layers.1.linear2.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 7.450580596923828e-09,
+          "max_abs_parameter_difference_after_step": 9.313225746154785e-10
+        },
+        {
+          "parameter": "transformer.layers.1.norm1.weight",
+          "elements": 64,
+          "max_abs_gradient_difference": 2.0954757928848267e-09,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "transformer.layers.1.norm1.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 8.381903171539307e-09,
+          "max_abs_parameter_difference_after_step": 2.3283064365386963e-10
+        },
+        {
+          "parameter": "transformer.layers.1.norm2.weight",
+          "elements": 64,
+          "max_abs_gradient_difference": 2.0954757928848267e-09,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "transformer.layers.1.norm2.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 1.862645149230957e-09,
+          "max_abs_parameter_difference_after_step": 1.1641532182693481e-10
+        },
+        {
+          "parameter": "ln_f.weight",
+          "elements": 64,
+          "max_abs_gradient_difference": 7.450580596923828e-09,
+          "max_abs_parameter_difference_after_step": 0.0
+        },
+        {
+          "parameter": "ln_f.bias",
+          "elements": 64,
+          "max_abs_gradient_difference": 2.60770320892334e-08,
+          "max_abs_parameter_difference_after_step": 2.3283064365386963e-10
+        },
+        {
+          "parameter": "lm_head.weight",
+          "elements": 4288,
+          "max_abs_gradient_difference": 2.9802322387695312e-08,
+          "max_abs_parameter_difference_after_step": 7.450580596923828e-09
+        }
+      ]
+    }
+  ],
+  "script_sha256": "206a72dfd20b0e0bc465face14378e06e9a1b7aa7243282d0fb9c9540b59e41c",
+  "limitation": "One step, six development conditions; parameter differences do not establish functional trajectory differences"
+}

@@ -1,0 +1,38 @@
+{
+  "status": "passed",
+  "cases": 81,
+  "model_config": {
+    "seq_len": 29,
+    "d_model": 64,
+    "n_heads": 2,
+    "n_layers": 2
+  },
+  "vocab_size": 67,
+  "parameter_tensors_per_model": 29,
+  "gradient_tensor_comparisons": 4698,
+  "analytic_penalty_tensor_checks": 2349,
+  "coordinate_checks_including_analytic_penalty": 26858304,
+  "max_scalar_absolute_error": 1.7763568394002505e-15,
+  "max_abs_error_by_kind": {
+    "task": 2.7755575615628914e-16,
+    "with_l2sp": 2.7755575615628914e-16,
+    "l2sp_derivative": 1.6696713456276768e-17
+  },
+  "max_gradient_tolerance_fraction": 1.7882886856187366e-06,
+  "token_totals": {
+    "original_phonebooks": [
+      130,
+      130
+    ],
+    "unequal_target_lengths": [
+      29,
+      23
+    ],
+    "unequal_book_sizes": [
+      26,
+      130
+    ]
+  },
+  "atol": 1e-10,
+  "rtol": 1e-09
+}

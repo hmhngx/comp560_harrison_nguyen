@@ -1,0 +1,3 @@
+Passed 6 conditions; 174 parameter-gradient comparisons
+Maximum after-step parameter gap 0.0002834315528161824
+Maximum after-step logit gap 2.4318695068359375e-05

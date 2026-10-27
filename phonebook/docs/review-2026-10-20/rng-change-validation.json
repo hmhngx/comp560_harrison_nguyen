@@ -1,0 +1,35 @@
+{
+  "reviewed_base_commit": "8b4ccf34ca6351f7914596e8138da3a358cce1db",
+  "working_tree_changes_uncommitted": true,
+  "source_sha256": {
+    "train.py": "0ed7773a7084badfa0702c32018a23c65925cc837e07ecba3f0fc967ac20b59b",
+    "tests/test_logging_invariance.py": "bbd5975bb2f6dd47b9edcba03ad42324fb8a10d4df454d56bbd2035b2479e44b",
+    "README.md": "d39057508ab7099942b29374c6b2c14966dd73886e6ae45adc70ee4e0f8341c8"
+  },
+  "initial_regression": {
+    "failed": 2,
+    "passed": 1
+  },
+  "focused_tests_passed": 6,
+  "full_suite": {
+    "tests": "308",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "350.921"
+  },
+  "real_phonebook_identical_states": {
+    "updates": 100,
+    "accuracy_intervals": [
+      1,
+      5,
+      10
+    ]
+  },
+  "historical_audits_passed": 7,
+  "historical_training_records": 159,
+  "historical_regenerated_answers": 3180,
+  "original_artifacts_unchanged": 1337,
+  "partial_replay_research_executed": false,
+  "next_step": "Readable-audit initialization pin reconciliation and mutation tests"
+}
