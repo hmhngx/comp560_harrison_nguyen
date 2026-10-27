@@ -17,6 +17,7 @@ import json
 import math
 from pathlib import Path
 import posixpath
+import re
 import subprocess
 import sys
 
@@ -154,6 +155,38 @@ def _same_evaluation(fresh: dict, saved: dict) -> bool:
     return True
 
 
+def _audit_initializations(spec: dict, initializations) -> None:
+    """Reconcile recorded anchors with declarations, without opening local weights.
+
+    The runner copies declaration paths verbatim. Comparing those strings keeps
+    this check portable and prevents a command and its anchor record from jointly
+    substituting a different file. An unpinned digest can only be verified against
+    actual bytes in full-local mode; a declared pin is checked in both modes.
+    """
+    declared = {scenario["id"]: scenario["init"] for scenario in spec["scenarios"] if "init" in scenario}
+    require(isinstance(initializations, dict), "Initializations must be an object")
+    require(set(initializations) == set(declared), "Initialization scenarios differ from the spec")
+    fields = {"checkpoint", "checkpoint_sha256", "meta", "meta_sha256", "context_length"}
+    for scenario, declaration in declared.items():
+        recorded = initializations[scenario]
+        require(isinstance(recorded, dict) and set(recorded) == fields,
+                f"Initialization fields differ from the required record: {scenario}")
+        for name in ("checkpoint", "meta"):
+            require(isinstance(declaration[name], str) and bool(declaration[name])
+                    and recorded[name] == declaration[name],
+                    f"Initialization path differs from the spec: {scenario}/{name}")
+            key = f"{name}_sha256"
+            digest = recorded[key]
+            require(isinstance(digest, str) and re.fullmatch(r"[0-9a-f]{64}", digest) is not None,
+                    f"Initialization {key} must be 64 lowercase hex characters: {scenario}")
+            if key in declaration:
+                require(digest == declaration[key],
+                        f"Initialization hash differs from the spec's pin: {scenario}/{key}")
+        context = recorded["context_length"]
+        require(isinstance(context, int) and not isinstance(context, bool) and context > 0,
+                f"Initialization context must be a positive integer: {scenario}")
+
+
 def audit(root: Path, *, repo_root: Path, require_local_artifacts: bool = False, check_git: bool = True) -> dict:
     root, repo_root = Path(root), Path(repo_root)
     protocol = json.loads((root / "protocol.json").read_text(encoding="utf-8"))
@@ -161,17 +194,21 @@ def audit(root: Path, *, repo_root: Path, require_local_artifacts: bool = False,
     require(not protocol["git"]["dirty"], "Training began on a dirty git tree")
     require(canonical_sha256(spec) == protocol["spec_sha256"], "The embedded spec does not match its recorded hash")
     validate_spec(spec)
-    if check_git and protocol.get("spec_path"):
+    if check_git:
+        require(isinstance(protocol.get("spec_path"), str) and bool(protocol["spec_path"]),
+                "Git verification requires a recorded spec path")
         shown = subprocess.run(["git", "show", f"{protocol['git']['commit']}:{protocol['spec_path']}"],
                                cwd=repo_root, capture_output=True, text=True)
         require(shown.returncode == 0, f"The recorded commit does not contain the spec {protocol['spec_path']}")
         require(json.loads(shown.stdout) == spec, "The embedded spec differs from the spec committed at the recorded commit")
 
+    _audit_initializations(spec, protocol.get("initializations"))
+
     for path, expected in protocol["inputs"].items():
         require(sha256(resolve(repo_root, path)) == expected, f"Input hash differs: {path}")
     config_path = resolve(repo_root, protocol["config"]["path"])
     require(protocol["config"]["sha256"] in text_hashes(config_path.read_bytes()), "Model config differs from its recorded hash")
-    if check_git and protocol.get("spec_path"):
+    if check_git:
         committed = subprocess.run(["git", "show", f"{protocol['git']['commit']}:{protocol['config']['path']}"],
                                    cwd=repo_root, capture_output=True)
         require(committed.returncode == 0 and protocol["config"]["sha256"] in text_hashes(committed.stdout),
@@ -179,17 +216,30 @@ def audit(root: Path, *, repo_root: Path, require_local_artifacts: bool = False,
 
     expected_runs = expand_runs(spec)
     runs = protocol["runs"]
+    scenarios = {scenario["id"]: scenario for scenario in spec["scenarios"]}
+    context_lengths = {}
     require([r["id"] for r in runs] == [r["id"] for r in expected_runs], "Protocol runs differ from the spec expansion")
     for run, expected in zip(runs, expected_runs):
         require({key: run[key] for key in expected} == expected, f"Protocol run differs from the spec: {run['id']}")
         require(run["updates_per_epoch"] == 1 or not spec.get("require_one_update_per_epoch", True),
                 f"Run does not have one update per epoch: {run['id']}")
+        if run["adapt"]:
+            key = (run["scenario"], run["mode"])
+            if key not in context_lengths:
+                scenario = scenarios[run["scenario"]]
+                a_lines = load_phonebook_lines(resolve(repo_root, scenario["book_a"]))
+                b_lines = load_phonebook_lines(resolve(repo_root, scenario["book_b"])) if "book_b" in scenario else []
+                mixture = build_mixture_lines(a_lines, b_lines, **run["train"])
+                # The current trainer and planner size the context from the training text.
+                context_lengths[key] = max(len(line) for line in mixture)
+            require(protocol["initializations"][run["scenario"]]["context_length"]
+                    == run.get("seq_len") == context_lengths[key],
+                    f"Initialization context differs from the training text or adapted run: {run['id']}")
 
     records = [json.loads(line) for line in (root / "manifest.jsonl").read_text(encoding="utf-8").splitlines()]
     require([record["run"]["id"] for record in records] == [run["id"] for run in runs],
             "The manifest does not record every protocol run exactly once, in order")
     evaluate_books = spec.get("evaluate_books", ["A", "B"])
-    scenarios = {scenario["id"]: scenario for scenario in spec["scenarios"]}
     completions = 0
     evaluations = {}
     for run, record in zip(runs, records):
