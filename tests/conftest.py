@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -9,6 +10,10 @@ from typing import Callable
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
+
+# train.py draws a loss plot; a GUI backend can fail intermittently (a Tk error was seen once), and no test needs a window.
+# Set before matplotlib is imported, and inherited by every training subprocess the tests start.
+os.environ.setdefault("MPLBACKEND", "Agg")
 
 
 @pytest.fixture

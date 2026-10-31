@@ -28,6 +28,7 @@ if str(ROOT_DIR) not in sys.path:
 from phonebook.analyze_experiment import counts_from_row, load_metrics
 from phonebook.evaluate_checkpoint import evaluate_checkpoint, sha256
 from phonebook.make_replay_input import build_mixture_lines
+from phonebook.param_count import expected_param_count
 from phonebook.prepare_phonebook import load_phonebook_lines
 from phonebook.run_experiment import canonical_sha256, expand_runs, expected_logged_epochs, resolve, validate_spec
 
@@ -80,6 +81,18 @@ def _audit_command(run: dict, record: dict, protocol: dict, repo_root: Path) -> 
                "--batch-size": run["batch_size"], "--accuracy-interval": run["accuracy_interval"]}
     for flag, expected in numeric.items():
         require(float(_flag(command, flag, where)) == float(expected), f"command for {where} differs from the protocol at {flag}")
+    model = run.get("model")
+    for flag, key in (("--embedding-dim", "embedding_dim"), ("--n-heads", "n_heads"), ("--n-layers", "n_layers")):
+        if model is not None:
+            require(_flag(command, flag, where) == str(model[key]), f"command for {where} differs from the protocol at {flag}")
+        else:
+            require(command.count(flag) == 0, f"command for {where} sets {flag} although the protocol declares no model")
+    if "loader_rng" in spec:
+        require(_flag(command, "--loader-rng", where) == spec["loader_rng"],
+                f"command for {where} differs from the protocol at --loader-rng")
+    else:
+        require(command.count("--loader-rng") == 0,
+                f"command for {where} sets --loader-rng although the protocol declares no loader policy")
     require(("--adapt-from" in command) == run["adapt"], f"command for {where} differs from the protocol in its initialization mode")
     if run["adapt"]:
         init = protocol["initializations"][run["scenario"]]
@@ -117,6 +130,17 @@ def _audit_book(run_id: str, name: str, scores: dict, source: Path) -> None:
     require(math.isfinite(forced["loss"]), f"Non-finite cross-entropy: {run_id}/{name}")
 
 
+def _audit_parameter_count(run: dict, metrics: list[dict], model_config: dict) -> None:
+    """The logged count must be constant and equal the closed form for some vocabulary size."""
+    counts = {row["Param Count"] for row in metrics}
+    require(len(counts) == 1, f"The logged parameter count changes during the run: {run['id']}")
+    (params,) = counts
+    d = model_config["d_model"]
+    smallest = expected_param_count(1, model_config["seq_len"], d, model_config["n_layers"])
+    require(float(params).is_integer() and params >= smallest and (params - smallest) % (2 * d) == 0,
+            f"The logged parameter count matches no vocabulary size for the declared model: {run['id']}")
+
+
 def _audit_logged_metrics(run: dict, metrics: list[dict], evaluation: dict) -> None:
     require([row["epoch"] for row in metrics] == expected_logged_epochs(run["epochs"], run["accuracy_interval"]),
             f"Logged epochs differ from the spec: {run['id']}")
@@ -138,6 +162,8 @@ def _audit_logged_metrics(run: dict, metrics: list[dict], evaluation: dict) -> N
     if run["eval_book"] in books:
         require(abs(final["Val Token Acc"] - books[run["eval_book"]]["teacher_forced"]["token_accuracy"]) <= TOKEN_TOLERANCE,
                 f"Validation token accuracy differs from the evaluation: {run['id']}")
+    if "model" in run:
+        _audit_parameter_count(run, metrics, evaluation["model_config"])
 
 
 def _same_evaluation(fresh: dict, saved: dict) -> bool:
@@ -253,6 +279,11 @@ def audit(root: Path, *, repo_root: Path, require_local_artifacts: bool = False,
         require(Path(evaluation["metadata"]).parts[-3:] == (run["scenario"], f"data_{run['mode']}", "meta.pkl"),
                 f"The evaluation used a different run's vocabulary file: {run['id']}")
         require(set(evaluation["books"]) == set(evaluate_books), f"Evaluated books differ from the spec: {run['id']}")
+        if "model" in run:
+            declared, trained = run["model"], evaluation["model_config"]
+            require(trained["d_model"] == declared["embedding_dim"] and trained["n_heads"] == declared["n_heads"]
+                    and trained["n_layers"] == declared["n_layers"] and trained["seq_len"] == run["seq_len"],
+                    f"The evaluated checkpoint's model differs from the declared model: {run['id']}")
         for name in evaluate_books:
             _audit_book(run["id"], name, evaluation["books"][name], resolve(repo_root, scenarios[run["scenario"]]["book_" + name.lower()]))
             completions += len(evaluation["books"][name]["generation"]["predictions"])

@@ -68,11 +68,22 @@ def _check_id(value, where: str) -> None:
         raise ValueError(f"{where} id {value!r} must match {ID_PATTERN.pattern}")
 
 
+def _check_model(model, where: str) -> None:
+    _check_keys(model, {"embedding_dim", "n_heads", "n_layers"}, set(), f"{where} model")
+    for field in ("embedding_dim", "n_heads", "n_layers"):
+        if not _is_int(model[field]) or model[field] < 1:
+            raise ValueError(f"{where} model {field} must be an integer >= 1")
+    if model["embedding_dim"] % model["n_heads"] != 0:
+        raise ValueError(f"{where} model embedding_dim must be divisible by n_heads")
+
+
 def validate_spec(spec: dict) -> None:
     _check_keys(spec, {"name", "seed", "model_config", "scenarios", "conditions"},
                 {"description", "decision_rules", "evaluate_books", "require_one_update_per_epoch",
-                 "timeout_seconds"}, "spec")
+                 "timeout_seconds", "loader_rng"}, "spec")
     _check_id(spec["name"], "spec")
+    if "loader_rng" in spec and spec["loader_rng"] not in ("isolated", "legacy"):
+        raise ValueError("spec loader_rng must be 'isolated' or 'legacy'")
     if not is_torch_seed(spec["seed"]):
         raise ValueError("spec seed must be an integer in [-2**63, 2**64 - 1]")
     if not isinstance(spec["model_config"], str):
@@ -105,12 +116,14 @@ def validate_spec(spec: dict) -> None:
     seen = set()
     for condition in spec["conditions"]:
         _check_keys(condition, {"id", "train", "eval_book", "lr", "epochs", "batch_size",
-                                "accuracy_interval", "adapt"}, {"l2sp_lambda"}, "condition")
+                                "accuracy_interval", "adapt"}, {"l2sp_lambda", "model"}, "condition")
         _check_id(condition["id"], "condition")
         where = f"condition {condition['id']}"
         if condition["id"] in seen:
             raise ValueError(f"duplicate condition id {condition['id']!r}")
         seen.add(condition["id"])
+        if "model" in condition:
+            _check_model(condition["model"], where)
         _check_keys(condition["train"], {"a_copies", "b_copies"}, set(), f"{where} train")
         copies = condition["train"]
         if not (_is_int(copies["a_copies"]) and _is_int(copies["b_copies"])) \
@@ -172,6 +185,8 @@ def expand_runs(spec: dict) -> list[dict]:
                 "accuracy_interval": condition["accuracy_interval"],
                 "l2sp_lambda": float(condition.get("l2sp_lambda", 0.0)), "adapt": condition["adapt"],
             })
+            if "model" in condition:
+                runs[-1]["model"] = dict(condition["model"])
     return runs
 
 
@@ -179,13 +194,18 @@ def expand_runs(spec: dict) -> list[dict]:
 
 
 def training_command(run: dict, *, config: str, data_dir: Path, out_dir: Path, seed: int,
-                     init_checkpoint: Path | None) -> list[str]:
+                     init_checkpoint: Path | None, loader_rng: str | None = None) -> list[str]:
     command = [sys.executable, "train.py", config, "--device", "cpu", "--data-dir", str(data_dir),
                "--out-dir", str(out_dir), "--seed", str(seed), "--lr", str(run["lr"]),
                "--epochs", str(run["epochs"]), "--batch-size", str(run["batch_size"]),
                "--accuracy-interval", str(run["accuracy_interval"]), "--l2sp-lambda", str(run["l2sp_lambda"])]
     if run["adapt"]:
         command += ["--adapt-from", str(init_checkpoint)]
+    if run.get("model"):
+        command += ["--embedding-dim", str(run["model"]["embedding_dim"]),
+                    "--n-heads", str(run["model"]["n_heads"]), "--n-layers", str(run["model"]["n_layers"])]
+    if loader_rng is not None:
+        command += ["--loader-rng", loader_rng]
     return command
 
 
@@ -398,7 +418,8 @@ def run_spec(spec: dict, out_root: Path, *, repo_root: Path, provenance_fn=git_s
         data_dir = out_root / run["scenario"] / f"data_{run['mode']}"
         out_dir = out_root / run["scenario"] / run["condition"]
         command = training_command(run, config=spec["model_config"], data_dir=data_dir, out_dir=out_dir,
-                                   seed=spec["seed"], init_checkpoint=info["init"]["checkpoint"] if info["init"] else None)
+                                   seed=spec["seed"], init_checkpoint=info["init"]["checkpoint"] if info["init"] else None,
+                                   loader_rng=spec.get("loader_rng"))
         start = time.perf_counter()
         timed_out = False
         try:

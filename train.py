@@ -404,6 +404,8 @@ def main() -> None:
         print(f"Loss plot chart saved successfully at: {plot_path}")
     except ImportError:
         print("Warning: matplotlib not installed. Skipping plot layout creation.")
+    except Exception as exc:  # a plotting failure must not cost a finished run its weights
+        print(f"Warning: loss plot skipped ({type(exc).__name__}: {exc})")
 
     # --- Persist weights ---
     weights_path = cfg.out_dir / "model.pth"
