@@ -1,0 +1,73 @@
+{
+  "schema": "e5-predictions-v1",
+  "written_on": "2026-11-02",
+  "status": "draft until the researcher replies confirmed; locked when committed inside the E5 main specs",
+  "known_when_written": "E1 to E3 results; the 18 E5 Phase-A models (each recalls all ten entries of its own book A, first at update 60, one at 70); scratch pilots on the E3 phonebook plus ten phonebooks that E5 does not use (seeds 15, 17, 18, 20, 26, 32, 34, 36, 38, 39). No E5 main, noise or anchor run existed.",
+  "provenance": "Drafted by Claude (Sonnet 5.5) from those pilots at the researcher's request; adopted by the researcher on confirmation.",
+  "definitions": "Statistics follow phonebook/analyze_replay_k.py: stable_joint per run, the median over the three Phase-A inits of a phonebook, then the median (or a count) over the six phonebooks. Learning rate 0.001 unless stated.",
+  "q1_k1_median_updates": {
+    "point": 38,
+    "low": 34,
+    "high": 43,
+    "confidence": 0.8,
+    "why": "Median over the six phonebook-level medians of stable_joint at k=1. Pilot phonebook-level times were 31 to 41 (median 36); nudged up because E2's three reused phonebooks ran slower (36, 43, 48 at init 42) and E1 ran 33 to 51."
+  },
+  "q2_phonebooks_faster_than_k1_of_6": {
+    "k2": {"point": 5, "low": 4, "high": 6},
+    "k3": {"point": 2, "low": 1, "high": 4},
+    "k4": {"point": 0, "low": 0, "high": 1},
+    "k5": {"point": 0, "low": 0, "high": 1},
+    "k9": {"point": 0, "low": 0, "high": 0},
+    "why": "One update is a full-batch AdamW step on A once plus B k times, loss averaged over all sequences, so A's gradient share is 1/(1+k). Joint recall waits for the slower of two clocks: B memorized, or A back to 10/10 after being knocked down. B's clock barely moves with k (Adam fixes the step size, so extra B weight changes direction, not speed): k=1 to k=9 saved only 1 to 5 updates. A's clock grows with k: the dip deepens and A returns later. At k=2 A is still back before B finishes, so the small B speedup of 1 to 3 updates shows; at k>=3 A is usually the slow clock and the time rises. Pilot (11 phonebooks): k=2 faster in 9, k=3 in 4 (2 ties), k=4 in 1, k=5 and k=9 in 0."
+  },
+  "q3_noise_band_updates": {
+    "point": 0,
+    "low": 0,
+    "high": 1,
+    "probabilities": {"0": 0.75, "1": 0.2, "2_or_more": 0.05},
+    "why": "The shuffle only reorders rows inside one full batch, which changes float rounding. Final weights differ by about 0.002 (roughly two lr steps) but the integer recall update never moved: spread 0 in 44 of 44 groups at lr 0.001 and 12 more at lr 0.0003, including default-thread runs. Zero is likely, not certain, because the E5 phonebooks are new."
+  },
+  "q4_any_k_beats_k1": {
+    "answer": "yes",
+    "which": [2],
+    "confidence": 0.55,
+    "confidence_no_other_k_beats": 0.97,
+    "why": "With a band of 0 the rule reduces to: faster in at least 5 of 6 phonebooks and median gain of at least 1 update. Bootstrapping six phonebooks from the pilot, P(k=2 faster in 5 or more) is about 0.70, times about 0.77 that the band does not block a median gain of 1, giving about 0.55. The win would be real but tiny: 1 to 3 updates, about 3 to 8 percent."
+  },
+  "q5_plateau": {
+    "plateau": [2],
+    "if_noise_band_is_1": [1, 2, 3],
+    "excluded": [4, 5, 9],
+    "why": "Medians over phonebooks were about 36, 35, 36, 39, 41, 53 for k = 1, 2, 3, 4, 5, 9. A band of 0 collapses the plateau to the single best k (74 percent in the pilot bootstrap)."
+  },
+  "q6_cheapest_and_fastest": {
+    "cheapest_k_in_work": 1,
+    "cheapest_confidence": 0.99,
+    "fastest_k_in_updates": 2,
+    "fastest_probabilities": {"k2": 0.8, "k1": 0.17},
+    "why": "Work per update is 10 + 10k, so k=2 would have to cut updates by a third to be cheaper and it cuts them by about 1 to 3; k=1 is cheapest. For fastest, the pilot bootstrap gives k=2 about 0.80 and k=1 about 0.17; ties go to the smaller k."
+  },
+  "q7_dip_fewest_a_recalled": {
+    "k1": {"point": 9, "low": 8, "high": 9},
+    "k9": {"point": 0, "low": 0, "high": 1},
+    "why": "At k=1 A holds half the gradient and keeps 8 to 10 entries (mostly 9); E2 saw 8, 8, 9. At k=9 A gets a tenth of the gradient and drops to 0 to 2 entries."
+  },
+  "q8_runs_never_joint_of_270": {
+    "point": 18,
+    "low": 18,
+    "high": 20,
+    "p_exactly_18": 0.85,
+    "why": "The 18 plain fine-tuning runs (6 phonebooks x 3 inits) lose A by construction and are censored. The pilot had 0 censored in 340 cells at lr 0.001 and 0.0003 and 0 in 120 at lr 0.003. Rare flicker occurred (2 of 340 cells had a later stable_joint than first_joint) but all recovered."
+  },
+  "q9_best_k_at_lr_0.0003_vs_0.001": {
+    "answer": "larger",
+    "probabilities": {"larger": 0.55, "same": 0.43, "smaller": 0.02},
+    "why": "Lower lr makes B take about 2.5 times longer while A's recovery stretches less, so more B weight pays off. In the pilot k=2 beat k=1 in 11 of 11 phonebooks at lr 0.0003 (by 2 to 8) and k=3 in 9 of 11; the best k was larger at the low lr in 9 of 11 phonebooks and equal in the other 2. The median-over-phonebooks version is shakier because phonebooks split into fast and slow clusters."
+  },
+  "q10_result_that_would_change_my_mind": {
+    "tripwire": "k=4 or k=5 faster than k=1 in 3 or more of the 6 phonebooks at lr 0.001",
+    "second_tripwire": "a noise band of 3 or more updates, which would undermine the claim that k=2's gain is real",
+    "story": "Joint time is the later of two clocks (B memorized, A recovered); past about k=2 the A clock dominates, so only k=2 can win and only by a few updates.",
+    "why": "That outcome would mean A's recovery is not the bottleneck at moderate k and would break the picture that k=2 is the edge of the plateau."
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "name": "e5_noise_seed3",
+  "description": "Noise arm: k=1 and k=3 at lr 0.001 on init 42 of each phonebook, shuffle seed 3.",
+  "seed": 3,
+  "model_config": "phonebook/config/phonebook.py",
+  "evaluate_books": [
+    "A",
+    "B"
+  ],
+  "require_one_update_per_epoch": true,
+  "timeout_seconds": 1800,
+  "decision_rules": {
+    "purpose": "Runs identical to the main grid except for the shuffle seed; their spread is the noise band."
+  },
+  "scenarios": [
+    {
+      "id": "pb2_s42",
+      "book_a": "phonebook/inputs/heldout_seed2_phonebookA.txt",
+      "book_b": "phonebook/inputs/heldout_seed2_phonebookB.txt",
+      "init": {
+        "checkpoint": "phonebook/experiments/week_2026-10-31/e5_phase_a_s42/pb2/phase_a/model.pth",
+        "checkpoint_sha256": "ac4f42e50759d2e936aa84a8d33a68417e1237177de352329183603e48a3bcdb",
+        "meta": "phonebook/experiments/week_2026-10-31/e5_phase_a_s42/pb2/data_a1b0_evalB/meta.pkl",
+        "meta_sha256": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+      }
+    },
+    {
+      "id": "pb4_s42",
+      "book_a": "phonebook/inputs/heldout_seed4_phonebookA.txt",
+      "book_b": "phonebook/inputs/heldout_seed4_phonebookB.txt",
+      "init": {
+        "checkpoint": "phonebook/experiments/week_2026-10-31/e5_phase_a_s42/pb4/phase_a/model.pth",
+        "checkpoint_sha256": "07aff6302384e4620964187435efe1fe2ccf6b00a021351e974b57a0afdbceaf",
+        "meta": "phonebook/experiments/week_2026-10-31/e5_phase_a_s42/pb4/data_a1b0_evalB/meta.pkl",
+        "meta_sha256": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+      }
+    },
+    {
+      "id": "pb7_s42",
+      "book_a": "phonebook/inputs/heldout_seed7_phonebookA.txt",
+      "book_b": "phonebook/inputs/heldout_seed7_phonebookB.txt",
+      "init": {
+        "checkpoint": "phonebook/experiments/week_2026-10-31/e5_phase_a_s42/pb7/phase_a/model.pth",
+        "checkpoint_sha256": "59f4ad1799c422c53d61d4dc3208eb917351f88c960fd4dee39b67462e9a02fb",
+        "meta": "phonebook/experiments/week_2026-10-31/e5_phase_a_s42/pb7/data_a1b0_evalB/meta.pkl",
+        "meta_sha256": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+      }
+    }
+  ],
+  "conditions": [
+    {
+      "id": "k1_lr0.001",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 1
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "adapt": true
+    },
+    {
+      "id": "k3_lr0.001",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 3
+      },
+      "eval_book": "A",
+      "lr": 0.001,
+      "epochs": 500,
+      "batch_size": 128,
+      "accuracy_interval": 1,
+      "adapt": true
+    }
+  ]
+}
