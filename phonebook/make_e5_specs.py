@@ -27,6 +27,7 @@ if str(ROOT_DIR) not in sys.path:
 from phonebook import audit_experiment as audit_mod
 from phonebook.evaluate_checkpoint import sha256
 from phonebook.make_heldout_dataset import book_paths
+from phonebook.predictions import load_predictions
 from phonebook.run_experiment import write_json
 
 MODEL_CONFIG = "phonebook/config/phonebook.py"
@@ -221,7 +222,9 @@ def build_spec(args, *, repo_root: Path) -> dict:
         roots = _roots(args.phase_a_root)
         for root in roots.values():
             audit_phase_a(root, repo_root=repo_root)
-        return main_spec_from_evidence(args.phonebook, roots, repo_root=repo_root)
+        predictions = getattr(args, "predictions", None)
+        return main_spec_from_evidence(args.phonebook, roots, repo_root=repo_root,
+                                       predictions=load_predictions(predictions) if predictions else None)
     if args.command == "noise":
         roots = _roots([args.phase_a_root])
         if MAIN_SEED not in roots:
@@ -241,6 +244,8 @@ def main() -> None:
     main_cmd = sub.add_parser("main")
     main_cmd.add_argument("--phonebook", type=int, required=True)
     main_cmd.add_argument("--phase-a-root", action="append", required=True, metavar="INIT=PATH")
+    main_cmd.add_argument("--predictions", type=Path, required=True,
+                          help="JSON object of the predictions written before any E5 result existed; embedded verbatim")
     noise = sub.add_parser("noise")
     noise.add_argument("--shuffle-seed", type=int, required=True)
     noise.add_argument("--phonebooks", required=True)

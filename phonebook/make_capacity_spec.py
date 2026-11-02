@@ -17,6 +17,7 @@ if str(ROOT_DIR) not in sys.path:
     sys.path.insert(0, str(ROOT_DIR))
 
 from phonebook.make_capacity_books import capacity_path, control_path
+from phonebook.predictions import load_predictions
 from phonebook.run_experiment import expected_logged_epochs, write_json
 
 
@@ -101,6 +102,7 @@ def main() -> None:
     parser.add_argument("--experiment-seeds", type=int, help="book seeds in the whole experiment (default: this spec's)")
     parser.add_argument("--train-seed", type=int, default=42)
     parser.add_argument("--name", help="spec name (default e4_capacity_d<d>)")
+    parser.add_argument("--predictions", type=Path, help="JSON object of predictions written before any result; embedded verbatim")
     parser.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
     try:
@@ -110,7 +112,8 @@ def main() -> None:
                              epochs=args.epochs, accuracy_interval=args.accuracy_interval,
                              budgets=[int(b) for b in args.budgets.split(",")], timeout_seconds=args.timeout,
                              n_heads=args.heads, n_layers=args.layers, min_seeds=args.min_seeds,
-                             experiment_seeds=args.experiment_seeds, train_seed=args.train_seed, name=args.name)
+                             experiment_seeds=args.experiment_seeds, train_seed=args.train_seed, name=args.name,
+                             predictions=load_predictions(args.predictions) if args.predictions else None)
         write_json(args.out, spec)
         print(f"wrote {args.out}: {len(spec['scenarios'])} runs")
     except ValueError as error:
