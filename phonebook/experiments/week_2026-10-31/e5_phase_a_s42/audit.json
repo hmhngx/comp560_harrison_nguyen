@@ -1,0 +1,10 @@
+{
+  "root": "phonebook\\experiments\\week_2026-10-31\\e5_phase_a_s42",
+  "status": "passed",
+  "spec": "e5_phase_a_s42",
+  "git_commit": "ba502911895d58ca02db3255e230c7fa1f65019e",
+  "runs": 6,
+  "completions": 120,
+  "local_artifacts_checked": true,
+  "git_checked": true
+}
