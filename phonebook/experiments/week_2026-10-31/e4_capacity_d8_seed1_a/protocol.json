@@ -1,0 +1,411 @@
+{
+  "created_at_utc": "2026-11-03T20:44:24.393433+00:00",
+  "git": {
+    "commit": "0fe8f6f17988427f204ac834e3395310c0cad16b",
+    "dirty": false
+  },
+  "spec_path": "phonebook/specs/e4_capacity_d8_seed1_a.json",
+  "spec_sha256": "af9aa1ee3c2fcfdefb4ba77d3b83729e9c677b46ea64a9fd9af09e46690657fb",
+  "spec": {
+    "name": "e4_capacity_d8_seed1_a",
+    "description": "Capacity of a 2-layer, 2-head transformer with embedding width 8: train from scratch on nested books of [10, 14, 20, 28, 40] random entries for 1000 epochs, 1 book seed.",
+    "seed": 1,
+    "model_config": "phonebook/config/phonebook.py",
+    "evaluate_books": [
+      "A",
+      "B"
+    ],
+    "require_one_update_per_epoch": false,
+    "timeout_seconds": 14400,
+    "decision_rules": {
+      "question": "How many random name-to-number entries does a transformer of this size memorize exactly within a given number of epochs, and does that boundary stop moving with more training?",
+      "success": "A cell is perfect by budget E if the trainer's logged training sequence accuracy is 100% (every entry recalled exactly, which equals strict greedy generation) at some logged epoch <= E.",
+      "capacity": "A rung passes at budget E if at least 2 of its 3 book seeds are perfect by E. The capacity at E is the largest rung such that it and every smaller rung pass; passes above the first failing rung are reported but never counted.",
+      "replicates": "Replicates are book seeds. Within this spec the training seed is 1; the full experiment varies the initialisation together with the book only when each book seed is its own spec with that book seed as its training seed.",
+      "boundary": "The boundary is stable if the capacity at the largest budget equals the capacity at the previous budget; otherwise it is still moving and is reported as a budget limit, not a capacity. If no rung fails at the largest budget the ladder ended before the boundary and the capacity is only a lower bound.",
+      "controls": "The control book holds entries sharing no name or number with training; its exact recall must stay 0. The logged parameter count must equal the closed form for the declared model.",
+      "budgets": "Capacities are read at epochs [100, 300, 500, 1000] from one run of 1000 epochs per cell (training is deterministic with an isolated loader stream, so a shorter budget is a prefix).",
+      "predictions": {
+        "schema": "e4-predictions-v1",
+        "written_on": "2026-11-03",
+        "status": "written before any E4 run; locked when committed inside the E4 specs; adopted by the researcher on confirmation (see provenance)",
+        "known_when_written": "E1 to E3 and E5 results; scratch calibration of 57 cells (widths 8, 16, 32, 64; 300 or 1000 epochs; throwaway book seed 100, training seeds 100 and 101) that is not evidence. No run on the experiment's book seeds 1, 2 and 3 existed.",
+        "provenance": "Drafted by Claude (Sonnet 5.5) from that calibration at the researcher's request; adopted by the researcher on confirmation.",
+        "definitions": "Statistics follow phonebook/analyze_capacity.py. A run is perfect by budget E if all N entries are recalled exactly at some logged epoch (every 10) at or before E. A rung passes if at least 2 of the 3 book seeds are perfect by E; the capacity at E is the largest rung such that it and every smaller rung pass (0 means no rung passes). Budgets 100, 300, 500, 1000 epochs, read from one 1000-epoch run per cell at lr 0.001, batch 64, 2 layers, 2 heads, widths 8, 16, 32, 64. The boundary status compares the capacity at 500 with the capacity at 1000: stable if equal, moving if not, ceiling if the top rung passes, none if nothing passes.",
+        "ladders": {
+          "d8": [
+            10,
+            14,
+            20,
+            28,
+            40
+          ],
+          "d16": [
+            10,
+            20,
+            40,
+            57,
+            80,
+            113,
+            160,
+            226
+          ],
+          "d32": [
+            10,
+            20,
+            40,
+            80,
+            113,
+            160,
+            226,
+            320,
+            453
+          ],
+          "d64": [
+            10,
+            20,
+            40,
+            80,
+            160,
+            226,
+            320,
+            453,
+            640,
+            905
+          ]
+        },
+        "q1_capacity_at_1000": {
+          "d8": {
+            "point": 14,
+            "low": 14,
+            "high": 20
+          },
+          "d16": {
+            "point": 113,
+            "low": 80,
+            "high": 113
+          },
+          "d32": {
+            "point": 226,
+            "low": 226,
+            "high": 320
+          },
+          "d64": {
+            "point": 453,
+            "low": 320,
+            "high": 453
+          },
+          "why": "Capacity here is how many random name-to-number entries a model memorizes exactly within the epoch budget, so two limits compete: room in the weights and time. Room is not what binds: the best case is about 0.1 to 0.4 bits per parameter, against the 1 to 2 bits per parameter often quoted for trained language models. Time binds: recall of every entry stays at zero for a long stretch and then climbs, the stretch is longer for narrow models (first full recall of 10 entries at epoch about 60 for d=64 and about 450 for d=8) and longer for bigger books. In calibration the rung just above each boundary stalled at 0.95 to 0.98 and was still climbing at epoch 1000. Calibration passes at 1000 epochs: d=8 up to 14 (20 in one of two seeds), d=16 up to 113, d=32 up to 226 (320 in one of two), d=64 up to 453 (full recall at epoch 770 to 850)."
+        },
+        "q2_capacity_at_300": {
+          "d8": {
+            "point": 0,
+            "low": 0,
+            "high": 0
+          },
+          "d16": {
+            "point": 20,
+            "low": 10,
+            "high": 20
+          },
+          "d32": {
+            "point": 160,
+            "low": 80,
+            "high": 226
+          },
+          "d64": {
+            "point": 320,
+            "low": 226,
+            "high": 320
+          },
+          "why": "At 300 epochs the narrow models have barely left the plateau: d=8 recalls nothing exactly (10 entries need 450 to 520 epochs), d=16 manages 20 entries (full recall at epoch 280), d=32 reaches 160 (epoch 250 to 260) and d=64 reaches 320 only just (epoch 280 to 290, so a seed can miss the budget)."
+        },
+        "q3_capacity_at_100": {
+          "d8": {
+            "point": 0,
+            "low": 0,
+            "high": 0
+          },
+          "d16": {
+            "point": 0,
+            "low": 0,
+            "high": 0
+          },
+          "d32": {
+            "point": 0,
+            "low": 0,
+            "high": 10
+          },
+          "d64": {
+            "point": 20,
+            "low": 10,
+            "high": 40
+          },
+          "why": "Only the widest model leaves the plateau within 100 epochs: d=64 recalls 10 entries at epoch 60 to 70 and 20 entries at epoch 80 to 90, while 40 entries took 110. d=32 needs 130 epochs even for 10 entries."
+        },
+        "q4_boundary_status_at_1000": {
+          "d8": "moving",
+          "d16": "moving",
+          "d32": "stable",
+          "d64": "moving",
+          "confidence": {
+            "d8": 0.93,
+            "d16": 0.97,
+            "d32": 0.5,
+            "d64": 0.8
+          },
+          "why": "A boundary is moving when the capacity at 500 epochs differs from the capacity at 1000. It should move for d=8, 16 and 64: their next rung up is still climbing at epoch 1000 and their capacity at 500 is a smaller rung. d=32 is a coin flip (stable at 226 unless 320 passes in two seeds, which it did in one of two calibration seeds)."
+        },
+        "q5_capacity_grows_with_width": {
+          "answer": "strict",
+          "why": "Wider models memorize more within the same budget: the capacity at 1000 epochs should rise strictly from d=8 to 16 to 32 to 64. It fails only if d=32 and d=64 land on the same rung (about 1 chance in 12)."
+        },
+        "q6_bits_per_param_at_1000": {
+          "d8": {
+            "point": 0.15,
+            "low": 0.14,
+            "high": 0.22
+          },
+          "d16": {
+            "point": 0.4,
+            "low": 0.28,
+            "high": 0.4
+          },
+          "d32": {
+            "point": 0.24,
+            "low": 0.23,
+            "high": 0.34
+          },
+          "d64": {
+            "point": 0.13,
+            "low": 0.09,
+            "high": 0.14
+          },
+          "why": "Bits per parameter = capacity x log2(800 x 800 x 10000) = 32.575 bits per entry, divided by the logged parameter count at the top passing rung (3,072; 9,216 or 9,232; 30,720 or 30,752; 110,592 or 110,656). It is a direct consequence of the capacity ranges above and shows that every model is far below 1 bit per parameter at this budget, and the widest model is the lowest because it is limited by training time, not by room."
+        },
+        "q7_no_ladder_ceiling": {
+          "answer": true,
+          "why": "Every ladder reaches a rung that fails: d=8 stops at 40 (0.28 in calibration), d=16 at 226 (160 already stalls at 0.97), d=32 at 453 (640 reached 0.80) and d=64 at 905 (640 stalled at 0.97 and 1280 at 0.82). The chance that some model passes its top rung is about 10 percent."
+        },
+        "q8_control_book": {
+          "max_control_violations": 0,
+          "why": "The control book shares no name or number with any training book, and a random 10-digit number cannot be guessed from a name, so exact recall of control entries must be 0. It was 0 in all 57 calibration cells."
+        },
+        "q10_result_that_would_change_my_mind": {
+          "tripwire": "d=64 holds 640 or more entries at 1000 epochs, or the capacity grows 4x or more when the width doubles from 16 to 32 or from 32 to 64",
+          "d64_capacity_at_least": 640,
+          "width_doubling_ratio_at_least": 4,
+          "story": "At a fixed budget the capacity is set by training time more than by parameter count, so it grows about 2x per doubling of width and the best bits per parameter stays well under 1.",
+          "why": "A capacity of 640 or more for d=64, or a 4x jump per doubling, would mean the budget is not the limit and the room in the weights (parameter count) is what decides, which is the opposite of the calibration picture."
+        }
+      }
+    },
+    "scenarios": [
+      {
+        "id": "s1_n10",
+        "book_a": "phonebook/inputs/capacity_seed1_n10.txt",
+        "book_b": "phonebook/inputs/capacity_seed1_control.txt"
+      },
+      {
+        "id": "s1_n14",
+        "book_a": "phonebook/inputs/capacity_seed1_n14.txt",
+        "book_b": "phonebook/inputs/capacity_seed1_control.txt"
+      },
+      {
+        "id": "s1_n20",
+        "book_a": "phonebook/inputs/capacity_seed1_n20.txt",
+        "book_b": "phonebook/inputs/capacity_seed1_control.txt"
+      },
+      {
+        "id": "s1_n28",
+        "book_a": "phonebook/inputs/capacity_seed1_n28.txt",
+        "book_b": "phonebook/inputs/capacity_seed1_control.txt"
+      },
+      {
+        "id": "s1_n40",
+        "book_a": "phonebook/inputs/capacity_seed1_n40.txt",
+        "book_b": "phonebook/inputs/capacity_seed1_control.txt"
+      }
+    ],
+    "conditions": [
+      {
+        "id": "d8",
+        "train": {
+          "a_copies": 1,
+          "b_copies": 0
+        },
+        "eval_book": "B",
+        "lr": 0.001,
+        "epochs": 1000,
+        "batch_size": 64,
+        "accuracy_interval": 10,
+        "adapt": false,
+        "model": {
+          "embedding_dim": 8,
+          "n_heads": 2,
+          "n_layers": 2
+        }
+      }
+    ]
+  },
+  "environment": {
+    "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+    "executable": "C:\\Users\\minhh\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "packages": {
+      "torch": "2.12.0",
+      "numpy": "2.1.3",
+      "matplotlib": "3.10.9",
+      "pytest": "9.1.0"
+    },
+    "torch_version": "2.12.0+cpu",
+    "torch_num_threads": 1,
+    "device": "cpu"
+  },
+  "optimizer": {
+    "name": "AdamW",
+    "fresh_state_per_run": true,
+    "weight_decay": 0.1,
+    "grad_clip": 1.0
+  },
+  "config": {
+    "path": "phonebook/config/phonebook.py",
+    "sha256": "86aa6d3b7470c750ee02882bc1821f34e7298a91e411daaf7f75c43c7817903b"
+  },
+  "inputs": {
+    "phonebook/inputs/capacity_seed1_n10.txt": "c9ca3395c0a2510ca4c8258f0dc609255e226b45030fa40c395fd3114f12354d",
+    "phonebook/inputs/capacity_seed1_control.txt": "51cd9369780f2d6886ab93fe2b3c281ebcde71f85350073e45ed5b7b315c7d76",
+    "phonebook/inputs/capacity_seed1_n14.txt": "1fe198bc9cd61a5752dad073951c7640bf6448cffc79368fe60b66ead1ddcf7d",
+    "phonebook/inputs/capacity_seed1_n20.txt": "5d80b59a66c72c951b2cef2a07f68a3818b550e3bbed5a1c196398351ec79f5c",
+    "phonebook/inputs/capacity_seed1_n28.txt": "3f2bbb80c0b54071f542e95f38fae502fd6de84ce2e794e5189abd96f2789ddf",
+    "phonebook/inputs/capacity_seed1_n40.txt": "c1ec420dd405774896b054885f1c01d918a4ed1ada489f9d8ca852ce1aee0bec"
+  },
+  "initializations": {},
+  "runs": [
+    {
+      "id": "s1_n10/d8",
+      "scenario": "s1_n10",
+      "condition": "d8",
+      "mode": "a1b0_evalB",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 0
+      },
+      "eval_book": "B",
+      "lr": 0.001,
+      "epochs": 1000,
+      "batch_size": 64,
+      "accuracy_interval": 10,
+      "l2sp_lambda": 0.0,
+      "adapt": false,
+      "model": {
+        "embedding_dim": 8,
+        "n_heads": 2,
+        "n_layers": 2
+      },
+      "n_train": 10,
+      "updates_per_epoch": 1,
+      "seq_len": 28
+    },
+    {
+      "id": "s1_n14/d8",
+      "scenario": "s1_n14",
+      "condition": "d8",
+      "mode": "a1b0_evalB",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 0
+      },
+      "eval_book": "B",
+      "lr": 0.001,
+      "epochs": 1000,
+      "batch_size": 64,
+      "accuracy_interval": 10,
+      "l2sp_lambda": 0.0,
+      "adapt": false,
+      "model": {
+        "embedding_dim": 8,
+        "n_heads": 2,
+        "n_layers": 2
+      },
+      "n_train": 14,
+      "updates_per_epoch": 1,
+      "seq_len": 28
+    },
+    {
+      "id": "s1_n20/d8",
+      "scenario": "s1_n20",
+      "condition": "d8",
+      "mode": "a1b0_evalB",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 0
+      },
+      "eval_book": "B",
+      "lr": 0.001,
+      "epochs": 1000,
+      "batch_size": 64,
+      "accuracy_interval": 10,
+      "l2sp_lambda": 0.0,
+      "adapt": false,
+      "model": {
+        "embedding_dim": 8,
+        "n_heads": 2,
+        "n_layers": 2
+      },
+      "n_train": 20,
+      "updates_per_epoch": 1,
+      "seq_len": 31
+    },
+    {
+      "id": "s1_n28/d8",
+      "scenario": "s1_n28",
+      "condition": "d8",
+      "mode": "a1b0_evalB",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 0
+      },
+      "eval_book": "B",
+      "lr": 0.001,
+      "epochs": 1000,
+      "batch_size": 64,
+      "accuracy_interval": 10,
+      "l2sp_lambda": 0.0,
+      "adapt": false,
+      "model": {
+        "embedding_dim": 8,
+        "n_heads": 2,
+        "n_layers": 2
+      },
+      "n_train": 28,
+      "updates_per_epoch": 1,
+      "seq_len": 31
+    },
+    {
+      "id": "s1_n40/d8",
+      "scenario": "s1_n40",
+      "condition": "d8",
+      "mode": "a1b0_evalB",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 0
+      },
+      "eval_book": "B",
+      "lr": 0.001,
+      "epochs": 1000,
+      "batch_size": 64,
+      "accuracy_interval": 10,
+      "l2sp_lambda": 0.0,
+      "adapt": false,
+      "model": {
+        "embedding_dim": 8,
+        "n_heads": 2,
+        "n_layers": 2
+      },
+      "n_train": 40,
+      "updates_per_epoch": 1,
+      "seq_len": 31
+    }
+  ]
+}

@@ -1,0 +1,212 @@
+[
+ {
+  "q": "Q1",
+  "what": "capacity at 1000 epochs, d=8",
+  "predicted": "14 [14, 20]",
+  "actual": 14,
+  "result": "HIT (exact)",
+  "note": "boundary moving"
+ },
+ {
+  "q": "Q1",
+  "what": "capacity at 1000 epochs, d=16",
+  "predicted": "113 [80, 113]",
+  "actual": 113,
+  "result": "HIT (exact)",
+  "note": "boundary moving"
+ },
+ {
+  "q": "Q1",
+  "what": "capacity at 1000 epochs, d=32",
+  "predicted": "226 [226, 320]",
+  "actual": 226,
+  "result": "HIT (exact)",
+  "note": "boundary stable"
+ },
+ {
+  "q": "Q1",
+  "what": "capacity at 1000 epochs, d=64",
+  "predicted": "453 [320, 453]",
+  "actual": 453,
+  "result": "HIT (exact)",
+  "note": "boundary moving"
+ },
+ {
+  "q": "Q2",
+  "what": "capacity at 300 epochs, d=8",
+  "predicted": "0 [0, 0]",
+  "actual": 0,
+  "result": "HIT (exact)",
+  "note": "boundary moving"
+ },
+ {
+  "q": "Q2",
+  "what": "capacity at 300 epochs, d=16",
+  "predicted": "20 [10, 20]",
+  "actual": 20,
+  "result": "HIT (exact)",
+  "note": "boundary moving"
+ },
+ {
+  "q": "Q2",
+  "what": "capacity at 300 epochs, d=32",
+  "predicted": "160 [80, 226]",
+  "actual": 160,
+  "result": "HIT (exact)",
+  "note": "boundary stable"
+ },
+ {
+  "q": "Q2",
+  "what": "capacity at 300 epochs, d=64",
+  "predicted": "320 [226, 320]",
+  "actual": 320,
+  "result": "HIT (exact)",
+  "note": "boundary moving"
+ },
+ {
+  "q": "Q3",
+  "what": "capacity at 100 epochs, d=8",
+  "predicted": "0 [0, 0]",
+  "actual": 0,
+  "result": "HIT (exact)",
+  "note": "boundary moving"
+ },
+ {
+  "q": "Q3",
+  "what": "capacity at 100 epochs, d=16",
+  "predicted": "0 [0, 0]",
+  "actual": 0,
+  "result": "HIT (exact)",
+  "note": "boundary moving"
+ },
+ {
+  "q": "Q3",
+  "what": "capacity at 100 epochs, d=32",
+  "predicted": "0 [0, 10]",
+  "actual": 0,
+  "result": "HIT (exact)",
+  "note": "boundary stable"
+ },
+ {
+  "q": "Q3",
+  "what": "capacity at 100 epochs, d=64",
+  "predicted": "20 [10, 40]",
+  "actual": 20,
+  "result": "HIT (exact)",
+  "note": "boundary moving"
+ },
+ {
+  "q": "Q4",
+  "what": "boundary status, d=8",
+  "predicted": "moving",
+  "actual": "moving",
+  "result": "HIT",
+  "note": ""
+ },
+ {
+  "q": "Q4",
+  "what": "boundary status, d=16",
+  "predicted": "moving",
+  "actual": "moving",
+  "result": "HIT",
+  "note": ""
+ },
+ {
+  "q": "Q4",
+  "what": "boundary status, d=32",
+  "predicted": "stable",
+  "actual": "stable",
+  "result": "HIT",
+  "note": ""
+ },
+ {
+  "q": "Q4",
+  "what": "boundary status, d=64",
+  "predicted": "moving",
+  "actual": "moving",
+  "result": "HIT",
+  "note": ""
+ },
+ {
+  "q": "Q5",
+  "what": "capacity strictly increases with width at 1000",
+  "predicted": "strict",
+  "actual": [
+   14,
+   113,
+   226,
+   453
+  ],
+  "result": "HIT",
+  "note": ""
+ },
+ {
+  "q": "Q6",
+  "what": "bits per parameter at 1000 epochs, d=8",
+  "predicted": "0.15 [0.14, 0.22]",
+  "actual": 0.1488,
+  "result": "HIT",
+  "note": ""
+ },
+ {
+  "q": "Q6",
+  "what": "bits per parameter at 1000 epochs, d=16",
+  "predicted": "0.4 [0.28, 0.4]",
+  "actual": 0.3994,
+  "result": "HIT",
+  "note": ""
+ },
+ {
+  "q": "Q6",
+  "what": "bits per parameter at 1000 epochs, d=32",
+  "predicted": "0.24 [0.23, 0.34]",
+  "actual": 0.2396,
+  "result": "HIT",
+  "note": ""
+ },
+ {
+  "q": "Q6",
+  "what": "bits per parameter at 1000 epochs, d=64",
+  "predicted": "0.13 [0.09, 0.14]",
+  "actual": 0.1334,
+  "result": "HIT",
+  "note": ""
+ },
+ {
+  "q": "Q7",
+  "what": "no model reached the top of its ladder",
+  "predicted": true,
+  "actual": {
+   "8": false,
+   "16": false,
+   "32": false,
+   "64": false
+  },
+  "result": "HIT",
+  "note": ""
+ },
+ {
+  "q": "Q8",
+  "what": "control-book entries recalled (runs with any)",
+  "predicted": 0,
+  "actual": 0,
+  "result": "HIT (exact)",
+  "note": ""
+ },
+ {
+  "q": "Q10",
+  "what": "tripwires fired",
+  "predicted": "none",
+  "actual": {
+   "d64_capacity": 453,
+   "ratios": {
+    "d32/d16": 2.0,
+    "d64/d32": 2.004424778761062
+   },
+   "wide": false,
+   "steep": false
+  },
+  "result": "STORY SURVIVES",
+  "note": "d=64 holds 640 or more entries at 1000 epochs, or the capacity grows 4x or more when the width doubles from 16 to 32 or from 32 to 64"
+ }
+]

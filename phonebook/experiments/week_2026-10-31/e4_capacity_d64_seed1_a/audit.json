@@ -1,0 +1,10 @@
+{
+  "root": "phonebook\\experiments\\week_2026-10-31\\e4_capacity_d64_seed1_a",
+  "status": "passed",
+  "spec": "e4_capacity_d64_seed1_a",
+  "git_commit": "0fe8f6f17988427f204ac834e3395310c0cad16b",
+  "runs": 6,
+  "completions": 656,
+  "local_artifacts_checked": true,
+  "git_checked": true
+}

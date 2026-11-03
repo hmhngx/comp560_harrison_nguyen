@@ -1,0 +1,346 @@
+{
+  "checkpoint": "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e4_capacity_d8_seed3_a\\s3_n20\\d8\\model.pth",
+  "checkpoint_sha256": "de0fb1bf6b41c3a0e83bc427d7ff2718fa1b8b59a82a5989c82112bb513920f0",
+  "metadata": "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e4_capacity_d8_seed3_a\\s3_n20\\data_a1b0_evalB\\meta.pkl",
+  "metadata_sha256": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9",
+  "model_config": {
+    "seq_len": 29,
+    "d_model": 8,
+    "n_heads": 2,
+    "n_layers": 2
+  },
+  "device": "cpu",
+  "generation_budget": "automatic_context_limit",
+  "books": {
+    "A": {
+      "source": "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\inputs\\capacity_seed3_n20.txt",
+      "source_sha256": "d6f6969254db6a2f0f332072d9c573c76c2b7f5283eaa7451e7dfe2c986d80da",
+      "teacher_forced": {
+        "loss": 0.36425700783729553,
+        "token_accuracy": 0.9538461538461539,
+        "sequence_accuracy": 0.7,
+        "token_correct": 248,
+        "token_total": 260,
+        "sequence_correct": 14,
+        "sequence_total": 20
+      },
+      "generation": {
+        "correct": 14,
+        "total": 20,
+        "accuracy": 0.7,
+        "stop_counts": {
+          "newline": 19,
+          "budget": 0,
+          "context": 1
+        },
+        "predictions": [
+          {
+            "prompt": "Brian Bram",
+            "expected": "686-648-7894",
+            "prediction": "686-648-7894",
+            "stop_reason": "newline",
+            "correct": true
+          },
+          {
+            "prompt": "Ever Clayis",
+            "expected": "561-473-0460",
+            "prediction": "56-66-27-9-265",
+            "stop_reason": "newline",
+            "correct": false
+          },
+          {
+            "prompt": "Evana Bell",
+            "expected": "403-912-4803",
+            "prediction": "403-912-4-67-96032",
+            "stop_reason": "context",
+            "correct": false
+          },
+          {
+            "prompt": "Giari Cranewin",
+            "expected": "279-705-4963",
+            "prediction": "279-705-4963",
+            "stop_reason": "newline",
+            "correct": true
+          },
+          {
+            "prompt": "Celis Brylin",
+            "expected": "441-760-2410",
+            "prediction": "441-760-2410",
+            "stop_reason": "newline",
+            "correct": true
+          },
+          {
+            "prompt": "Camo Daneby",
+            "expected": "383-250-1784",
+            "prediction": "-8-8-50-8-8-2",
+            "stop_reason": "newline",
+            "correct": false
+          },
+          {
+            "prompt": "Delon Barers",
+            "expected": "230-854-2572",
+            "prediction": "230-854-2572",
+            "stop_reason": "newline",
+            "correct": true
+          },
+          {
+            "prompt": "Beni Daymore",
+            "expected": "561-614-5855",
+            "prediction": "561-614-5855",
+            "stop_reason": "newline",
+            "correct": true
+          },
+          {
+            "prompt": "Danie Coleham",
+            "expected": "813-680-0282",
+            "prediction": "813-680-0282",
+            "stop_reason": "newline",
+            "correct": true
+          },
+          {
+            "prompt": "Casis Cookmar",
+            "expected": "856-250-3387",
+            "prediction": "856-250-3387",
+            "stop_reason": "newline",
+            "correct": true
+          },
+          {
+            "prompt": "Casry Dunnlin",
+            "expected": "282-834-8369",
+            "prediction": "282-834-8369",
+            "stop_reason": "newline",
+            "correct": true
+          },
+          {
+            "prompt": "Delta Birchmond",
+            "expected": "433-419-9087",
+            "prediction": "4-8-4141-2",
+            "stop_reason": "newline",
+            "correct": false
+          },
+          {
+            "prompt": "Anian Baywell",
+            "expected": "808-751-8944",
+            "prediction": "808-786-526669",
+            "stop_reason": "newline",
+            "correct": false
+          },
+          {
+            "prompt": "Corer Baywood",
+            "expected": "213-809-2706",
+            "prediction": "213-809-2706",
+            "stop_reason": "newline",
+            "correct": true
+          },
+          {
+            "prompt": "Casi Bluemond",
+            "expected": "659-888-5178",
+            "prediction": "659-888-5178",
+            "stop_reason": "newline",
+            "correct": true
+          },
+          {
+            "prompt": "Ianey Bondlin",
+            "expected": "665-334-2368",
+            "prediction": "665-334-2368",
+            "stop_reason": "newline",
+            "correct": true
+          },
+          {
+            "prompt": "Calren Elmey",
+            "expected": "270-598-0752",
+            "prediction": "270-598-0752",
+            "stop_reason": "newline",
+            "correct": true
+          },
+          {
+            "prompt": "Ianin Baris",
+            "expected": "918-277-8526",
+            "prediction": "918-277-8526",
+            "stop_reason": "newline",
+            "correct": true
+          },
+          {
+            "prompt": "Isain Bramor",
+            "expected": "229-694-7379",
+            "prediction": "229-694-7379",
+            "stop_reason": "newline",
+            "correct": true
+          },
+          {
+            "prompt": "Amus Barey",
+            "expected": "911-280-7467",
+            "prediction": "9-8-2-73-",
+            "stop_reason": "newline",
+            "correct": false
+          }
+        ]
+      }
+    },
+    "B": {
+      "source": "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\inputs\\capacity_seed3_control.txt",
+      "source_sha256": "ce66569f2e9760177b5d41f118d326eb8c4d7fbd4bbb15ae28f7ac7753501af9",
+      "teacher_forced": {
+        "loss": 4.4839582443237305,
+        "token_accuracy": 0.15384615384615385,
+        "sequence_accuracy": 0.0,
+        "token_correct": 40,
+        "token_total": 260,
+        "sequence_correct": 0,
+        "sequence_total": 20
+      },
+      "generation": {
+        "correct": 0,
+        "total": 20,
+        "accuracy": 0.0,
+        "stop_counts": {
+          "newline": 13,
+          "budget": 0,
+          "context": 7
+        },
+        "predictions": [
+          {
+            "prompt": "Caman Bondham",
+            "expected": "954-585-0440",
+            "prediction": "-1-5-5---5778-",
+            "stop_reason": "newline",
+            "correct": false
+          },
+          {
+            "prompt": "Giaix Dunner",
+            "expected": "928-503-0987",
+            "prediction": "262761-625",
+            "stop_reason": "newline",
+            "correct": false
+          },
+          {
+            "prompt": "Avsa Eastner",
+            "expected": "613-567-2357",
+            "prediction": "2266-03-7--92022",
+            "stop_reason": "context",
+            "correct": false
+          },
+          {
+            "prompt": "Elius Brownner",
+            "expected": "270-748-2411",
+            "prediction": "22---62-3",
+            "stop_reason": "newline",
+            "correct": false
+          },
+          {
+            "prompt": "Casi Daleston",
+            "expected": "230-580-8428",
+            "prediction": "322-59-8-227-27",
+            "stop_reason": "context",
+            "correct": false
+          },
+          {
+            "prompt": "Avar Elmor",
+            "expected": "222-289-8388",
+            "prediction": "980-77104-52722",
+            "stop_reason": "newline",
+            "correct": false
+          },
+          {
+            "prompt": "Finri Barmore",
+            "expected": "515-725-4575",
+            "prediction": "213-2221--27362",
+            "stop_reason": "context",
+            "correct": false
+          },
+          {
+            "prompt": "Delio Ashis",
+            "expected": "324-471-3298",
+            "prediction": "8--8-8-8-1-2",
+            "stop_reason": "newline",
+            "correct": false
+          },
+          {
+            "prompt": "Calra Cainden",
+            "expected": "391-778-0644",
+            "prediction": "-64-5-8-2641062",
+            "stop_reason": "context",
+            "correct": false
+          },
+          {
+            "prompt": "Adi Brandman",
+            "expected": "569-201-7705",
+            "prediction": "21612-2-69-92",
+            "stop_reason": "newline",
+            "correct": false
+          },
+          {
+            "prompt": "Aley Blakeor",
+            "expected": "343-774-7456",
+            "prediction": "2-22273-94022",
+            "stop_reason": "newline",
+            "correct": false
+          },
+          {
+            "prompt": "Finia Clayry",
+            "expected": "912-346-0740",
+            "prediction": "280--27-22720222",
+            "stop_reason": "context",
+            "correct": false
+          },
+          {
+            "prompt": "Devson Casson",
+            "expected": "484-803-6323",
+            "prediction": "686--8404426",
+            "stop_reason": "newline",
+            "correct": false
+          },
+          {
+            "prompt": "Casan Eastner",
+            "expected": "471-796-1181",
+            "prediction": "-6-603-07066-52",
+            "stop_reason": "context",
+            "correct": false
+          },
+          {
+            "prompt": "Gilon Dean",
+            "expected": "839-918-5335",
+            "prediction": "28-82",
+            "stop_reason": "newline",
+            "correct": false
+          },
+          {
+            "prompt": "Adan Caldwood",
+            "expected": "686-654-2616",
+            "prediction": "-6-03-8-6-56-76",
+            "stop_reason": "context",
+            "correct": false
+          },
+          {
+            "prompt": "Giaey Bramry",
+            "expected": "568-812-1745",
+            "prediction": "2",
+            "stop_reason": "newline",
+            "correct": false
+          },
+          {
+            "prompt": "Alel Dunners",
+            "expected": "469-403-0301",
+            "prediction": "5-754-5-2736987",
+            "stop_reason": "newline",
+            "correct": false
+          },
+          {
+            "prompt": "Daris Blacksen",
+            "expected": "531-519-0997",
+            "prediction": "25403-623653",
+            "stop_reason": "newline",
+            "correct": false
+          },
+          {
+            "prompt": "Alson Daneley",
+            "expected": "482-729-0924",
+            "prediction": "-83---84-2678",
+            "stop_reason": "newline",
+            "correct": false
+          }
+        ]
+      }
+    }
+  }
+}

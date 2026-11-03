@@ -1,0 +1,39 @@
+E4 audit note: why e4_capacity_d64_seed1_a failed at the default thread count and passes at one thread
+Written 2026-11-03. Everything below is machine output, unedited.
+
+== Attempt 1: audit_experiment.py --require-local-artifacts at PyTorch's default threads (10) ==
+Traceback (most recent call last):
+  File "C:\Users\minhh\Side Hustles\comp560_harrison_nguyen\phonebook\audit_experiment.py", line 367, in <module>
+    main()
+  File "C:\Users\minhh\Side Hustles\comp560_harrison_nguyen\phonebook\audit_experiment.py", line 359, in main
+    report = audit(args.root, repo_root=ROOT_DIR, require_local_artifacts=args.require_local_artifacts)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\minhh\Side Hustles\comp560_harrison_nguyen\phonebook\audit_experiment.py", line 341, in audit
+    require(_same_evaluation(fresh, evaluation), f"The saved evaluation differs from a fresh evaluation of its checkpoint: {run['id']}")
+  File "C:\Users\minhh\Side Hustles\comp560_harrison_nguyen\phonebook\audit_experiment.py", line 40, in require
+    raise ValueError(message)
+ValueError: The saved evaluation differs from a fresh evaluation of its checkpoint: s1_n10/d64
+
+== Fresh evaluation of run s1_n10/d64 against its saved evaluation, default threads (diff_eval.py) ==
+torch threads: 10 | generation budget saved/fresh: automatic_context_limit/automatic_context_limit
+book A: generation identical: True | correct saved/fresh 10/10 of 10
+   teacher_forced.loss: saved 0.0013339654542505741 fresh 0.0013339635916054249 relative difference 1.40e-06   <-- beyond the audit's 1e-6 tolerance
+   teacher_forced.token_accuracy: saved 1.0 fresh 1.0 relative difference 0.00e+00
+   teacher_forced.sequence_accuracy: saved 1.0 fresh 1.0 relative difference 0.00e+00
+book B: generation identical: True | correct saved/fresh 0/0 of 20
+   teacher_forced.loss: saved 6.089746952056885 fresh 6.089746952056885 relative difference 0.00e+00
+   teacher_forced.token_accuracy: saved 0.19230769230769232 fresh 0.19230769230769232 relative difference 0.00e+00
+   teacher_forced.sequence_accuracy: saved 0.0 fresh 0.0 relative difference 0.00e+00
+
+== The same with OMP_NUM_THREADS=1 and MKL_NUM_THREADS=1, the environment of training and of the saved evaluation ==
+torch threads: 1 | generation budget saved/fresh: automatic_context_limit/automatic_context_limit
+book A: generation identical: True | correct saved/fresh 10/10 of 10
+   teacher_forced.loss: saved 0.0013339654542505741 fresh 0.0013339654542505741 relative difference 0.00e+00
+   teacher_forced.token_accuracy: saved 1.0 fresh 1.0 relative difference 0.00e+00
+   teacher_forced.sequence_accuracy: saved 1.0 fresh 1.0 relative difference 0.00e+00
+book B: generation identical: True | correct saved/fresh 0/0 of 20
+   teacher_forced.loss: saved 6.089746952056885 fresh 6.089746952056885 relative difference 0.00e+00
+   teacher_forced.token_accuracy: saved 0.19230769230769232 fresh 0.19230769230769232 relative difference 0.00e+00
+   teacher_forced.sequence_accuracy: saved 0.0 fresh 0.0 relative difference 0.00e+00
+
+== Attempt 2: audit_experiment.py --require-local-artifacts with one thread: exit 0, status passed (audit.json in the evidence folder) ==

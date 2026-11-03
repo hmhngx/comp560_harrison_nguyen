@@ -1,0 +1,40 @@
+{
+  "s1_n320/a1b0_evalB": {
+    "command": [
+      "C:\\Users\\minhh\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "phonebook/prepare_phonebook.py",
+      "--train-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e4_capacity_d64_seed1_b\\s1_n320\\inputs_a1b0_evalB\\train.txt",
+      "--eval-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e4_capacity_d64_seed1_b\\s1_n320\\inputs_a1b0_evalB\\eval.txt",
+      "--out-dir",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e4_capacity_d64_seed1_b\\s1_n320\\data_a1b0_evalB"
+    ],
+    "train_sha256": "29ff308b8a533dd4bdfca4d0e3c54bd670ce3dd3375becabe6097de9f74aba04",
+    "eval_sha256": "51cd9369780f2d6886ab93fe2b3c281ebcde71f85350073e45ed5b7b315c7d76",
+    "sha256": {
+      "train.bin": "1865e083a04def1c7b7e5c5aa4f78995588b701b30214070b63d0519879e8791",
+      "val.bin": "3f6a8cf4b300c23ade699fcdb97599140d38b3efa147fd9542d11720fee5dbc3",
+      "meta.pkl": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+    }
+  },
+  "s1_n453/a1b0_evalB": {
+    "command": [
+      "C:\\Users\\minhh\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "phonebook/prepare_phonebook.py",
+      "--train-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e4_capacity_d64_seed1_b\\s1_n453\\inputs_a1b0_evalB\\train.txt",
+      "--eval-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e4_capacity_d64_seed1_b\\s1_n453\\inputs_a1b0_evalB\\eval.txt",
+      "--out-dir",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e4_capacity_d64_seed1_b\\s1_n453\\data_a1b0_evalB"
+    ],
+    "train_sha256": "ab4da35071fd7446549777ccbd0a4e86f566d44cfd3efef72afd6077857d9904",
+    "eval_sha256": "51cd9369780f2d6886ab93fe2b3c281ebcde71f85350073e45ed5b7b315c7d76",
+    "sha256": {
+      "train.bin": "9c99b2d9669ad7b89974a842b8eae9be7bb06c4bceccc7814e96ab1e58c253ad",
+      "val.bin": "3f6a8cf4b300c23ade699fcdb97599140d38b3efa147fd9542d11720fee5dbc3",
+      "meta.pkl": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+    }
+  }
+}

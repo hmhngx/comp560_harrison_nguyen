@@ -1,0 +1,830 @@
+{
+  "8": {
+    "params": 3064,
+    "capacity_by_budget": {
+      "100": null,
+      "300": null,
+      "500": null,
+      "1000": 14
+    },
+    "detail": {
+      "100": {
+        "budget": 100,
+        "capacity": null,
+        "first_failing_rung": 10,
+        "isolated_passes_above": [],
+        "rungs": {
+          "10": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "14": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "20": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "28": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "40": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          }
+        }
+      },
+      "300": {
+        "budget": 300,
+        "capacity": null,
+        "first_failing_rung": 10,
+        "isolated_passes_above": [],
+        "rungs": {
+          "10": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "14": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "20": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "28": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "40": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          }
+        }
+      },
+      "500": {
+        "budget": 500,
+        "capacity": null,
+        "first_failing_rung": 10,
+        "isolated_passes_above": [],
+        "rungs": {
+          "10": {
+            "passed": 1,
+            "seeds": 3,
+            "ok": false
+          },
+          "14": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "20": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "28": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "40": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          }
+        }
+      },
+      "1000": {
+        "budget": 1000,
+        "capacity": 14,
+        "first_failing_rung": 20,
+        "isolated_passes_above": [],
+        "rungs": {
+          "10": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "14": {
+            "passed": 2,
+            "seeds": 3,
+            "ok": true
+          },
+          "20": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "28": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "40": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          }
+        }
+      }
+    },
+    "boundary": "moving",
+    "capacity_is_lower_bound": false,
+    "bits_per_param_at_largest_budget": 0.14884332461729263,
+    "control_violations": 0
+  },
+  "16": {
+    "params": 9216,
+    "capacity_by_budget": {
+      "100": null,
+      "300": 20,
+      "500": 40,
+      "1000": 113
+    },
+    "detail": {
+      "100": {
+        "budget": 100,
+        "capacity": null,
+        "first_failing_rung": 10,
+        "isolated_passes_above": [],
+        "rungs": {
+          "10": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "20": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "40": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "57": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "80": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "113": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "160": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "226": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          }
+        }
+      },
+      "300": {
+        "budget": 300,
+        "capacity": 20,
+        "first_failing_rung": 40,
+        "isolated_passes_above": [],
+        "rungs": {
+          "10": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "20": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "40": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "57": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "80": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "113": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "160": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "226": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          }
+        }
+      },
+      "500": {
+        "budget": 500,
+        "capacity": 40,
+        "first_failing_rung": 57,
+        "isolated_passes_above": [],
+        "rungs": {
+          "10": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "20": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "40": {
+            "passed": 2,
+            "seeds": 3,
+            "ok": true
+          },
+          "57": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "80": {
+            "passed": 1,
+            "seeds": 3,
+            "ok": false
+          },
+          "113": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "160": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "226": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          }
+        }
+      },
+      "1000": {
+        "budget": 1000,
+        "capacity": 113,
+        "first_failing_rung": 160,
+        "isolated_passes_above": [],
+        "rungs": {
+          "10": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "20": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "40": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "57": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "80": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "113": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "160": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "226": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          }
+        }
+      }
+    },
+    "boundary": "moving",
+    "capacity_is_lower_bound": false,
+    "bits_per_param_at_largest_budget": 0.3994165579186389,
+    "control_violations": 0
+  },
+  "32": {
+    "params": 30720,
+    "capacity_by_budget": {
+      "100": null,
+      "300": 160,
+      "500": 226,
+      "1000": 226
+    },
+    "detail": {
+      "100": {
+        "budget": 100,
+        "capacity": null,
+        "first_failing_rung": 10,
+        "isolated_passes_above": [],
+        "rungs": {
+          "10": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "20": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "40": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "80": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "113": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "160": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "226": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "320": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "453": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          }
+        }
+      },
+      "300": {
+        "budget": 300,
+        "capacity": 160,
+        "first_failing_rung": 226,
+        "isolated_passes_above": [],
+        "rungs": {
+          "10": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "20": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "40": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "80": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "113": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "160": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "226": {
+            "passed": 1,
+            "seeds": 3,
+            "ok": false
+          },
+          "320": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "453": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          }
+        }
+      },
+      "500": {
+        "budget": 500,
+        "capacity": 226,
+        "first_failing_rung": 320,
+        "isolated_passes_above": [],
+        "rungs": {
+          "10": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "20": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "40": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "80": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "113": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "160": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "226": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "320": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "453": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          }
+        }
+      },
+      "1000": {
+        "budget": 1000,
+        "capacity": 226,
+        "first_failing_rung": 320,
+        "isolated_passes_above": [],
+        "rungs": {
+          "10": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "20": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "40": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "80": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "113": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "160": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "226": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "320": {
+            "passed": 1,
+            "seeds": 3,
+            "ok": false
+          },
+          "453": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          }
+        }
+      }
+    },
+    "boundary": "stable",
+    "capacity_is_lower_bound": false,
+    "bits_per_param_at_largest_budget": 0.23964993475118332,
+    "control_violations": 0
+  },
+  "64": {
+    "params": 110656,
+    "capacity_by_budget": {
+      "100": 20,
+      "300": 320,
+      "500": 320,
+      "1000": 453
+    },
+    "detail": {
+      "100": {
+        "budget": 100,
+        "capacity": 20,
+        "first_failing_rung": 40,
+        "isolated_passes_above": [],
+        "rungs": {
+          "10": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "20": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "40": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "80": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "160": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "226": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "320": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "453": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "640": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "905": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          }
+        }
+      },
+      "300": {
+        "budget": 300,
+        "capacity": 320,
+        "first_failing_rung": 453,
+        "isolated_passes_above": [],
+        "rungs": {
+          "10": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "20": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "40": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "80": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "160": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "226": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "320": {
+            "passed": 2,
+            "seeds": 3,
+            "ok": true
+          },
+          "453": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "640": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "905": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          }
+        }
+      },
+      "500": {
+        "budget": 500,
+        "capacity": 320,
+        "first_failing_rung": 453,
+        "isolated_passes_above": [],
+        "rungs": {
+          "10": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "20": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "40": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "80": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "160": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "226": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "320": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "453": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "640": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "905": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          }
+        }
+      },
+      "1000": {
+        "budget": 1000,
+        "capacity": 453,
+        "first_failing_rung": 640,
+        "isolated_passes_above": [],
+        "rungs": {
+          "10": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "20": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "40": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "80": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "160": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "226": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "320": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "453": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          },
+          "640": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          },
+          "905": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          }
+        }
+      }
+    },
+    "boundary": "moving",
+    "capacity_is_lower_bound": false,
+    "bits_per_param_at_largest_budget": 0.13335623387680562,
+    "control_violations": 0
+  }
+}
