@@ -1,0 +1,210 @@
+{
+  "noise": {
+    "band": 0,
+    "groups": 6,
+    "spread_rows": [
+      {
+        "phonebook": 2,
+        "init": 42,
+        "lr": 0.001,
+        "k": 1,
+        "plain": false,
+        "seeds": 6,
+        "min": 36,
+        "max": 36,
+        "spread": 0
+      },
+      {
+        "phonebook": 2,
+        "init": 42,
+        "lr": 0.001,
+        "k": 3,
+        "plain": false,
+        "seeds": 6,
+        "min": 47,
+        "max": 47,
+        "spread": 0
+      },
+      {
+        "phonebook": 4,
+        "init": 42,
+        "lr": 0.001,
+        "k": 1,
+        "plain": false,
+        "seeds": 6,
+        "min": 43,
+        "max": 43,
+        "spread": 0
+      },
+      {
+        "phonebook": 4,
+        "init": 42,
+        "lr": 0.001,
+        "k": 3,
+        "plain": false,
+        "seeds": 6,
+        "min": 41,
+        "max": 41,
+        "spread": 0
+      },
+      {
+        "phonebook": 7,
+        "init": 42,
+        "lr": 0.001,
+        "k": 1,
+        "plain": false,
+        "seeds": 6,
+        "min": 48,
+        "max": 48,
+        "spread": 0
+      },
+      {
+        "phonebook": 7,
+        "init": 42,
+        "lr": 0.001,
+        "k": 3,
+        "plain": false,
+        "seeds": 6,
+        "min": 54,
+        "max": 54,
+        "spread": 0
+      }
+    ]
+  },
+  "primary_lr": 0.001,
+  "baseline_k": 1,
+  "lr": {
+    "0.001": {
+      "phonebook_medians": {
+        "2": {
+          "1": 40,
+          "2": 41,
+          "3": 41,
+          "4": 41,
+          "5": 51,
+          "9": 60
+        },
+        "4": {
+          "1": 40,
+          "2": 37,
+          "3": 36,
+          "4": 40,
+          "5": 40,
+          "9": 52
+        },
+        "7": {
+          "1": 48,
+          "2": 46,
+          "3": 45,
+          "4": 45,
+          "5": 44,
+          "9": 46
+        },
+        "8": {
+          "1": 41,
+          "2": 40,
+          "3": 39,
+          "4": 43,
+          "5": 47,
+          "9": 58
+        },
+        "9": {
+          "1": 37,
+          "2": 35,
+          "3": 38,
+          "4": 40,
+          "5": 44,
+          "9": 56
+        },
+        "12": {
+          "1": 35,
+          "2": 34,
+          "3": 36,
+          "4": 39,
+          "5": 41,
+          "9": 49
+        }
+      },
+      "median_stable_joint": {
+        "1": 40.0,
+        "2": 38.5,
+        "3": 38.5,
+        "4": 40.5,
+        "5": 44.0,
+        "9": 54.0
+      },
+      "median_work_sequences": {
+        "1": 800.0,
+        "2": 1155.0,
+        "3": 1540.0,
+        "4": 2025.0,
+        "5": 2640.0,
+        "9": 5400.0
+      },
+      "median_min_a": {
+        "1": 9.0,
+        "2": 6.5,
+        "3": 4.0,
+        "4": 3.0,
+        "5": 2.0,
+        "9": 0.5
+      },
+      "censored": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "9": 0
+      },
+      "paired": {
+        "2": {
+          "faster": 5,
+          "tied": 0,
+          "slower": 1,
+          "median_gain": 1.5,
+          "band": 0,
+          "beats": true
+        },
+        "3": {
+          "faster": 3,
+          "tied": 0,
+          "slower": 3,
+          "median_gain": 0.5,
+          "band": 0,
+          "beats": false
+        },
+        "4": {
+          "faster": 1,
+          "tied": 1,
+          "slower": 4,
+          "median_gain": -1.5,
+          "band": 0,
+          "beats": false
+        },
+        "5": {
+          "faster": 1,
+          "tied": 1,
+          "slower": 4,
+          "median_gain": -6.0,
+          "band": 0,
+          "beats": false
+        },
+        "9": {
+          "faster": 1,
+          "tied": 0,
+          "slower": 5,
+          "median_gain": -15.5,
+          "band": 0,
+          "beats": false
+        }
+      },
+      "plateau": [
+        2,
+        3
+      ],
+      "cheapest_k_in_work": 1,
+      "dip_monotone": true
+    }
+  }
+}

@@ -1,0 +1,138 @@
+[
+ {
+  "q": "Q1",
+  "what": "median stable_joint at k=1",
+  "predicted": "38 [34, 43]",
+  "actual": 40.0,
+  "result": "HIT",
+  "note": ""
+ },
+ {
+  "q": "Q2",
+  "what": "phonebooks faster than k=1, k=2",
+  "predicted": "5 [4, 6]",
+  "actual": 5,
+  "result": "HIT (exact)",
+  "note": "tied 0, slower 1, median gain 1.5"
+ },
+ {
+  "q": "Q2",
+  "what": "phonebooks faster than k=1, k=3",
+  "predicted": "2 [1, 4]",
+  "actual": 3,
+  "result": "HIT",
+  "note": "tied 0, slower 3, median gain 0.5"
+ },
+ {
+  "q": "Q2",
+  "what": "phonebooks faster than k=1, k=4",
+  "predicted": "0 [0, 1]",
+  "actual": 1,
+  "result": "HIT",
+  "note": "tied 1, slower 4, median gain -1.5"
+ },
+ {
+  "q": "Q2",
+  "what": "phonebooks faster than k=1, k=5",
+  "predicted": "0 [0, 1]",
+  "actual": 1,
+  "result": "HIT",
+  "note": "tied 1, slower 4, median gain -6.0"
+ },
+ {
+  "q": "Q2",
+  "what": "phonebooks faster than k=1, k=9",
+  "predicted": "0 [0, 0]",
+  "actual": 1,
+  "result": "MISS",
+  "note": "tied 0, slower 5, median gain -15.5"
+ },
+ {
+  "q": "Q3",
+  "what": "noise band",
+  "predicted": "0 [0, 1]",
+  "actual": 0,
+  "result": "HIT (exact)",
+  "note": ""
+ },
+ {
+  "q": "Q4",
+  "what": "k that beat k=1 under the rule",
+  "predicted": "yes, [2]",
+  "actual": [
+   2
+  ],
+  "result": "HIT",
+  "note": "band 0"
+ },
+ {
+  "q": "Q5",
+  "what": "plateau",
+  "predicted": "[2] (band 0) / [1, 2, 3] (band 1)",
+  "actual": [
+   2,
+   3
+  ],
+  "result": "MISS",
+  "note": "actual band 0"
+ },
+ {
+  "q": "Q6",
+  "what": "cheapest k in work",
+  "predicted": 1,
+  "actual": 1,
+  "result": "HIT",
+  "note": ""
+ },
+ {
+  "q": "Q6",
+  "what": "fastest k in updates",
+  "predicted": 2,
+  "actual": 2,
+  "result": "HIT",
+  "note": "medians {'1': 40.0, '2': 38.5, '3': 38.5, '4': 40.5, '5': 44.0, '9': 54.0}"
+ },
+ {
+  "q": "Q7",
+  "what": "median dip at k=1",
+  "predicted": "9 [8, 9]",
+  "actual": 9.0,
+  "result": "HIT (exact)",
+  "note": ""
+ },
+ {
+  "q": "Q7",
+  "what": "median dip at k=9",
+  "predicted": "0 [0, 1]",
+  "actual": 0.5,
+  "result": "HIT",
+  "note": ""
+ },
+ {
+  "q": "Q8",
+  "what": "main-spec runs with no stable joint recall",
+  "predicted": "18 [18, 20]",
+  "actual": 18,
+  "result": "HIT (exact)",
+  "note": "main-spec cells counted: 270"
+ },
+ {
+  "q": "Q9",
+  "what": "best k at lr 0.0003 vs 0.001",
+  "predicted": "larger",
+  "actual": "larger",
+  "result": "HIT",
+  "note": "best k 3 at 0.0003, 2 at 0.001"
+ },
+ {
+  "q": "Q10",
+  "what": "tripwires fired",
+  "predicted": "none",
+  "actual": {
+   "k4_or_k5_faster_in_3_plus": false,
+   "noise_band_3_plus": false
+  },
+  "result": "STORY SURVIVES",
+  "note": "k=4 or k=5 faster than k=1 in 3 or more of the 6 phonebooks at lr 0.001"
+ }
+]

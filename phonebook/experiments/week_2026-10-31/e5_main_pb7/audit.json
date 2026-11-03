@@ -1,0 +1,10 @@
+{
+  "root": "phonebook\\experiments\\week_2026-10-31\\e5_main_pb7",
+  "status": "passed",
+  "spec": "e5_main_pb7",
+  "git_commit": "6d8cc86351514ff48a489a328a191312428d2632",
+  "runs": 45,
+  "completions": 900,
+  "local_artifacts_checked": true,
+  "git_checked": true
+}

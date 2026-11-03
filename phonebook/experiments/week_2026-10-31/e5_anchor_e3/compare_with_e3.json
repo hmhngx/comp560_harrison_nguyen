@@ -1,0 +1,26 @@
+{
+  "d0_seed42/k1_lr0.001 vs d0_seed42/k1_lr0.001": {
+    "compared_epochs": 500,
+    "mismatches": []
+  },
+  "d0_seed42/k3_lr0.001 vs d0_seed42/k3_lr0.001": {
+    "compared_epochs": 500,
+    "mismatches": []
+  },
+  "d0_seed123/k1_lr0.001 vs d0_seed123/k1_lr0.001": {
+    "compared_epochs": 500,
+    "mismatches": []
+  },
+  "d0_seed123/k3_lr0.001 vs d0_seed123/k3_lr0.001": {
+    "compared_epochs": 500,
+    "mismatches": []
+  },
+  "d0_seed999/k1_lr0.001 vs d0_seed999/k1_lr0.001": {
+    "compared_epochs": 500,
+    "mismatches": []
+  },
+  "d0_seed999/k3_lr0.001 vs d0_seed999/k3_lr0.001": {
+    "compared_epochs": 500,
+    "mismatches": []
+  }
+}

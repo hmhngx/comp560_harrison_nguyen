@@ -1,0 +1,266 @@
+{
+  "noise": {
+    "band": 0,
+    "groups": 6,
+    "spread_rows": [
+      {
+        "phonebook": 2,
+        "init": 42,
+        "lr": 0.001,
+        "k": 1,
+        "plain": false,
+        "seeds": 6,
+        "min": 36,
+        "max": 36,
+        "spread": 0
+      },
+      {
+        "phonebook": 2,
+        "init": 42,
+        "lr": 0.001,
+        "k": 3,
+        "plain": false,
+        "seeds": 6,
+        "min": 47,
+        "max": 47,
+        "spread": 0
+      },
+      {
+        "phonebook": 4,
+        "init": 42,
+        "lr": 0.001,
+        "k": 1,
+        "plain": false,
+        "seeds": 6,
+        "min": 43,
+        "max": 43,
+        "spread": 0
+      },
+      {
+        "phonebook": 4,
+        "init": 42,
+        "lr": 0.001,
+        "k": 3,
+        "plain": false,
+        "seeds": 6,
+        "min": 41,
+        "max": 41,
+        "spread": 0
+      },
+      {
+        "phonebook": 7,
+        "init": 42,
+        "lr": 0.001,
+        "k": 1,
+        "plain": false,
+        "seeds": 6,
+        "min": 48,
+        "max": 48,
+        "spread": 0
+      },
+      {
+        "phonebook": 7,
+        "init": 42,
+        "lr": 0.001,
+        "k": 3,
+        "plain": false,
+        "seeds": 6,
+        "min": 54,
+        "max": 54,
+        "spread": 0
+      }
+    ]
+  },
+  "primary_lr": 0.003,
+  "baseline_k": 1,
+  "lr": {
+    "0.003": {
+      "phonebook_medians": {
+        "2": {
+          "1": 20,
+          "2": 19,
+          "3": 21,
+          "5": 26
+        },
+        "4": {
+          "1": 19,
+          "2": 17,
+          "3": 19,
+          "5": 23
+        },
+        "7": {
+          "1": 21,
+          "2": 20,
+          "3": 20,
+          "5": 28
+        },
+        "8": {
+          "1": 19,
+          "2": 18,
+          "3": 19,
+          "5": 25
+        },
+        "9": {
+          "1": 16,
+          "2": 17,
+          "3": 18,
+          "5": 22
+        },
+        "12": {
+          "1": 18,
+          "2": 17,
+          "3": 19,
+          "5": 26
+        }
+      },
+      "median_stable_joint": {
+        "1": 19.0,
+        "2": 17.5,
+        "3": 19.0,
+        "5": 25.5
+      },
+      "median_work_sequences": {
+        "1": 380.0,
+        "2": 525.0,
+        "3": 760.0,
+        "5": 1530.0
+      },
+      "median_min_a": {
+        "1": 7.0,
+        "2": 3.0,
+        "3": 2.0,
+        "5": 0.0
+      },
+      "censored": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "5": 0
+      },
+      "paired": {
+        "2": {
+          "faster": 5,
+          "tied": 0,
+          "slower": 1,
+          "median_gain": 1.0,
+          "band": 0,
+          "beats": true
+        },
+        "3": {
+          "faster": 1,
+          "tied": 2,
+          "slower": 3,
+          "median_gain": -0.5,
+          "band": 0,
+          "beats": false
+        },
+        "5": {
+          "faster": 0,
+          "tied": 0,
+          "slower": 6,
+          "median_gain": -6.0,
+          "band": 0,
+          "beats": false
+        }
+      },
+      "plateau": [
+        2
+      ],
+      "cheapest_k_in_work": 1,
+      "dip_monotone": true
+    },
+    "0.0003": {
+      "phonebook_medians": {
+        "2": {
+          "1": 94,
+          "2": 95,
+          "3": 94,
+          "5": 122
+        },
+        "4": {
+          "1": 99,
+          "2": 92,
+          "3": 89,
+          "5": 86
+        },
+        "7": {
+          "1": 128,
+          "2": 120,
+          "3": 117,
+          "5": 113
+        },
+        "8": {
+          "1": 103,
+          "2": 96,
+          "3": 94,
+          "5": 98
+        },
+        "9": {
+          "1": 94,
+          "2": 87,
+          "3": 85,
+          "5": 95
+        },
+        "12": {
+          "1": 82,
+          "2": 78,
+          "3": 76,
+          "5": 86
+        }
+      },
+      "median_stable_joint": {
+        "1": 96.5,
+        "2": 93.5,
+        "3": 91.5,
+        "5": 96.5
+      },
+      "median_work_sequences": {
+        "1": 1930.0,
+        "2": 2805.0,
+        "3": 3660.0,
+        "5": 5790.0
+      },
+      "median_min_a": {
+        "1": 10.0,
+        "2": 9.0,
+        "3": 8.0,
+        "5": 5.5
+      },
+      "censored": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "5": 0
+      },
+      "paired": {
+        "2": {
+          "faster": 5,
+          "tied": 0,
+          "slower": 1,
+          "median_gain": 7.0,
+          "band": null,
+          "beats": null
+        },
+        "3": {
+          "faster": 5,
+          "tied": 1,
+          "slower": 0,
+          "median_gain": 9.0,
+          "band": null,
+          "beats": null
+        },
+        "5": {
+          "faster": 3,
+          "tied": 0,
+          "slower": 3,
+          "median_gain": 2.0,
+          "band": null,
+          "beats": null
+        }
+      },
+      "plateau": null,
+      "cheapest_k_in_work": 1,
+      "dip_monotone": true
+    }
+  }
+}

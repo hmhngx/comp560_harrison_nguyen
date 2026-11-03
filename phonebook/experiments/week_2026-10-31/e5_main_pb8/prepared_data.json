@@ -1,0 +1,401 @@
+{
+  "pb8_s42/a1b1_evalA": {
+    "command": [
+      "C:\\Users\\minhh\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "phonebook/prepare_phonebook.py",
+      "--train-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s42\\inputs_a1b1_evalA\\train.txt",
+      "--eval-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s42\\inputs_a1b1_evalA\\eval.txt",
+      "--out-dir",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s42\\data_a1b1_evalA"
+    ],
+    "train_sha256": "98ab7232ff948cf5d70b36b7ab3a2e220d7cf92063b1008d71224f838bbd41d4",
+    "eval_sha256": "b0969bf962778389ddc63895b6cdaaf9e65b57d8c063e7dd44fe4dd2d59a96bc",
+    "sha256": {
+      "train.bin": "fa78118562fd66cef2d33ac440a9d4b41988c68ab66568336a67f22adfaadd42",
+      "val.bin": "65acb4527a74ad79767f82022cf588cc5a5143bf2c620e8eb41ce388757163fc",
+      "meta.pkl": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+    }
+  },
+  "pb8_s42/a1b2_evalA": {
+    "command": [
+      "C:\\Users\\minhh\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "phonebook/prepare_phonebook.py",
+      "--train-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s42\\inputs_a1b2_evalA\\train.txt",
+      "--eval-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s42\\inputs_a1b2_evalA\\eval.txt",
+      "--out-dir",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s42\\data_a1b2_evalA"
+    ],
+    "train_sha256": "68bc3f701492279cbf494009d05b63717ae592a5a0e65bebfb1ebe354b9edd39",
+    "eval_sha256": "b0969bf962778389ddc63895b6cdaaf9e65b57d8c063e7dd44fe4dd2d59a96bc",
+    "sha256": {
+      "train.bin": "649b40fe36aee9b6817f22de75c4755227ee3f28d3f9941be3a2301394cf6de7",
+      "val.bin": "65acb4527a74ad79767f82022cf588cc5a5143bf2c620e8eb41ce388757163fc",
+      "meta.pkl": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+    }
+  },
+  "pb8_s42/a1b3_evalA": {
+    "command": [
+      "C:\\Users\\minhh\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "phonebook/prepare_phonebook.py",
+      "--train-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s42\\inputs_a1b3_evalA\\train.txt",
+      "--eval-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s42\\inputs_a1b3_evalA\\eval.txt",
+      "--out-dir",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s42\\data_a1b3_evalA"
+    ],
+    "train_sha256": "ab8b06d4b1b4f917212b0f2d59652fc60c99cf445f91fac1b3d679c8606996fa",
+    "eval_sha256": "b0969bf962778389ddc63895b6cdaaf9e65b57d8c063e7dd44fe4dd2d59a96bc",
+    "sha256": {
+      "train.bin": "bc2857bc5493207a45dc8d14cf40fc8d1619093dc811676e797c9f8258023469",
+      "val.bin": "65acb4527a74ad79767f82022cf588cc5a5143bf2c620e8eb41ce388757163fc",
+      "meta.pkl": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+    }
+  },
+  "pb8_s42/a1b4_evalA": {
+    "command": [
+      "C:\\Users\\minhh\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "phonebook/prepare_phonebook.py",
+      "--train-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s42\\inputs_a1b4_evalA\\train.txt",
+      "--eval-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s42\\inputs_a1b4_evalA\\eval.txt",
+      "--out-dir",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s42\\data_a1b4_evalA"
+    ],
+    "train_sha256": "22fdac08ade357f84a9c6e4497dbc1b7681fd41e52a0b208426e4c746b272c81",
+    "eval_sha256": "b0969bf962778389ddc63895b6cdaaf9e65b57d8c063e7dd44fe4dd2d59a96bc",
+    "sha256": {
+      "train.bin": "5eab0c8f5eb69df5eccc6190f8837f43bd6b6984fb7b814634dee153b718fc73",
+      "val.bin": "65acb4527a74ad79767f82022cf588cc5a5143bf2c620e8eb41ce388757163fc",
+      "meta.pkl": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+    }
+  },
+  "pb8_s42/a1b5_evalA": {
+    "command": [
+      "C:\\Users\\minhh\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "phonebook/prepare_phonebook.py",
+      "--train-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s42\\inputs_a1b5_evalA\\train.txt",
+      "--eval-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s42\\inputs_a1b5_evalA\\eval.txt",
+      "--out-dir",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s42\\data_a1b5_evalA"
+    ],
+    "train_sha256": "1bd60e5828e83d59e6c87aed35486cc29b185b371d5a235c121ac0c304eb0971",
+    "eval_sha256": "b0969bf962778389ddc63895b6cdaaf9e65b57d8c063e7dd44fe4dd2d59a96bc",
+    "sha256": {
+      "train.bin": "8f76ad42bb7c3841c89526361f44e77eb89c04db9669f96177c335d3d9466467",
+      "val.bin": "65acb4527a74ad79767f82022cf588cc5a5143bf2c620e8eb41ce388757163fc",
+      "meta.pkl": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+    }
+  },
+  "pb8_s42/a1b9_evalA": {
+    "command": [
+      "C:\\Users\\minhh\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "phonebook/prepare_phonebook.py",
+      "--train-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s42\\inputs_a1b9_evalA\\train.txt",
+      "--eval-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s42\\inputs_a1b9_evalA\\eval.txt",
+      "--out-dir",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s42\\data_a1b9_evalA"
+    ],
+    "train_sha256": "f02c3ab8c6eb06a9c82ad5faa4648d0172a77f268086ec9c9f3dcc2b5fb5e3ad",
+    "eval_sha256": "b0969bf962778389ddc63895b6cdaaf9e65b57d8c063e7dd44fe4dd2d59a96bc",
+    "sha256": {
+      "train.bin": "3c7c7f09b032c45f573b358cb2d10b6e6488a35a2f69175eb846a349c6db2ed5",
+      "val.bin": "65acb4527a74ad79767f82022cf588cc5a5143bf2c620e8eb41ce388757163fc",
+      "meta.pkl": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+    }
+  },
+  "pb8_s42/a0b1_evalA": {
+    "command": [
+      "C:\\Users\\minhh\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "phonebook/prepare_phonebook.py",
+      "--train-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s42\\inputs_a0b1_evalA\\train.txt",
+      "--eval-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s42\\inputs_a0b1_evalA\\eval.txt",
+      "--out-dir",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s42\\data_a0b1_evalA"
+    ],
+    "train_sha256": "0a7ba60c40d1bbebe02fbb91f6881981df31cea84e8ea10fb72511fafa0e960f",
+    "eval_sha256": "b0969bf962778389ddc63895b6cdaaf9e65b57d8c063e7dd44fe4dd2d59a96bc",
+    "sha256": {
+      "train.bin": "952cf63fc6392bdd957818f416d810f7d829f76e6a3398e6bdac1908a31e7876",
+      "val.bin": "65acb4527a74ad79767f82022cf588cc5a5143bf2c620e8eb41ce388757163fc",
+      "meta.pkl": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+    }
+  },
+  "pb8_s123/a1b1_evalA": {
+    "command": [
+      "C:\\Users\\minhh\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "phonebook/prepare_phonebook.py",
+      "--train-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s123\\inputs_a1b1_evalA\\train.txt",
+      "--eval-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s123\\inputs_a1b1_evalA\\eval.txt",
+      "--out-dir",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s123\\data_a1b1_evalA"
+    ],
+    "train_sha256": "98ab7232ff948cf5d70b36b7ab3a2e220d7cf92063b1008d71224f838bbd41d4",
+    "eval_sha256": "b0969bf962778389ddc63895b6cdaaf9e65b57d8c063e7dd44fe4dd2d59a96bc",
+    "sha256": {
+      "train.bin": "fa78118562fd66cef2d33ac440a9d4b41988c68ab66568336a67f22adfaadd42",
+      "val.bin": "65acb4527a74ad79767f82022cf588cc5a5143bf2c620e8eb41ce388757163fc",
+      "meta.pkl": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+    }
+  },
+  "pb8_s123/a1b2_evalA": {
+    "command": [
+      "C:\\Users\\minhh\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "phonebook/prepare_phonebook.py",
+      "--train-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s123\\inputs_a1b2_evalA\\train.txt",
+      "--eval-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s123\\inputs_a1b2_evalA\\eval.txt",
+      "--out-dir",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s123\\data_a1b2_evalA"
+    ],
+    "train_sha256": "68bc3f701492279cbf494009d05b63717ae592a5a0e65bebfb1ebe354b9edd39",
+    "eval_sha256": "b0969bf962778389ddc63895b6cdaaf9e65b57d8c063e7dd44fe4dd2d59a96bc",
+    "sha256": {
+      "train.bin": "649b40fe36aee9b6817f22de75c4755227ee3f28d3f9941be3a2301394cf6de7",
+      "val.bin": "65acb4527a74ad79767f82022cf588cc5a5143bf2c620e8eb41ce388757163fc",
+      "meta.pkl": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+    }
+  },
+  "pb8_s123/a1b3_evalA": {
+    "command": [
+      "C:\\Users\\minhh\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "phonebook/prepare_phonebook.py",
+      "--train-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s123\\inputs_a1b3_evalA\\train.txt",
+      "--eval-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s123\\inputs_a1b3_evalA\\eval.txt",
+      "--out-dir",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s123\\data_a1b3_evalA"
+    ],
+    "train_sha256": "ab8b06d4b1b4f917212b0f2d59652fc60c99cf445f91fac1b3d679c8606996fa",
+    "eval_sha256": "b0969bf962778389ddc63895b6cdaaf9e65b57d8c063e7dd44fe4dd2d59a96bc",
+    "sha256": {
+      "train.bin": "bc2857bc5493207a45dc8d14cf40fc8d1619093dc811676e797c9f8258023469",
+      "val.bin": "65acb4527a74ad79767f82022cf588cc5a5143bf2c620e8eb41ce388757163fc",
+      "meta.pkl": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+    }
+  },
+  "pb8_s123/a1b4_evalA": {
+    "command": [
+      "C:\\Users\\minhh\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "phonebook/prepare_phonebook.py",
+      "--train-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s123\\inputs_a1b4_evalA\\train.txt",
+      "--eval-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s123\\inputs_a1b4_evalA\\eval.txt",
+      "--out-dir",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s123\\data_a1b4_evalA"
+    ],
+    "train_sha256": "22fdac08ade357f84a9c6e4497dbc1b7681fd41e52a0b208426e4c746b272c81",
+    "eval_sha256": "b0969bf962778389ddc63895b6cdaaf9e65b57d8c063e7dd44fe4dd2d59a96bc",
+    "sha256": {
+      "train.bin": "5eab0c8f5eb69df5eccc6190f8837f43bd6b6984fb7b814634dee153b718fc73",
+      "val.bin": "65acb4527a74ad79767f82022cf588cc5a5143bf2c620e8eb41ce388757163fc",
+      "meta.pkl": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+    }
+  },
+  "pb8_s123/a1b5_evalA": {
+    "command": [
+      "C:\\Users\\minhh\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "phonebook/prepare_phonebook.py",
+      "--train-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s123\\inputs_a1b5_evalA\\train.txt",
+      "--eval-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s123\\inputs_a1b5_evalA\\eval.txt",
+      "--out-dir",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s123\\data_a1b5_evalA"
+    ],
+    "train_sha256": "1bd60e5828e83d59e6c87aed35486cc29b185b371d5a235c121ac0c304eb0971",
+    "eval_sha256": "b0969bf962778389ddc63895b6cdaaf9e65b57d8c063e7dd44fe4dd2d59a96bc",
+    "sha256": {
+      "train.bin": "8f76ad42bb7c3841c89526361f44e77eb89c04db9669f96177c335d3d9466467",
+      "val.bin": "65acb4527a74ad79767f82022cf588cc5a5143bf2c620e8eb41ce388757163fc",
+      "meta.pkl": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+    }
+  },
+  "pb8_s123/a1b9_evalA": {
+    "command": [
+      "C:\\Users\\minhh\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "phonebook/prepare_phonebook.py",
+      "--train-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s123\\inputs_a1b9_evalA\\train.txt",
+      "--eval-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s123\\inputs_a1b9_evalA\\eval.txt",
+      "--out-dir",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s123\\data_a1b9_evalA"
+    ],
+    "train_sha256": "f02c3ab8c6eb06a9c82ad5faa4648d0172a77f268086ec9c9f3dcc2b5fb5e3ad",
+    "eval_sha256": "b0969bf962778389ddc63895b6cdaaf9e65b57d8c063e7dd44fe4dd2d59a96bc",
+    "sha256": {
+      "train.bin": "3c7c7f09b032c45f573b358cb2d10b6e6488a35a2f69175eb846a349c6db2ed5",
+      "val.bin": "65acb4527a74ad79767f82022cf588cc5a5143bf2c620e8eb41ce388757163fc",
+      "meta.pkl": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+    }
+  },
+  "pb8_s123/a0b1_evalA": {
+    "command": [
+      "C:\\Users\\minhh\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "phonebook/prepare_phonebook.py",
+      "--train-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s123\\inputs_a0b1_evalA\\train.txt",
+      "--eval-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s123\\inputs_a0b1_evalA\\eval.txt",
+      "--out-dir",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s123\\data_a0b1_evalA"
+    ],
+    "train_sha256": "0a7ba60c40d1bbebe02fbb91f6881981df31cea84e8ea10fb72511fafa0e960f",
+    "eval_sha256": "b0969bf962778389ddc63895b6cdaaf9e65b57d8c063e7dd44fe4dd2d59a96bc",
+    "sha256": {
+      "train.bin": "952cf63fc6392bdd957818f416d810f7d829f76e6a3398e6bdac1908a31e7876",
+      "val.bin": "65acb4527a74ad79767f82022cf588cc5a5143bf2c620e8eb41ce388757163fc",
+      "meta.pkl": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+    }
+  },
+  "pb8_s999/a1b1_evalA": {
+    "command": [
+      "C:\\Users\\minhh\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "phonebook/prepare_phonebook.py",
+      "--train-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s999\\inputs_a1b1_evalA\\train.txt",
+      "--eval-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s999\\inputs_a1b1_evalA\\eval.txt",
+      "--out-dir",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s999\\data_a1b1_evalA"
+    ],
+    "train_sha256": "98ab7232ff948cf5d70b36b7ab3a2e220d7cf92063b1008d71224f838bbd41d4",
+    "eval_sha256": "b0969bf962778389ddc63895b6cdaaf9e65b57d8c063e7dd44fe4dd2d59a96bc",
+    "sha256": {
+      "train.bin": "fa78118562fd66cef2d33ac440a9d4b41988c68ab66568336a67f22adfaadd42",
+      "val.bin": "65acb4527a74ad79767f82022cf588cc5a5143bf2c620e8eb41ce388757163fc",
+      "meta.pkl": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+    }
+  },
+  "pb8_s999/a1b2_evalA": {
+    "command": [
+      "C:\\Users\\minhh\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "phonebook/prepare_phonebook.py",
+      "--train-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s999\\inputs_a1b2_evalA\\train.txt",
+      "--eval-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s999\\inputs_a1b2_evalA\\eval.txt",
+      "--out-dir",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s999\\data_a1b2_evalA"
+    ],
+    "train_sha256": "68bc3f701492279cbf494009d05b63717ae592a5a0e65bebfb1ebe354b9edd39",
+    "eval_sha256": "b0969bf962778389ddc63895b6cdaaf9e65b57d8c063e7dd44fe4dd2d59a96bc",
+    "sha256": {
+      "train.bin": "649b40fe36aee9b6817f22de75c4755227ee3f28d3f9941be3a2301394cf6de7",
+      "val.bin": "65acb4527a74ad79767f82022cf588cc5a5143bf2c620e8eb41ce388757163fc",
+      "meta.pkl": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+    }
+  },
+  "pb8_s999/a1b3_evalA": {
+    "command": [
+      "C:\\Users\\minhh\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "phonebook/prepare_phonebook.py",
+      "--train-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s999\\inputs_a1b3_evalA\\train.txt",
+      "--eval-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s999\\inputs_a1b3_evalA\\eval.txt",
+      "--out-dir",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s999\\data_a1b3_evalA"
+    ],
+    "train_sha256": "ab8b06d4b1b4f917212b0f2d59652fc60c99cf445f91fac1b3d679c8606996fa",
+    "eval_sha256": "b0969bf962778389ddc63895b6cdaaf9e65b57d8c063e7dd44fe4dd2d59a96bc",
+    "sha256": {
+      "train.bin": "bc2857bc5493207a45dc8d14cf40fc8d1619093dc811676e797c9f8258023469",
+      "val.bin": "65acb4527a74ad79767f82022cf588cc5a5143bf2c620e8eb41ce388757163fc",
+      "meta.pkl": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+    }
+  },
+  "pb8_s999/a1b4_evalA": {
+    "command": [
+      "C:\\Users\\minhh\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "phonebook/prepare_phonebook.py",
+      "--train-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s999\\inputs_a1b4_evalA\\train.txt",
+      "--eval-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s999\\inputs_a1b4_evalA\\eval.txt",
+      "--out-dir",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s999\\data_a1b4_evalA"
+    ],
+    "train_sha256": "22fdac08ade357f84a9c6e4497dbc1b7681fd41e52a0b208426e4c746b272c81",
+    "eval_sha256": "b0969bf962778389ddc63895b6cdaaf9e65b57d8c063e7dd44fe4dd2d59a96bc",
+    "sha256": {
+      "train.bin": "5eab0c8f5eb69df5eccc6190f8837f43bd6b6984fb7b814634dee153b718fc73",
+      "val.bin": "65acb4527a74ad79767f82022cf588cc5a5143bf2c620e8eb41ce388757163fc",
+      "meta.pkl": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+    }
+  },
+  "pb8_s999/a1b5_evalA": {
+    "command": [
+      "C:\\Users\\minhh\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "phonebook/prepare_phonebook.py",
+      "--train-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s999\\inputs_a1b5_evalA\\train.txt",
+      "--eval-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s999\\inputs_a1b5_evalA\\eval.txt",
+      "--out-dir",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s999\\data_a1b5_evalA"
+    ],
+    "train_sha256": "1bd60e5828e83d59e6c87aed35486cc29b185b371d5a235c121ac0c304eb0971",
+    "eval_sha256": "b0969bf962778389ddc63895b6cdaaf9e65b57d8c063e7dd44fe4dd2d59a96bc",
+    "sha256": {
+      "train.bin": "8f76ad42bb7c3841c89526361f44e77eb89c04db9669f96177c335d3d9466467",
+      "val.bin": "65acb4527a74ad79767f82022cf588cc5a5143bf2c620e8eb41ce388757163fc",
+      "meta.pkl": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+    }
+  },
+  "pb8_s999/a1b9_evalA": {
+    "command": [
+      "C:\\Users\\minhh\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "phonebook/prepare_phonebook.py",
+      "--train-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s999\\inputs_a1b9_evalA\\train.txt",
+      "--eval-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s999\\inputs_a1b9_evalA\\eval.txt",
+      "--out-dir",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s999\\data_a1b9_evalA"
+    ],
+    "train_sha256": "f02c3ab8c6eb06a9c82ad5faa4648d0172a77f268086ec9c9f3dcc2b5fb5e3ad",
+    "eval_sha256": "b0969bf962778389ddc63895b6cdaaf9e65b57d8c063e7dd44fe4dd2d59a96bc",
+    "sha256": {
+      "train.bin": "3c7c7f09b032c45f573b358cb2d10b6e6488a35a2f69175eb846a349c6db2ed5",
+      "val.bin": "65acb4527a74ad79767f82022cf588cc5a5143bf2c620e8eb41ce388757163fc",
+      "meta.pkl": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+    }
+  },
+  "pb8_s999/a0b1_evalA": {
+    "command": [
+      "C:\\Users\\minhh\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "phonebook/prepare_phonebook.py",
+      "--train-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s999\\inputs_a0b1_evalA\\train.txt",
+      "--eval-input",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s999\\inputs_a0b1_evalA\\eval.txt",
+      "--out-dir",
+      "C:\\Users\\minhh\\Side Hustles\\comp560_harrison_nguyen\\phonebook\\experiments\\week_2026-10-31\\e5_main_pb8\\pb8_s999\\data_a0b1_evalA"
+    ],
+    "train_sha256": "0a7ba60c40d1bbebe02fbb91f6881981df31cea84e8ea10fb72511fafa0e960f",
+    "eval_sha256": "b0969bf962778389ddc63895b6cdaaf9e65b57d8c063e7dd44fe4dd2d59a96bc",
+    "sha256": {
+      "train.bin": "952cf63fc6392bdd957818f416d810f7d829f76e6a3398e6bdac1908a31e7876",
+      "val.bin": "65acb4527a74ad79767f82022cf588cc5a5143bf2c620e8eb41ce388757163fc",
+      "meta.pkl": "0ab0e2c10178aa954677b82011b74863d3cd3503b54fcde7abbb3bd90f35a3e9"
+    }
+  }
+}
