@@ -139,7 +139,7 @@ Every experiment is a committed spec in [`specs/`](specs/) with predictions or r
 the runs, and a separate audit script (code written apart from the runner, not a third party) covered every run of the weeks of
 October 7 and November 3: 591 training runs and 30,522 generated answers, all consistent (the 432 runs of the week of November 3 are in
 [`experiments/week_2026-10-31/`](experiments/week_2026-10-31/README.md); one of those audits failed at PyTorch's default
-thread count on a 1.4e-6 relative loss difference and passes at the training thread count, as that README explains). The 8 runs
+thread count on a 1.4e-6 relative loss difference and passes at the training thread count, as that README explains; since November 4 the audit compares the loss within a relative 1e-5 and everything else exactly, and passes at both thread counts). The 8 runs
 of the week of September 30 (400 answers) were audited by that week's own earlier script.
 From a fresh clone, the committed files alone can be re-audited (run from the repository root):
 

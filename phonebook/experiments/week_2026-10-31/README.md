@@ -231,6 +231,11 @@ of the seeds that carry the passes).
   With one thread, the environment of training and of the saved evaluation, the fresh evaluation reproduces the saved one exactly and the audit passes
   (machine output of both attempts: [`results/e4_audit_thread_check.txt`](../../results/e4_audit_thread_check.txt)).
   The audit code was not changed. A later fix could use an absolute tolerance for near-zero losses or pin the thread count.
+  *Later, November 4:* the audit was changed. Its fresh-evaluation check now compares the cross-entropy within a relative 1e-5 (absolute 1e-9) and every count, accuracy
+  ratio and generated answer exactly. A measurement of all 58 readable evidence roots (591 runs, 1,182 losses, 8,274 compared fields) found this one loss to be the only
+  rejection of the old rule; the largest other drift was 1.9e-7 relative. With the change all of those roots pass the weights-based audit at the default thread count and at
+  one thread, including `e4_capacity_d64_seed1_a`. Pinning one thread was not chosen: two E5 Phase-A evaluations differ from their saved values by 1.3e-7 at one thread,
+  so the saved evidence was not all produced at one thread. The paragraph above is left as it was written.
 - **Threads.** The E5 anchor ran at PyTorch's default thread count, as E3 did; all other E5 runs and all E4 and E6 runs ran with one thread each, chosen for
   throughput after a measurement (stable_joint was identical at one and ten threads in scratch pilots, which are not evidence).
 - **E6 ran without incident.** No run was interrupted or rerun; all 12 manifest entries record commit `f4f669a` and a clean tree, and all 12 audits passed at one thread on

@@ -571,3 +571,85 @@ def test_local_artifact_check_catches_an_edited_prepared_training_text(copy_of_e
     train.write_bytes(train.read_bytes() + b"extra\n")
     with pytest.raises(ValueError, match="Prepared training text"):
         audit(copy_of_evidence, require_local_artifacts=True)
+
+
+# --- the fresh re-evaluation: only the cross-entropy is a float32 reduction that a thread count can reorder ----------
+# The one case seen in the real evidence: s1_n10/d64 of e4_capacity_d64_seed1_a, audited at PyTorch's default 10
+# threads on 2026-11-03 (the training environment, 1 thread, reproduces it exactly).
+SAVED_LOSS, FRESH_LOSS = 0.0013339654542505741, 0.0013339635916054249
+
+
+def _scores(loss: float, **forced_overrides) -> dict:
+    forced = {"loss": loss, "token_accuracy": 1.0, "sequence_accuracy": 1.0, "token_correct": 130, "token_total": 130,
+              "sequence_correct": 10, "sequence_total": 10}
+    forced.update(forced_overrides)
+    generation = {"correct": 10, "total": 10, "predictions": [{"prompt": "p", "prediction": "1", "correct": True}]}
+    return {"books": {"A": {"generation": generation, "teacher_forced": forced}}}
+
+
+def _ulps(value: float, count: int) -> float:
+    """`value` moved by `count` float32 spacings: what a different summation order does to a float32 loss."""
+    import numpy as np
+    moved = np.float32(value)
+    for _ in range(abs(count)):
+        moved = np.nextafter(moved, np.float32(np.inf if count > 0 else -np.inf))
+    return float(moved)
+
+
+def test_the_loss_drift_recorded_at_the_default_thread_count_is_accepted() -> None:
+    assert audit_mod._same_evaluation(_scores(FRESH_LOSS), _scores(SAVED_LOSS))
+    assert audit_mod._same_evaluation(_scores(SAVED_LOSS), _scores(FRESH_LOSS))
+
+
+@pytest.mark.parametrize("value", [3e-4, 1.3e-3, 0.5, 6.09, 40.0])
+@pytest.mark.parametrize("ulps", [1, 16, 64])
+def test_float32_summation_noise_in_the_loss_is_accepted(value, ulps) -> None:
+    assert audit_mod._same_evaluation(_scores(_ulps(value, ulps)), _scores(value))
+    assert audit_mod._same_evaluation(_scores(_ulps(value, -ulps)), _scores(value))
+
+
+@pytest.mark.parametrize("value", [3e-4, 1.3e-3, 0.5, 6.09])
+@pytest.mark.parametrize("factor", [1 + 1e-4, 1 - 1e-4, 1.001, 2.0])
+def test_a_real_change_of_the_loss_is_rejected(value, factor) -> None:
+    assert not audit_mod._same_evaluation(_scores(value * factor), _scores(value))
+
+
+def test_a_loss_near_zero_has_an_absolute_floor_and_no_more() -> None:
+    assert audit_mod._same_evaluation(_scores(1e-6 + 5e-10), _scores(1e-6))      # 5e-4 relative, but under the 1e-9 floor
+    assert not audit_mod._same_evaluation(_scores(1e-6 + 5e-9), _scores(1e-6))   # over the floor
+
+
+@pytest.mark.parametrize("key,wrong", [("token_accuracy", 1.0 - 1e-9), ("sequence_accuracy", 1.0 - 1e-9),
+                                       ("token_correct", 129), ("sequence_correct", 9),
+                                       ("token_total", 131), ("sequence_total", 11)])
+def test_counts_and_the_accuracies_computed_from_them_are_compared_exactly(key, wrong) -> None:
+    assert not audit_mod._same_evaluation(_scores(0.5, **{key: wrong}), _scores(0.5))
+
+
+def test_a_different_generated_string_is_rejected_even_when_every_number_agrees() -> None:
+    fresh = _scores(0.5)
+    fresh["books"]["A"]["generation"]["predictions"][0]["prediction"] = "2"
+    assert not audit_mod._same_evaluation(fresh, _scores(0.5))
+
+
+def _drift_the_fresh_loss(monkeypatch, move) -> None:
+    real = audit_mod.evaluate_checkpoint
+
+    def drifting(checkpoint, meta, books):
+        result = real(checkpoint, meta, books)
+        for scores in result["books"].values():
+            scores["teacher_forced"]["loss"] = move(scores["teacher_forced"]["loss"])
+        return result
+
+    monkeypatch.setattr(audit_mod, "evaluate_checkpoint", drifting)
+
+
+def test_the_audit_accepts_a_fresh_evaluation_whose_loss_moved_by_float32_noise(copy_of_evidence, monkeypatch) -> None:
+    _drift_the_fresh_loss(monkeypatch, lambda loss: _ulps(loss, 16))
+    assert audit(copy_of_evidence, require_local_artifacts=True)["status"] == "passed"
+
+
+def test_the_audit_rejects_a_fresh_evaluation_whose_loss_really_differs(copy_of_evidence, monkeypatch) -> None:
+    _drift_the_fresh_loss(monkeypatch, lambda loss: loss * 1.001)
+    with pytest.raises(ValueError, match="fresh"):
+        audit(copy_of_evidence, require_local_artifacts=True)

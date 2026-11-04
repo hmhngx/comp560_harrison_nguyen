@@ -33,6 +33,12 @@ from phonebook.prepare_phonebook import load_phonebook_lines
 from phonebook.run_experiment import canonical_sha256, expand_runs, expected_logged_epochs, resolve, validate_spec
 
 TOKEN_TOLERANCE = 5.1e-5  # the trainer logs four decimals
+# The evaluator averages the cross-entropy in float32. Summing the same terms in another order (another thread count)
+# moves its last bits: 16 float32 spacings, 1.4e-6 relative, were seen on a loss of 1.3e-3 (e4_capacity_d64_seed1_a).
+# 1e-5 relative is about 84 spacings; the 1e-9 absolute floor for a loss near zero is the one this check always had.
+# Counts, the accuracies computed from them and the generated strings are not float reductions and are compared exactly.
+LOSS_REL_TOL = 1e-5
+LOSS_ABS_TOL = 1e-9
 
 
 def require(condition: bool, message: str) -> None:
@@ -173,8 +179,8 @@ def _same_evaluation(fresh: dict, saved: dict) -> bool:
             return False
         for key, value in scores["teacher_forced"].items():
             other = new["teacher_forced"][key]
-            if isinstance(value, float):
-                if not math.isclose(value, other, rel_tol=1e-6, abs_tol=1e-9):
+            if key == "loss":
+                if not math.isclose(value, other, rel_tol=LOSS_REL_TOL, abs_tol=LOSS_ABS_TOL):
                     return False
             elif value != other:
                 return False
