@@ -21,6 +21,7 @@ from pathlib import Path
 import subprocess
 import sys
 import tempfile
+import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
 
@@ -97,6 +98,7 @@ def parse_cells(text: str) -> list[tuple]:
 def run_batch(work: Path, cells: list[tuple], workers: int, results: Path, runner=run_cell) -> int:
     """Run the cells, append each success to `results`, return how many failed (reported on stdout)."""
     failed = []
+    write_lock = threading.Lock()                      # workers that finish together must not lose or merge each other's rows
 
     def go(cell):
         d, n, epochs = cell[:3]
@@ -108,7 +110,7 @@ def run_batch(work: Path, cells: list[tuple], workers: int, results: Path, runne
             failed.append(cell)
             print(f"FAILED cell {cell}: {row['error']}", flush=True)
             return
-        with results.open("a", encoding="utf-8", newline="\n") as file:
+        with write_lock, results.open("a", encoding="utf-8", newline="\n") as file:
             file.write(json.dumps(row) + "\n")
         tag = f"perfect@{row['first_perfect']}"
         print(f"d={d} n={n} e={epochs} -> {tag}, final train {row['final_train_seq']:.3f}, control max {row['max_control']:.2f}, {row['seconds']}s", flush=True)

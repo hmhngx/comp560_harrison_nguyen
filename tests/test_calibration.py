@@ -7,6 +7,7 @@ import math
 from pathlib import Path
 import random
 import statistics
+import threading
 
 import pytest
 
@@ -81,6 +82,22 @@ def test_the_committed_calibration_still_reproduces_the_numbers_behind_the_e4_pr
 
 
 # ------------------------------------------------------------------ the E4 calibration runner
+
+def test_workers_that_finish_together_never_lose_or_merge_recorded_rows(tmp_path: Path) -> None:
+    workers = 7
+    for attempt in range(40):
+        barrier = threading.Barrier(workers)
+
+        def runner(work, d, n, epochs, seed=100):
+            barrier.wait()                                   # every worker returns, and writes its row, at the same instant
+            return row(d, n, seed, epochs, 100, final=1.0)
+
+        results = tmp_path / f"results{attempt}.jsonl"
+        cells = [(8, 10 + i, 300) for i in range(workers)]
+        assert cal.run_batch(tmp_path, cells, workers=workers, results=results, runner=runner) == 0
+        recorded = [json.loads(line) for line in results.read_text(encoding="utf-8").splitlines()]
+        assert sorted(r["n"] for r in recorded) == [10 + i for i in range(workers)]
+
 
 def test_collapse_keeps_the_longest_run_of_each_cell() -> None:
     rows = [row(8, 10, 100, 300, None), row(8, 10, 100, 1000, 520), row(8, 10, 101, 300, 450), row(16, 10, 100, 300, 230)]
