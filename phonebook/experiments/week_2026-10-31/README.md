@@ -246,7 +246,7 @@ of the seeds that carry the passes).
   that the experiments do not use (archived in `phonebook/calibration/`), and confirmed by the researcher before any run. The scorers (`score_e5_predictions.py`, `score_e4_predictions.py`) have tests that plant bugs in
   the scoring rules and confirm that the tests catch them.
 - **Who wrote the E6 predictions.** Drafted by Claude (Sonnet 5.5) at the researcher's request from the E4 cells on the real books and a scratch calibration at 4000 epochs (8 runs on a
-  throwaway book, seed 100, at the four first failing rungs; it is not evidence and, unlike the E4 and E5 calibrations, is **not archived in the repository**), then adopted by the researcher as drafted,
+  throwaway book, seed 100, at the four first failing rungs; it is not evidence; it was archived in `phonebook/calibration/` on November 4, after the write-up, like the E4 and E5 calibrations), then adopted by the researcher as drafted,
   together with the rising/flat threshold, before any E6 run. A scratch run that planted 58 one-line bugs, one at a time, in `analyze_extension.py` and `score_e6_predictions.py` was caught by their
   tests every time (the first round caught 56 of 59: one miss was a missing test, now added, and two were the same redundant check, since simplified); that script is not committed.
 

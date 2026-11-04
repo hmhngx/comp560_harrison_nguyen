@@ -121,7 +121,7 @@ strength does (findings 1 and 2).
   Every capacity is a lower bound: E6 lifted three of E4's, and the rung above E6's passes was not run. Width 64's 640-entry rung did not pass in 4000
   epochs but was still rising, so no impossible rung has been shown for any width. Learning rate, schedule and weight decay were not varied. E4 and E6 vary only the width
   (2 layers and 2 heads throughout) and set it on the trainer command line, leaving `phonebook/config/phonebook.py` at its defaults. The scratch calibration behind the E6
-  predictions (8 runs) is not archived in the repository.
+  predictions (8 runs, not evidence) is archived in [`calibration/`](calibration/README.md), added after the write-up.
 - Replay uses old data and L2-SP does not, so "replay wins" says nothing about the case where old
   data are unavailable, only that isotropic L2-SP does not rescue it here.
 

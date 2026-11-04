@@ -1,7 +1,7 @@
 # Calibration and pilots behind the locked predictions
 
 **This is not evidence.** Nothing here has a spec, a manifest, an audit or a lock commit. It is the scratch work that fixed the
-E4 ladders and that the E4 and E5 predictions
+E4 ladders and that the E4, E5 and E6 predictions
 ([`../preregistration/`](../preregistration/)) were drafted from. It is committed so that the predictions can be reproduced and
 inspected, not so that anything can be cited as a result. The results are in [`../results/`](../results/) and
 [`../experiments/week_2026-10-31/README.md`](../experiments/week_2026-10-31/README.md).
@@ -16,6 +16,8 @@ inspected, not so that anything can be cited as a result. The results are in [`.
 | [`e5_pilots.py`](e5_pilots.py) | the E5 pilots: the E3 phonebook with several shuffle seeds, and ten other phonebooks |
 | [`e5_pilot_results/`](e5_pilot_results/) | the six raw result files of those pilots, as the pilots wrote them |
 | [`e5_pilot_report.py`](e5_pilot_report.py) | the noise, censoring, flicker and bootstrap numbers the E5 predictions quote |
+| [`e6_calibration_results.jsonl`](e6_calibration_results.jsonl) | the 8 recorded 4000-epoch cells behind the E6 predictions (the first rung that failed in E4 at each width, training seeds 100 and 101), with full accuracy curves; kept apart from the E4 file on purpose, see below |
+| [`e6_calibration_report.py`](e6_calibration_report.py) | prints the per-run table and the pooled window trends the E6 predictions quote |
 | [`throughput_benchmark.py`](throughput_benchmark.py) | the measurement that chose 7 single-thread runs at a time for the E5 and E4 batches |
 
 ## E4 calibration
@@ -69,6 +71,55 @@ rule, the plateau, the fastest k) on the pooled tables and the bootstrap, Q3 on 
 census (the 18 plain fine-tuning runs are censored by construction) and Q9 on the lr 0.0003 arm. A bootstrap of 11 phonebooks overstates
 how well the pool represents new phonebooks; E5 hit 13 of its 15 scored lines and missed Q2 for k = 9 and the Q5 plateau.
 
+## E6 calibration
+
+Eight runs of 4000 epochs: for each width the first rung that failed in E4 (width 8: 20 entries, 16: 160, 32: 320, 64: 640), on the
+throwaway book (book seed 100) with training seeds 100 and 101, from scratch at lr 0.001, batch 64 and accuracy every 10 epochs,
+the same recipe as the E4 calibration. The locked E6 predictions ([`../preregistration/e6_predictions.json`](../preregistration/e6_predictions.json))
+were drafted from these runs together with the E4 cells on the real books. The rows are in
+[`e6_calibration_results.jsonl`](e6_calibration_results.jsonl), unchanged from the scratch files they were copied from;
+`python phonebook/calibration/e6_calibration_report.py` prints this from them:
+
+```text
+run: first epoch at 100% | logged epochs at 100% of 400 | best / final entries recalled
+d=8  n=20  seed=100: 1170 | 274 | 20/20 / 20/20
+d=8  n=20  seed=101: 680 | 327 | 20/20 / 20/20
+d=16 n=160 seed=100: 1790 | 18 | 160/160 / 155/160
+d=16 n=160 seed=101: 1590 | 37 | 160/160 / 158/160
+d=32 n=320 seed=100: never | 0 | 319/320 / 297/320
+d=32 n=320 seed=101: 570 | 7 | 320/320 / 314/320
+d=64 n=640 seed=100: never | 0 | 636/640 / 627/640
+d=64 n=640 seed=101: never | 0 | 637/640 / 627/640
+pooled over seeds: mean accuracy in epochs 1001-2000 -> 3001-4000, gain, trend
+d=8 : 0.9948 -> 0.9972, gain +0.0025, flat
+d=16: 0.9721 -> 0.9703, gain -0.0018, flat
+d=32: 0.9662 -> 0.9745, gain +0.0083, rising
+d=64: 0.9671 -> 0.9752, gain +0.0082, rising
+```
+
+What the table shows, and what the E6 predictions took from it (runs are listed seed 101 first, then seed 100, in each bullet):
+
+- Width 8 reached 100% in both runs (epochs 680 and 1170) and was still there at epoch 4000 (100% on 327 and 274 of the 400 logged epochs).
+- Width 16 reached 100% at epochs 1590 and 1790, but only on 37 and 18 logged epochs, and ended at 158 and 155 of 160 entries.
+- Width 32 reached it once (epoch 570, on 7 logged epochs); the other run never did (best 319 of 320).
+- Width 64 never did (best 637 and 636 of 640).
+- Pooled over the two seeds, the mean accuracy changed from epochs 1001-2000 to epochs 3001-4000 by +0.0083 at width 32 and +0.0082 at width 64
+  (rising under the E6 rule, which calls a gain of +0.005 or more rising) and by -0.0018 at width 16 (flat); at width 8 it was +0.0025 (flat).
+
+Limits: two runs per width on one other book, so the spread between books was not measured. The real books were slower than this one at the
+small widths: in E4 at epoch 1000, width 8 had recalled 18, 18 and 14 of its 20 entries and width 16 had recalled 128, 157 and 116 of 160
+([`../results/e4_cells.csv`](../results/e4_cells.csv)), and the predictions leaned later for that reason. E6 later scored 17 of its 17 locked lines as hits, 8 of
+them exact ([`../results/e6_prediction_scores.json`](../results/e6_prediction_scores.json)); that is one confirmation of the calibration as a guide, not a validation of it.
+
+The first 1000 epochs of every run equal the recorded 1000-epoch row of the same cell in `e4_calibration_results.jsonl` (8 of 8). That is why
+these rows are **not** appended to that file: `summary` there prints any row with another epoch count as an unfinished 300-epoch run, and `collapse`
+would let a 4000-epoch row replace its 1000-epoch twin in the Monte Carlo. `tests/test_calibration.py` checks that the E4 file still holds only 300- and 1000-epoch rows.
+
+The script that wrote these rows was not kept (no earlier session's files mention it), so the `run` line in "How each raw file was made" is the equivalent
+command with the archived driver, which trains with one thread, and not a record of the original command. Two of its cells (width 8 and width 16, training seed 101) were retrained with that driver on November 4 and
+reproduce the archived rows exactly: every key but `seconds` is equal, including all 400 points of the accuracy curve
+(width 8 took 95 s against 156 s archived, width 16 387 s against 1009 s; the timings depend on how many runs shared the machine).
+
 ## Throughput benchmark
 
 500-epoch replay runs (k = 5) on the E3 checkpoint, measured once while choosing how to run the batches:
@@ -101,6 +152,8 @@ python phonebook/calibration/e5_pilots.py phonebooks --work WORK --out phonebook
 python phonebook/calibration/e4_montecarlo.py --sigma 0.25
 python phonebook/calibration/e4_montecarlo.py --sigma 0.4
 python phonebook/calibration/e5_pilot_report.py
+python phonebook/calibration/e4_calibration.py run --work WORK --cells 8:20:4000:100,8:20:4000:101,16:160:4000:100,16:160:4000:101,32:320:4000:100,32:320:4000:101,64:640:4000:100,64:640:4000:101 --workers 7
+python phonebook/calibration/e6_calibration_report.py
 ```
 
 The `d0` pilots need the E3 Phase-A checkpoints named in `e5_pilots.py` (`D0_CHECKPOINTS`), which are local files and not committed; the
@@ -126,3 +179,14 @@ Two things went wrong during the original work and are worth knowing. The first 
 cells whose books did not exist (the intermediate rungs), so the first results file had 43 rows instead of 50; the cells were rerun once the
 books existed, and `run_batch` now reports a failed cell and exits 1. And the audit of one E4 evidence folder failed at the default thread
 count; that is documented with the E4 results, not here.
+
+## What was checked when the E6 rows were archived (November 4)
+
+- `e6_calibration_results.jsonl` is the two scratch files (`d8_4000.jsonl`, 2 rows, and `wide_4000.jsonl`, 6 rows) concatenated, byte for byte.
+- `tests/test_calibration.py` now has 32 tests (24 before). Five pin the E6 rows: the eight cells and their epoch grid, the 8-of-8 equality of the first 1000 epochs with the E4
+  calibration, every number the locked E6 predictions quote from them, the four-decimal rounding bound, and the report text. One checks that this README shows exactly what the
+  report prints, one checks that the E4 file still holds only 300- and 1000-epoch rows, and one is the race test described next.
+- A third problem was found while doing this and is fixed: `run_batch` appended each finished cell to the results file from several worker threads without a lock. With an instant
+  fake runner, rows were lost in 12 of 400 batches at 2 workers and in 141 of 400 at 7 workers, and at 7 workers with 14 cells two records were merged into one unparseable line.
+  Real cells take minutes, so a collision is rare and nothing indicates that a recorded row is missing, but the archived rows cannot prove it. A lock now guards the append and a test
+  makes all workers finish at the same instant.

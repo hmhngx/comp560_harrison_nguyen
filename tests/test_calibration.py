@@ -288,3 +288,61 @@ def test_the_report_runs_end_to_end() -> None:
     for heading in ("== 1.", "== 2.", "== 3.", "== 4."):
         assert heading in text
     assert "0 with a nonzero spread" in text
+
+
+# ------------------------------------------------------------------ the E6 calibration (4000 epochs, 8 runs)
+
+from phonebook.calibration import e6_calibration_report as e6rep
+
+
+def test_the_e4_calibration_file_still_holds_only_300_and_1000_epoch_runs() -> None:
+    # a 4000-epoch row appended there would be printed by `summary` as an unfinished 300-epoch run and would replace its 1000-epoch twin
+    assert {r["epochs"] for r in e6rep.load_rows(CAL / "e4_calibration_results.jsonl")} == {300, 1000}
+
+
+def test_the_e6_calibration_is_the_eight_recorded_runs_on_the_throwaway_book() -> None:
+    rows = e6rep.load_rows()
+    assert sorted((r["d"], r["n"], r["seed"]) for r in rows) == [
+        (8, 20, 100), (8, 20, 101), (16, 160, 100), (16, 160, 101), (32, 320, 100), (32, 320, 101), (64, 640, 100), (64, 640, 101)]
+    assert all(r["epochs"] == 4000 and r["max_control"] == 0.0 for r in rows)
+    assert all([e for e, _ in r["curve"]] == list(range(10, 4001, 10)) for r in rows)
+
+
+def test_the_first_1000_epochs_of_every_e6_calibration_run_are_the_e4_calibration_run() -> None:
+    e4 = {(r["d"], r["n"], r["seed"]): r for r in e6rep.load_rows(CAL / "e4_calibration_results.jsonl") if r["epochs"] == 1000}
+    for row in e6rep.load_rows():
+        old = e4[(row["d"], row["n"], row["seed"])]
+        assert row["curve"][:len(old["curve"])] == old["curve"]
+
+
+def test_the_numbers_the_locked_e6_predictions_quote_come_from_these_rows() -> None:
+    rows = {(r["d"], r["seed"]): r for r in e6rep.load_rows()}
+    first = {key: r["first_perfect"] for key, r in rows.items()}
+    assert (first[8, 100], first[8, 101], first[16, 100], first[16, 101], first[32, 101]) == (1170, 680, 1790, 1590, 570)
+    assert first[32, 100] is None and first[64, 100] is None and first[64, 101] is None
+    assert {key: e6rep.perfect_epochs(r) for key, r in rows.items()} == {
+        (8, 100): 274, (8, 101): 327, (16, 100): 18, (16, 101): 37, (32, 100): 0, (32, 101): 7, (64, 100): 0, (64, 101): 0}
+    assert [max(e6rep.entries(rows[64, s], a) for _, a in rows[64, s]["curve"]) for s in (100, 101)] == [636, 637]
+    widths = {d: e6rep.width_summary([r for r in rows.values() if r["d"] == d]) for d in (8, 16, 32, 64)}
+    assert {d: w["trend"] for d, w in widths.items()} == {8: "flat", 16: "flat", 32: "rising", 64: "rising"}
+    assert [round(float(widths[d]["gain"]), 3) for d in (16, 32, 64)] == [-0.002, 0.008, 0.008]
+
+
+def test_a_curve_value_that_is_not_a_whole_number_of_entries_is_refused() -> None:
+    assert e6rep.entries({"n": 160}, 0.0312) == 5                    # 5/160 = 0.03125, stored to four decimals
+    with pytest.raises(ValueError, match="whole number"):
+        e6rep.entries({"n": 160}, 0.5001)
+
+
+def test_the_e6_report_prints_one_line_per_run_and_one_trend_per_width(capsys) -> None:
+    assert e6rep.main([]) == 0
+    lines = capsys.readouterr().out.splitlines()
+    assert len(lines) == 1 + 8 + 1 + 4
+    assert lines[1].startswith("d=8  n=20  seed=100: 1170 | 274 |")
+    assert lines[-1] == "d=64: 0.9671 -> 0.9752, gain +0.0082, rising"
+
+
+def test_the_calibration_readme_shows_what_the_e6_report_prints(capsys) -> None:
+    assert e6rep.main([]) == 0
+    printed = capsys.readouterr().out.strip()
+    assert printed in (CAL / "README.md").read_text(encoding="utf-8")
