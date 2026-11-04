@@ -83,7 +83,7 @@ random name-to-number entries from the course generator. Books are nested: the b
 book per seed. Three book seeds (1, 2, 3), the training seed equal to the book seed; learning rate 0.001 (the trainer default), batch size 64,
 1000 epochs, accuracy logged every 10 epochs. A held-out control book of 20 entries that share no name and no number with any training entry
 is evaluated at every logged epoch. Each width has its own ladder of book sizes, chosen from a scratch calibration on a throwaway book seed
-(57 short runs, not evidence): d = 8: 10, 14, 20, 28, 40; d = 16: 10, 20, 40, 57, 80, 113, 160, 226; d = 32: 10, 20, 40, 80, 113, 160, 226, 320,
+(57 runs, not evidence; code and data are archived in `phonebook/calibration/`): d = 8: 10, 14, 20, 28, 40; d = 16: 10, 20, 40, 57, 80, 113, 160, 226; d = 32: 10, 20, 40, 80, 113, 160, 226, 320,
 453; d = 64: 10, 20, 40, 80, 160, 226, 320, 453, 640, 905.
 
 **Pre-registered rules** (in the specs and the analysis code before any E4 run).
@@ -160,7 +160,7 @@ d = 32 and 64 (result 3).
 - **A predictions file in the wrong folder.** The E5 predictions file was first committed in `specs/`, which a test treats as runner specs; it was moved to
   `preregistration/` (commit `33c1d5f`) without touching the lock commit.
 - **Who wrote the predictions.** Both sets of predictions were drafted by Claude (Sonnet 5.5) at the researcher's request, from scratch pilots on phonebooks and book seeds
-  that the experiments do not use, and confirmed by the researcher before any run. The scorers (`score_e5_predictions.py`, `score_e4_predictions.py`) have tests that plant bugs in
+  that the experiments do not use (archived in `phonebook/calibration/`), and confirmed by the researcher before any run. The scorers (`score_e5_predictions.py`, `score_e4_predictions.py`) have tests that plant bugs in
   the scoring rules and confirm that the tests catch them.
 
 ## Reproduce
