@@ -1,8 +1,8 @@
 # Phonebook forgetting: what the experiments show
 
-*Status as of Tuesday November 3, 2026. Protocol, per-experiment results and audits:
+*Status as of Wednesday November 4, 2026. Protocol, per-experiment results and audits:
 [`experiments/week_2026-10-07/README.md`](experiments/week_2026-10-07/README.md) (E1 to E3) and
-[`experiments/week_2026-10-31/README.md`](experiments/week_2026-10-31/README.md) (E4 capacity, E5 replay ratio).
+[`experiments/week_2026-10-31/README.md`](experiments/week_2026-10-31/README.md) (E4 capacity, E5 replay ratio, E6 longer training).
 Derived tables and figures: [`results/`](results/).*
 
 ## The question
@@ -56,6 +56,12 @@ number and the newline, with no length hint. Counts are entries recalled out of 
    110 to 120 and 60 to 70 for the four widths, the capacity at 500 epochs is smaller than at 1000 for three of the four, and
    the narrow models were still improving at epoch 1000. The wide models' next rung up flattened at 96% to 99% of its
    entries. No control entry was ever recalled. This is a capacity at a budget, not an asymptotic capacity.
+   **E6 then trained the first failing rung of each width for 4000 epochs** (same books, seeds and settings; the first 1000 epochs reproduce E4's).
+   It passes for widths 8, 16 and 32 (20, 160 and 320 entries), so those E4 capacities were budget limits and are now at least 0.21, 0.57 and 0.34
+   bits per parameter, still under one. It does not pass for width 64: 640 entries reached at most 636 to 638 correct, and the mean accuracy rose
+   by 0.7 points between epochs 1001-2000 and 3001-4000, so that rung is neither shown possible nor shown impossible. At widths 16 and 32 the 100%
+   is reached only at isolated logged epochs (1 to 21 of 400 for the seeds that reach it) and none of those six runs is at 100% at epoch 4000; only the
+   width-8 runs hold it. No width has been shown to have an impossible rung.
 
 ## Claims and evidence
 
@@ -72,8 +78,10 @@ number and the newline, with no length hint. Counts are entries recalled out of 
 | 9 | Other regularizers (EWC), other model sizes for the replay question, larger or other kinds of data | **Not tested** | |
 | 10 | At lr = 0.001, k = 2 reaches joint recall slightly sooner than k = 1 (about 1.5 updates, 5 of 6 phonebooks); no other k does; k = 9 is much slower | Established by the pre-registered rule on six phonebooks (E5); small, and the rule is a sign rule because the noise band is 0 | [`e5_analysis.json`](results/e5_analysis.json), [`e5_cells.csv`](results/e5_cells.csv), [`e5_prediction_scores.json`](results/e5_prediction_scores.json) |
 | 11 | A 2-layer, 2-head model memorizes 14, 113, 226 and 453 random entries at widths 8, 16, 32, 64 within 1000 epochs | Established for this budget, learning rate and exact-recall criterion, with three book seeds per rung | [`e4_capacity.json`](results/e4_capacity.json), [`e4_cells.csv`](results/e4_cells.csv), [`e4_prediction_scores.json`](results/e4_prediction_scores.json) |
-| 12 | Capacity is limited by training time more than by parameter count | Supported (narrow models still improving, boundaries moving, 0.13 to 0.40 bits per parameter); not tested with more epochs | same files |
-| 13 | Capacity is an asymptotic property of the model | **Not established**: only 1000 epochs, constant lr 0.001; the next rung up reached 70% to 99% of its entries | |
+| 12 | Capacity is limited by training time more than by parameter count | Supported: E4 (narrow models still improving, boundaries moving, 0.13 to 0.40 bits per parameter) and E6 (at 4000 epochs the rung above the E4 capacity passes at widths 8, 16, 32); not shown for width 64, whose 640-entry rung still fails | same files, [`e6_capacity.json`](results/e6_capacity.json), [`e6_extension.json`](results/e6_extension.json) |
+| 13 | Capacity is an asymptotic property of the model, or some rung is impossible for a width | **Not established**: 1000 and 4000 epochs, constant lr 0.001, weight decay 0.1; width 64's 640-entry rung is still rising slowly at 4000 (best 636 to 638 of 640) and the rungs above E6's passes were not run | [`e6_extension.json`](results/e6_extension.json) |
+| 14 | At 4000 epochs the first rung that failed in E4 passes at widths 8, 16, 32 (20, 160, 320 entries) and not at width 64 (640 entries) | Established by the pre-registered rule (2 of 3 book seeds, first epoch at 100%) on E4's books; 17 of 17 locked predictions hit, 8 exactly | [`e6_cells.csv`](results/e6_cells.csv), [`e6_prediction_scores.json`](results/e6_prediction_scores.json) |
+| 15 | A wide model keeps 100% exact recall of a book at the rung where it first reaches it | **Not true in E6**: at widths 16 and 32 the 100% is isolated (1 to 21 of 400 logged epochs for the seeds that reach it) and none of the six runs is at 100% at epoch 4000; width 8 holds it (all three runs) | [`e6_extension.json`](results/e6_extension.json) |
 
 ## What was retracted
 
@@ -107,10 +115,13 @@ strength does (findings 1 and 2).
 - L2-SP here is the isotropic penalty from the mitigation notes. A "no" is not a claim about every
   regularizer; a Fisher-weighted penalty (EWC) was not tried.
 - E3 counts updates, not work: at k = 5 each update processes 60 sequences against 20 at k = 1. E5 reports both.
-- Capacity is read at 1000 epochs with a constant learning rate and an exact-recall criterion; the ladders step by about
-  1.4x, so a capacity is known only to the nearest rung, and several rest on a cell finishing at the edge of a budget. It is a lower bound:
-  the rung above each capacity was only seen not to reach 100% in 1000 epochs. E4 varies only the width (2 layers and 2 heads throughout),
-  and sets it on the trainer command line, leaving `phonebook/config/phonebook.py` at its defaults.
+- Capacity is read at 1000 epochs (E4) and, for the first failing rung of each width, at 4000 (E6), with a constant learning rate and an
+  exact-recall criterion that counts the first epoch at which every entry is recalled, even if the model falls back afterwards (at widths 16 and 32 it does).
+  The ladders step by about 1.4x, so a capacity is known only to the nearest rung, and several rest on a cell finishing at the edge of a budget.
+  Every capacity is a lower bound: E6 lifted three of E4's, and the rung above E6's passes was not run. Width 64's 640-entry rung did not pass in 4000
+  epochs but was still rising, so no impossible rung has been shown for any width. Learning rate, schedule and weight decay were not varied. E4 and E6 vary only the width
+  (2 layers and 2 heads throughout) and set it on the trainer command line, leaving `phonebook/config/phonebook.py` at its defaults. The scratch calibration behind the E6
+  predictions (8 runs) is not archived in the repository.
 - Replay uses old data and L2-SP does not, so "replay wins" says nothing about the case where old
   data are unavailable, only that isotropic L2-SP does not rescue it here.
 
@@ -118,17 +129,18 @@ strength does (findings 1 and 2).
 
 1. A Fisher-weighted penalty (EWC), and replay of only a fraction of A, to see what is needed
    when old data are limited.
-2. Capacity beyond 1000 epochs and with a learning-rate schedule, and for other shapes (layers, heads): do the
-   narrow models' next rungs complete, and what stops the wide models at 96% to 99%?
+2. Capacity beyond 4000 epochs for width 64 (E6 left its 640-entry rung still rising), the rungs above E6's passes, a learning-rate
+   schedule or a lower weight decay (what stops the wide models from holding 100%?), and other shapes (layers, heads).
 3. Other kinds of data than random phone numbers.
 
 ## Checking this
 
 Every experiment is a committed spec in [`specs/`](specs/) with predictions or rules fixed before
-the runs, and a separate audit script (code written apart from the runner, not a third party) covered every run:
-579 training runs and 26,862 generated answers, all consistent (the 420 runs of the week of November 3 are in
+the runs, and a separate audit script (code written apart from the runner, not a third party) covered every run of the weeks of
+October 7 and November 3: 591 training runs and 30,522 generated answers, all consistent (the 432 runs of the week of November 3 are in
 [`experiments/week_2026-10-31/`](experiments/week_2026-10-31/README.md); one of those audits failed at PyTorch's default
-thread count on a 1.4e-6 relative loss difference and passes at the training thread count, as that README explains).
+thread count on a 1.4e-6 relative loss difference and passes at the training thread count, as that README explains). The 8 runs
+of the week of September 30 (400 answers) were audited by that week's own earlier script.
 From a fresh clone, the committed files alone can be re-audited (run from the repository root):
 
 ```bash
@@ -144,5 +156,5 @@ failed, E1b against E1; it is reported as failed in the experiment README with i
 
 ## AI assistance
 
-Claude Code assisted with the code, experiments, audit and writing. The predictions for E4 and E5 were drafted by
+Claude Code assisted with the code, experiments, audit and writing. The predictions for E4, E5 and E6 were drafted by
 Claude at the researcher's request and confirmed by the researcher before any run (see the November 3 experiment README).

@@ -1,16 +1,18 @@
-# Week of October 31 to November 3, 2026: replay ratio (E5) and capacity (E4)
+# Week of October 31 to November 4, 2026: replay ratio (E5), capacity (E4) and longer training (E6)
 
 Two experiments answer the two course-README bullets that were still open: *which replay ratio k reaches 100% on all
-the data fastest* (E5, which finishes E3 properly) and *what is the capacity of a very small model* (E4). Protocols, rules
-and predictions were fixed and committed before any run of the experiment they govern; results are scored against those
-predictions mechanically. Derived tables are in [`../../results/`](../../results/), the rules and predictions in
-[`../../preregistration/`](../../preregistration/) and [`../../specs/`](../../specs/).
+the data fastest* (E5, which finishes E3 properly) and *what is the capacity of a very small model* (E4). A third, E6, then
+retrains the first failing rung of each E4 width for 4000 epochs, to see whether E4's limits belong to the model or only to the
+1000-epoch budget. Protocols, rules and predictions were fixed and committed before any run of the experiment they govern;
+results are scored against those predictions mechanically. Derived tables are in [`../../results/`](../../results/), the rules
+and predictions in [`../../preregistration/`](../../preregistration/) and [`../../specs/`](../../specs/).
 
 | What | Commit | Runs | Audit |
 |---|---|---|---|
 | E5 Phase A (18 models, 6 phonebooks x 3 inits) | `ba50291` | 18 | passed (360 answers regenerated) |
 | E5 main grid, noise arm, E3 anchor | `6d8cc86` (lock) | 306 | 12 folders passed (6,120 answers) |
 | E4 capacity | `0fe8f6f` (lock) | 96 | 24 folders passed (17,202 answers) |
+| E6 first failing rung of each width, 4000 epochs | `f4f669a` (lock) | 12 | 12 folders passed (3,660 answers) |
 
 All weights stay local; the committed evidence per run is `metrics.csv` and the strict evaluation JSON, plus protocol,
 prepared-data hashes, manifest, summary and audit for each folder.
@@ -93,8 +95,10 @@ is evaluated at every logged epoch. Each width has its own ladder of book sizes,
 - Only the width was reduced. The README names layers, heads or embedding dimension as examples, so one is enough, but layers and heads were
   held at 2 and nothing is known here about capacity at other depths or head counts.
 - "Until it is impossible to get 100 percent" was turned into a rule that can be checked: the largest rung at which 2 of 3 books reach 100% exact recall
-  within a budget (up to 1000 epochs). The rung above it was only observed not to reach 100% in 1000 epochs (result 3); that more epochs or a
-  different learning rate cannot get it there was not tested, so the capacities below are lower bounds on what each model can memorize.
+  within a budget (E4: up to 1000 epochs). The rung above it was only observed not to reach 100% in 1000 epochs (result 3), so the E4 capacities
+  are lower bounds on what each model can memorize. E6 (below) then tried 4000 epochs on that rung at the same constant learning rate: it passes for
+  d = 8, 16 and 32 and not for d = 64. Impossibility is therefore not shown for any width: a different learning rate or schedule, a lower weight
+  decay and longer runs for d = 64 were not tried.
 
 **Pre-registered rules** (in the specs and the analysis code before any E4 run).
 - A run is *perfect by budget E* if every one of its N entries is recalled exactly at some logged epoch at or before E (the trainer's
@@ -132,7 +136,8 @@ is evaluated at every logged epoch. Each width has its own ladder of book sizes,
    940 (and fell back to 0.99); d = 64 at 640 entries 0.98/0.97/0.96. For the two narrow models accuracy was still rising steeply at the
    end (+0.07 to +0.26 over the last 200 epochs). For the two wide models it had flattened at 0.96 to 0.99 with a few entries
    moving in and out, so "needs more epochs" is established for d = 8 and 16 only; for d = 32 and 64 the last entries may need a lower
-   learning rate or a different schedule, which was not tried.
+   learning rate or a different schedule, which was not tried. (E6 below later ran this rung for 4000 epochs: d = 32's 320 entries then
+   pass, through isolated epochs at 100%, and d = 64's 640 do not.)
 4. **No control entry was ever recalled** (0 of 20 in all 96 runs), so the recall is memorization of the training pairs.
 5. **Several capacities rest on cells at the edge of a budget.** d = 8 passes at 14 entries only because one seed finished at epoch 1000
    (the last logged epoch; the others at 730 and never, 0.93); d = 16 passes at 113 entries with seeds at 970, 1000 and 920; d = 32's capacity at
@@ -146,6 +151,69 @@ strongly correlated (the same four capacities read at different budgets), so thi
 produced the predictions used a different book seed and different training seeds, which is why it generalized. One part of the locked
 explanation was only half right: it said the rung above each boundary was "still climbing at epoch 1000", which is true for d = 8 and 16 and not for
 d = 32 and 64 (result 3).
+
+---
+
+## E6: more training for the first failing rung of each width
+
+**Question.** E4 reads capacity at 1000 epochs, and the course README says "until it is impossible". Is the rung just above each E4 capacity out of reach
+for that width, or only out of reach within 1000 epochs?
+
+**Design.** The first rung that failed in E4, one per width: 20 entries for d = 8, 160 for d = 16, 320 for d = 32 and 640 for d = 64. The books, the book
+seeds (1, 2, 3), the training seed (equal to the book seed), the model, the learning rate (0.001, constant), the batch size and the logging are E4's; only the
+length changes, from 1000 to 4000 epochs, with budgets 1000, 2000, 3000 and 4000 read from one log per run. That is 12 runs, one spec each, run 7 at a time with one
+thread each from the locked commit `f4f669a` in 1 h 48 min (23:51 on November 3 to 01:39). Training is deterministic with an isolated loader stream, so the first 1000
+epochs of every run must equal the E4 run; the analysis checks the logged recall counts at every logged epoch up to 1000.
+
+**Pre-registered rules** (analysis and scorer committed in `5d13f55` together with `preregistration/e6_predictions.json`, specs locked in `f4f669a`, all before any E6 run).
+- A run is perfect by budget E, and a rung passes at E, exactly as in E4 (at least 2 of the 3 book seeds). Only one rung per width is run, so a pass at E shows
+  that the capacity at E is at least that rung (a lower bound: the rung above was not run), and a fail shows that it is the E4 capacity (the smaller rungs passed within
+  1000 epochs, so they pass at any longer budget).
+- Accuracy at a logged epoch is the number of training entries recalled exactly divided by N. A window mean is its mean over the logged epochs in the window, pooled over
+  the 3 seeds with equal weight; the *gain* is the mean over epochs 3001 to 4000 minus the mean over epochs 1001 to 2000. The trend is *rising* if the gain is at least
+  +0.005, *falling* if at most -0.005 and *flat* otherwise (computed in exact fractions). The threshold was fixed before the runs: in a scratch calibration the standard
+  error of one window mean was 0.0005 to 0.003.
+
+### Results
+
+1. **Three of the four first failing rungs pass at 4000 epochs; d = 64 does not.**
+
+   | width | rung | recall at epoch 1000 in E4 (seeds 1/2/3) | first epoch at 100% in E6 (seeds 1/2/3) | passes at 4000 (first budget) | recall at epoch 4000 (seeds 1/2/3) |
+   |---|---|---|---|---|---|
+   | 8 | 20 | 18/18/14 | 1050/1050/1730 | yes (2000) | 20/20/20 |
+   | 16 | 160 | 128/157/116 | 3270/1210/3200 | yes (4000) | 147/158/154 |
+   | 32 | 320 | 316/309/314 | 940/2960/never | yes (3000) | 316/311/316 |
+   | 64 | 640 | 628/620/613 | never/never/never | no | 610/633/623 |
+
+   E4's capacities of 14, 113 and 226 entries for d = 8, 16 and 32 were therefore budget limits: at 4000 epochs the capacities are at least 20, 160 and 320 entries
+   (at least 0.213, 0.566 and 0.339 bits per parameter, still under one bit; lower bounds because the rung above was not run). For d = 64 the 640-entry rung fails,
+   so on this ladder the capacity at 4000 epochs stays at 453 entries (0.133 bits per parameter). d = 32 seed 3 came closest without passing (319 of 320 at epoch 740).
+2. **At the two wide widths the passes rest on isolated epochs, and none of the six runs ends at 100%.** d = 8 holds 100%: its seeds are at 100% in 283, 290 and 219 of
+   their 400 logged epochs and all three are perfect at epoch 4000. d = 16 is at 100% in 3, 21 and 2 of 400 logged epochs and d = 32 in 6, 1 and 0; at epoch 4000
+   they recall 91.9% to 98.8% (147 to 158 of 160) and 97.2% to 98.8% (311 to 316 of 320) of their entries. So "passes" means, as in E4, that every entry was recalled
+   at some logged epoch (the rule counts the first hit), not that the model holds the book. E4 already showed this for d = 32 seed 1, which reached 100% at epoch 940
+   and fell back (E4 result 3).
+3. **d = 64 is not decided.** No seed reached 640 of 640 in 4000 epochs. The best recall at any logged epoch was 637, 638 and 636 (at epochs 3920, 1760 and 1660) and the
+   recall at epoch 4000 was 610 to 633. The pooled mean accuracy rose from 0.9684 (epochs 1001 to 2000) to 0.9754 (epochs 3001 to 4000), a gain of +0.0070, which the rule
+   calls rising. That is a slow rise; it is no evidence that 100% will be reached or that it will not. E6 does not separate longer training from the learning rate, a
+   schedule or the weight decay (0.1 in AdamW), none of which was varied.
+4. **Trend by width** (pooled mean over epochs 1001 to 2000, then over 3001 to 4000): d = 8 0.9542 then 0.9955 (+0.0413), d = 16 0.9351 then 0.9526 (+0.0175), d = 32 0.9636 then
+   0.9733 (+0.0097), d = 64 0.9684 then 0.9754 (+0.0070); all four are rising under the rule. For d = 8 and 16 the early window still contains the catch-up (E4 had 70% to 98% of
+   the entries recalled at epoch 1000), so the rule says something real only for d = 64.
+5. **Controls and reproduction.** No control entry was recalled (0 of 20 in all 12 runs). The logged recall counts of the first 1000 epochs of all 12 runs equal the E4 run's at every
+   logged epoch, so E6 continues the E4 runs rather than drawing new ones. All 12 audits pass (3,660 answers, regenerated from the saved weights at one thread). `independent_check.py e4` agrees with the
+   capacity analysis, and a one-off recompute straight from `metrics.csv` with separate code (a scratch script, not committed) agrees on the first epochs at 100%, the window means, the gains
+   and the recall at epoch 4000.
+
+### Predictions against outcomes (rules fixed before any result was read)
+
+17 of 17 scored lines hit (`results/e6_prediction_scores.json`): 8 exact hits on the locked point value and 9 inside the locked range. Treat the count with care. The ranges were meant to
+cover about 80% each, and the lines are correlated (the seeds-perfect, pass and first-budget lines all read the same 12 runs). The loosest hits: d = 16's first passing budget was 4000, the top
+of its locked range (its second-fastest seed first reached 100% at epoch 3200), and its seeds perfect by 4000 were 3 against a point of 2. The d = 64 window numbers (0.9754 and +0.0070
+against a locked 0.975 and +0.007) match closely, which says the scratch calibration at the same width was a good guide for a smooth curve, not that the picture behind it is right.
+Reported but not scored: the first-1000-epochs check passed for all four widths, neither tripwire fired (d = 64 did not pass; d = 16 and d = 32 did not both fail), and all four trends are rising.
+What the locked story left open: it expected 100% to be a brief hit at the wide widths, and it was, but it did not say how brief (as few as 1 to 3 logged epochs of 400 for some
+of the seeds that carry the passes).
 
 ---
 
@@ -163,15 +231,24 @@ d = 32 and 64 (result 3).
   With one thread, the environment of training and of the saved evaluation, the fresh evaluation reproduces the saved one exactly and the audit passes
   (machine output of both attempts: [`results/e4_audit_thread_check.txt`](../../results/e4_audit_thread_check.txt)).
   The audit code was not changed. A later fix could use an absolute tolerance for near-zero losses or pin the thread count.
-- **Threads.** The E5 anchor ran at PyTorch's default thread count, as E3 did; all other E5 runs and all E4 runs ran with one thread each, chosen for
+- **Threads.** The E5 anchor ran at PyTorch's default thread count, as E3 did; all other E5 runs and all E4 and E6 runs ran with one thread each, chosen for
   throughput after a measurement (stable_joint was identical at one and ten threads in scratch pilots, which are not evidence).
+- **E6 ran without incident.** No run was interrupted or rerun; all 12 manifest entries record commit `f4f669a` and a clean tree, and all 12 audits passed at one thread on
+  the first attempt. Two differences from E4 and E5: the E6 predictions file was committed with the analysis and scorer code (`5d13f55`), before the specs were generated and
+  locked, not inside the lock commit; and the spec text for the rule and the description is the E4 generator's, so it speaks of a ladder and nested books
+  although each E6 spec holds a single rung (the E6 rules are in the predictions file and above). The driver that started the 12 runs is a scratch script, not committed; the exact commands
+  are under Reproduce.
 - **Analysis calls.** `analyze_replay_k.py` and `independent_check.py` cannot take one `--ks` list across learning rates that have different k, so each was called
   twice (lr 0.001 with k = 1, 2, 3, 4, 5, 9; lr 0.003 and 0.0003 with k = 1, 2, 3, 5); no analysis code was changed.
 - **A predictions file in the wrong folder.** The E5 predictions file was first committed in `specs/`, which a test treats as runner specs; it was moved to
   `preregistration/` (commit `33c1d5f`) without touching the lock commit.
-- **Who wrote the predictions.** Both sets of predictions were drafted by Claude (Sonnet 5.5) at the researcher's request, from scratch pilots on phonebooks and book seeds
+- **Who wrote the predictions.** The E4 and E5 predictions were drafted by Claude (Sonnet 5.5) at the researcher's request, from scratch pilots on phonebooks and book seeds
   that the experiments do not use (archived in `phonebook/calibration/`), and confirmed by the researcher before any run. The scorers (`score_e5_predictions.py`, `score_e4_predictions.py`) have tests that plant bugs in
   the scoring rules and confirm that the tests catch them.
+- **Who wrote the E6 predictions.** Drafted by Claude (Sonnet 5.5) at the researcher's request from the E4 cells on the real books and a scratch calibration at 4000 epochs (8 runs on a
+  throwaway book, seed 100, at the four first failing rungs; it is not evidence and, unlike the E4 and E5 calibrations, is **not archived in the repository**), then adopted by the researcher as drafted,
+  together with the rising/flat threshold, before any E6 run. A scratch run that planted 58 one-line bugs, one at a time, in `analyze_extension.py` and `score_e6_predictions.py` was caught by their
+  tests every time (the first round caught 56 of 59: one miss was a missing test, now added, and two were the same redundant check, since simplified); that script is not committed.
 
 ## Reproduce
 
@@ -190,6 +267,12 @@ python phonebook/run_experiment.py --spec phonebook/specs/e4_capacity_d64_seed1_
 python phonebook/analyze_capacity.py --root ROOT [--root ROOT ...] --budgets 100 300 500 1000 --out phonebook/results --prefix e4
 python phonebook/independent_check.py e4 --root ROOT [--root ROOT ...] --budgets 100 300 500 1000 --against phonebook/results/e4_capacity.json
 python phonebook/score_e4_predictions.py --capacity phonebook/results/e4_capacity.json --predictions phonebook/preregistration/e4_predictions.json
+# E6 (twelve specs e6_extend_d{8,16,32,64}_seed{1,2,3}; the runs were started 7 at a time, one thread each)
+python phonebook/run_experiment.py --spec phonebook/specs/e6_extend_d64_seed1.json --out-root phonebook/experiments/week_2026-10-31/e6_extend_d64_seed1
+python phonebook/analyze_capacity.py --root ROOT [--root ROOT ...] --budgets 1000 2000 3000 4000 --out phonebook/results --prefix e6
+python phonebook/analyze_extension.py --root ROOT [--root ROOT ...] --earlier-root E4ROOT [--earlier-root E4ROOT ...] --budgets 1000 2000 3000 4000 --out phonebook/results
+python phonebook/independent_check.py e4 --root ROOT [--root ROOT ...] --budgets 1000 2000 3000 4000 --against phonebook/results/e6_capacity.json
+python phonebook/score_e6_predictions.py --extension phonebook/results/e6_extension.json --predictions phonebook/preregistration/e6_predictions.json
 ```
 
 Without the weights, `python phonebook/audit_experiment.py --root ROOT` still reconciles manifests, protocols, specs at their recorded commits,
