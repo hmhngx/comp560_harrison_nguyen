@@ -1,0 +1,150 @@
+{
+  "8": {
+    "n": 20,
+    "seeds": 3,
+    "first_perfect": {
+      "1": 1050,
+      "2": 1050,
+      "3": 1730
+    },
+    "perfect_by": {
+      "1000": 0,
+      "2000": 3,
+      "3000": 3,
+      "4000": 3
+    },
+    "passes": {
+      "1000": false,
+      "2000": true,
+      "3000": true,
+      "4000": true
+    },
+    "first_pass_budget": 2000,
+    "reached_perfect": 3,
+    "perfect_at_end": 3,
+    "mean_accuracy": {
+      "1001_2000": 0.9541666666666667,
+      "3001_4000": 0.9955
+    },
+    "gain": 0.04133333333333333,
+    "trend": "rising",
+    "control_violations": 0,
+    "first_1000_match_by_seed": {
+      "1": true,
+      "2": true,
+      "3": true
+    },
+    "first_1000_matches_earlier": true
+  },
+  "16": {
+    "n": 160,
+    "seeds": 3,
+    "first_perfect": {
+      "1": 3270,
+      "2": 1210,
+      "3": 3200
+    },
+    "perfect_by": {
+      "1000": 0,
+      "2000": 1,
+      "3000": 1,
+      "4000": 3
+    },
+    "passes": {
+      "1000": false,
+      "2000": false,
+      "3000": false,
+      "4000": true
+    },
+    "first_pass_budget": 4000,
+    "reached_perfect": 3,
+    "perfect_at_end": 0,
+    "mean_accuracy": {
+      "1001_2000": 0.9351041666666666,
+      "3001_4000": 0.9525625
+    },
+    "gain": 0.017458333333333333,
+    "trend": "rising",
+    "control_violations": 0,
+    "first_1000_match_by_seed": {
+      "1": true,
+      "2": true,
+      "3": true
+    },
+    "first_1000_matches_earlier": true
+  },
+  "32": {
+    "n": 320,
+    "seeds": 3,
+    "first_perfect": {
+      "1": 940,
+      "2": 2960,
+      "3": null
+    },
+    "perfect_by": {
+      "1000": 1,
+      "2000": 1,
+      "3000": 2,
+      "4000": 2
+    },
+    "passes": {
+      "1000": false,
+      "2000": false,
+      "3000": true,
+      "4000": true
+    },
+    "first_pass_budget": 3000,
+    "reached_perfect": 2,
+    "perfect_at_end": 0,
+    "mean_accuracy": {
+      "1001_2000": 0.9636354166666666,
+      "3001_4000": 0.9733020833333333
+    },
+    "gain": 0.009666666666666667,
+    "trend": "rising",
+    "control_violations": 0,
+    "first_1000_match_by_seed": {
+      "1": true,
+      "2": true,
+      "3": true
+    },
+    "first_1000_matches_earlier": true
+  },
+  "64": {
+    "n": 640,
+    "seeds": 3,
+    "first_perfect": {
+      "1": null,
+      "2": null,
+      "3": null
+    },
+    "perfect_by": {
+      "1000": 0,
+      "2000": 0,
+      "3000": 0,
+      "4000": 0
+    },
+    "passes": {
+      "1000": false,
+      "2000": false,
+      "3000": false,
+      "4000": false
+    },
+    "first_pass_budget": null,
+    "reached_perfect": 0,
+    "perfect_at_end": 0,
+    "mean_accuracy": {
+      "1001_2000": 0.9684270833333334,
+      "3001_4000": 0.9754427083333334
+    },
+    "gain": 0.007015625,
+    "trend": "rising",
+    "control_violations": 0,
+    "first_1000_match_by_seed": {
+      "1": true,
+      "2": true,
+      "3": true
+    },
+    "first_1000_matches_earlier": true
+  }
+}

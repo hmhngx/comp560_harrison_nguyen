@@ -1,0 +1,219 @@
+{
+  "created_at_utc": "2026-11-04T05:33:07.622084+00:00",
+  "git": {
+    "commit": "f4f669a6733fb09a6a06cb398e10f24058c5ecfe",
+    "dirty": false
+  },
+  "spec_path": "phonebook/specs/e6_extend_d16_seed3.json",
+  "spec_sha256": "a88f9237d3136da516495a11793e3edc87028cb02323209c7f65bb28b8707821",
+  "spec": {
+    "name": "e6_extend_d16_seed3",
+    "description": "Capacity of a 2-layer, 2-head transformer with embedding width 16: train from scratch on nested books of [160] random entries for 4000 epochs, 1 book seed.",
+    "seed": 3,
+    "model_config": "phonebook/config/phonebook.py",
+    "evaluate_books": [
+      "A",
+      "B"
+    ],
+    "require_one_update_per_epoch": false,
+    "timeout_seconds": 28800,
+    "decision_rules": {
+      "question": "How many random name-to-number entries does a transformer of this size memorize exactly within a given number of epochs, and does that boundary stop moving with more training?",
+      "success": "A cell is perfect by budget E if the trainer's logged training sequence accuracy is 100% (every entry recalled exactly, which equals strict greedy generation) at some logged epoch <= E.",
+      "capacity": "A rung passes at budget E if at least 2 of its 3 book seeds are perfect by E. The capacity at E is the largest rung such that it and every smaller rung pass; passes above the first failing rung are reported but never counted.",
+      "replicates": "Replicates are book seeds. Within this spec the training seed is 3; the full experiment varies the initialisation together with the book only when each book seed is its own spec with that book seed as its training seed.",
+      "boundary": "The boundary is stable if the capacity at the largest budget equals the capacity at the previous budget; otherwise it is still moving and is reported as a budget limit, not a capacity. If no rung fails at the largest budget the ladder ended before the boundary and the capacity is only a lower bound.",
+      "controls": "The control book holds entries sharing no name or number with training; its exact recall must stay 0. The logged parameter count must equal the closed form for the declared model.",
+      "budgets": "Capacities are read at epochs [1000, 2000, 3000, 4000] from one run of 4000 epochs per cell (training is deterministic with an isolated loader stream, so a shorter budget is a prefix).",
+      "predictions": {
+        "schema": "e6-predictions-v1",
+        "written_on": "2026-11-03",
+        "status": "written before any E6 run; locked when committed inside the E6 specs; adopted by the researcher on confirmation (see provenance)",
+        "known_when_written": "E1 to E5 results, including the E4 cells on book seeds 1, 2 and 3 at 1000 epochs (so the 1000-epoch budget of every E6 run is already known: only d=32 seed 1 is perfect by epoch 1000, at epoch 940); and a scratch calibration of 4000-epoch runs on a throwaway book (seed 100, training seeds 100 and 101) at the same four rungs, which is not evidence. No E6 run existed.",
+        "provenance": "Drafted by Claude (Sonnet 5.5) from that calibration and the E4 cells at the researcher's request; adopted by the researcher on confirmation ('Adopt as drafted', 2026-11-03).",
+        "definitions": "E6 retrains, from scratch and unchanged except for the length, the first rung of each width that failed in E4 (d=8: 20 entries, d=16: 160, d=32: 320, d=64: 640 entries) on book seeds 1, 2 and 3 for 4000 epochs, with budgets 1000, 2000, 3000 and 4000. Training seed equals book seed, as in E4, so the first 1000 epochs of each run must equal the E4 run. A run is perfect by budget E if all N entries are recalled exactly at some logged epoch (every 10) at or before E. A rung passes at E if at least 2 of the 3 book seeds are perfect by E. Because only one rung per width is run, a pass shows that the capacity at E is at least that rung (a lower bound; the rung above is not run) and a fail shows that the capacity at E is the E4 capacity (14, 113, 226 and 453 entries). Accuracy at a logged epoch is the number of training entries recalled exactly divided by N. A window mean is the mean accuracy over the logged epochs inside the window, pooled over the 3 seeds. The gain is the window mean of epochs 3001 to 4000 minus that of epochs 1001 to 2000. Trend rule (reported, not scored): rising if the gain is at least +0.005, falling if it is at most -0.005, flat otherwise.",
+        "rungs": {
+          "d8": 20,
+          "d16": 160,
+          "d32": 320,
+          "d64": 640
+        },
+        "q1_seeds_perfect_by_4000": {
+          "d8": {
+            "point": 3,
+            "low": 2,
+            "high": 3
+          },
+          "d16": {
+            "point": 2,
+            "low": 1,
+            "high": 3
+          },
+          "d32": {
+            "point": 2,
+            "low": 1,
+            "high": 3
+          },
+          "d64": {
+            "point": 0,
+            "low": 0,
+            "high": 1
+          },
+          "why": "Calibration (one other book, two training seeds per width): d=8 reached 100% at epochs 680 and 1170, d=16 at 1790 and 1590, d=32 once (epoch 570, the other seed best 319 of 320) and d=64 never (best 636 and 637 of 640 in 4000 epochs). The E4 books are slower than the calibration book at the small widths (at epoch 1000: d=8 recalled 18, 18 and 14 of 20, d=16 128, 157 and 116 of 160), so the small-width ranges lean later. d=32 seed 1 is already perfect at epoch 940, so at least one seed is certain there."
+        },
+        "q2_rung_passes_at_4000": {
+          "d8": true,
+          "d16": true,
+          "d32": true,
+          "d64": false,
+          "confidence_of_this_answer": {
+            "d8": 0.85,
+            "d16": 0.7,
+            "d32": 0.7,
+            "d64": 0.93
+          },
+          "why": "A rung passes if two of three seeds are perfect. At the wide widths the training accuracy sits at 96 to 99 percent and flickers, so a 100 percent epoch is an occasional hit rather than a state: in calibration d=16 hit 100 percent at 18 and 37 of 400 logged epochs, d=32 at 7 and 0, d=64 at 0 and 0. The chance that two of three seeds hit within 4000 epochs is judged high for d=8, d=16 and d=32 and low for d=64. These percentages are judgment, not a computed estimate."
+        },
+        "q3_first_passing_budget": {
+          "d8": {
+            "point": 2000,
+            "low": 2000,
+            "high": 3000
+          },
+          "d16": {
+            "point": 3000,
+            "low": 2000,
+            "high": 4000
+          },
+          "d32": {
+            "point": 3000,
+            "low": 2000,
+            "high": 4000
+          },
+          "why": "The first of the budgets 1000, 2000, 3000 and 4000 at which the rung passes. None passes at 1000 (known from E4). A width whose rung never passes has no first passing budget and counts as a miss on this line. d=64 is not scored here because it is predicted not to pass."
+        },
+        "q4_widths_passing_at_4000": {
+          "point": 3,
+          "low": 2,
+          "high": 3,
+          "why": "d=8, d=16 and d=32 pass and d=64 does not; two of the three passing is the lower end."
+        },
+        "q5_d64_last_windows": {
+          "mean_accuracy_3001_4000": {
+            "point": 0.975,
+            "low": 0.965,
+            "high": 0.985
+          },
+          "gain_vs_1001_2000": {
+            "point": 0.007,
+            "low": 0.003,
+            "high": 0.012
+          },
+          "why": "Calibration d=64 window means were 0.968, 0.972 and 0.975 for epochs 1001-2000, 2001-3000 and 3001-4000 (seed 100 and 101 alike), a gain of +0.007 and +0.009 between the first and the last of those windows, and E4 had d=64 at 0.958 to 0.981 at epoch 1000. The standard error of one window mean is about 0.0005 to 0.003, so a gain of about +0.007 is a real but slow rise that is still short of 100 percent."
+        },
+        "q6_still_perfect_at_epoch_4000": {
+          "d16_plus_d32_runs": {
+            "point": 0,
+            "low": 0,
+            "high": 1
+          },
+          "d8_at_least": 2,
+          "why": "Of the five calibration runs that reached 100 percent, the two d=8 runs ended perfect (100 percent at 274 and 327 of 400 logged epochs) and the d=16 and d=32 runs did not (d=16 seed 100 was perfect at epoch 3990 and 0.969 at epoch 4000). At the wide widths 100 percent is a brief hit that falls back, so almost none of the six d=16 and d=32 runs should be perfect at the last epoch; most d=8 runs should be."
+        },
+        "q7_control_book": {
+          "max_control_violations": 0,
+          "why": "The control book shares no name or number with training, so exact recall of control entries must be 0. It was 0 in every calibration run and every E4 run."
+        },
+        "q8_results_that_would_change_my_mind": {
+          "tripwire_d64_passes": "d=64 passes at 4000 epochs: time was then the limit even at the widest model, and the weight-decay explanation for the 96 to 99 percent plateau weakens.",
+          "tripwire_d16_and_d32_both_fail": "d=16 and d=32 both fail at 4000 epochs: the 100 percent hits are rarer on the real books than the calibration suggested.",
+          "why": "These two outcomes would contradict the main story, that waiting longer lets the narrower models reach 100 percent but the widest rung stays below it. They are reported, not scored."
+        },
+        "not_scored": "The check that the first 1000 epochs of every E6 run equal the E4 run, the trend (rising, flat, falling) of every width under the rule above, and the two tripwires of q8 are reported next to the scored lines but never counted as hits."
+      }
+    },
+    "scenarios": [
+      {
+        "id": "s3_n160",
+        "book_a": "phonebook/inputs/capacity_seed3_n160.txt",
+        "book_b": "phonebook/inputs/capacity_seed3_control.txt"
+      }
+    ],
+    "conditions": [
+      {
+        "id": "d16",
+        "train": {
+          "a_copies": 1,
+          "b_copies": 0
+        },
+        "eval_book": "B",
+        "lr": 0.001,
+        "epochs": 4000,
+        "batch_size": 64,
+        "accuracy_interval": 10,
+        "adapt": false,
+        "model": {
+          "embedding_dim": 16,
+          "n_heads": 2,
+          "n_layers": 2
+        }
+      }
+    ]
+  },
+  "environment": {
+    "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+    "executable": "C:\\Users\\minhh\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "packages": {
+      "torch": "2.12.0",
+      "numpy": "2.1.3",
+      "matplotlib": "3.10.9",
+      "pytest": "9.1.0"
+    },
+    "torch_version": "2.12.0+cpu",
+    "torch_num_threads": 1,
+    "device": "cpu"
+  },
+  "optimizer": {
+    "name": "AdamW",
+    "fresh_state_per_run": true,
+    "weight_decay": 0.1,
+    "grad_clip": 1.0
+  },
+  "config": {
+    "path": "phonebook/config/phonebook.py",
+    "sha256": "86aa6d3b7470c750ee02882bc1821f34e7298a91e411daaf7f75c43c7817903b"
+  },
+  "inputs": {
+    "phonebook/inputs/capacity_seed3_n160.txt": "2e45e87de2033436c2423504d14f1cbb24b5a5317de9f6990fe7448ec4e43d84",
+    "phonebook/inputs/capacity_seed3_control.txt": "ce66569f2e9760177b5d41f118d326eb8c4d7fbd4bbb15ae28f7ac7753501af9"
+  },
+  "initializations": {},
+  "runs": [
+    {
+      "id": "s3_n160/d16",
+      "scenario": "s3_n160",
+      "condition": "d16",
+      "mode": "a1b0_evalB",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 0
+      },
+      "eval_book": "B",
+      "lr": 0.001,
+      "epochs": 4000,
+      "batch_size": 64,
+      "accuracy_interval": 10,
+      "l2sp_lambda": 0.0,
+      "adapt": false,
+      "model": {
+        "embedding_dim": 16,
+        "n_heads": 2,
+        "n_layers": 2
+      },
+      "n_train": 160,
+      "updates_per_epoch": 3,
+      "seq_len": 30
+    }
+  ]
+}

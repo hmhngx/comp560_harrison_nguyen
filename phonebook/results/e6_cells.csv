@@ -1,0 +1,13 @@
+model_d,n_layers,n_heads,seed,n,params,epochs,first_perfect,perfect_by_1000,recall_at_1000,perfect_by_2000,recall_at_2000,perfect_by_3000,recall_at_3000,perfect_by_4000,recall_at_4000,final,perfect_at_end,max_control,control_ok
+8,2,2,1,20,3080,4000,1050,False,18,True,20,True,20,True,20,20,True,0,True
+8,2,2,2,20,3064,4000,1050,False,18,True,20,True,20,True,20,20,True,0,True
+8,2,2,3,20,3064,4000,1730,False,14,True,20,True,20,True,20,20,True,0,True
+16,2,2,1,160,9232,4000,3270,False,128,False,151,False,146,True,147,147,False,0,True
+16,2,2,2,160,9216,4000,1210,False,157,True,157,True,159,True,158,158,False,0,True
+16,2,2,3,160,9216,4000,3200,False,116,False,156,False,147,True,154,154,False,0,True
+32,2,2,1,320,30752,4000,940,True,316,True,320,True,313,True,316,316,False,0,True
+32,2,2,2,320,30720,4000,2960,False,309,False,310,True,299,True,311,311,False,0,True
+32,2,2,3,320,30720,4000,,False,314,False,317,False,314,False,316,316,False,0,True
+64,2,2,1,640,110656,4000,,False,628,False,625,False,628,False,610,610,False,0,True
+64,2,2,2,640,110656,4000,,False,620,False,632,False,629,False,633,633,False,0,True
+64,2,2,3,640,110592,4000,,False,613,False,612,False,629,False,623,623,False,0,True

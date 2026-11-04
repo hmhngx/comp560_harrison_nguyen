@@ -1,0 +1,199 @@
+[
+ {
+  "q": "Q1",
+  "what": "seeds perfect by 4000 epochs, d=8",
+  "predicted": "3 [2, 3]",
+  "actual": 3,
+  "result": "HIT (exact)",
+  "note": ""
+ },
+ {
+  "q": "Q1",
+  "what": "seeds perfect by 4000 epochs, d=16",
+  "predicted": "2 [1, 3]",
+  "actual": 3,
+  "result": "HIT",
+  "note": ""
+ },
+ {
+  "q": "Q1",
+  "what": "seeds perfect by 4000 epochs, d=32",
+  "predicted": "2 [1, 3]",
+  "actual": 2,
+  "result": "HIT (exact)",
+  "note": ""
+ },
+ {
+  "q": "Q1",
+  "what": "seeds perfect by 4000 epochs, d=64",
+  "predicted": "0 [0, 1]",
+  "actual": 0,
+  "result": "HIT (exact)",
+  "note": ""
+ },
+ {
+  "q": "Q2",
+  "what": "rung passes at 4000 epochs, d=8",
+  "predicted": true,
+  "actual": true,
+  "result": "HIT",
+  "note": ""
+ },
+ {
+  "q": "Q2",
+  "what": "rung passes at 4000 epochs, d=16",
+  "predicted": true,
+  "actual": true,
+  "result": "HIT",
+  "note": ""
+ },
+ {
+  "q": "Q2",
+  "what": "rung passes at 4000 epochs, d=32",
+  "predicted": true,
+  "actual": true,
+  "result": "HIT",
+  "note": ""
+ },
+ {
+  "q": "Q2",
+  "what": "rung passes at 4000 epochs, d=64",
+  "predicted": false,
+  "actual": false,
+  "result": "HIT",
+  "note": ""
+ },
+ {
+  "q": "Q3",
+  "what": "first passing budget, d=8",
+  "predicted": "2000 [2000, 3000]",
+  "actual": 2000,
+  "result": "HIT (exact)",
+  "note": ""
+ },
+ {
+  "q": "Q3",
+  "what": "first passing budget, d=16",
+  "predicted": "3000 [2000, 4000]",
+  "actual": 4000,
+  "result": "HIT",
+  "note": ""
+ },
+ {
+  "q": "Q3",
+  "what": "first passing budget, d=32",
+  "predicted": "3000 [2000, 4000]",
+  "actual": 3000,
+  "result": "HIT (exact)",
+  "note": ""
+ },
+ {
+  "q": "Q4",
+  "what": "widths whose rung passes at 4000 epochs",
+  "predicted": "3 [2, 3]",
+  "actual": 3,
+  "result": "HIT (exact)",
+  "note": ""
+ },
+ {
+  "q": "Q5",
+  "what": "d=64 mean accuracy, epochs 3001-4000",
+  "predicted": "0.975 [0.965, 0.985]",
+  "actual": 0.9754,
+  "result": "HIT",
+  "note": ""
+ },
+ {
+  "q": "Q5",
+  "what": "d=64 gain over epochs 1001-2000",
+  "predicted": "0.007 [0.003, 0.012]",
+  "actual": 0.007,
+  "result": "HIT",
+  "note": ""
+ },
+ {
+  "q": "Q6",
+  "what": "d=16 and d=32 runs perfect at epoch 4000 (of 6)",
+  "predicted": "0 [0, 1]",
+  "actual": 0,
+  "result": "HIT (exact)",
+  "note": "5 of the 6 reached 100% at some epoch"
+ },
+ {
+  "q": "Q6",
+  "what": "d=8 runs perfect at epoch 4000 (of 3)",
+  "predicted": "at least 2",
+  "actual": 3,
+  "result": "HIT",
+  "note": ""
+ },
+ {
+  "q": "Q7",
+  "what": "runs that recalled any control entry",
+  "predicted": 0,
+  "actual": 0,
+  "result": "HIT (exact)",
+  "note": ""
+ },
+ {
+  "q": "CHECK",
+  "what": "first 1000 epochs of every run equal the E4 run",
+  "predicted": "all equal",
+  "actual": {
+   "8": true,
+   "16": true,
+   "32": true,
+   "64": true
+  },
+  "result": "CHECK PASSED",
+  "note": ""
+ },
+ {
+  "q": "TREND",
+  "what": "trend, d=8",
+  "predicted": "",
+  "actual": "rising (gain +0.0413)",
+  "result": "REPORTED",
+  "note": ""
+ },
+ {
+  "q": "TREND",
+  "what": "trend, d=16",
+  "predicted": "",
+  "actual": "rising (gain +0.0175)",
+  "result": "REPORTED",
+  "note": ""
+ },
+ {
+  "q": "TREND",
+  "what": "trend, d=32",
+  "predicted": "",
+  "actual": "rising (gain +0.0097)",
+  "result": "REPORTED",
+  "note": ""
+ },
+ {
+  "q": "TREND",
+  "what": "trend, d=64",
+  "predicted": "",
+  "actual": "rising (gain +0.0070)",
+  "result": "REPORTED",
+  "note": ""
+ },
+ {
+  "q": "TRIPWIRE",
+  "what": "d=64 passes at 4000 epochs",
+  "predicted": "no",
+  "actual": false,
+  "result": "TRIPWIRE NOT FIRED",
+  "note": "d=64 passes at 4000 epochs: time was then the limit even at the widest model, and the weight-decay explanation for the 96 to 99 percent plateau weakens."
+ },
+ {
+  "q": "TRIPWIRE",
+  "what": "d=16 and d=32 both fail at 4000 epochs",
+  "predicted": "no",
+  "actual": false,
+  "result": "TRIPWIRE NOT FIRED",
+  "note": "d=16 and d=32 both fail at 4000 epochs: the 100 percent hits are rarer on the real books than the calibration suggested."
+ }
+]
