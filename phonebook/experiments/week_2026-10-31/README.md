@@ -86,6 +86,16 @@ is evaluated at every logged epoch. Each width has its own ladder of book sizes,
 (57 runs, not evidence; code and data are archived in `phonebook/calibration/`): d = 8: 10, 14, 20, 28, 40; d = 16: 10, 20, 40, 57, 80, 113, 160, 226; d = 32: 10, 20, 40, 80, 113, 160, 226, 320,
 453; d = 64: 10, 20, 40, 80, 160, 226, 320, 453, 640, 905.
 
+**How this follows the course wording, and where it does not.**
+- The course README says to adjust `phonebook/config/phonebook.py`. That file was not edited (it still reads 64 dimensions, 2 heads, 2 layers).
+  Each run's size is set by `--embedding-dim`, `--n-heads` and `--n-layers` on the trainer command line, which `train.py` applies on top of the
+  config file, so that the size of every run is written into its spec and its manifest (`model`).
+- Only the width was reduced. The README names layers, heads or embedding dimension as examples, so one is enough, but layers and heads were
+  held at 2 and nothing is known here about capacity at other depths or head counts.
+- "Until it is impossible to get 100 percent" was turned into a rule that can be checked: the largest rung at which 2 of 3 books reach 100% exact recall
+  within a budget (up to 1000 epochs). The rung above it was only observed not to reach 100% in 1000 epochs (result 3); that more epochs or a
+  different learning rate cannot get it there was not tested, so the capacities below are lower bounds on what each model can memorize.
+
 **Pre-registered rules** (in the specs and the analysis code before any E4 run).
 - A run is *perfect by budget E* if every one of its N entries is recalled exactly at some logged epoch at or before E (the trainer's
   teacher-forced sequence accuracy is 100%; the audit checks that this equals strict greedy generation).

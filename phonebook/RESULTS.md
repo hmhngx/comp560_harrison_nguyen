@@ -108,7 +108,9 @@ strength does (findings 1 and 2).
   regularizer; a Fisher-weighted penalty (EWC) was not tried.
 - E3 counts updates, not work: at k = 5 each update processes 60 sequences against 20 at k = 1. E5 reports both.
 - Capacity is read at 1000 epochs with a constant learning rate and an exact-recall criterion; the ladders step by about
-  1.4x, so a capacity is known only to the nearest rung, and several rest on a cell finishing at the edge of a budget.
+  1.4x, so a capacity is known only to the nearest rung, and several rest on a cell finishing at the edge of a budget. It is a lower bound:
+  the rung above each capacity was only seen not to reach 100% in 1000 epochs. E4 varies only the width (2 layers and 2 heads throughout),
+  and sets it on the trainer command line, leaving `phonebook/config/phonebook.py` at its defaults.
 - Replay uses old data and L2-SP does not, so "replay wins" says nothing about the case where old
   data are unavailable, only that isotropic L2-SP does not rescue it here.
 
