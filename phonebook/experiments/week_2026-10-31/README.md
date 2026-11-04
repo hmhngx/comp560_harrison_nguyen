@@ -63,6 +63,10 @@ the largest spread between runs that differ only in the shuffle seed.
    lr 0.003, 0.001 and 0.0003).
 7. **The anchor reproduces E3 exactly:** six runs of 500 updates, no differing logged value except timing.
 
+![Time to joint recall and depth of the dip in A for each k](../../results/fig_e5_replay_k.png)
+
+Time to joint recall and depth of the dip in A for each k at lr = 0.001, one gray line per phonebook and the median in blue (table: [`fig_e5_replay_k.csv`](../../results/fig_e5_replay_k.csv)).
+
 ### Predictions against outcomes (rules fixed before any result was read)
 
 13 of 15 scored lines hit (`results/e5_prediction_scores.json`). Misses: (a) k = 9 was predicted faster than k = 1 in exactly 0 phonebooks
@@ -144,6 +148,14 @@ is evaluated at every logged epoch. Each width has its own ladder of book sizes,
    300 epochs is 160 only because 226 entries passes in 1 of 3 seeds (finishing at epochs 330, 500 and 300); d = 64's capacity at 300 epochs
    passes at 320 entries with seeds at 220, 330 and 240, exactly the rule's 2 of 3. A rung ladder with ratio 1.4 and a 10-epoch logging grid cannot resolve these better.
 
+![Entries memorized exactly at four training budgets (E4), and the next rung trained for 4000 epochs (E6)](../../results/fig_e4_capacity.png)
+
+Capacity at four budgets, and what 4000 epochs added for the first rung that failed at 1000 epochs (a lower bound where the rung passed; table: [`fig_e4_capacity.csv`](../../results/fig_e4_capacity.csv)).
+
+![Seeds that recalled every entry, per width, rung and budget (E4)](../../results/fig_e4_passmap.png)
+
+Seeds that recalled every entry of each rung by each budget; a rung passes with 2 of 3, the dot marks the capacity (table: [`fig_e4_passmap.csv`](../../results/fig_e4_passmap.csv)).
+
 ### Predictions against outcomes (rules fixed before any result was read)
 
 23 of 23 scored lines hit (`results/e4_prediction_scores.json`), including all four capacities at 1000 epochs exactly on the predicted rung. These lines are
@@ -204,6 +216,10 @@ epochs of every run must equal the E4 run; the analysis checks the logged recall
    logged epoch, so E6 continues the E4 runs rather than drawing new ones. All 12 audits pass (3,660 answers, regenerated from the saved weights at one thread). `independent_check.py e4` agrees with the
    capacity analysis, and a one-off recompute straight from `metrics.csv` with separate code (a scratch script, not committed) agrees on the first epochs at 100%, the window means, the gains
    and the recall at epoch 4000.
+
+![Exact recall over 4000 epochs for the first rung that failed in E4 (E6)](../../results/fig_e6_curves.png)
+
+Share of the entries recalled exactly at each logged epoch, per width and book seed; the y axis starts at 90% (table: [`fig_e6_curves.csv`](../../results/fig_e6_curves.csv)).
 
 ### Predictions against outcomes (rules fixed before any result was read)
 
@@ -278,6 +294,8 @@ python phonebook/analyze_capacity.py --root ROOT [--root ROOT ...] --budgets 100
 python phonebook/analyze_extension.py --root ROOT [--root ROOT ...] --earlier-root E4ROOT [--earlier-root E4ROOT ...] --budgets 1000 2000 3000 4000 --out phonebook/results
 python phonebook/independent_check.py e4 --root ROOT [--root ROOT ...] --budgets 1000 2000 3000 4000 --against phonebook/results/e6_capacity.json
 python phonebook/score_e6_predictions.py --extension phonebook/results/e6_extension.json --predictions phonebook/preregistration/e6_predictions.json
+# Figures for E4, E5 and E6 (the four PNGs and the CSV table behind each; --force replaces existing files)
+python phonebook/report_capacity_replay.py --out phonebook/results
 ```
 
 Without the weights, `python phonebook/audit_experiment.py --root ROOT` still reconciles manifests, protocols, specs at their recorded commits,

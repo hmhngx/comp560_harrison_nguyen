@@ -104,6 +104,32 @@ strength does (findings 1 and 2).
 
 ![Time to joint recall and depth of the dip in A (E3)](results/e3_heatmaps.png)
 
+![Entries memorized exactly at four training budgets (E4), and the next rung trained for 4000 epochs (E6)](results/fig_e4_capacity.png)
+
+Left: the capacity of a 2-layer, 2-head model at widths 8 to 64 after 100, 300, 500 and 1000 epochs (E4); a width has no point at a budget where
+no rung of the ladder passed. Right: the first rung that failed at 1000 epochs, trained for 4000 epochs (E6). At widths 8, 16 and 32 it passed, so the
+capacity is at least that rung (the rung above it was not run); at width 64 the 640-entry rung did not pass.
+Table: [`fig_e4_capacity.csv`](results/fig_e4_capacity.csv).
+
+![Seeds that recalled every entry, per width, rung and budget (E4)](results/fig_e4_passmap.png)
+
+For each width, how many of the 3 book seeds recalled every entry of a rung exactly by each budget; a rung passes with 2 of 3, and the dot marks the
+capacity at that budget. The boundary was still moving between 500 and 1000 epochs at widths 8, 16 and 64 and was stable at width 32.
+Table: [`fig_e4_passmap.csv`](results/fig_e4_passmap.csv).
+
+![Time to joint recall and depth of the dip in A for each k (E5)](results/fig_e5_replay_k.png)
+
+E5 at lr = 0.001 on six independent phonebooks: gray lines are single phonebooks (the median of their 3 Phase-A models), blue is the median over the six.
+Only k = 2 beats k = 1 under the pre-registered rule (faster in 5 of 6 phonebooks, by a median of 1.5 updates), and the dip in A deepens as k grows. The vertical
+axes start at 0, so the small difference at k = 2 looks as small as it is. Table: [`fig_e5_replay_k.csv`](results/fig_e5_replay_k.csv).
+
+![Exact recall over 4000 epochs for the first rung that failed in E4 (E6)](results/fig_e6_curves.png)
+
+E6: the share of the entries recalled exactly at each logged epoch, for each width (columns) and book seed (rows), at the rung that first failed in E4.
+Width 8 ends at 100% in all three runs, with brief dips; at widths 16 and 32 the 100% is reached only on isolated logged epochs (the dot is the first), and
+seed 3 of width 32 never reaches it; width 64 never does (best 636 to 638 of 640). The vertical axis starts at 90%.
+Table: [`fig_e6_curves.csv`](results/fig_e6_curves.csv).
+
 ## Limits
 
 - One task type (20 random names and phone numbers, ten entries per book), one model size, one
