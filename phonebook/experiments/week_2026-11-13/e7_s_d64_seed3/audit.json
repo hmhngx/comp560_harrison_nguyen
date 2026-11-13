@@ -1,0 +1,10 @@
+{
+  "root": "phonebook\\experiments\\week_2026-11-13\\e7_s_d64_seed3",
+  "status": "passed",
+  "spec": "e7_s_d64_seed3",
+  "git_commit": "40a73f257cf15689c940e432fd794f48a15d4fce",
+  "runs": 1,
+  "completions": 660,
+  "local_artifacts_checked": true,
+  "git_checked": true
+}

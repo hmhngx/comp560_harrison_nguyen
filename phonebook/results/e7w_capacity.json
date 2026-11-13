@@ -1,0 +1,203 @@
+{
+  "16": {
+    "params": 9216,
+    "capacity_by_budget": {
+      "1000": null,
+      "2000": 160,
+      "3000": 160,
+      "4000": 160
+    },
+    "detail": {
+      "1000": {
+        "budget": 1000,
+        "capacity": null,
+        "first_failing_rung": 160,
+        "isolated_passes_above": [],
+        "rungs": {
+          "160": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          }
+        }
+      },
+      "2000": {
+        "budget": 2000,
+        "capacity": 160,
+        "first_failing_rung": null,
+        "isolated_passes_above": [],
+        "rungs": {
+          "160": {
+            "passed": 2,
+            "seeds": 3,
+            "ok": true
+          }
+        }
+      },
+      "3000": {
+        "budget": 3000,
+        "capacity": 160,
+        "first_failing_rung": null,
+        "isolated_passes_above": [],
+        "rungs": {
+          "160": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          }
+        }
+      },
+      "4000": {
+        "budget": 4000,
+        "capacity": 160,
+        "first_failing_rung": null,
+        "isolated_passes_above": [],
+        "rungs": {
+          "160": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          }
+        }
+      }
+    },
+    "boundary": "ceiling",
+    "capacity_is_lower_bound": true,
+    "bits_per_param_at_largest_budget": 0.5655455687343559,
+    "control_violations": 0
+  },
+  "32": {
+    "params": 30720,
+    "capacity_by_budget": {
+      "1000": null,
+      "2000": 320,
+      "3000": 320,
+      "4000": 320
+    },
+    "detail": {
+      "1000": {
+        "budget": 1000,
+        "capacity": null,
+        "first_failing_rung": 320,
+        "isolated_passes_above": [],
+        "rungs": {
+          "320": {
+            "passed": 1,
+            "seeds": 3,
+            "ok": false
+          }
+        }
+      },
+      "2000": {
+        "budget": 2000,
+        "capacity": 320,
+        "first_failing_rung": null,
+        "isolated_passes_above": [],
+        "rungs": {
+          "320": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          }
+        }
+      },
+      "3000": {
+        "budget": 3000,
+        "capacity": 320,
+        "first_failing_rung": null,
+        "isolated_passes_above": [],
+        "rungs": {
+          "320": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          }
+        }
+      },
+      "4000": {
+        "budget": 4000,
+        "capacity": 320,
+        "first_failing_rung": null,
+        "isolated_passes_above": [],
+        "rungs": {
+          "320": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          }
+        }
+      }
+    },
+    "boundary": "ceiling",
+    "capacity_is_lower_bound": true,
+    "bits_per_param_at_largest_budget": 0.33932734124061353,
+    "control_violations": 0
+  },
+  "64": {
+    "params": 110656,
+    "capacity_by_budget": {
+      "1000": null,
+      "2000": 640,
+      "3000": 640,
+      "4000": 640
+    },
+    "detail": {
+      "1000": {
+        "budget": 1000,
+        "capacity": null,
+        "first_failing_rung": 640,
+        "isolated_passes_above": [],
+        "rungs": {
+          "640": {
+            "passed": 0,
+            "seeds": 3,
+            "ok": false
+          }
+        }
+      },
+      "2000": {
+        "budget": 2000,
+        "capacity": 640,
+        "first_failing_rung": null,
+        "isolated_passes_above": [],
+        "rungs": {
+          "640": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          }
+        }
+      },
+      "3000": {
+        "budget": 3000,
+        "capacity": 640,
+        "first_failing_rung": null,
+        "isolated_passes_above": [],
+        "rungs": {
+          "640": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          }
+        }
+      },
+      "4000": {
+        "budget": 4000,
+        "capacity": 640,
+        "first_failing_rung": null,
+        "isolated_passes_above": [],
+        "rungs": {
+          "640": {
+            "passed": 3,
+            "seeds": 3,
+            "ok": true
+          }
+        }
+      }
+    },
+    "boundary": "ceiling",
+    "capacity_is_lower_bound": true,
+    "bits_per_param_at_largest_budget": 0.18840615823654655,
+    "control_violations": 0
+  }
+}

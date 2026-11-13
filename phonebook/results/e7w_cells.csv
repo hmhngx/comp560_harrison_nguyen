@@ -1,0 +1,10 @@
+model_d,n_layers,n_heads,seed,n,params,epochs,first_perfect,perfect_by_1000,recall_at_1000,perfect_by_2000,recall_at_2000,perfect_by_3000,recall_at_3000,perfect_by_4000,recall_at_4000,final,perfect_at_end,max_control,control_ok
+16,2,2,1,160,9232,4000,2020,False,132,False,147,True,159,True,160,160,True,0,True
+16,2,2,2,160,9216,4000,1310,False,155,True,160,True,160,True,160,160,True,0,True
+16,2,2,3,160,9216,4000,1830,False,140,True,158,True,160,True,160,160,True,0,True
+32,2,2,1,320,30752,4000,820,True,315,True,320,True,320,True,320,320,True,0,True
+32,2,2,2,320,30720,4000,1660,False,296,True,313,True,320,True,320,320,True,0,True
+32,2,2,3,320,30720,4000,1770,False,312,True,317,True,320,True,320,320,True,0,True
+64,2,2,1,640,110656,4000,1310,False,633,True,640,True,640,True,640,640,True,0,True
+64,2,2,2,640,110656,4000,1270,False,628,True,640,True,640,True,640,640,True,0,True
+64,2,2,3,640,110592,4000,1500,False,632,True,640,True,640,True,640,640,True,0,True

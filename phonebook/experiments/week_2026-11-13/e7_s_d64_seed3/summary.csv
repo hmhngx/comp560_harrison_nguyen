@@ -1,0 +1,2 @@
+run_id,scenario,condition,lr,epochs,batch_size,l2sp_lambda,a_copies,b_copies,A_correct,A_total,B_correct,B_total,A_token_accuracy,B_token_accuracy,A_cross_entropy,B_cross_entropy
+s3_n640/d64,s3_n640,d64,0.001,4000,64,0.0,1,0,640,640,0,20,1.0,0.28076923076923077,5.620889353963321e-08,11.289511680603027

@@ -1,0 +1,414 @@
+{
+  "created_at_utc": "2026-11-13T21:56:54.877814+00:00",
+  "git": {
+    "commit": "40a73f257cf15689c940e432fd794f48a15d4fce",
+    "dirty": false
+  },
+  "spec_path": "phonebook/specs/e7_w_d16_seed2.json",
+  "spec_sha256": "11aec7b510c5bcd9e63c35a9689662c09271ada8e14e023bef11f711a029f99c",
+  "spec": {
+    "name": "e7_w_d16_seed2",
+    "description": "Capacity of a 2-layer, 2-head transformer with embedding width 16: train from scratch on nested books of [160] random entries for 4000 epochs, 1 book seed.",
+    "seed": 2,
+    "model_config": "phonebook/config/phonebook.py",
+    "evaluate_books": [
+      "A",
+      "B"
+    ],
+    "require_one_update_per_epoch": false,
+    "timeout_seconds": 28800,
+    "decision_rules": {
+      "question": "How many random name-to-number entries does a transformer of this size memorize exactly within a given number of epochs, and does that boundary stop moving with more training?",
+      "success": "A cell is perfect by budget E if the trainer's logged training sequence accuracy is 100% (every entry recalled exactly, which equals strict greedy generation) at some logged epoch <= E.",
+      "capacity": "A rung passes at budget E if at least 2 of its 3 book seeds are perfect by E. The capacity at E is the largest rung such that it and every smaller rung pass; passes above the first failing rung are reported but never counted.",
+      "replicates": "Replicates are book seeds. Within this spec the training seed is 2; the full experiment varies the initialisation together with the book only when each book seed is its own spec with that book seed as its training seed.",
+      "boundary": "The boundary is stable if the capacity at the largest budget equals the capacity at the previous budget; otherwise it is still moving and is reported as a budget limit, not a capacity. If no rung fails at the largest budget the ladder ended before the boundary and the capacity is only a lower bound.",
+      "controls": "The control book holds entries sharing no name or number with training; its exact recall must stay 0. The logged parameter count must equal the closed form for the declared model.",
+      "budgets": "Capacities are read at epochs [1000, 2000, 3000, 4000] from one run of 4000 epochs per cell (training is deterministic with an isolated loader stream, so a shorter budget is a prefix).",
+      "arm": "This spec differs from the E6 run of the same cell (same book, seeds, model, base learning rate, batch size and epochs) in one setting: AdamW weight decay is 0.0 (E6: 0.1). The E6 run is the control.",
+      "predictions": {
+        "schema": "e7-predictions-v1",
+        "written_on": "2026-11-13",
+        "status": "written before any E7 run; locked when committed together with its scorer (commit C2) and inside the E7 specs; adopted by the researcher on confirmation (see provenance)",
+        "known_when_written": "E1 to E6 results (RESULTS.md claims 1 to 15). The control of E7 is E6: weight decay 0.1, constant learning rate 0.001, 4000 epochs, book seeds 1 to 3. In E6 the seeds that reach 100% at some logged epoch are 3 of 3 at width 16 (first at epochs 3270, 1210 and 3200), 2 of 3 at width 32 (940, 2960, never) and 0 of 3 at width 64; none of those nine runs is at 100% at epoch 4000; the 100 logged epochs of 3001-4000 contain 3, 2 and 2 epochs at 100% (width 16), 2, 0 and 0 (width 32) and 0, 0 and 0 (width 64), against 95, 96 and 94 at width 8; the mean accuracy pooled over the seeds is 0.9351 (epochs 1001-2000) and 0.9526 (3001-4000) at width 16, 0.9636 and 0.9733 at width 32, 0.9684 and 0.9754 at width 64. Also known: the E6 scratch calibration (book seed 100, training seeds 100 and 101), which is not evidence. Throwaway calibrations of the two E7 settings were made on 2026-11-12 and 2026-11-13, in a scratch clone with the calibration driver extended by two options, on the throwaway book (seed 100, which no experiment uses), training seeds 100 and 101, 4000 epochs. At widths 16 (160 entries) and 32 (320 entries): with weight decay 0.0 all four runs reached 100% (first at epochs 900, 1070, 1110 and 1270), were at 100% on all 100 logged epochs of 3001-4000 and ended at 100%; with the learning rate multiplied by 0.1 after epoch 2000 all four runs did the same, their first 2000 epochs equal the E6 calibration runs point for point, and the mean accuracy over epochs 2001-2500 was 0.9999 (width 16) and 1.0000 (width 32). At width 64 (640 entries): with weight decay 0.0 both runs reached 100% (at epochs 1410 and 1430) and ended at 100%; one was at 100% on all 100 logged epochs of 3001-4000, the other on 93 of them (a spike down to 0.767 at epoch 3860 that recovered by epoch 3930); with the learning rate multiplied by 0.1 after epoch 2000 both runs were at 100% from epoch 2010 on, on all 100 logged epochs of 3001-4000, and their first 2000 epochs equal the E6 calibration runs point for point. The E6 calibration runs (weight decay 0.1, constant rate) held 100% in none of the six cells at these three widths, and at width 64 never reached it. Those calibrations are not evidence: two seeds per cell and one other book. Proof-of-code runs for E7 were made on 2026-11-12 in scratch folders, none of them evidence and none longer than 300 epochs: width 16 (160 entries) and width 64 (640 entries) on book seed 1 reproduced E6's first 300 epochs row for row with no new flag and with an explicit --weight-decay 0.1; --lr-schedule step:100:0.1 matched E6 through epoch 100 and departed at epoch 110 (Train Loss 1.9023 against 1.8308); and 30-epoch runs of the four settings at width 16 showed that weight decay 0.0 departs from E6 at the first logged epoch. No E7 evidence run existed.",
+        "provenance": "Drafted by Claude (Sonnet 5.5) on 2026-11-12 at the researcher's request, from the E6 logs, the E6 scratch calibration and the E7 plan, and revised on 2026-11-13 after throwaway calibrations of the two E7 settings at widths 16, 32 and 64. Settled with the researcher in a chat session on 2026-11-13 (the log is kept with the drafts, in step4_log.md): the researcher chose how far the calibration carries to the real books at each width (the 'more sure' option at widths 16, 32 and 64) and how quickly arm W passes (the 'faster' option), kept the other numeric lines and the tripwire readings as they stood, and left the chance that an arm W run dips at width 64 to Claude, who set it to 0.30 from one dip in six calibration runs. Asked whether to adopt, the researcher answered 'go for the most optimal approach' (2026-11-13), and Claude adopted the file as settled on that instruction; the researcher is asked to confirm it again, with this wording, when asked to commit it with its scorer (commit C2).",
+        "definitions": "E7 retrains the three rungs that E6 trained for 4000 epochs, at widths 16, 32 and 64 (160, 320 and 640 entries; 2 layers, 2 heads; book seeds 1, 2 and 3; training seed equal to the book seed; learning rate 0.001; batch size 64), with exactly one optimizer setting changed from E6, which is the control (weight decay 0.1, constant learning rate 0.001). Arm W sets AdamW weight decay to 0.0 for all 4000 epochs. Arm S multiplies the learning rate by 0.1 after epoch 2000 (--lr-schedule step:2000:0.1). AdamW decays every weight by learning rate times weight decay at each step, so arm S lowers the step size and the per-step decay together after epoch 2000; only arm W isolates the decay. Budgets are 1000, 2000, 3000 and 4000 epochs. A run is perfect by budget E if all N entries are recalled exactly at some logged epoch (every 10th) at or before E. A rung passes at E if at least 2 of the 3 book seeds are perfect by E; the first passing budget is the first of the four budgets at which it passes. A run is perfect at epoch 4000 if all N entries are recalled at the last logged epoch. A run holds the book if at least 50 of its 100 logged epochs in 3001-4000 have all N entries recalled (the three width-8 runs of E6 do, with 95, 96 and 94; none of the nine width 16, 32 and 64 runs of E6 does). Accuracy at a logged epoch is the number of entries recalled exactly divided by N. A window mean is the mean accuracy over the logged epochs inside the window, pooled over the 3 seeds with equal weight. The gain is the 3001-4000 mean minus the 1001-2000 mean. An arm beats E6 at a width when its 3001-4000 mean exceeds the E6 value of e6_control by at least the margin. Arm S keeps the learning rate of E6 until epoch 2000, so its first 2000 epochs must equal the E6 run point for point: its perfect-by counts at budgets 1000 and 2000 (0 and 1 at width 16, 1 and 1 at width 32, 0 and 0 at width 64) and its 1001-2000 window means are the E6 values and are not predicted. Arm W departs from E6 at the first logged epoch, so it has no such check. Control recall (the control book shares no name or number with training) must be 0.",
+        "scoring": "A scored line is a HIT when the actual value lies inside the locked [low, high] (or equals the locked answer) and an exact HIT when it equals the point; nothing else counts - no rounding, no 'close'. Each range is the shortest run of neighbouring values that holds at least 80 percent of the researcher's probability (for window means and gains, the 10th to the 90th percentile); the point is the most likely value (the median). A yes/no line is a HIT when the answer is right.",
+        "arms": {
+          "W": "AdamW weight decay 0.0 (E6: 0.1), learning rate constant at 0.001, 4000 epochs. Isolates the decay.",
+          "S": "Learning rate multiplied by 0.1 after epoch 2000 (step:2000:0.1), weight decay 0.1 as in E6. Lowers the step size and the per-step decay together; the first 2000 epochs equal E6."
+        },
+        "rungs": {
+          "d16": 160,
+          "d32": 320,
+          "d64": 640
+        },
+        "e6_control": {
+          "mean_accuracy_3001_4000": {
+            "d16": 0.9525625,
+            "d32": 0.9733020833333333,
+            "d64": 0.9754427083333334
+          },
+          "seeds_that_hold": {
+            "d16": 0,
+            "d32": 0,
+            "d64": 0
+          },
+          "margin_for_beating_e6": 0.005
+        },
+        "q1_seeds_perfect_by_4000": {
+          "why": "E6 (the control) had 3, 2 and 0 seeds perfect by 4000 at widths 16, 32 and 64, every 100% an isolated hit (width 64: none). In the calibrations (throwaway book, two seeds per cell) both arms reached 100% in all 12 runs at widths 16, 32 and 64: arm W at epochs 900 to 1430, arm S within 10 to 500 epochs of the cut (arm S repeats E6 until epoch 2000, where 1, 1 and 0 seeds are already perfect). So I expect all three seeds to be perfect at every width on the real books. The doubts are that the calibration is two seeds on one other book and that E6 found the real books slower than the calibration book at small widths (width 16 first reached 100% at epochs 1210, 3200 and 3270 on the real books, 1590 and 1790 on the calibration book). At width 64 the real control (mean 0.9754) is almost the same as the calibration control (0.9752), so I trust the transfer most there. The chance that all three seeds are perfect by 4000 is about 0.96 (arm W) and 0.97 (arm S) at width 16, 0.88 and 0.85 at width 32 (arm W settles slowest there) and 0.95 and 0.95 at width 64; the range [3, 3] holds that much.",
+          "W": {
+            "d16": {
+              "point": 3,
+              "low": 3,
+              "high": 3
+            },
+            "d32": {
+              "point": 3,
+              "low": 3,
+              "high": 3
+            },
+            "d64": {
+              "point": 3,
+              "low": 3,
+              "high": 3
+            }
+          },
+          "S": {
+            "d16": {
+              "point": 3,
+              "low": 3,
+              "high": 3
+            },
+            "d32": {
+              "point": 3,
+              "low": 3,
+              "high": 3
+            },
+            "d64": {
+              "point": 3,
+              "low": 3,
+              "high": 3
+            }
+          }
+        },
+        "q2_rung_passes_at_4000": {
+          "why": "Derived from q1: a rung passes when at least 2 of 3 seeds are perfect by 4000. The confidence is the probability mass of q1 that agrees with the answer (0.99 in all six cases). E6 had no seed perfect by 4000 at width 64; the width-64 calibration (4 of 4 runs perfect) is why width 64 is 'passes' for both arms.",
+          "confidence_of_this_answer": {
+            "W": {
+              "d16": 0.99,
+              "d32": 0.99,
+              "d64": 0.99
+            },
+            "S": {
+              "d16": 0.99,
+              "d32": 0.99,
+              "d64": 0.99
+            }
+          },
+          "W": {
+            "d16": true,
+            "d32": true,
+            "d64": true
+          },
+          "S": {
+            "d16": true,
+            "d32": true,
+            "d64": true
+          }
+        },
+        "q3_first_passing_budget": {
+          "why": "Only where the rung is predicted to pass (now all six). Arm S cannot pass at 1000 or 2000, because it equals E6 there and E6 had at most 1 perfect seed by 2000 at every width. After the cut every calibration run was perfect within 500 epochs (width 64: at epoch 2010 in both seeds), so I expect the second seed by 3000: an exact line (0.93 to 0.96). Arm W has no floor. In the calibrations it reached 100% at epochs 900 and 1070 (width 16, against 1590 and 1790 for the E6 calibration runs), 1110 and 1270 (width 32) and 1410 and 1430 (width 64), so the second seed should be perfect by 2000. I put the chance of passing by 2000 at 0.75 at width 16 (a little less, because the real width-16 control is harder than the calibration control: mean accuracy 0.935 against 0.972 in epochs 1001-2000), 0.80 at width 32 and 0.88 at width 64 (where the real control matched the calibration control). 3000 stays inside the range at widths 16 and 32. A rung that never passes is a miss.",
+          "W": {
+            "d16": {
+              "point": 2000,
+              "low": 2000,
+              "high": 3000
+            },
+            "d32": {
+              "point": 2000,
+              "low": 2000,
+              "high": 3000
+            },
+            "d64": {
+              "point": 2000,
+              "low": 2000,
+              "high": 2000
+            }
+          },
+          "S": {
+            "d16": {
+              "point": 3000,
+              "low": 3000,
+              "high": 3000
+            },
+            "d32": {
+              "point": 3000,
+              "low": 3000,
+              "high": 3000
+            },
+            "d64": {
+              "point": 3000,
+              "low": 3000,
+              "high": 3000
+            }
+          }
+        },
+        "q4_seeds_that_hold_100_percent": {
+          "why": "Which runs HOLD 100% (at least 50 of 100 logged epochs in 3001-4000). E6: none at widths 16, 32, 64. Calibrations: all twelve W and S runs held (arm S 100 of 100 in all six; arm W 100 of 100 in five and 93 of 100 in one, a dip at width 64). So I expect nearly every real-book seed to hold at every width. The chance that all three seeds hold is about 0.91 (arm W) and 0.94 (arm S) at width 16, 0.85 (arm W) and 0.84 (arm S) at width 32, and 0.91 (arm W) and 0.95 (arm S) at width 64. The doubts are the two seeds per cell and the real books being slower, mainly at width 16 (the real control is noisier than the calibration control: late spread 0.037 against 0.023) and for arm W at width 32 (its unbroken stretch at 100% began at epochs 2730 and 2920 in the calibration, and holding needs the real stretch to begin before about epoch 3500).",
+          "W": {
+            "d16": {
+              "point": 3,
+              "low": 3,
+              "high": 3
+            },
+            "d32": {
+              "point": 3,
+              "low": 3,
+              "high": 3
+            },
+            "d64": {
+              "point": 3,
+              "low": 3,
+              "high": 3
+            }
+          },
+          "S": {
+            "d16": {
+              "point": 3,
+              "low": 3,
+              "high": 3
+            },
+            "d32": {
+              "point": 3,
+              "low": 3,
+              "high": 3
+            },
+            "d64": {
+              "point": 3,
+              "low": 3,
+              "high": 3
+            }
+          }
+        },
+        "q5_seeds_perfect_at_epoch_4000": {
+          "why": "Runs at 100% at the last logged epoch, 4000. Calibrations: all twelve runs. A dip at exactly that epoch would cost a count: the one calibration dip lasted about 7 of the 100 late epochs, so a dipping run is inside a dip at epoch 4000 with probability about 0.07. Arm W at zero decay dipped in 1 of 6 calibration runs (width 64, epoch 3860, recovered by 3930), arm S in none. With a 0.30 chance that a W run at width 64 dips (see q6), the chance that all three W runs are perfect at 4000 is about 0.85 there; at the other lines it is the chance of holding (q4) less a little: 0.91 (W) and 0.94 (S) at width 16, 0.83 and 0.83 at width 32, 0.94 (S) at width 64.",
+          "W": {
+            "d16": {
+              "point": 3,
+              "low": 3,
+              "high": 3
+            },
+            "d32": {
+              "point": 3,
+              "low": 3,
+              "high": 3
+            },
+            "d64": {
+              "point": 3,
+              "low": 3,
+              "high": 3
+            }
+          },
+          "S": {
+            "d16": {
+              "point": 3,
+              "low": 3,
+              "high": 3
+            },
+            "d32": {
+              "point": 3,
+              "low": 3,
+              "high": 3
+            },
+            "d64": {
+              "point": 3,
+              "low": 3,
+              "high": 3
+            }
+          }
+        },
+        "q6_d64_windows": {
+          "why": "Width 64, where E6 has mean accuracy 0.9684 (1001-2000) and 0.9754 (3001-4000), gain +0.0070. Calibration: arm W 0.9916 in 1001-2000 (E6 calibration 0.9671) and 0.9975 in 3001-4000 (lowered by the one dip); arm S 1.0000 from epoch 2010 on, so its 3001-4000 mean is exactly 1.0 if every seed holds with no dip. A window mean of exactly 1.0 means every logged late epoch of all three seeds is perfect. Arm W's late mean and gain come from a small model of dips (tools/spike_model.py): each of the 3 W runs dips with probability 0.30 (one dip in six calibration runs gives a pooled estimate of 0.25, one in two at width 64 gives 0.50), a dip costs that run about 0.004 of its late mean (the calibration dip cost 0.005), and an arm that does not hold has a late mean between 0.975 and 0.9995. That gives arm W's 3001-4000 mean a median of 0.9988 and 10th and 90th percentiles of 0.9934 and 1.0, and a gain over its 1001-2000 mean (0.991; 10th and 90th percentiles 0.98 and 0.998) with median +0.0068 and percentiles -0.0019 and +0.0164. Arm S's gain is its late mean minus E6's 0.9684 (arm S repeats E6 until epoch 2000), so its 90th percentile, 0.0316, is the largest value possible (1.0 minus 0.9684, rounded up). Ranges are the 10th and 90th percentiles of my belief.",
+          "W": {
+            "mean_accuracy_1001_2000": {
+              "point": 0.991,
+              "low": 0.98,
+              "high": 0.998
+            },
+            "mean_accuracy_3001_4000": {
+              "point": 0.9988,
+              "low": 0.9934,
+              "high": 1.0
+            },
+            "gain_vs_1001_2000": {
+              "point": 0.0068,
+              "low": -0.0019,
+              "high": 0.0164
+            }
+          },
+          "S": {
+            "mean_accuracy_3001_4000": {
+              "point": 1.0,
+              "low": 0.995,
+              "high": 1.0
+            },
+            "gain_vs_1001_2000": {
+              "point": 0.0316,
+              "low": 0.0266,
+              "high": 0.0316
+            }
+          }
+        },
+        "q7_late_mean_beats_e6": {
+          "why": "A direction line for every arm and width: does the 3001-4000 mean accuracy beat E6's by at least 0.005? E6's values are 0.9526, 0.9733 and 0.9754 (the bars are 0.9576, 0.9783 and 0.9804). All twelve calibration runs reached 0.995 to 1.000. I give 0.99 (both arms) at width 16, 0.99 (arm W) and 0.98 (arm S) at width 32, and 0.97 (arm W) and 0.98 (arm S) at width 64. These are higher than the chances that all three seeds hold, because a line fails only if the whole arm fails to rise above E6, not if one seed is slow. A miss on a line reads as 'no effect of that setting at that width'.",
+          "W": {
+            "d16": {
+              "answer": true,
+              "confidence": 0.99
+            },
+            "d32": {
+              "answer": true,
+              "confidence": 0.99
+            },
+            "d64": {
+              "answer": true,
+              "confidence": 0.97
+            }
+          },
+          "S": {
+            "d16": {
+              "answer": true,
+              "confidence": 0.99
+            },
+            "d32": {
+              "answer": true,
+              "confidence": 0.98
+            },
+            "d64": {
+              "answer": true,
+              "confidence": 0.98
+            }
+          }
+        },
+        "q8_control_book": {
+          "max_control_violations": 0,
+          "why": "The control book shares no name or number with training; exact recall of its entries must be 0. It was 0 in every E4 and E6 run and every calibration run, including all twelve E7 calibration cells."
+        },
+        "q9_contrasts": {
+          "why": "Contrasts. Width 64: arm S is likelier than a tie (0.66 against 0.30). With a 0.30 chance that a W run dips there is about a two in three chance that at least one of the three W runs dips, which lowers arm W's late mean below arm S's, whereas a tie needs both means to be exactly 1.0. Arm W can be higher only if arm S fails (about 0.04). Width 16: both arms held in both calibration runs and the chances that all three seeds hold are 0.91 (W) and 0.94 (S), so I expect them to hold in the same number of seeds (tie, 0.90).",
+          "d64_higher_3001_4000_mean": {
+            "answer": "S",
+            "confidence": 0.66
+          },
+          "d16_more_holding_seeds": {
+            "answer": "tie",
+            "confidence": 0.9
+          }
+        },
+        "tripwires": {
+          "w_d64_passes": "Fires when arm W passes at width 64 (at least 2 seeds perfect by 4000). About 0.99. Reading: the decay was the binding limit even at the widest model, E6's width-64 shortfall was not a time or capacity limit, and the weight-decay explanation of the 96 to 99 percent plateau is supported.",
+          "w_d64_fails_to_pass": "Fires when arm W does not pass at width 64 (fewer than 2 seeds perfect by 4000). About 0.01. Reading: the calibration's complete fix at width 64 does not carry over to the real books, and E6's time or capacity limit stands for arm W.",
+          "neither_arm_lifts_d64": "Fires when both arms have a width-64 3001-4000 mean accuracy below 0.980. Under 0.01. Reading: neither the decay nor the step size explains E6's shortfall at width 64; it is a time, capacity or shape limit, and the next experiment is longer runs or other shapes, not other optimizer settings.",
+          "w_null_s_large": "Fires when arm W's 3001-4000 mean is within 0.003 of E6's at all three widths and arm S holds in more seeds than E6 (E6 held in none, so at least 1) at both widths 16 and 32. Reading: the step size, not the decay, is what keeps the wide models from holding 100%; this reading is allowed only because W isolates the decay. It would contradict the calibrations, where arm W held in all six runs; if it happens, the real books or seeds differ from the calibration in a way that matters.",
+          "w_large_s_null": "Fires when arm W holds in more seeds than E6 (E6 held in none, so at least 1) at both widths 16 and 32 and arm S's 3001-4000 mean is within 0.003 of E6's at both. Reading: the decay matters at a constant step size, and the lower decay after epoch 2000 in S was too late or too small to show it. It would contradict the calibrations, where arm S held in all six runs.",
+          "both_large": "Fires when both arms hold in more seeds than E6 (E6 held in none, so at least 1) at both widths 16 and 32. This is what the calibrations showed. Reading: either setting is enough to help; arm S cannot say whether the step size or the lower decay did it (it changes both), and only arm W shows that the decay alone is enough.",
+          "w_hurts": "Fires when arm W's 3001-4000 mean accuracy is below E6's at any width. Reading: removing the decay destabilises the runs, which contradicts the decay story and the calibrations, and would need its own explanation.",
+          "s_prefix_fails": "Fires when the first 2000 epochs of an arm S run differ from the E6 run at any width (the CHECK line of the scorer). Reading: the environment or the code changed (Python, torch, numpy, the trainer), the arm S counts at budgets 1000 and 2000 are no longer E6's, and the arm is reported but not compared with E6 until the cause is found.",
+          "s_d64_does_not_hold": "Fires when arm S holds in fewer than 2 seeds at width 64. About 0.01. Reading: the rate cut that fixed widths 16, 32 and 64 in the calibrations does not fix 640 entries on the real books within 2000 epochs; the limit at width 64 is then time or capacity, or the tail after the cut is too short.",
+          "real_books_do_not_replicate": "Fires when either arm holds in fewer than 2 seeds at width 16 or at width 32. About 0.06. Reading: the calibration book was easier than the real books (E6 already found the real books slower at small widths), the calibrations' complete fix does not carry over, and the dependence on the book becomes part of the finding."
+        },
+        "not_scored": "The trend (rising, flat, falling) of every width in both arms under the E6 rule (rising if the gain is at least +0.005, falling if at most -0.005); the tripwires; and any dip below 100% of an arm W run after its first stretch of 500 epochs at 100% (arm W had one in the calibrations, a spike to 0.767 at width 64 that recovered in 70 epochs), which is listed from the curves in the write-up and is not scored. The check that the first 2000 epochs of every arm S run equal the E6 run is reported by the scorer and is the tripwire s_prefix_fails."
+      }
+    },
+    "scenarios": [
+      {
+        "id": "s2_n160",
+        "book_a": "phonebook/inputs/capacity_seed2_n160.txt",
+        "book_b": "phonebook/inputs/capacity_seed2_control.txt"
+      }
+    ],
+    "conditions": [
+      {
+        "id": "d16",
+        "train": {
+          "a_copies": 1,
+          "b_copies": 0
+        },
+        "eval_book": "B",
+        "lr": 0.001,
+        "epochs": 4000,
+        "batch_size": 64,
+        "accuracy_interval": 10,
+        "adapt": false,
+        "model": {
+          "embedding_dim": 16,
+          "n_heads": 2,
+          "n_layers": 2
+        },
+        "weight_decay": 0.0
+      }
+    ]
+  },
+  "environment": {
+    "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+    "executable": "C:\\Users\\minhh\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "packages": {
+      "torch": "2.12.0",
+      "numpy": "2.1.3",
+      "matplotlib": "3.10.9",
+      "pytest": "9.1.0"
+    },
+    "torch_version": "2.12.0+cpu",
+    "torch_num_threads": 1,
+    "device": "cpu"
+  },
+  "optimizer": {
+    "name": "AdamW",
+    "fresh_state_per_run": true,
+    "weight_decay": 0.1,
+    "grad_clip": 1.0,
+    "per_run_keys": [
+      "weight_decay"
+    ]
+  },
+  "config": {
+    "path": "phonebook/config/phonebook.py",
+    "sha256": "86aa6d3b7470c750ee02882bc1821f34e7298a91e411daaf7f75c43c7817903b"
+  },
+  "inputs": {
+    "phonebook/inputs/capacity_seed2_n160.txt": "32d7d03f0c08541a78a4f370a293aea8f735cdf052dcf948e0e8e56ca840db3c",
+    "phonebook/inputs/capacity_seed2_control.txt": "5567e8da0d00999caf2c281d55a800ab03a8338a9222b04a1792e80aa69a1157"
+  },
+  "initializations": {},
+  "runs": [
+    {
+      "id": "s2_n160/d16",
+      "scenario": "s2_n160",
+      "condition": "d16",
+      "mode": "a1b0_evalB",
+      "train": {
+        "a_copies": 1,
+        "b_copies": 0
+      },
+      "eval_book": "B",
+      "lr": 0.001,
+      "epochs": 4000,
+      "batch_size": 64,
+      "accuracy_interval": 10,
+      "l2sp_lambda": 0.0,
+      "adapt": false,
+      "model": {
+        "embedding_dim": 16,
+        "n_heads": 2,
+        "n_layers": 2
+      },
+      "weight_decay": 0.0,
+      "n_train": 160,
+      "updates_per_epoch": 3,
+      "seq_len": 30
+    }
+  ]
+}

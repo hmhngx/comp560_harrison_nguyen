@@ -1,0 +1,173 @@
+{
+  "16": {
+    "n": 160,
+    "seeds": 3,
+    "first_perfect": {
+      "1": 2010,
+      "2": 1210,
+      "3": 2510
+    },
+    "perfect_by": {
+      "1000": 0,
+      "2000": 1,
+      "3000": 3,
+      "4000": 3
+    },
+    "passes": {
+      "1000": false,
+      "2000": false,
+      "3000": true,
+      "4000": true
+    },
+    "first_pass_budget": 3000,
+    "reached_perfect": 3,
+    "perfect_at_end": 3,
+    "mean_accuracy": {
+      "1001_2000": 0.9351041666666666,
+      "3001_4000": 1.0
+    },
+    "gain": 0.06489583333333333,
+    "trend": "rising",
+    "control_violations": 0,
+    "first_2000_match_by_seed": {
+      "1": true,
+      "2": true,
+      "3": true
+    },
+    "first_2000_matches_earlier": true,
+    "epochs_at_100": {
+      "logged": {
+        "all": 400,
+        "3001_4000": 100
+      },
+      "by_seed": {
+        "1": {
+          "all": 200,
+          "3001_4000": 100
+        },
+        "2": {
+          "all": 214,
+          "3001_4000": 100
+        },
+        "3": {
+          "all": 150,
+          "3001_4000": 100
+        }
+      }
+    }
+  },
+  "32": {
+    "n": 320,
+    "seeds": 3,
+    "first_perfect": {
+      "1": 940,
+      "2": 2010,
+      "3": 2010
+    },
+    "perfect_by": {
+      "1000": 1,
+      "2000": 1,
+      "3000": 3,
+      "4000": 3
+    },
+    "passes": {
+      "1000": false,
+      "2000": false,
+      "3000": true,
+      "4000": true
+    },
+    "first_pass_budget": 3000,
+    "reached_perfect": 3,
+    "perfect_at_end": 3,
+    "mean_accuracy": {
+      "1001_2000": 0.9636354166666666,
+      "3001_4000": 1.0
+    },
+    "gain": 0.03636458333333333,
+    "trend": "rising",
+    "control_violations": 0,
+    "first_2000_match_by_seed": {
+      "1": true,
+      "2": true,
+      "3": true
+    },
+    "first_2000_matches_earlier": true,
+    "epochs_at_100": {
+      "logged": {
+        "all": 400,
+        "3001_4000": 100
+      },
+      "by_seed": {
+        "1": {
+          "all": 203,
+          "3001_4000": 100
+        },
+        "2": {
+          "all": 200,
+          "3001_4000": 100
+        },
+        "3": {
+          "all": 200,
+          "3001_4000": 100
+        }
+      }
+    }
+  },
+  "64": {
+    "n": 640,
+    "seeds": 3,
+    "first_perfect": {
+      "1": 2010,
+      "2": 2010,
+      "3": 2010
+    },
+    "perfect_by": {
+      "1000": 0,
+      "2000": 0,
+      "3000": 3,
+      "4000": 3
+    },
+    "passes": {
+      "1000": false,
+      "2000": false,
+      "3000": true,
+      "4000": true
+    },
+    "first_pass_budget": 3000,
+    "reached_perfect": 3,
+    "perfect_at_end": 3,
+    "mean_accuracy": {
+      "1001_2000": 0.9684270833333334,
+      "3001_4000": 1.0
+    },
+    "gain": 0.031572916666666666,
+    "trend": "rising",
+    "control_violations": 0,
+    "first_2000_match_by_seed": {
+      "1": true,
+      "2": true,
+      "3": true
+    },
+    "first_2000_matches_earlier": true,
+    "epochs_at_100": {
+      "logged": {
+        "all": 400,
+        "3001_4000": 100
+      },
+      "by_seed": {
+        "1": {
+          "all": 200,
+          "3001_4000": 100
+        },
+        "2": {
+          "all": 200,
+          "3001_4000": 100
+        },
+        "3": {
+          "all": 200,
+          "3001_4000": 100
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,494 @@
+[
+ {
+  "q": "Q1",
+  "what": "seeds perfect by 4000 epochs, arm W, d=16",
+  "predicted": "3 [3, 3]",
+  "actual": 3,
+  "result": "HIT (exact)",
+  "note": ""
+ },
+ {
+  "q": "Q1",
+  "what": "seeds perfect by 4000 epochs, arm W, d=32",
+  "predicted": "3 [3, 3]",
+  "actual": 3,
+  "result": "HIT (exact)",
+  "note": ""
+ },
+ {
+  "q": "Q1",
+  "what": "seeds perfect by 4000 epochs, arm W, d=64",
+  "predicted": "3 [3, 3]",
+  "actual": 3,
+  "result": "HIT (exact)",
+  "note": ""
+ },
+ {
+  "q": "Q1",
+  "what": "seeds perfect by 4000 epochs, arm S, d=16",
+  "predicted": "3 [3, 3]",
+  "actual": 3,
+  "result": "HIT (exact)",
+  "note": ""
+ },
+ {
+  "q": "Q1",
+  "what": "seeds perfect by 4000 epochs, arm S, d=32",
+  "predicted": "3 [3, 3]",
+  "actual": 3,
+  "result": "HIT (exact)",
+  "note": ""
+ },
+ {
+  "q": "Q1",
+  "what": "seeds perfect by 4000 epochs, arm S, d=64",
+  "predicted": "3 [3, 3]",
+  "actual": 3,
+  "result": "HIT (exact)",
+  "note": ""
+ },
+ {
+  "q": "Q2",
+  "what": "rung passes at 4000 epochs, arm W, d=16",
+  "predicted": true,
+  "actual": true,
+  "result": "HIT",
+  "note": ""
+ },
+ {
+  "q": "Q2",
+  "what": "rung passes at 4000 epochs, arm W, d=32",
+  "predicted": true,
+  "actual": true,
+  "result": "HIT",
+  "note": ""
+ },
+ {
+  "q": "Q2",
+  "what": "rung passes at 4000 epochs, arm W, d=64",
+  "predicted": true,
+  "actual": true,
+  "result": "HIT",
+  "note": ""
+ },
+ {
+  "q": "Q2",
+  "what": "rung passes at 4000 epochs, arm S, d=16",
+  "predicted": true,
+  "actual": true,
+  "result": "HIT",
+  "note": ""
+ },
+ {
+  "q": "Q2",
+  "what": "rung passes at 4000 epochs, arm S, d=32",
+  "predicted": true,
+  "actual": true,
+  "result": "HIT",
+  "note": ""
+ },
+ {
+  "q": "Q2",
+  "what": "rung passes at 4000 epochs, arm S, d=64",
+  "predicted": true,
+  "actual": true,
+  "result": "HIT",
+  "note": ""
+ },
+ {
+  "q": "Q3",
+  "what": "first passing budget, arm W, d=16",
+  "predicted": "2000 [2000, 3000]",
+  "actual": 2000,
+  "result": "HIT (exact)",
+  "note": ""
+ },
+ {
+  "q": "Q3",
+  "what": "first passing budget, arm W, d=32",
+  "predicted": "2000 [2000, 3000]",
+  "actual": 2000,
+  "result": "HIT (exact)",
+  "note": ""
+ },
+ {
+  "q": "Q3",
+  "what": "first passing budget, arm W, d=64",
+  "predicted": "2000 [2000, 2000]",
+  "actual": 2000,
+  "result": "HIT (exact)",
+  "note": ""
+ },
+ {
+  "q": "Q3",
+  "what": "first passing budget, arm S, d=16",
+  "predicted": "3000 [3000, 3000]",
+  "actual": 3000,
+  "result": "HIT (exact)",
+  "note": ""
+ },
+ {
+  "q": "Q3",
+  "what": "first passing budget, arm S, d=32",
+  "predicted": "3000 [3000, 3000]",
+  "actual": 3000,
+  "result": "HIT (exact)",
+  "note": ""
+ },
+ {
+  "q": "Q3",
+  "what": "first passing budget, arm S, d=64",
+  "predicted": "3000 [3000, 3000]",
+  "actual": 3000,
+  "result": "HIT (exact)",
+  "note": ""
+ },
+ {
+  "q": "Q4",
+  "what": "seeds that hold 100 percent, arm W, d=16",
+  "predicted": "3 [3, 3]",
+  "actual": 2,
+  "result": "MISS",
+  "note": "epochs at 100% of the 100 logged in 3001-4000, per seed: 13, 100, 100"
+ },
+ {
+  "q": "Q4",
+  "what": "seeds that hold 100 percent, arm W, d=32",
+  "predicted": "3 [3, 3]",
+  "actual": 3,
+  "result": "HIT (exact)",
+  "note": "epochs at 100% of the 100 logged in 3001-4000, per seed: 100, 100, 100"
+ },
+ {
+  "q": "Q4",
+  "what": "seeds that hold 100 percent, arm W, d=64",
+  "predicted": "3 [3, 3]",
+  "actual": 3,
+  "result": "HIT (exact)",
+  "note": "epochs at 100% of the 100 logged in 3001-4000, per seed: 95, 90, 100"
+ },
+ {
+  "q": "Q4",
+  "what": "seeds that hold 100 percent, arm S, d=16",
+  "predicted": "3 [3, 3]",
+  "actual": 3,
+  "result": "HIT (exact)",
+  "note": "epochs at 100% of the 100 logged in 3001-4000, per seed: 100, 100, 100"
+ },
+ {
+  "q": "Q4",
+  "what": "seeds that hold 100 percent, arm S, d=32",
+  "predicted": "3 [3, 3]",
+  "actual": 3,
+  "result": "HIT (exact)",
+  "note": "epochs at 100% of the 100 logged in 3001-4000, per seed: 100, 100, 100"
+ },
+ {
+  "q": "Q4",
+  "what": "seeds that hold 100 percent, arm S, d=64",
+  "predicted": "3 [3, 3]",
+  "actual": 3,
+  "result": "HIT (exact)",
+  "note": "epochs at 100% of the 100 logged in 3001-4000, per seed: 100, 100, 100"
+ },
+ {
+  "q": "Q5",
+  "what": "seeds perfect at epoch 4000, arm W, d=16",
+  "predicted": "3 [3, 3]",
+  "actual": 3,
+  "result": "HIT (exact)",
+  "note": ""
+ },
+ {
+  "q": "Q5",
+  "what": "seeds perfect at epoch 4000, arm W, d=32",
+  "predicted": "3 [3, 3]",
+  "actual": 3,
+  "result": "HIT (exact)",
+  "note": ""
+ },
+ {
+  "q": "Q5",
+  "what": "seeds perfect at epoch 4000, arm W, d=64",
+  "predicted": "3 [3, 3]",
+  "actual": 3,
+  "result": "HIT (exact)",
+  "note": ""
+ },
+ {
+  "q": "Q5",
+  "what": "seeds perfect at epoch 4000, arm S, d=16",
+  "predicted": "3 [3, 3]",
+  "actual": 3,
+  "result": "HIT (exact)",
+  "note": ""
+ },
+ {
+  "q": "Q5",
+  "what": "seeds perfect at epoch 4000, arm S, d=32",
+  "predicted": "3 [3, 3]",
+  "actual": 3,
+  "result": "HIT (exact)",
+  "note": ""
+ },
+ {
+  "q": "Q5",
+  "what": "seeds perfect at epoch 4000, arm S, d=64",
+  "predicted": "3 [3, 3]",
+  "actual": 3,
+  "result": "HIT (exact)",
+  "note": ""
+ },
+ {
+  "q": "Q6",
+  "what": "d=64 arm W mean accuracy, epochs 1001-2000",
+  "predicted": "0.991 [0.98, 0.998]",
+  "actual": 0.9928,
+  "result": "HIT",
+  "note": ""
+ },
+ {
+  "q": "Q6",
+  "what": "d=64 arm W mean accuracy, epochs 3001-4000",
+  "predicted": "0.9988 [0.9934, 1.0]",
+  "actual": 0.9928,
+  "result": "MISS",
+  "note": ""
+ },
+ {
+  "q": "Q6",
+  "what": "d=64 arm W gain over epochs 1001-2000",
+  "predicted": "0.0068 [-0.0019, 0.0164]",
+  "actual": 0.0,
+  "result": "HIT",
+  "note": ""
+ },
+ {
+  "q": "Q6",
+  "what": "d=64 arm S mean accuracy, epochs 3001-4000",
+  "predicted": "1.0 [0.995, 1.0]",
+  "actual": 1.0,
+  "result": "HIT (exact)",
+  "note": ""
+ },
+ {
+  "q": "Q6",
+  "what": "d=64 arm S gain over epochs 1001-2000",
+  "predicted": "0.0316 [0.0266, 0.0316]",
+  "actual": 0.0316,
+  "result": "HIT",
+  "note": ""
+ },
+ {
+  "q": "Q7",
+  "what": "3001-4000 mean beats E6 by the margin, arm W, d=16",
+  "predicted": true,
+  "actual": true,
+  "result": "HIT",
+  "note": "0.9937 against E6 0.9526"
+ },
+ {
+  "q": "Q7",
+  "what": "3001-4000 mean beats E6 by the margin, arm W, d=32",
+  "predicted": true,
+  "actual": true,
+  "result": "HIT",
+  "note": "1.0000 against E6 0.9733"
+ },
+ {
+  "q": "Q7",
+  "what": "3001-4000 mean beats E6 by the margin, arm W, d=64",
+  "predicted": true,
+  "actual": true,
+  "result": "HIT",
+  "note": "0.9928 against E6 0.9754"
+ },
+ {
+  "q": "Q7",
+  "what": "3001-4000 mean beats E6 by the margin, arm S, d=16",
+  "predicted": true,
+  "actual": true,
+  "result": "HIT",
+  "note": "1.0000 against E6 0.9526"
+ },
+ {
+  "q": "Q7",
+  "what": "3001-4000 mean beats E6 by the margin, arm S, d=32",
+  "predicted": true,
+  "actual": true,
+  "result": "HIT",
+  "note": "1.0000 against E6 0.9733"
+ },
+ {
+  "q": "Q7",
+  "what": "3001-4000 mean beats E6 by the margin, arm S, d=64",
+  "predicted": true,
+  "actual": true,
+  "result": "HIT",
+  "note": "1.0000 against E6 0.9754"
+ },
+ {
+  "q": "Q8",
+  "what": "runs that recalled any control entry (of 18)",
+  "predicted": 0,
+  "actual": 0,
+  "result": "HIT (exact)",
+  "note": ""
+ },
+ {
+  "q": "Q9",
+  "what": "d=64: arm with the higher 3001-4000 mean",
+  "predicted": "S",
+  "actual": "S",
+  "result": "HIT",
+  "note": ""
+ },
+ {
+  "q": "Q9",
+  "what": "d=16: arm with more holding seeds",
+  "predicted": "tie",
+  "actual": "S",
+  "result": "MISS",
+  "note": ""
+ },
+ {
+  "q": "CHECK",
+  "what": "first 2000 epochs of every arm S run equal the E6 run",
+  "predicted": "all equal",
+  "actual": {
+   "16": true,
+   "32": true,
+   "64": true
+  },
+  "result": "CHECK PASSED",
+  "note": ""
+ },
+ {
+  "q": "TREND",
+  "what": "trend, arm W, d=16",
+  "predicted": "",
+  "actual": "rising (gain +0.0271)",
+  "result": "REPORTED",
+  "note": ""
+ },
+ {
+  "q": "TREND",
+  "what": "trend, arm W, d=32",
+  "predicted": "",
+  "actual": "rising (gain +0.0198)",
+  "result": "REPORTED",
+  "note": ""
+ },
+ {
+  "q": "TREND",
+  "what": "trend, arm W, d=64",
+  "predicted": "",
+  "actual": "flat (gain +0.0000)",
+  "result": "REPORTED",
+  "note": ""
+ },
+ {
+  "q": "TREND",
+  "what": "trend, arm S, d=16",
+  "predicted": "",
+  "actual": "rising (gain +0.0649)",
+  "result": "REPORTED",
+  "note": ""
+ },
+ {
+  "q": "TREND",
+  "what": "trend, arm S, d=32",
+  "predicted": "",
+  "actual": "rising (gain +0.0364)",
+  "result": "REPORTED",
+  "note": ""
+ },
+ {
+  "q": "TREND",
+  "what": "trend, arm S, d=64",
+  "predicted": "",
+  "actual": "rising (gain +0.0316)",
+  "result": "REPORTED",
+  "note": ""
+ },
+ {
+  "q": "TRIPWIRE",
+  "what": "w_d64_passes",
+  "predicted": "",
+  "actual": true,
+  "result": "TRIPWIRE FIRED",
+  "note": "Fires when arm W passes at width 64 (at least 2 seeds perfect by 4000). About 0.99. Reading: the decay was the binding limit even at the widest model, E6's width-64 shortfall was not a time or capacity limit, and the weight-decay explanation of the 96 to 99 percent plateau is supported."
+ },
+ {
+  "q": "TRIPWIRE",
+  "what": "w_d64_fails_to_pass",
+  "predicted": "",
+  "actual": false,
+  "result": "TRIPWIRE NOT FIRED",
+  "note": "Fires when arm W does not pass at width 64 (fewer than 2 seeds perfect by 4000). About 0.01. Reading: the calibration's complete fix at width 64 does not carry over to the real books, and E6's time or capacity limit stands for arm W."
+ },
+ {
+  "q": "TRIPWIRE",
+  "what": "neither_arm_lifts_d64",
+  "predicted": "",
+  "actual": false,
+  "result": "TRIPWIRE NOT FIRED",
+  "note": "Fires when both arms have a width-64 3001-4000 mean accuracy below 0.980. Under 0.01. Reading: neither the decay nor the step size explains E6's shortfall at width 64; it is a time, capacity or shape limit, and the next experiment is longer runs or other shapes, not other optimizer settings."
+ },
+ {
+  "q": "TRIPWIRE",
+  "what": "w_null_s_large",
+  "predicted": "",
+  "actual": false,
+  "result": "TRIPWIRE NOT FIRED",
+  "note": "Fires when arm W's 3001-4000 mean is within 0.003 of E6's at all three widths and arm S holds in more seeds than E6 (E6 held in none, so at least 1) at both widths 16 and 32. Reading: the step size, not the decay, is what keeps the wide models from holding 100%; this reading is allowed only because W isolates the decay. It would contradict the calibrations, where arm W held in all six runs; if it happens, the real books or seeds differ from the calibration in a way that matters."
+ },
+ {
+  "q": "TRIPWIRE",
+  "what": "w_large_s_null",
+  "predicted": "",
+  "actual": false,
+  "result": "TRIPWIRE NOT FIRED",
+  "note": "Fires when arm W holds in more seeds than E6 (E6 held in none, so at least 1) at both widths 16 and 32 and arm S's 3001-4000 mean is within 0.003 of E6's at both. Reading: the decay matters at a constant step size, and the lower decay after epoch 2000 in S was too late or too small to show it. It would contradict the calibrations, where arm S held in all six runs."
+ },
+ {
+  "q": "TRIPWIRE",
+  "what": "both_large",
+  "predicted": "",
+  "actual": true,
+  "result": "TRIPWIRE FIRED",
+  "note": "Fires when both arms hold in more seeds than E6 (E6 held in none, so at least 1) at both widths 16 and 32. This is what the calibrations showed. Reading: either setting is enough to help; arm S cannot say whether the step size or the lower decay did it (it changes both), and only arm W shows that the decay alone is enough."
+ },
+ {
+  "q": "TRIPWIRE",
+  "what": "w_hurts",
+  "predicted": "",
+  "actual": false,
+  "result": "TRIPWIRE NOT FIRED",
+  "note": "Fires when arm W's 3001-4000 mean accuracy is below E6's at any width. Reading: removing the decay destabilises the runs, which contradicts the decay story and the calibrations, and would need its own explanation."
+ },
+ {
+  "q": "TRIPWIRE",
+  "what": "s_prefix_fails",
+  "predicted": "",
+  "actual": false,
+  "result": "TRIPWIRE NOT FIRED",
+  "note": "Fires when the first 2000 epochs of an arm S run differ from the E6 run at any width (the CHECK line of the scorer). Reading: the environment or the code changed (Python, torch, numpy, the trainer), the arm S counts at budgets 1000 and 2000 are no longer E6's, and the arm is reported but not compared with E6 until the cause is found."
+ },
+ {
+  "q": "TRIPWIRE",
+  "what": "s_d64_does_not_hold",
+  "predicted": "",
+  "actual": false,
+  "result": "TRIPWIRE NOT FIRED",
+  "note": "Fires when arm S holds in fewer than 2 seeds at width 64. About 0.01. Reading: the rate cut that fixed widths 16, 32 and 64 in the calibrations does not fix 640 entries on the real books within 2000 epochs; the limit at width 64 is then time or capacity, or the tail after the cut is too short."
+ },
+ {
+  "q": "TRIPWIRE",
+  "what": "real_books_do_not_replicate",
+  "predicted": "",
+  "actual": false,
+  "result": "TRIPWIRE NOT FIRED",
+  "note": "Fires when either arm holds in fewer than 2 seeds at width 16 or at width 32. About 0.06. Reading: the calibration book was easier than the real books (E6 already found the real books slower at small widths), the calibrations' complete fix does not carry over, and the dependence on the book becomes part of the finding."
+ }
+]
