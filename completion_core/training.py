@@ -150,7 +150,8 @@ def run_epoch(
 
                 optimizer.zero_grad()
                 backward_loss.backward()
-                nn.utils.clip_grad_norm_(model.parameters(), grad_clip)
+                if grad_clip > 0:  # 0 means no clipping; clip_grad_norm_(..., 0) would zero every gradient
+                    nn.utils.clip_grad_norm_(model.parameters(), grad_clip)
                 optimizer.step()
 
                 if batch_idx % log_interval == 0:

@@ -4,3 +4,5 @@ phonebook/inputs/*.txt text eol=lf
 phonebook/experiments/**/*.log -whitespace
 # Specs are hashed into every protocol; keep their bytes identical on every platform.
 phonebook/specs/*.json text eol=lf
+# Locked predictions are hash-checked by tests; keep their bytes identical on every platform.
+phonebook/preregistration/*.json text eol=lf

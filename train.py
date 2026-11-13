@@ -191,6 +191,27 @@ def load_adapt_state_dict(checkpoint_path: Path, device: str) -> dict[str, torch
     return state_dict
 
 
+def check_adapt_compatibility(
+    checkpoint_path: Path, device: str, *, embedding_dim: int, n_heads: int, n_layers: int, seq_len: int,
+) -> None:
+    """Refuse a checkpoint whose recorded architecture differs from the model being built.
+
+    Tensors trained with a different head count have exactly the same shapes, so load_state_dict
+    cannot detect it; only the metadata written by make_checkpoint_payload can.
+    """
+    raw = torch.load(checkpoint_path, map_location=device)
+    recorded = raw.get("model_config") if isinstance(raw, dict) else None
+    if not isinstance(recorded, dict):
+        print(f"Warning: {checkpoint_path} records no model_config; cannot verify that its architecture matches.")
+        return
+    current = {"d_model": embedding_dim, "n_heads": n_heads, "n_layers": n_layers, "seq_len": seq_len}
+    mismatched = {key: (recorded[key], current[key]) for key in current
+                  if key in recorded and recorded[key] != current[key]}
+    if mismatched:
+        detail = ", ".join(f"{key}: checkpoint {old} vs current {new}" for key, (old, new) in mismatched.items())
+        raise ValueError(f"Model adaptation checkpoint was trained with a different architecture ({detail}).")
+
+
 def build_data_loaders(
     train_dataset, val_dataset, *, batch_size: int, seed: int, loader_rng: str = "isolated",
 ) -> tuple[DataLoader, DataLoader, DataLoader]:
@@ -252,6 +273,10 @@ def main() -> None:
 
     if cfg.adapt_from is not None:
         state_dict = load_adapt_state_dict(cfg.adapt_from, cfg.device)
+        check_adapt_compatibility(
+            cfg.adapt_from, cfg.device, embedding_dim=cfg.embedding_dim, n_heads=cfg.n_heads,
+            n_layers=cfg.n_layers, seq_len=seq_len,
+        )
         try:
             model.load_state_dict(state_dict)
         except RuntimeError as exc:
