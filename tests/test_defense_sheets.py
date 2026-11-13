@@ -776,13 +776,23 @@ def _c27() -> str:
 def _c28() -> str:
     optimizers = set()
     for folder in ("e4_capacity_d8_seed1_a", "e6_extend_d64_seed1"):
-        recorded = json.loads((WEEK / folder / "protocol.json").read_text(encoding="utf-8"))["optimizer"]
+        protocol = json.loads((WEEK / folder / "protocol.json").read_text(encoding="utf-8"))
+        recorded = protocol["optimizer"]
         optimizers.add((recorded["name"], recorded["weight_decay"], recorded["grad_clip"]))
+        # E7 added optional per-run overrides of the weight decay and the learning-rate schedule. The recorded optimizer is
+        # what these runs used only if no run overrides it, and "constant" holds only if no run set a schedule.
+        overridden = "per_run_keys" in recorded or any(key in run for run in protocol["runs"] for key in ("weight_decay", "lr_schedule"))
+        assert not overridden, (
+            f"{folder}: a run overrides the weight decay or sets a learning-rate schedule: the recorded optimizer no longer describes it")
     assert len(optimizers) == 1, optimizers
     ((name, decay, clip),) = optimizers
+    from train import TrainConfig
+    assert TrainConfig().lr_schedule is None, "the trainer now applies a learning-rate schedule by default: 'constant' is no longer true"
     trainer = (ROOT / "train.py").read_text(encoding="utf-8").lower()
-    assert not any(word in trainer for word in ("scheduler", "param_groups", "warmup", "cosine")),         "train.py now has a learning-rate schedule: 'constant' is no longer true"
-    return f"{name}, weight decay {decay}, gradient clip {clip}, constant learning rate (the trainer has no schedule)"
+    assert not any(word in trainer for word in ("scheduler", "warmup", "cosine")), (
+        "train.py has a learning-rate schedule other than the opt-in step schedule: 'constant' needs a new check")
+    return (f"{name}, weight decay {decay}, gradient clip {clip}, constant learning rate "
+            f"(neither protocol records a schedule or an override; the trainer applies a schedule only when --lr-schedule is given)")
 
 
 @number("C29", "specs/e4_capacity_d8_seed1_a.json")
@@ -1007,6 +1017,59 @@ def test_registry_every_recomputation_runs_and_returns_plain_text_without_pipes(
         assert isinstance(value, str) and value and "|" not in value, ident
         for source in sources:
             assert (PHONEBOOK / source).exists(), f"{ident}: source {source} does not exist"
+
+
+C28_FOLDERS = ("e4_capacity_d8_seed1_a", "e6_extend_d64_seed1")
+
+
+def copy_c28_protocols(week: Path, change=lambda protocol: None) -> None:
+    for folder in C28_FOLDERS:
+        protocol = json.loads((WEEK / folder / "protocol.json").read_text(encoding="utf-8"))
+        change(protocol)
+        (week / folder).mkdir(parents=True)
+        (week / folder / "protocol.json").write_text(json.dumps(protocol), encoding="utf-8")
+
+
+def test_registry_c28_holds_on_a_faithful_copy_of_the_cited_protocols(monkeypatch, tmp_path: Path) -> None:
+    copy_c28_protocols(tmp_path)
+    monkeypatch.setitem(globals(), "WEEK", tmp_path)
+    expected = ("AdamW, weight decay 0.1, gradient clip 1.0, constant learning rate (neither protocol records "
+                "a schedule or an override; the trainer applies a schedule only when --lr-schedule is given)")
+    assert REGISTRY["C28"][1]() == expected
+
+
+@pytest.mark.parametrize("change", [
+    lambda protocol: protocol["runs"][0].update(lr_schedule="step:2000:0.1"),
+    lambda protocol: protocol["runs"][0].update(weight_decay=0.0),
+    lambda protocol: protocol["optimizer"].update(per_run_keys=["weight_decay"]),
+], ids=["a run sets a schedule", "a run overrides the weight decay", "the optimizer block lists per-run keys"])
+def test_registry_c28_notices_an_override_or_a_schedule_in_a_cited_protocol(monkeypatch, tmp_path: Path, change) -> None:
+    copy_c28_protocols(tmp_path, change)
+    monkeypatch.setitem(globals(), "WEEK", tmp_path)
+    with pytest.raises(AssertionError, match="no longer describes it"):
+        REGISTRY["C28"][1]()
+
+
+def test_registry_c28_notices_a_trainer_that_applies_a_schedule_by_default(monkeypatch) -> None:
+    import train
+
+    monkeypatch.setattr(train, "TrainConfig", lambda: type("Config", (), {"lr_schedule": "step:2000:0.1"})())
+    with pytest.raises(AssertionError, match="by default"):
+        REGISTRY["C28"][1]()
+
+
+@pytest.mark.parametrize("word", ["get_cosine_schedule_with_warmup", "lr_scheduler.StepLR", "linear warmup"])
+def test_registry_c28_notices_any_other_kind_of_schedule_in_the_trainer(monkeypatch, tmp_path: Path, word: str) -> None:
+    (tmp_path / "train.py").write_text(f"# {word}", encoding="utf-8")
+    monkeypatch.setitem(globals(), "ROOT", tmp_path)
+    with pytest.raises(AssertionError, match="other than the opt-in step schedule"):
+        REGISTRY["C28"][1]()
+
+
+def test_registry_c28_accepts_the_opt_in_step_schedule_hook_that_the_trainer_now_has() -> None:
+    trainer = (ROOT / "train.py").read_text(encoding="utf-8")
+    assert "param_groups" in trainer and "lr_factor" in trainer          # the hook is there ...
+    assert "constant learning rate" in REGISTRY["C28"][1]()              # ... and the claim about E4 and E6 still holds
 
 
 def test_registry_agrees_with_the_analysis_outputs_it_does_not_call() -> None:

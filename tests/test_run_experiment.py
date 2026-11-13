@@ -4,6 +4,8 @@ import copy
 import csv
 import json
 from pathlib import Path
+import subprocess
+import sys
 
 import pytest
 
@@ -326,3 +328,223 @@ def test_planning_enforces_one_update_per_epoch_when_the_spec_requires_it(tmp_pa
         rx.plan(spec, repo_root=ROOT, provenance=clean())
     spec["require_one_update_per_epoch"] = False
     assert rx.plan(spec, repo_root=ROOT, provenance=clean())["runs"][0]["updates_per_epoch"] == 2
+
+
+# ------------------------------------------------------------------ E7: optional optimizer overrides per condition
+
+HISTORIC_RUN_KEYS = {"id", "scenario", "condition", "mode", "train", "eval_book", "lr", "epochs", "batch_size",
+                     "accuracy_interval", "l2sp_lambda", "adapt", "model"}
+HISTORIC_OPTIMIZER = {"name": "AdamW", "fresh_state_per_run": True, "weight_decay": 0.1, "grad_clip": 1.0}
+NEW_FLAGS = {"--weight-decay", "--lr-schedule"}
+
+
+def scratch_spec(**overrides) -> dict:
+    """A from-scratch 4000-epoch spec (the E6 shape), optionally with optimizer overrides on its one condition."""
+    spec = make_spec()
+    del spec["scenarios"][0]["init"]
+    spec["conditions"][0].update({"train": {"a_copies": 1, "b_copies": 0}, "eval_book": "B", "adapt": False,
+                                  "epochs": 4000, "accuracy_interval": 10, **overrides})
+    return spec
+
+
+def command_with(**overrides) -> list[str]:
+    spec = scratch_spec(**overrides)
+    (run,) = rx.expand_runs(spec)
+    return rx.training_command(run, config="cfg.py", data_dir=Path("d"), out_dir=Path("o"), seed=7, init_checkpoint=None)
+
+
+@pytest.mark.parametrize("overrides", [
+    {"weight_decay": 0.0}, {"weight_decay": 0}, {"weight_decay": 0.05},
+    {"lr_schedule": "step:2000:0.1"}, {"lr_schedule": "step:1000,3999:0.5"},
+    {"weight_decay": 0.0, "lr_schedule": "step:2000:0.1"},
+])
+def test_the_optimizer_overrides_are_valid_condition_keys(overrides) -> None:
+    rx.validate_spec(scratch_spec(**overrides))
+
+
+@pytest.mark.parametrize("value", [-0.1, -1, float("nan"), float("inf"), -float("inf"), True, False, "0.0", None, [0.0], 10**400])
+def test_a_bad_weight_decay_is_rejected(value) -> None:
+    with pytest.raises(ValueError, match="weight_decay must be a finite number >= 0"):
+        rx.validate_spec(scratch_spec(weight_decay=value))
+
+
+@pytest.mark.parametrize("value", ["", "cosine:2000:0.1", "step:2000", "step:2000:0.10", "step:02000:0.1",
+                                   "step:2000:0", "step:2000:1.5", 2000, None, ["step:2000:0.1"]])
+def test_a_bad_schedule_is_rejected(value) -> None:
+    with pytest.raises(ValueError, match="lr_schedule: "):
+        rx.validate_spec(scratch_spec(lr_schedule=value))
+
+
+@pytest.mark.parametrize("epochs,schedule", [(4000, "step:4000:0.1"), (4000, "step:5000:0.1"), (4000, "step:1000,4000:0.1"),
+                                             (2000, "step:2000:0.1")])
+def test_every_milestone_must_be_before_the_last_epoch(epochs, schedule) -> None:
+    with pytest.raises(ValueError, match="lr_schedule: every milestone must be before the last epoch"):
+        rx.validate_spec(scratch_spec(epochs=epochs, lr_schedule=schedule))
+
+
+def test_a_milestone_one_epoch_before_the_end_is_valid() -> None:
+    rx.validate_spec(scratch_spec(epochs=2001, lr_schedule="step:2000:0.1"))
+
+
+def test_the_error_names_the_condition_that_carries_the_bad_override() -> None:
+    spec = scratch_spec()
+    spec["conditions"].append({**copy.deepcopy(spec["conditions"][0]), "id": "second", "weight_decay": -1.0})
+    with pytest.raises(ValueError, match="condition second weight_decay"):
+        rx.validate_spec(spec)
+
+
+@pytest.mark.parametrize("typo", ["weight_decays", "lr_schedules", "weightdecay", "schedule"])
+def test_unknown_keys_are_still_rejected_beside_the_new_ones(typo) -> None:
+    spec = scratch_spec(weight_decay=0.0, lr_schedule="step:2000:0.1", **{typo: 1})
+    with pytest.raises(ValueError, match=f"^condition has unknown keys \\['{typo}'\\]$") as error:
+        rx.validate_spec(spec)
+    assert "'weight_decay'" not in str(error.value) and "'lr_schedule'" not in str(error.value)
+
+
+def test_a_condition_without_overrides_expands_to_the_historic_keys_only() -> None:
+    (run,) = rx.expand_runs(scratch_spec())
+    assert set(run) <= HISTORIC_RUN_KEYS and not {"weight_decay", "lr_schedule"} & set(run)
+
+
+def test_the_overrides_travel_with_the_expanded_run() -> None:
+    (run,) = rx.expand_runs(scratch_spec(weight_decay=0, lr_schedule="step:2000:0.1"))
+    assert run["weight_decay"] == 0.0 and isinstance(run["weight_decay"], float)
+    assert run["lr_schedule"] == "step:2000:0.1"
+
+
+def test_each_override_travels_alone() -> None:
+    (decay,) = rx.expand_runs(scratch_spec(weight_decay=0.0))
+    (step,) = rx.expand_runs(scratch_spec(lr_schedule="step:2000:0.1"))
+    assert "weight_decay" in decay and "lr_schedule" not in decay
+    assert "lr_schedule" in step and "weight_decay" not in step
+
+
+def test_the_overrides_become_trainer_flags_only_when_declared() -> None:
+    both = command_with(weight_decay=0.0, lr_schedule="step:2000:0.1")
+    assert both.count("--weight-decay") == 1 and both[both.index("--weight-decay") + 1] == "0.0"
+    assert both.count("--lr-schedule") == 1 and both[both.index("--lr-schedule") + 1] == "step:2000:0.1"
+    assert not NEW_FLAGS & set(command_with())
+    decay = command_with(weight_decay=0.05)
+    assert decay[decay.index("--weight-decay") + 1] == "0.05" and "--lr-schedule" not in decay
+    step = command_with(lr_schedule="step:2000:0.1")
+    assert "--weight-decay" not in step and "--lr-schedule" in step
+
+
+def test_the_command_the_runner_builds_gives_the_trainer_exactly_the_declared_settings(monkeypatch) -> None:
+    import train
+
+    command = command_with(weight_decay=0.0, lr_schedule="step:2000:0.1")
+    command[2] = str(ROOT / "phonebook" / "config" / "phonebook.py")      # the real config the experiments use
+    monkeypatch.setattr(sys, "argv", ["train.py", *command[2:]])
+    cfg = train.parse_args()
+    assert (cfg.weight_decay, cfg.lr_schedule, cfg.epochs, cfg.lr) == (0.0, "step:2000:0.1", 4000, 0.001)
+
+
+# ---- the committed evidence must not feel the change at all -------------------------------------------------------------
+
+def tracked_files(prefix: str) -> list[str]:
+    listing = subprocess.run(["git", "ls-files", "--", prefix], cwd=ROOT, capture_output=True, text=True, check=False)
+    if listing.returncode != 0:
+        pytest.skip("not a git checkout: the tracked evidence cannot be enumerated")
+    return listing.stdout.split()
+
+
+def declares_an_override(spec: dict) -> bool:
+    return any(key in condition for condition in spec["conditions"] for key in rx.OPTIMIZER_KEYS)
+
+
+def test_no_committed_spec_gains_a_key_a_flag_or_an_optimizer_record_entry() -> None:
+    specs = sorted((ROOT / "phonebook" / "specs").glob("*.json"))
+    untouched = 0
+    for path in specs:
+        spec = rx.load_spec(path)
+        if declares_an_override(spec):
+            continue            # an E7 spec declares its override on purpose; the tests above and in test_audit_experiment cover it
+        untouched += 1
+        runs = rx.expand_runs(spec)
+        assert rx.optimizer_record(runs) == HISTORIC_OPTIMIZER, path.name
+        for run in runs:
+            assert set(run) <= HISTORIC_RUN_KEYS, (path.name, set(run) - HISTORIC_RUN_KEYS)
+            command = rx.training_command(run, config=spec["model_config"], data_dir=Path("d"), out_dir=Path("o"),
+                                          seed=spec["seed"], init_checkpoint=Path("i.pth") if run["adapt"] else None,
+                                          loader_rng=spec.get("loader_rng"))
+            assert not NEW_FLAGS & set(command), path.name
+    assert untouched >= 58          # every spec of E1 to E6 was written before the overrides existed
+
+
+def runner_protocols() -> list[tuple[str, dict]]:
+    found = []
+    for name in tracked_files("phonebook/experiments"):
+        if name.endswith("/protocol.json"):
+            protocol = json.loads((ROOT / name).read_text(encoding="utf-8"))
+            if "spec" in protocol:        # the older schemas under week_2026-09-30 have their own audit script
+                found.append((name, protocol))
+    return found
+
+
+def test_every_committed_protocol_records_the_optimizer_block_the_planner_still_writes() -> None:
+    protocols = runner_protocols()
+    historic = [(name, protocol) for name, protocol in protocols
+                if not any(key in run for run in protocol["runs"] for key in rx.OPTIMIZER_KEYS)]
+    assert len(historic) >= 58          # E1 to E6 were recorded before the overrides existed; later evidence may add more
+    for name, protocol in protocols:
+        assert protocol["optimizer"] == rx.optimizer_record(protocol["runs"]), name
+    for name, protocol in historic:
+        assert protocol["optimizer"] == HISTORIC_OPTIMIZER, name
+
+
+def test_every_recorded_training_command_of_the_committed_evidence_is_rebuilt_exactly() -> None:
+    rebuilt = 0
+    for name, protocol in runner_protocols():
+        manifest = ROOT / name.replace("protocol.json", "manifest.jsonl")
+        for line in manifest.read_text(encoding="utf-8").splitlines():
+            record = json.loads(line)
+            command = record["command"]
+
+            def flag(name: str):
+                return command[command.index(name) + 1] if name in command else None
+
+            again = rx.training_command(record["run"], config=command[2], data_dir=flag("--data-dir"), out_dir=flag("--out-dir"),
+                                        seed=int(flag("--seed")), init_checkpoint=flag("--adapt-from"),
+                                        loader_rng=flag("--loader-rng"))
+            assert again[1:] == command[1:], (name, record["run"]["id"])     # [0] is the interpreter of the machine that ran it
+            rebuilt += 1
+    assert rebuilt >= 591           # the 58 protocols of E1 to E6 hold 591 records; later evidence adds its own
+
+
+# ---- the protocol says which optimizer settings individual runs override (the recorded default would be wrong for them) ----
+
+def test_the_optimizer_record_is_the_historic_one_unless_a_run_overrides_something() -> None:
+    plain = {"id": "a/b", "lr": 0.001}
+    assert rx.optimizer_record([plain]) == HISTORIC_OPTIMIZER
+    assert rx.optimizer_record([]) == HISTORIC_OPTIMIZER
+    assert rx.optimizer_record([plain, {**plain, "weight_decay": 0.0}]) == {**HISTORIC_OPTIMIZER, "per_run_keys": ["weight_decay"]}
+    assert rx.optimizer_record([{**plain, "lr_schedule": "step:2:0.1"}]) == {**HISTORIC_OPTIMIZER, "per_run_keys": ["lr_schedule"]}
+    both = rx.optimizer_record([{**plain, "lr_schedule": "step:2:0.1"}, {**plain, "weight_decay": 0.0}])
+    assert both == {**HISTORIC_OPTIMIZER, "per_run_keys": ["lr_schedule", "weight_decay"]}
+
+
+def override_conditions() -> list[dict]:
+    base = {"train": {"a_copies": 1, "b_copies": 0}, "eval_book": "B", "lr": 0.01, "epochs": 3, "batch_size": 8,
+            "accuracy_interval": 1, "adapt": False}
+    return [{"id": "plain", **base}, {"id": "decay", **base, "weight_decay": 0.0},
+            {"id": "step", **base, "lr_schedule": "step:1:0.5"}]
+
+
+def test_the_planner_records_the_per_run_keys_and_each_run_carries_only_its_own_overrides(tmp_path: Path) -> None:
+    a, b = tiny_books(tmp_path)
+    spec = {"name": "overrides", "seed": 42, "model_config": str(tiny_config(tmp_path)),
+            "scenarios": [{"id": "s1", "book_a": str(a), "book_b": str(b)}], "conditions": override_conditions()}
+    protocol = rx.plan(spec, repo_root=ROOT, provenance=clean())
+    assert protocol["optimizer"] == {**HISTORIC_OPTIMIZER, "per_run_keys": ["lr_schedule", "weight_decay"]}
+    runs = {run["condition"]: run for run in protocol["runs"]}
+    assert not {"weight_decay", "lr_schedule"} & set(runs["plain"])
+    assert runs["decay"]["weight_decay"] == 0.0 and "lr_schedule" not in runs["decay"]
+    assert runs["step"]["lr_schedule"] == "step:1:0.5" and "weight_decay" not in runs["step"]
+
+
+def test_the_planner_writes_the_historic_optimizer_record_when_no_run_overrides(tmp_path: Path) -> None:
+    a, b = tiny_books(tmp_path)
+    spec = {"name": "plain", "seed": 42, "model_config": str(tiny_config(tmp_path)),
+            "scenarios": [{"id": "s1", "book_a": str(a), "book_b": str(b)}], "conditions": override_conditions()[:1]}
+    assert rx.plan(spec, repo_root=ROOT, provenance=clean())["optimizer"] == HISTORIC_OPTIMIZER

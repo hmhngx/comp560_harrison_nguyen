@@ -24,6 +24,7 @@ from completion_core.modeling import (
     ModelConfig,
     make_checkpoint_payload,
 )
+from completion_core.schedule import lr_factor, parse_lr_schedule
 from completion_core.training import SequenceDataset, evaluate_epoch_metrics, run_epoch
 from completion_core.validation import is_finite_number, is_torch_seed
 from completion_core.vocabulary import Vocabulary
@@ -50,6 +51,7 @@ class TrainConfig:
     epochs: int = 100
     lr: float = 1e-3
     weight_decay: float = 1e-1
+    lr_schedule: str | None = None  # "step:2000:0.1" multiplies the rate by 0.1 after epoch 2000; None means constant
     grad_clip: float = 1.0
     seed: int = 42
     log_interval: int = 50  # batches between progress prints
@@ -108,6 +110,19 @@ def parse_args() -> TrainConfig:
         help="L2-SP regularization strength: penalizes drift from the --adapt-from "
         "checkpoint's weights (default: 0.0, meaning off)",
     )
+    parser.add_argument(
+        "--weight-decay",
+        type=float,
+        default=argparse.SUPPRESS,
+        help="AdamW weight decay (default: the TrainConfig value, 0.1)",
+    )
+    parser.add_argument(
+        "--lr-schedule",
+        type=str,
+        default=argparse.SUPPRESS,
+        help="step learning-rate schedule such as step:2000:0.1, which multiplies the rate by 0.1 after epoch 2000 "
+        "(default: constant)",
+    )
     args = parser.parse_args()
 
     cfg = TrainConfig()
@@ -143,6 +158,8 @@ def parse_args() -> TrainConfig:
     if hasattr(args, "accuracy_interval"): cfg.accuracy_interval = args.accuracy_interval
     if hasattr(args, "adapt_from"): cfg.adapt_from = args.adapt_from
     if hasattr(args, "l2sp_lambda"): cfg.l2sp_lambda = args.l2sp_lambda
+    if hasattr(args, "weight_decay"): cfg.weight_decay = args.weight_decay
+    if hasattr(args, "lr_schedule"): cfg.lr_schedule = args.lr_schedule
 
     for field in ("embedding_dim", "n_heads", "n_layers", "batch_size", "epochs",
                   "log_interval", "accuracy_interval"):
@@ -160,6 +177,14 @@ def parse_args() -> TrainConfig:
         if not is_finite_number(value) or value < 0 or (field == "lr" and value == 0):
             bound = "> 0" if field == "lr" else ">= 0"
             raise ValueError(f"--{field.replace('_', '-')} must be a finite number {bound}")
+
+    if cfg.lr_schedule is not None:
+        try:
+            schedule = parse_lr_schedule(cfg.lr_schedule)
+        except ValueError as error:
+            raise ValueError(f"--lr-schedule: {error}") from None
+        if schedule["milestones"][-1] >= cfg.epochs:
+            raise ValueError("--lr-schedule: every milestone must be before the last epoch")
 
     if cfg.loader_rng not in ("isolated", "legacy"):
         raise ValueError("--loader-rng must be isolated or legacy")
@@ -210,6 +235,19 @@ def check_adapt_compatibility(
     if mismatched:
         detail = ", ".join(f"{key}: checkpoint {old} vs current {new}" for key, (old, new) in mismatched.items())
         raise ValueError(f"Model adaptation checkpoint was trained with a different architecture ({detail}).")
+
+
+def optimizer_overrides(cfg: TrainConfig) -> dict:
+    """The optimizer settings that differ from the trainer's defaults; empty for every run made before E7.
+
+    They are printed once and recorded in the checkpoint's training_config, so that a changed setting is never silent.
+    """
+    overrides = {}
+    if cfg.weight_decay != TrainConfig().weight_decay:
+        overrides["weight_decay"] = cfg.weight_decay
+    if cfg.lr_schedule is not None:
+        overrides["lr_schedule"] = cfg.lr_schedule
+    return overrides
 
 
 def build_data_loaders(
@@ -295,6 +333,11 @@ def main() -> None:
     param_count = sum(p.numel() for p in model.parameters() if p.requires_grad)
     print(f"Trainable Model Parameters: {param_count:,}")
 
+    overrides = optimizer_overrides(cfg)
+    if overrides:
+        print("Optimizer overrides: " + ", ".join(f"{key}={value}" for key, value in overrides.items()))
+    schedule = parse_lr_schedule(cfg.lr_schedule) if cfg.lr_schedule is not None else None
+
     optimizer = optim.AdamW(
         model.parameters(), lr=cfg.lr, weight_decay=cfg.weight_decay
     )
@@ -327,6 +370,9 @@ def main() -> None:
 
     # --- Training loop ---
     for epoch in range(1, cfg.epochs + 1):
+        if schedule is not None:
+            for group in optimizer.param_groups:
+                group["lr"] = cfg.lr * lr_factor(schedule, epoch)
         start_time = time.perf_counter()
         
         train_loss = run_epoch(
@@ -441,7 +487,7 @@ def main() -> None:
         n_layers=cfg.n_layers,
     )
     checkpoint = make_checkpoint_payload(model, model_cfg)
-    checkpoint["training_config"] = {"seed": cfg.seed, "loader_rng": cfg.loader_rng}
+    checkpoint["training_config"] = {"seed": cfg.seed, "loader_rng": cfg.loader_rng, **overrides}
     torch.save(checkpoint, weights_path)
     print(f"Weights saved to {weights_path}")
 

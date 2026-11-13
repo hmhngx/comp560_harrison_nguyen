@@ -653,3 +653,147 @@ def test_the_audit_rejects_a_fresh_evaluation_whose_loss_really_differs(copy_of_
     _drift_the_fresh_loss(monkeypatch, lambda loss: loss * 1.001)
     with pytest.raises(ValueError, match="fresh"):
         audit(copy_of_evidence, require_local_artifacts=True)
+
+
+# ------------------------------------------------------------------ E7: the optimizer overrides in a recorded command
+
+OVERRIDE_CONDITIONS = {"plain": {}, "decay": {"weight_decay": 0.0}, "step": {"lr_schedule": "step:1:0.5"},
+                       "both": {"weight_decay": 0.0, "lr_schedule": "step:1:0.5"}}
+OVERRIDE_FLAGS = {"weight_decay": "--weight-decay", "lr_schedule": "--lr-schedule"}
+
+
+@pytest.fixture(scope="module")
+def override_evidence(tmp_path_factory) -> Path:
+    base = tmp_path_factory.mktemp("audit_overrides")
+    a, b = tiny_books(base)
+    config = base / "tiny_config.py"
+    config.write_text("batch_size = 8\nepochs = 2\nembedding_dim = 8\nn_heads = 2\nn_layers = 1\n", encoding="utf-8")
+    common = {"train": {"a_copies": 1, "b_copies": 0}, "eval_book": "B", "lr": 0.01, "epochs": 3, "batch_size": 8,
+              "accuracy_interval": 1, "adapt": False}
+    spec = {"name": "tiny_overrides", "seed": 42, "model_config": str(config),
+            "scenarios": [{"id": "s1", "book_a": str(a), "book_b": str(b)}],
+            "conditions": [{"id": name, **common, **overrides} for name, overrides in OVERRIDE_CONDITIONS.items()]}
+    root = base / "evidence"
+    rx.run_spec(spec, root, repo_root=ROOT, provenance_fn=clean)
+    return root
+
+
+@pytest.fixture
+def copy_of_override_evidence(override_evidence, tmp_path) -> Path:
+    destination = tmp_path / "evidence"
+    shutil.copytree(override_evidence, destination)
+    return destination
+
+
+def command_of(records: list[dict], condition: str) -> list[str]:
+    return next(record["command"] for record in records if record["run"]["condition"] == condition)
+
+
+def test_evidence_that_uses_the_optimizer_overrides_audits_clean(copy_of_override_evidence) -> None:
+    assert audit(copy_of_override_evidence)["status"] == "passed"
+    assert audit(copy_of_override_evidence, require_local_artifacts=True)["status"] == "passed"
+
+
+def test_each_recorded_command_carries_exactly_the_override_flags_its_condition_declares(override_evidence) -> None:
+    records = [json.loads(line) for line in (override_evidence / "manifest.jsonl").read_text(encoding="utf-8").splitlines()]
+    for condition, overrides in OVERRIDE_CONDITIONS.items():
+        command = command_of(records, condition)
+        for key, flag in OVERRIDE_FLAGS.items():
+            assert command.count(flag) == (1 if key in overrides else 0), (condition, flag)
+            if key in overrides:
+                assert command[command.index(flag) + 1] == str(overrides[key])
+
+
+def test_the_protocol_names_the_per_run_keys_and_each_run_carries_its_own_values(override_evidence) -> None:
+    protocol = json.loads((override_evidence / "protocol.json").read_text(encoding="utf-8"))
+    assert protocol["optimizer"]["per_run_keys"] == ["lr_schedule", "weight_decay"]
+    for run in protocol["runs"]:
+        assert {key: run[key] for key in OVERRIDE_FLAGS if key in run} == OVERRIDE_CONDITIONS[run["condition"]]
+
+
+def test_the_trainer_recorded_in_each_checkpoint_the_overrides_it_was_given(override_evidence) -> None:
+    import torch
+
+    for condition, overrides in OVERRIDE_CONDITIONS.items():
+        payload = torch.load(override_evidence / "s1" / condition / "model.pth", map_location="cpu", weights_only=True)
+        assert payload["training_config"] == {"seed": 42, "loader_rng": "isolated", **overrides}, condition
+
+
+@pytest.mark.parametrize("condition,flag,new_value", [
+    ("both", "--weight-decay", "0.1"), ("decay", "--weight-decay", "0.05"),
+    ("both", "--lr-schedule", "step:1:0.25"), ("step", "--lr-schedule", "step:2:0.5"),
+    ("step", "--lr-schedule", "step:1:0.50"),          # the same schedule in a non-canonical spelling is not the protocol's string
+])
+def test_an_edited_override_flag_is_detected(copy_of_override_evidence, condition, flag, new_value) -> None:
+    def change(records):
+        command = command_of(records, condition)
+        command[command.index(flag) + 1] = new_value
+    rewrite_manifest(copy_of_override_evidence, change)
+    with pytest.raises(ValueError, match=f"command for s1/{condition} differs from the protocol at {flag}"):
+        audit(copy_of_override_evidence)
+
+
+@pytest.mark.parametrize("condition,flag", [
+    ("both", "--weight-decay"), ("both", "--lr-schedule"), ("decay", "--weight-decay"), ("step", "--lr-schedule"),
+])
+def test_a_dropped_override_flag_is_detected(copy_of_override_evidence, condition, flag) -> None:
+    def change(records):
+        command = command_of(records, condition)
+        index = command.index(flag)
+        del command[index:index + 2]
+    rewrite_manifest(copy_of_override_evidence, change)
+    with pytest.raises(ValueError, match=f"command for s1/{condition} must contain {flag} exactly once"):
+        audit(copy_of_override_evidence)
+
+
+@pytest.mark.parametrize("condition,flag,value", [
+    ("plain", "--weight-decay", "0.0"), ("plain", "--lr-schedule", "step:1:0.5"),
+    ("decay", "--lr-schedule", "step:1:0.5"), ("step", "--weight-decay", "0.0"),
+])
+def test_an_override_flag_that_the_protocol_never_declared_is_detected(copy_of_override_evidence, condition, flag, value) -> None:
+    rewrite_manifest(copy_of_override_evidence, lambda records: command_of(records, condition).extend([flag, value]))
+    key = {"--weight-decay": "weight_decay", "--lr-schedule": "lr_schedule"}[flag]
+    with pytest.raises(ValueError, match=f"command for s1/{condition} sets {flag} although the protocol declares no {key}"):
+        audit(copy_of_override_evidence)
+
+
+@pytest.mark.parametrize("condition,flag,value", [("decay", "--weight-decay", "0.0"), ("step", "--lr-schedule", "step:1:0.5")])
+def test_a_repeated_override_flag_is_detected(copy_of_override_evidence, condition, flag, value) -> None:
+    rewrite_manifest(copy_of_override_evidence, lambda records: command_of(records, condition).extend([flag, value]))
+    with pytest.raises(ValueError, match=f"must contain {flag} exactly once"):
+        audit(copy_of_override_evidence)
+
+
+def test_an_override_edited_in_the_protocol_but_not_in_the_spec_is_detected(copy_of_override_evidence) -> None:
+    def change(data):
+        next(run for run in data["runs"] if run["condition"] == "decay")["weight_decay"] = 0.5
+    edit_json(copy_of_override_evidence / "protocol.json", change)
+    with pytest.raises(ValueError, match="Protocol run differs from the spec"):
+        audit(copy_of_override_evidence)
+
+
+# ---- review finding: the protocol's optimizer record is part of the evidence, so the audit checks it against the runs ------
+
+def test_a_protocol_whose_optimizer_record_lost_its_per_run_keys_is_detected(copy_of_override_evidence) -> None:
+    edit_json(copy_of_override_evidence / "protocol.json", lambda data: data["optimizer"].pop("per_run_keys"))
+    with pytest.raises(ValueError, match="^The protocol's optimizer record does not match its runs$"):
+        audit(copy_of_override_evidence)
+
+
+def test_a_protocol_that_claims_per_run_keys_no_run_has_is_detected(copy_of_evidence) -> None:
+    edit_json(copy_of_evidence / "protocol.json", lambda data: data["optimizer"].update(per_run_keys=["weight_decay"]))
+    with pytest.raises(ValueError, match="^The protocol's optimizer record does not match its runs$"):
+        audit(copy_of_evidence)
+
+
+@pytest.mark.parametrize("key,value", [("weight_decay", 0.0), ("grad_clip", 5.0), ("name", "Adam")])
+def test_a_protocol_whose_optimizer_defaults_were_edited_is_detected(copy_of_evidence, key, value) -> None:
+    edit_json(copy_of_evidence / "protocol.json", lambda data: data["optimizer"].update({key: value}))
+    with pytest.raises(ValueError, match="^The protocol's optimizer record does not match its runs$"):
+        audit(copy_of_evidence)
+
+
+def test_a_protocol_without_an_optimizer_record_is_detected(copy_of_evidence) -> None:
+    edit_json(copy_of_evidence / "protocol.json", lambda data: data.pop("optimizer"))
+    with pytest.raises(ValueError, match="^The protocol's optimizer record does not match its runs$"):
+        audit(copy_of_evidence)

@@ -58,7 +58,7 @@ Read the status words literally: every capacity here is a statement about this b
 | C25 | Pre-registered predictions, scored mechanically | E4: 23 of 23 scored lines hit (13 exact); E6: 17 of 17 scored lines hit (8 exact) | [e4_prediction_scores.json](../../results/e4_prediction_scores.json), [e6_prediction_scores.json](../../results/e6_prediction_scores.json) |
 | C26 | E6 width 32 seed 3: the closest it came to 100% | 319 of 320 at logged epoch 740 | [fig_e6_curves.csv](../../results/fig_e6_curves.csv) |
 | C27 | Spacing of the rung ladders | consecutive rungs differ by a factor of 1.40 to 2.00 | [e4_cells.csv](../../results/e4_cells.csv) |
-| C28 | Optimizer and schedule of E4 and E6 | AdamW, weight decay 0.1, gradient clip 1.0, constant learning rate (the trainer has no schedule) | [protocol.json](../../experiments/week_2026-10-31/e4_capacity_d8_seed1_a/protocol.json), [protocol.json](../../experiments/week_2026-10-31/e6_extend_d64_seed1/protocol.json), [train.py](../../../train.py) |
+| C28 | Optimizer and schedule of E4 and E6 | AdamW, weight decay 0.1, gradient clip 1.0, constant learning rate (neither protocol records a schedule or an override; the trainer applies a schedule only when --lr-schedule is given) | [protocol.json](../../experiments/week_2026-10-31/e4_capacity_d8_seed1_a/protocol.json), [protocol.json](../../experiments/week_2026-10-31/e6_extend_d64_seed1/protocol.json), [train.py](../../../train.py) |
 | C29 | Capacity rule, quoted from the spec | fixed before the runs: a rung passes if at least 2 of its 3 book seeds are perfect by the budget; the capacity is the largest rung such that it and every smaller rung pass | [e4_capacity_d8_seed1_a.json](../../specs/e4_capacity_d8_seed1_a.json) |
 
 ## 5. The mechanism

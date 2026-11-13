@@ -5,10 +5,13 @@ import csv
 from fractions import Fraction
 import json
 from pathlib import Path
+import subprocess
 
 import pytest
 
 from phonebook import analyze_extension as ae
+
+ROOT = Path(__file__).resolve().parents[1]
 
 
 def pts(*triples):
@@ -363,3 +366,273 @@ def test_a_budget_beyond_the_trained_epochs_is_rejected(tmp_path: Path) -> None:
     fake_evidence(tmp_path / "e6", evidence_runs(16, 160, 4000, {1: 500, 2: 500, 3: 500}))
     with pytest.raises(ValueError, match="budget 5000"):
         ae.main(["--root", str(tmp_path / "e6"), "--budgets", "1000", "5000", "--out", str(tmp_path / "out")])
+
+
+# ------------------------------------------------------------------ E7: the compared prefix is a parameter
+
+def with_earlier(runs: list[dict], up_to: int, change: dict | None = None) -> dict:
+    """The earlier runs of the same cells: the first `up_to` epochs of `runs`, optionally with one seed's counts shifted."""
+    change = change or {}
+    return {(r["seed"], r["n"]): [dict(p, A=p["A"] + change.get(r["seed"], 0)) for p in r["points"] if p["epoch"] <= up_to]
+            for r in runs}
+
+
+def test_the_default_prefix_keeps_the_historic_key_names_in_the_historic_order() -> None:
+    runs = seeds([500, 1500, None])
+    report = ae.width_report(runs, BUDGETS, earlier=with_earlier(runs, 1000))
+    assert list(report)[-2:] == ["first_1000_match_by_seed", "first_1000_matches_earlier"]
+    assert report["first_1000_matches_earlier"] is True
+
+
+def test_a_longer_prefix_renames_the_keys_and_compares_that_many_epochs() -> None:
+    runs = seeds([500, 1500, None])
+    longer = ae.width_report(runs, BUDGETS, earlier=with_earlier(runs, 2000), prefix=2000)
+    assert longer["first_2000_match_by_seed"] == {"1": True, "2": True, "3": True} and longer["first_2000_matches_earlier"] is True
+    assert "first_1000_match_by_seed" not in longer and "first_1000_matches_earlier" not in longer
+    assert list(longer)[-2:] == ["first_2000_match_by_seed", "first_2000_matches_earlier"]
+
+
+def test_a_difference_between_epoch_1000_and_epoch_2000_is_seen_only_by_the_longer_prefix() -> None:
+    runs = seeds([500, 1500, None])
+    earlier = with_earlier(runs, 2000, change={2: 1})                      # the earlier run of seed 2 differs at epochs 1500 and 2000
+    earlier[(2, 20)] = [dict(p, A=runs[1]["points"][i]["A"]) if p["epoch"] <= 1000 else p
+                        for i, p in enumerate(earlier[(2, 20)])]            # ... but is identical through epoch 1000
+    short = ae.width_report(runs, BUDGETS, earlier=earlier, prefix=1000)
+    long = ae.width_report(runs, BUDGETS, earlier=earlier, prefix=2000)
+    assert short["first_1000_match_by_seed"] == {"1": True, "2": True, "3": True}
+    assert long["first_2000_match_by_seed"] == {"1": True, "2": False, "3": True}
+    assert long["first_2000_matches_earlier"] is False
+
+
+def test_the_prefix_is_passed_to_every_width_of_the_summary() -> None:
+    narrow, wide = seeds([500, 500, 500]), seeds([500, 500, 500])
+    earlier = {(d, r["seed"], 20): [p for p in r["points"] if p["epoch"] <= 2000] for d, rs in ((8, narrow), (16, wide)) for r in rs}
+    report = ae.summarize_extension({8: narrow, 16: wide}, BUDGETS, earlier=earlier, prefix=2000)
+    assert report["8"]["first_2000_matches_earlier"] is True and report["16"]["first_2000_matches_earlier"] is True
+    assert "first_1000_matches_earlier" not in report["8"]
+
+
+def test_without_an_earlier_run_a_longer_prefix_leaves_the_comparison_unknown() -> None:
+    report = ae.width_report(seeds([500, 500, 500]), BUDGETS, prefix=2000)
+    assert report["first_2000_match_by_seed"] is None and report["first_2000_matches_earlier"] is None
+
+
+def test_the_command_line_compares_the_requested_prefix_and_names_the_earlier_runs(tmp_path: Path, capsys) -> None:
+    arm = evidence_runs(16, 160, 4000, {1: 500, 2: 1500, 3: None})
+    fake_evidence(tmp_path / "arm", arm)
+    fake_evidence(tmp_path / "e6", evidence_runs(16, 160, 4000, {1: 500, 2: 1500, 3: None}))
+    out = tmp_path / "out"
+    ae.main(["--root", str(tmp_path / "arm"), "--earlier-root", str(tmp_path / "e6"), "--budgets", "1000", "2000", "3000", "4000",
+             "--prefix-epochs", "2000", "--earlier-label", "E6", "--out", str(out)])
+    entry = json.loads((out / "e6_extension.json").read_text(encoding="utf-8"))["16"]
+    assert entry["first_2000_matches_earlier"] is True and "first_1000_matches_earlier" not in entry
+    assert "first 2000 epochs equal E6: True" in capsys.readouterr().out
+
+
+def test_a_longer_prefix_catches_a_difference_that_the_default_prefix_misses(tmp_path: Path) -> None:
+    fake_evidence(tmp_path / "arm", evidence_runs(16, 160, 4000, {1: 500, 2: 1500, 3: None}))
+    fake_evidence(tmp_path / "e6", evidence_runs(16, 160, 4000, {1: 500, 2: 2000, 3: None}))   # seed 2 differs at epoch 1500
+    for prefix in (1000, 2000):
+        out = tmp_path / f"out{prefix}"
+        ae.main(["--root", str(tmp_path / "arm"), "--earlier-root", str(tmp_path / "e6"), "--budgets", "1000", "4000",
+                 "--prefix-epochs", str(prefix), "--out", str(out)])
+        entry = json.loads((out / "e6_extension.json").read_text(encoding="utf-8"))["16"]
+        assert entry[f"first_{prefix}_matches_earlier"] is (prefix == 1000)
+
+
+def test_by_default_the_command_line_still_compares_1000_epochs_and_calls_them_e4(tmp_path: Path, capsys) -> None:
+    fake_evidence(tmp_path / "e6", evidence_runs(16, 160, 4000, {1: 500, 2: 1500, 3: None}))
+    fake_evidence(tmp_path / "e4", evidence_runs(16, 160, 1000, {1: 500, 2: 1500, 3: None}))
+    ae.main(["--root", str(tmp_path / "e6"), "--earlier-root", str(tmp_path / "e4"), "--budgets", "1000", "4000",
+             "--out", str(tmp_path / "out")])
+    assert "first 1000 epochs equal E4: True" in capsys.readouterr().out
+    entry = json.loads((tmp_path / "out" / "e6_extension.json").read_text(encoding="utf-8"))["16"]
+    assert entry["first_1000_matches_earlier"] is True
+
+
+@pytest.mark.parametrize("value,message", [
+    ("0", "^--prefix-epochs must be an integer >= 1$"),
+    ("-5", "^--prefix-epochs must be an integer >= 1$"),
+    ("4500", "--prefix-epochs 4500 exceeds the 4000 epochs trained$"),
+])
+def test_a_prefix_outside_the_trained_epochs_is_rejected(tmp_path: Path, value, message) -> None:
+    fake_evidence(tmp_path / "e6", evidence_runs(16, 160, 4000, {1: 500, 2: 500, 3: 500}))
+    with pytest.raises(ValueError, match=message):
+        ae.main(["--root", str(tmp_path / "e6"), "--budgets", "1000", "4000", "--prefix-epochs", value, "--out", str(tmp_path / "out")])
+
+
+# ------------------------------------------------------------------ E7 review note R1: how long a run holds 100 percent
+
+def test_epochs_at_100_counts_the_logged_epochs_at_which_every_entry_is_recalled() -> None:
+    points = pts((10, 5, 0), (20, 10, 0), (30, 10, 0), (40, 9, 0), (50, 10, 0))
+    assert ae.epochs_at_100(points, 10) == 3
+    assert ae.epochs_at_100([], 10) == 0
+
+
+def test_the_window_of_the_count_excludes_its_lower_epoch_and_includes_its_upper_epoch() -> None:
+    points = pts((10, 5, 0), (20, 10, 0), (30, 10, 0), (40, 9, 0), (50, 10, 0))
+    assert ae.epochs_at_100(points, 10, (20, 50)) == 2                      # epochs 30 and 50; epoch 20 is the excluded lower edge
+    assert ae.epochs_at_100(points, 10, (20, 40)) == 1
+    assert ae.epochs_at_100(points, 10, (0, 20)) == 1
+
+
+def test_a_missing_recall_count_cannot_be_counted_as_not_perfect() -> None:
+    with pytest.raises(ValueError, match="^a logged epoch has no recall count$"):
+        ae.epochs_at_100(pts((10, None, 0), (20, 10, 0)), 10)
+
+
+def held_runs() -> list[dict]:
+    """n = 20, logged every 500 epochs up to 4000 (8 logged epochs; epochs 3500 and 4000 fall in the late window)."""
+    return [run(1, 20, {e: 20 for e in (500, 1000, 3500, 4000)}, default=10),
+            run(2, 20, {e: 20 for e in (1500, 2000, 2500, 3000, 3500)}, default=10),
+            run(3, 20, default=10)]
+
+
+HELD = {"logged": {"all": 8, "3001_4000": 2},
+        "by_seed": {"1": {"all": 4, "3001_4000": 2}, "2": {"all": 5, "3001_4000": 1}, "3": {"all": 0, "3001_4000": 0}}}
+
+
+def test_the_held_readout_counts_per_seed_over_the_whole_run_and_over_the_late_window() -> None:
+    assert ae.held_report(held_runs(), ae.LATE) == HELD
+    assert ae.width_report(held_runs(), BUDGETS, held=True)["epochs_at_100"] == HELD
+
+
+def test_the_late_window_of_the_held_readout_is_named_like_the_window_means() -> None:
+    report = ae.width_report(held_runs(), BUDGETS, early=(500, 1000), late=(1000, 2000), held=True)
+    assert set(report["epochs_at_100"]["logged"]) == {"all", "1001_2000"} and set(report["mean_accuracy"]) == {"501_1000", "1001_2000"}
+    assert report["epochs_at_100"]["by_seed"]["2"] == {"all": 5, "1001_2000": 2}
+
+
+def test_without_the_option_the_report_is_exactly_what_it_was_and_with_it_the_report_only_gains_a_key() -> None:
+    runs = held_runs()
+    plain = ae.width_report(runs, BUDGETS)
+    extra = ae.width_report(runs, BUDGETS, held=True)
+    assert "epochs_at_100" not in plain
+    assert {key: value for key, value in extra.items() if key != "epochs_at_100"} == plain
+    assert list(extra)[:-1] == list(plain)
+
+
+def test_seeds_that_logged_different_numbers_of_epochs_cannot_share_a_held_readout() -> None:
+    uneven = [run(1, 20, step=500), run(2, 20, step=250)]
+    with pytest.raises(ValueError, match="^the seeds have different numbers of logged epochs, so no single denominator describes them$"):
+        ae.held_report(uneven, ae.LATE)
+
+
+def test_the_summary_passes_the_held_option_to_every_width() -> None:
+    summary = ae.summarize_extension({8: held_runs(), 16: held_runs()}, BUDGETS, held=True)
+    assert summary["8"]["epochs_at_100"] == HELD and summary["16"]["epochs_at_100"] == HELD
+    assert "epochs_at_100" not in ae.summarize_extension({8: held_runs()}, BUDGETS)["8"]
+
+
+def test_the_command_line_writes_the_held_readout_only_when_asked(tmp_path: Path) -> None:
+    fake_evidence(tmp_path / "e6", evidence_runs(16, 160, 4000, {1: 500, 2: 1500, 3: None}))
+    base = ["--root", str(tmp_path / "e6"), "--budgets", "1000", "2000", "3000", "4000"]
+    ae.main([*base, "--out", str(tmp_path / "plain")])
+    ae.main([*base, "--epochs-at-100", "--out", str(tmp_path / "held")])
+    plain = json.loads((tmp_path / "plain" / "e6_extension.json").read_text(encoding="utf-8"))
+    held = json.loads((tmp_path / "held" / "e6_extension.json").read_text(encoding="utf-8"))
+    assert "epochs_at_100" not in plain["16"]
+    assert held["16"]["epochs_at_100"] == {"logged": {"all": 8, "3001_4000": 2},
+                                           "by_seed": {"1": {"all": 8, "3001_4000": 2}, "2": {"all": 6, "3001_4000": 2},
+                                                       "3": {"all": 0, "3001_4000": 0}}}
+    assert {k: v for k, v in held["16"].items() if k != "epochs_at_100"} == plain["16"]
+
+
+# ---- the committed E4 and E6 evidence: the default output is the committed file, and the new readout is claim 15 ----------
+
+def tracked_roots(fragment: str) -> list[str]:
+    listing = subprocess.run(["git", "ls-files", "--", "phonebook/experiments/week_2026-10-31"], cwd=ROOT,
+                             capture_output=True, text=True, check=False)
+    if listing.returncode != 0:
+        pytest.skip("not a git checkout: the tracked evidence cannot be enumerated")
+    roots = sorted({str((ROOT / name).parent) for name in listing.stdout.split()
+                    if name.endswith("/protocol.json") and fragment in name})
+    return roots
+
+
+def e6_arguments(out: Path, *extra: str) -> list[str]:
+    e6, e4 = tracked_roots("/e6_extend_d"), tracked_roots("/e4_capacity_d")
+    assert len(e6) == 12 and len(e4) == 24
+    arguments = ["--budgets", "1000", "2000", "3000", "4000", "--out", str(out), *extra]
+    for root in e6:
+        arguments += ["--root", root]
+    for root in e4:
+        arguments += ["--earlier-root", root]
+    return arguments
+
+
+def test_the_default_analysis_regenerates_the_committed_e6_extension_json_modulo_line_endings(tmp_path: Path) -> None:
+    ae.main(e6_arguments(tmp_path / "default"))
+    regenerated = (tmp_path / "default" / "e6_extension.json").read_bytes()
+    committed = (ROOT / "phonebook" / "results" / "e6_extension.json").read_bytes()    # CRLF in a Windows checkout, LF in git
+    assert regenerated.replace(b"\r\n", b"\n") == committed.replace(b"\r\n", b"\n")
+
+
+def test_the_held_readout_reproduces_the_counts_that_the_results_page_states_for_claim_15(tmp_path: Path) -> None:
+    ae.main(e6_arguments(tmp_path / "held", "--epochs-at-100", "--prefix", "e6_held"))
+    held = json.loads((tmp_path / "held" / "e6_held_extension.json").read_text(encoding="utf-8"))
+    by_width = {d: [entry["epochs_at_100"]["by_seed"][seed]["all"] for seed in ("1", "2", "3")] for d, entry in held.items()}
+    assert by_width == {"8": [283, 290, 219], "16": [3, 21, 2], "32": [6, 1, 0], "64": [0, 0, 0]}   # defense sheet C19: of 400 logged
+    assert {entry["epochs_at_100"]["logged"]["all"] for entry in held.values()} == {400}
+    late = {d: [entry["epochs_at_100"]["by_seed"][seed]["3001_4000"] for seed in ("1", "2", "3")] for d, entry in held.items()}
+    assert late == {"8": [95, 96, 94], "16": [3, 2, 2], "32": [2, 0, 0], "64": [0, 0, 0]}
+    default = json.loads((ROOT / "phonebook" / "results" / "e6_extension.json").read_text(encoding="utf-8"))
+    assert {d: {k: v for k, v in entry.items() if k != "epochs_at_100"} for d, entry in held.items()} == default
+
+
+# ---- review finding: a prefix that no run logged would silently report "no match" for every seed -------------------------
+
+@pytest.mark.parametrize("value", ["1200", "2005", "3999"])
+def test_a_prefix_that_is_not_a_logged_epoch_is_rejected(tmp_path: Path, value) -> None:
+    fake_evidence(tmp_path / "arm", evidence_runs(16, 160, 4000, {1: 500, 2: 500, 3: 500}))     # logged every 500 epochs
+    fake_evidence(tmp_path / "e6", evidence_runs(16, 160, 4000, {1: 500, 2: 500, 3: 500}))
+    with pytest.raises(ValueError, match="--prefix-epochs .* not a logged epoch"):
+        ae.main(["--root", str(tmp_path / "arm"), "--earlier-root", str(tmp_path / "e6"), "--budgets", "1000", "4000",
+                 "--prefix-epochs", value, "--out", str(tmp_path / "out")])
+
+
+def test_a_logged_prefix_is_accepted(tmp_path: Path) -> None:
+    fake_evidence(tmp_path / "arm", evidence_runs(16, 160, 4000, {1: 500, 2: 500, 3: 500}))
+    fake_evidence(tmp_path / "e6", evidence_runs(16, 160, 4000, {1: 500, 2: 500, 3: 500}))
+    ae.main(["--root", str(tmp_path / "arm"), "--earlier-root", str(tmp_path / "e6"), "--budgets", "1000", "4000",
+             "--prefix-epochs", "1500", "--out", str(tmp_path / "out")])
+    assert json.loads((tmp_path / "out" / "e6_extension.json").read_text(encoding="utf-8"))["16"]["first_1500_matches_earlier"] is True
+
+
+# ---- added in E7.1a after the planted-bug harness: the edges of the accepted prefix and the order of the held readout --------
+
+def test_the_held_readout_lists_the_seeds_in_order_whatever_order_it_is_given() -> None:
+    report = ae.held_report(list(reversed(held_runs())), ae.LATE)
+    assert list(report["by_seed"]) == ["1", "2", "3"]
+    assert report == HELD
+
+
+def test_the_smallest_prefix_is_accepted_when_there_is_nothing_to_compare_with(tmp_path: Path) -> None:
+    fake_evidence(tmp_path / "e6", evidence_runs(16, 160, 4000, {1: 500, 2: 500, 3: 500}))
+    ae.main(["--root", str(tmp_path / "e6"), "--budgets", "1000", "4000", "--prefix-epochs", "1", "--out", str(tmp_path / "out")])
+    entry = json.loads((tmp_path / "out" / "e6_extension.json").read_text(encoding="utf-8"))["16"]
+    assert entry["first_1_match_by_seed"] is None and entry["first_1_matches_earlier"] is None
+
+
+def test_a_prefix_as_long_as_the_runs_is_accepted(tmp_path: Path) -> None:
+    fake_evidence(tmp_path / "arm", evidence_runs(16, 160, 4000, {1: 500, 2: 1500, 3: None}))
+    fake_evidence(tmp_path / "e6", evidence_runs(16, 160, 4000, {1: 500, 2: 1500, 3: None}))
+    ae.main(["--root", str(tmp_path / "arm"), "--earlier-root", str(tmp_path / "e6"), "--budgets", "1000", "4000",
+             "--prefix-epochs", "4000", "--out", str(tmp_path / "out")])
+    entry = json.loads((tmp_path / "out" / "e6_extension.json").read_text(encoding="utf-8"))["16"]
+    assert entry["first_4000_matches_earlier"] is True
+
+
+# ---- added in E7.1a after the planted-bug harness: --help must work and say what the new options do ----------------------
+
+def test_the_help_describes_the_new_options(monkeypatch, capsys) -> None:
+    monkeypatch.setenv("COLUMNS", "1000")                           # no line wrapping
+    with pytest.raises(SystemExit) as caught:
+        ae.main(["--help"])
+    assert caught.value.code == 0
+    text = " ".join(capsys.readouterr().out.split())
+    assert ("--prefix-epochs PREFIX_EPOCHS epochs of every run that must equal the earlier run point for point "
+            "(default: 1000, the length of E4)") in text
+    assert "--earlier-label EARLIER_LABEL what the earlier runs are called in the printed summary" in text
+    assert ("--epochs-at-100 also count, per seed, the logged epochs with every entry recalled "
+            "(whole run and late window)") in text

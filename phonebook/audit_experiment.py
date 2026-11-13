@@ -30,7 +30,9 @@ from phonebook.evaluate_checkpoint import evaluate_checkpoint, sha256
 from phonebook.make_replay_input import build_mixture_lines
 from phonebook.param_count import expected_param_count
 from phonebook.prepare_phonebook import load_phonebook_lines
-from phonebook.run_experiment import canonical_sha256, expand_runs, expected_logged_epochs, resolve, validate_spec
+from phonebook.run_experiment import (
+    canonical_sha256, expand_runs, expected_logged_epochs, optimizer_record, resolve, validate_spec,
+)
 
 TOKEN_TOLERANCE = 5.1e-5  # the trainer logs four decimals
 # The evaluator averages the cross-entropy in float32. Summing the same terms in another order (another thread count)
@@ -80,6 +82,10 @@ def _adapted_from_declared_checkpoint(used: str, declared: str, recorded_cwd: st
 def _audit_command(run: dict, record: dict, protocol: dict, repo_root: Path) -> None:
     spec, command, where = protocol["spec"], record["command"], run["id"]
     require(command[1] == "train.py" and command[2] == spec["model_config"], f"command for {where} does not train with the spec's config")
+    # The runner always writes `--flag value`. `--flag=value` (which train.py accepts) would evade every
+    # "flag must be absent" rule below and could repeat a checked flag, so a recorded command cannot contain it.
+    require(not any(isinstance(token, str) and token.startswith("--") and "=" in token for token in command),
+            f"command for {where} uses --flag=value syntax, which the runner never writes")
     expectations = {"--device": "cpu", "--seed": str(spec["seed"])}
     for flag, expected in expectations.items():
         require(_flag(command, flag, where) == expected, f"command for {where} differs from the protocol at {flag}")
@@ -93,6 +99,13 @@ def _audit_command(run: dict, record: dict, protocol: dict, repo_root: Path) -> 
             require(_flag(command, flag, where) == str(model[key]), f"command for {where} differs from the protocol at {flag}")
         else:
             require(command.count(flag) == 0, f"command for {where} sets {flag} although the protocol declares no model")
+    for flag, key in (("--weight-decay", "weight_decay"), ("--lr-schedule", "lr_schedule")):
+        if key in run:
+            value = _flag(command, flag, where)
+            same = float(value) == float(run[key]) if key == "weight_decay" else value == run[key]
+            require(same, f"command for {where} differs from the protocol at {flag}")
+        else:
+            require(command.count(flag) == 0, f"command for {where} sets {flag} although the protocol declares no {key}")
     if "loader_rng" in spec:
         require(_flag(command, "--loader-rng", where) == spec["loader_rng"],
                 f"command for {where} differs from the protocol at --loader-rng")
@@ -251,6 +264,7 @@ def audit(root: Path, *, repo_root: Path, require_local_artifacts: bool = False,
     scenarios = {scenario["id"]: scenario for scenario in spec["scenarios"]}
     context_lengths = {}
     require([r["id"] for r in runs] == [r["id"] for r in expected_runs], "Protocol runs differ from the spec expansion")
+    require(protocol.get("optimizer") == optimizer_record(runs), "The protocol's optimizer record does not match its runs")
     for run, expected in zip(runs, expected_runs):
         require({key: run[key] for key in expected} == expected, f"Protocol run differs from the spec: {run['id']}")
         require(run["updates_per_epoch"] == 1 or not spec.get("require_one_update_per_epoch", True),

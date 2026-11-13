@@ -30,6 +30,7 @@ if str(ROOT_DIR) not in sys.path:
 
 import torch
 
+from completion_core.schedule import parse_lr_schedule
 from completion_core.vocabulary import Vocabulary
 from completion_core.validation import is_finite_number, is_torch_seed
 from phonebook.evaluate_checkpoint import evaluate_checkpoint, sha256
@@ -40,6 +41,8 @@ from train import TrainConfig
 
 ID_PATTERN = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]*")
 HEX64 = re.compile(r"[0-9a-f]{64}")
+# Optional per-condition overrides of the trainer's AdamW defaults. A run carries one only when its condition declares it.
+OPTIMIZER_KEYS = ("weight_decay", "lr_schedule")
 SUMMARY_COLUMNS = [
     "run_id", "scenario", "condition", "lr", "epochs", "batch_size", "l2sp_lambda", "a_copies", "b_copies",
     "A_correct", "A_total", "B_correct", "B_total",
@@ -116,7 +119,7 @@ def validate_spec(spec: dict) -> None:
     seen = set()
     for condition in spec["conditions"]:
         _check_keys(condition, {"id", "train", "eval_book", "lr", "epochs", "batch_size",
-                                "accuracy_interval", "adapt"}, {"l2sp_lambda", "model"}, "condition")
+                                "accuracy_interval", "adapt"}, {"l2sp_lambda", "model", *OPTIMIZER_KEYS}, "condition")
         _check_id(condition["id"], "condition")
         where = f"condition {condition['id']}"
         if condition["id"] in seen:
@@ -136,6 +139,15 @@ def validate_spec(spec: dict) -> None:
         for field in ("epochs", "batch_size", "accuracy_interval"):
             if not _is_int(condition[field]) or condition[field] < 1:
                 raise ValueError(f"{where} {field} must be an integer >= 1")
+        if "weight_decay" in condition and (not is_finite_number(condition["weight_decay"]) or condition["weight_decay"] < 0):
+            raise ValueError(f"{where} weight_decay must be a finite number >= 0")
+        if "lr_schedule" in condition:
+            try:
+                schedule = parse_lr_schedule(condition["lr_schedule"])
+            except ValueError as error:
+                raise ValueError(f"{where} lr_schedule: {error}") from None
+            if schedule["milestones"][-1] >= condition["epochs"]:
+                raise ValueError(f"{where} lr_schedule: every milestone must be before the last epoch")
         if not isinstance(condition["adapt"], bool):
             raise ValueError(f"{where} adapt must be a boolean")
         l2sp = condition.get("l2sp_lambda", 0.0)
@@ -187,7 +199,25 @@ def expand_runs(spec: dict) -> list[dict]:
             })
             if "model" in condition:
                 runs[-1]["model"] = dict(condition["model"])
+            if "weight_decay" in condition:
+                runs[-1]["weight_decay"] = float(condition["weight_decay"])
+            if "lr_schedule" in condition:
+                runs[-1]["lr_schedule"] = condition["lr_schedule"]
     return runs
+
+
+def optimizer_record(runs: list[dict]) -> dict:
+    """The protocol's optimizer block: the trainer's defaults, plus the names of the settings that some runs override.
+
+    The defaults alone would claim that every run used them. A run that overrides a setting carries its value in its own
+    protocol record; per_run_keys says which settings to look for there.
+    """
+    record = {"name": "AdamW", "fresh_state_per_run": True,
+              "weight_decay": TrainConfig().weight_decay, "grad_clip": TrainConfig().grad_clip}
+    per_run = sorted({key for run in runs for key in OPTIMIZER_KEYS if key in run})
+    if per_run:
+        record["per_run_keys"] = per_run
+    return record
 
 
 # ------------------------------------------------------------------- run helpers
@@ -204,6 +234,10 @@ def training_command(run: dict, *, config: str, data_dir: Path, out_dir: Path, s
     if run.get("model"):
         command += ["--embedding-dim", str(run["model"]["embedding_dim"]),
                     "--n-heads", str(run["model"]["n_heads"]), "--n-layers", str(run["model"]["n_layers"])]
+    if "weight_decay" in run:
+        command += ["--weight-decay", str(run["weight_decay"])]
+    if "lr_schedule" in run:
+        command += ["--lr-schedule", run["lr_schedule"]]
     if loader_rng is not None:
         command += ["--loader-rng", loader_rng]
     return command
@@ -341,8 +375,7 @@ def plan(spec: dict, *, repo_root: Path, provenance: dict, spec_path: str | None
         "created_at_utc": datetime.now(timezone.utc).isoformat(), "git": provenance,
         "spec_path": spec_path, "spec_sha256": canonical_sha256(spec), "spec": spec,
         "environment": environment(),
-        "optimizer": {"name": "AdamW", "fresh_state_per_run": True,
-                      "weight_decay": TrainConfig().weight_decay, "grad_clip": TrainConfig().grad_clip},
+        "optimizer": optimizer_record(runs),
         "config": {"path": spec["model_config"], "sha256": sha256(config_path)},
         "inputs": inputs, "initializations": initializations, "runs": runs,
     }

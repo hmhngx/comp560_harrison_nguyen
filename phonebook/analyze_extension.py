@@ -20,6 +20,12 @@ Rules (fixed before any E6 run, see phonebook/preregistration/e6_predictions.jso
   edge up to and including the upper edge, pooled over the seeds with equal weight. The gain is the mean over
   epochs 3001-4000 minus the mean over epochs 1001-2000; it is computed in exact fractions.
 - Trend: rising if the gain is at least +0.005, falling if it is at most -0.005, flat otherwise.
+
+Options added for E7 (without them the output is byte for byte what it was for E6):
+- --prefix-epochs N compares the first N epochs (default 1000) with the earlier runs and names the two JSON keys
+  first_N_match_by_seed and first_N_matches_earlier; --earlier-label names those runs in the printed summary.
+- --epochs-at-100 adds "epochs_at_100" to every width: per seed, how many logged epochs have every entry recalled, over the
+  whole run and inside the late window (3001-4000), with the number of logged epochs they are counted among.
 """
 from __future__ import annotations
 
@@ -89,11 +95,36 @@ def prefix_equal(new: list[dict], old: list[dict], up_to: int) -> bool:
     return bool(a) and a[-1][0] == up_to and a == b
 
 
+# ------------------------------------------------------------------ how long a run holds 100 percent
+
+
+def epochs_at_100(points: list[dict], n: int, window: tuple[int, int] | None = None) -> int:
+    """How many logged epochs have every one of the n entries recalled; `window` = (lo, hi] limits the count to those epochs."""
+    inside = points if window is None else window_points(points, *window)
+    if any(point["A"] is None for point in inside):
+        raise ValueError("a logged epoch has no recall count")
+    return sum(point["A"] == n for point in inside)
+
+
+def held_report(runs: list[dict], late: tuple[int, int]) -> dict:
+    """Per seed, the logged epochs at 100 percent over the whole run and inside the late window, and what they are counted among."""
+    label = f"{late[0] + 1}_{late[1]}"
+    runs = sorted(runs, key=lambda run: run["seed"])
+    logged = {(len(run["points"]), len(window_points(run["points"], *late))) for run in runs}
+    if len(logged) != 1:
+        raise ValueError("the seeds have different numbers of logged epochs, so no single denominator describes them")
+    (everything, inside), = logged
+    return {"logged": {"all": everything, label: inside},
+            "by_seed": {str(run["seed"]): {"all": epochs_at_100(run["points"], run["n"]),
+                                           label: epochs_at_100(run["points"], run["n"], late)} for run in runs}}
+
+
 # ------------------------------------------------------------------ one width
 
 
 def width_report(runs: list[dict], budgets: tuple[int, ...], *, min_seeds: int = 2, earlier: dict | None = None,
-                 early: tuple[int, int] = EARLY, late: tuple[int, int] = LATE, prefix: int = PREFIX) -> dict:
+                 early: tuple[int, int] = EARLY, late: tuple[int, int] = LATE, prefix: int = PREFIX,
+                 held: bool = False) -> dict:
     """runs: dicts with seed, n and the logged points of one width; earlier: {(seed, n): points} of the E4 runs."""
     rungs = {run["n"] for run in runs}
     if len(rungs) != 1:
@@ -113,7 +144,7 @@ def width_report(runs: list[dict], budgets: tuple[int, ...], *, min_seeds: int =
             if (run["seed"], n) not in earlier:
                 raise ValueError(f"no earlier run for seed {run['seed']} rung {n}")
             by_seed[str(run["seed"])] = prefix_equal(run["points"], earlier[(run["seed"], n)], prefix)
-    return {
+    report = {
         "n": n,
         "seeds": len(runs),
         "first_perfect": {str(cell["seed"]): cell["first_perfect"] for cell in cells},
@@ -126,18 +157,21 @@ def width_report(runs: list[dict], budgets: tuple[int, ...], *, min_seeds: int =
         "gain": float(gain),
         "trend": trend(gain),
         "control_violations": sum(not cell["control_ok"] for cell in cells),
-        "first_1000_match_by_seed": by_seed,
-        "first_1000_matches_earlier": None if by_seed is None else all(by_seed.values()),
+        f"first_{prefix}_match_by_seed": by_seed,
+        f"first_{prefix}_matches_earlier": None if by_seed is None else all(by_seed.values()),
     }
+    if held:
+        report["epochs_at_100"] = held_report(runs, late)
+    return report
 
 
 def summarize_extension(runs_by_width: dict[int, list[dict]], budgets: tuple[int, ...], *, min_seeds: int = 2,
-                        earlier: dict | None = None) -> dict:
+                        earlier: dict | None = None, prefix: int = PREFIX, held: bool = False) -> dict:
     """earlier: {(width, seed, n): points} of the E4 runs, or None."""
     report = {}
     for d in sorted(runs_by_width):
         mine = None if earlier is None else {(seed, n): points for (width, seed, n), points in earlier.items() if width == d}
-        report[str(d)] = width_report(runs_by_width[d], budgets, min_seeds=min_seeds, earlier=mine)
+        report[str(d)] = width_report(runs_by_width[d], budgets, min_seeds=min_seeds, earlier=mine, prefix=prefix, held=held)
     return report
 
 
@@ -179,8 +213,15 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--prefix", default="e6")
     parser.add_argument("--min-seeds", type=int, default=2, help="book seeds that must be perfect for a rung to pass")
+    parser.add_argument("--prefix-epochs", type=int, default=PREFIX,
+                        help="epochs of every run that must equal the earlier run point for point (default: 1000, the length of E4)")
+    parser.add_argument("--earlier-label", default="E4", help="what the earlier runs are called in the printed summary")
+    parser.add_argument("--epochs-at-100", action="store_true",
+                        help="also count, per seed, the logged epochs with every entry recalled (whole run and late window)")
     args = parser.parse_args(argv)
     budgets = tuple(sorted(set(args.budgets)))
+    if args.prefix_epochs < 1:
+        raise ValueError("--prefix-epochs must be an integer >= 1")
     runs = [run for root in args.root for run in load_extension_runs(root)]
     if not runs:
         raise ValueError("no extension runs found in the evidence folders")
@@ -188,16 +229,23 @@ def main(argv: list[str] | None = None) -> None:
         too_long = [budget for budget in budgets if budget > run["epochs"]]
         if too_long:
             raise ValueError(f"{run['id']}: budget {too_long[0]} exceeds the {run['epochs']} epochs trained")
+        if args.prefix_epochs > run["epochs"]:
+            raise ValueError(f"{run['id']}: --prefix-epochs {args.prefix_epochs} exceeds the {run['epochs']} epochs trained")
+        if args.earlier_root and args.prefix_epochs not in {point["epoch"] for point in run["points"]}:
+            # prefix_equal needs a logged point at the cutoff; without one every seed would silently report "no match"
+            raise ValueError(f"{run['id']}: --prefix-epochs {args.prefix_epochs} is not a logged epoch of this run")
     earlier = index_runs([run for root in args.earlier_root for run in load_extension_runs(root)]) if args.earlier_root else None
     runs_by_width: dict[int, list[dict]] = {}
     for run in runs:
         runs_by_width.setdefault(run["d"], []).append(run)
-    report = summarize_extension(runs_by_width, budgets, min_seeds=args.min_seeds, earlier=earlier)
+    report = summarize_extension(runs_by_width, budgets, min_seeds=args.min_seeds, earlier=earlier,
+                                 prefix=args.prefix_epochs, held=args.epochs_at_100)
     args.out.mkdir(parents=True, exist_ok=True)
     (args.out / f"{args.prefix}_extension.json").write_bytes((json.dumps(report, indent=2, allow_nan=False) + "\n").encode("utf-8"))
     for d, entry in report.items():
         print(f"d={d}: rung {entry['n']}, perfect by budget {entry['perfect_by']}, first pass {entry['first_pass_budget']}, "
-              f"gain {entry['gain']:+.4f} ({entry['trend']}), first 1000 epochs equal E4: {entry['first_1000_matches_earlier']}")
+              f"gain {entry['gain']:+.4f} ({entry['trend']}), first {args.prefix_epochs} epochs equal {args.earlier_label}: "
+              f"{entry[f'first_{args.prefix_epochs}_matches_earlier']}")
 
 
 if __name__ == "__main__":
