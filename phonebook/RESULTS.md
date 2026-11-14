@@ -212,9 +212,9 @@ saved weights, which is how the audits recorded in each folder were run. One pre
 failed, E1b against E1; it is reported as failed in the experiment README with its tested cause
 (d1).
 
-Study and defense sheets for the replay-ratio experiments (E3 to E5) and the capacity experiments (E4 to E6) are in
+Study and defense sheets for the replay-ratio experiments (E3 to E5) and the capacity experiments (E4 to E7) are in
 [`docs/defense/`](docs/defense/): the claims with their status, the design, a table of numbers, the mechanism and what was not
-shown, twelve hard questions with model answers and a rubric, and a glossary. `tests/test_defense_sheets.py` recomputes every
+shown, hard questions with model answers and a rubric (twelve in the replay sheet, sixteen in the capacity sheet), and a glossary. `tests/test_defense_sheets.py` recomputes every
 number in them from the files in [`results/`](results/) and fails if a sheet and the results disagree.
 
 ## AI assistance

@@ -10,8 +10,8 @@ A sheet is a study document, so a wrong number in it is worse than a missing one
    sentence must occur in a cited row. This catches a mistyped or stale number; it cannot catch a correct number attached to
    the wrong quantity, which is what the reading of the sheets is for.
 3. The claims table quotes phonebook/RESULTS.md word for word, so a sheet cannot drift from the claims table.
-4. Links resolve, the structure is the agreed one (six design bullets, twelve questions with an answer and a rubric, a glossary),
-   and the sheets do not use words that claim more than the experiments did.
+4. Links resolve, the structure is the agreed one (six design bullets, the agreed number of questions each with an answer and a
+   rubric, a glossary), and the sheets do not use words that claim more than the experiments did.
 
 The checker itself is tested on small texts first (see the tests named `checker_*`).
 """
@@ -42,14 +42,16 @@ WEEK = PHONEBOOK / "experiments" / "week_2026-10-31"
 DEFENSE = PHONEBOOK / "docs" / "defense"
 SHEETS = {"replay": DEFENSE / "replay-ratio-e3-e5.md", "capacity": DEFENSE / "capacity-e4-e6.md"}
 PREFIX = {"replay": "R", "capacity": "C"}
-CLAIMS = {"replay": {5, 6, 7, 10}, "capacity": {11, 12, 13, 14, 15}}
-HEADINGS = ["The question", "The claims and their status", "The design", "Numbers", "The mechanism", "What was not shown",
-            "Twelve hard questions", "Glossary"]
+CLAIMS = {"replay": {5, 6, 7, 10}, "capacity": set(range(11, 21))}      # the capacity sheet quotes rows 11 to 20 (E4 to E7)
+SECTIONS = ["The question", "The claims and their status", "The design", "Numbers", "The mechanism", "What was not shown"]
+HEADINGS = {"replay": [*SECTIONS, "Twelve hard questions", "Glossary"],
+            "capacity": [*SECTIONS, "Sixteen hard questions", "Glossary"]}
+QUESTIONS = {"replay": 12, "capacity": 16}
 GLOSSARY = {
     "replay": ["exact recall", "update", "k", "joint recall", "stable_joint", "dip", "noise band", "sign rule",
                "unit of replication"],
     "capacity": ["exact recall", "entry", "epoch", "first_perfect", "budget", "rung", "capacity", "lower bound",
-                 "boundary", "bits per parameter"],
+                 "boundary", "bits per parameter", "arm", "weight decay", "step-down", "holds", "dip"],
 }
 
 
@@ -666,12 +668,7 @@ def _c16() -> str:
 
 @number("C17", E6)
 def _c17() -> str:
-    parts = []
-    for d in WIDTHS:
-        cells = [c for c in e6_cells() if c["d"] == d]
-        passing = [b for b in (1000, 2000, 3000, 4000) if sum(perfect_by(c, b) for c in cells) >= 2]
-        parts.append(f"yes ({passing[0]})" if passing else "no")
-    return SLASH.join(parts)
+    return SLASH.join(first_passing([c for c in e6_cells() if c["d"] == d]) for d in WIDTHS)
 
 
 @number("C18", "results/fig_e6_curves.csv")
@@ -721,11 +718,7 @@ def _c21() -> str:
 
 @number("C22", "results/fig_e6_curves.csv")
 def _c22() -> str:
-    labels = []
-    for d in WIDTHS:
-        gain = window_mean(d, 3001, 4000) - window_mean(d, 1001, 2000)
-        labels.append("rising" if gain >= Fraction(5, 1000) else "falling" if gain <= -Fraction(5, 1000) else "flat")
-    return SLASH.join(labels)
+    return SLASH.join(trend_label(window_mean(d, 3001, 4000) - window_mean(d, 1001, 2000)) for d in WIDTHS)
 
 
 @number("C23", E4, E6)
@@ -803,6 +796,287 @@ def _c29() -> str:
     assert match, rule
     return (f"fixed before the runs: a rung passes if at least {match.group(1)} of its {match.group(2)} book seeds are perfect "
             f"by the budget; the capacity is the largest rung such that it and every smaller rung pass")
+
+
+# ---- capacity, E7: weight decay 0.0 (arm W) and a step-down of the learning rate after epoch 2000 (arm S)
+
+E7_ARMS = ("W", "S")
+E7_WIDTHS = (16, 32, 64)
+E7_WEEK = "experiments/week_2026-11-13/"
+E7_CELLS = {"W": "results/e7w_cells.csv", "S": "results/e7s_cells.csv"}
+SEEDS = (1, 2, 3)
+HOLD_AT_LEAST = 50      # logged epochs, of the last 100, at full recall; C44 reads the pre-registered rule and asserts that it is 50
+SETTLED_AFTER = 50      # consecutive logged epochs at full recall that settle a run (the pre-registration's 500 epochs, logged every 10)
+PREREG = "preregistration/e7_predictions.json"
+
+
+@functools.lru_cache(maxsize=None)
+def prereg() -> dict:
+    return json.loads((PHONEBOOK / PREREG).read_text(encoding="utf-8"))
+
+
+@functools.lru_cache(maxsize=None)
+def e7_cells(arm: str) -> tuple:
+    return tuple({"d": int(r["model_d"]), "seed": int(r["seed"]), "n": int(r["n"]), "params": int(r["params"]),
+                  "first": to_int(r["first_perfect"]), "control": int(r["max_control"]), "end": r["perfect_at_end"] == "True"}
+                 for r in table(f"e7{arm.lower()}_cells.csv"))
+
+
+@functools.lru_cache(maxsize=None)
+def e7_curve(arm: str, d: int, seed: int) -> tuple:
+    """(entries, ((epoch, recalled), ...)) of one E7 run from its committed metrics.csv; recalled = round(Train Seq Acc x entries)."""
+    folder = PHONEBOOK / E7_WEEK / f"e7_{arm.lower()}_d{d}_seed{seed}"
+    (scenario,) = [p for p in folder.iterdir() if p.is_dir() and p.name.startswith("s")]
+    entries = int(scenario.name.split("_n")[1])
+    (metrics,) = scenario.glob("d*/metrics.csv")
+    points = []
+    with metrics.open(newline="", encoding="utf-8") as file:
+        for row in csv.DictReader(file):
+            value = float(row["Train Seq Acc"]) * entries
+            assert abs(value - round(value)) <= 5.001e-5 * entries, (arm, d, seed, row["Epoch"], value)   # the log prints four decimals
+            points.append((int(row["Epoch"]), round(value)))
+    return entries, tuple(points)
+
+
+def at_full(arm: str, d: int, seed: int, low: int, high: int) -> int:
+    """Logged epochs between low and high (inclusive) at which every entry of the book is recalled."""
+    n, points = e7_curve(arm, d, seed)
+    return sum(x == n for e, x in points if low <= e <= high)
+
+
+def e6_at_full(d: int, seed: int, low: int, high: int) -> int:
+    n = e6_curves()["size"][d]
+    return sum(x == n for e, x in e6_curves()["curves"][(d, seed)] if low <= e <= high)
+
+
+def settling(points: tuple, n: int):
+    """(epoch from which the run is settled, its dips afterwards), read as the pre-registration says: settled from the first of
+    SETTLED_AFTER consecutive logged epochs at full recall; a dip is a run of logged epochs below full recall after that stretch,
+    given as (first epoch, last epoch, lowest recall). (None, []) if the run never settles."""
+    start, run, found = None, 0, None
+    for epoch, recalled in points:
+        if recalled == n:
+            if run == 0:
+                start = epoch
+            run += 1
+            if run == SETTLED_AFTER and found is None:
+                found = (start, epoch)
+        else:
+            run = 0
+    if found is None:
+        return None, []
+    dips, current = [], None
+    for epoch, recalled in points:
+        if epoch > found[1] and recalled < n:
+            current = [epoch, epoch, recalled] if current is None else [current[0], epoch, min(current[2], recalled)]
+        elif current is not None:
+            dips.append(tuple(current))
+            current = None
+    if current is not None:
+        dips.append(tuple(current))
+    return found[0], dips
+
+
+def e7_window_mean(arm: str, d: int, low: int, high: int) -> Fraction:
+    values = []
+    for seed in SEEDS:
+        n, points = e7_curve(arm, d, seed)
+        values += [Fraction(x, n) for e, x in points if low <= e <= high]
+    assert len(values) == 300
+    return sum(values) / len(values)
+
+
+def trend_label(gain: Fraction) -> str:
+    """E6's rule, kept for E7: rising if the gain is at least +0.005, falling if at most -0.005, flat otherwise."""
+    return "rising" if gain >= Fraction(5, 1000) else "falling" if gain <= -Fraction(5, 1000) else "flat"
+
+
+def first_passing(cells) -> str:
+    passing = [b for b in (1000, 2000, 3000, 4000) if sum(perfect_by(c, b) for c in cells) >= 2]
+    return f"yes ({passing[0]})" if passing else "no"
+
+
+def firsts_by_seed(cells) -> str:
+    return "/".join("never" if c["first"] is None else str(c["first"]) for c in sorted(cells, key=lambda c: c["seed"]))
+
+
+@number("C30", "specs/", E7_WEEK)
+def _c30() -> str:
+    common, widths, settings = set(), set(), collections.defaultdict(set)
+    for path in sorted((PHONEBOOK / "specs").glob("e7_[ws]_*.json")):
+        for condition in json.loads(path.read_text(encoding="utf-8"))["conditions"]:
+            model = condition["model"]
+            widths.add(model["embedding_dim"])
+            common.add((condition["lr"], condition["batch_size"], condition["accuracy_interval"], model["n_layers"],
+                        model["n_heads"], condition["epochs"]))
+            settings[path.name[3].upper()].add((condition.get("weight_decay"), condition.get("lr_schedule")))
+    assert len(common) == 1 and widths == set(E7_WIDTHS), (common, widths)
+    assert dict(settings) == {"W": {(0.0, None)}, "S": {(None, "step:2000:0.1")}}, dict(settings)
+    kept = set()                    # arm S keeps the optimizer's own weight decay, which the protocols record and no run of arm S overrides
+    for folder in sorted((PHONEBOOK / E7_WEEK).glob("e7_s_*")):
+        protocol = json.loads((folder / "protocol.json").read_text(encoding="utf-8"))
+        assert all("weight_decay" not in run for run in protocol["runs"]), folder.name
+        kept.add(protocol["optimizer"]["weight_decay"])
+    assert kept == {0.1}, kept
+    lr, batch, interval, layers, heads, epochs = common.pop()
+    return (f"widths {listed(E7_WIDTHS)}, {layers} layers, {heads} heads, learning rate {lr}, batch size {batch}, logged every "
+            f"{interval} epochs, {epochs} epochs; arm W: weight decay 0.0; arm S: weight decay 0.1 and the learning rate "
+            f"multiplied by 0.1 after epoch 2000 (step:2000:0.1)")
+
+
+@number("C31", E7_CELLS["W"], E7_CELLS["S"], E4)
+def _c31() -> str:
+    rungs = []
+    for d in E7_WIDTHS:
+        sizes = {c["n"] for arm in E7_ARMS for c in e7_cells(arm) if c["d"] == d}
+        assert sizes == {first_failing_rung(d)}, (d, sizes)
+        rungs.append(sizes.pop())
+    assert all({c["seed"] for c in e7_cells(arm)} == set(SEEDS) for arm in E7_ARMS)
+    runs = sum(len(e7_cells(arm)) for arm in E7_ARMS)
+    assert runs == len(E7_ARMS) * len(E7_WIDTHS) * len(SEEDS)
+    return (f"one rung per width: {listed(rungs, SLASH)} entries (the first rung that failed in E4); 3 book seeds (1, 2, 3); "
+            f"2 arms x 3 widths x 3 seeds = {runs} runs")
+
+
+@number("C32", E7_CELLS["W"], E7_CELLS["S"], E6)
+def _c32() -> str:
+    arms = [f"arm {arm}: " + SLASH.join(first_passing([c for c in e7_cells(arm) if c["d"] == d]) for d in E7_WIDTHS)
+            for arm in E7_ARMS]
+    return "; ".join(arms) + "; E6: " + SLASH.join(first_passing([c for c in e6_cells() if c["d"] == d]) for d in E7_WIDTHS)
+
+
+@number("C33", E7_CELLS["W"], E7_CELLS["S"])
+def _c33() -> str:
+    arms = [f"arm {arm}: " + SEMI.join(firsts_by_seed([c for c in e7_cells(arm) if c["d"] == d]) for d in E7_WIDTHS)
+            for arm in E7_ARMS]
+    after_step = sum(c["first"] == 2010 for c in e7_cells("S"))
+    return (". ".join(arms) + f". {after_step} of the {len(e7_cells('S'))} arm S runs first reach 100% at epoch 2010, "
+            f"the first logged epoch after the step-down at epoch 2000")
+
+
+@number("C34", E7_CELLS["W"], E7_CELLS["S"], E6)
+def _c34() -> str:
+    def line(ends) -> str:
+        return f"{sum(ends)} of {len(ends)}"
+    e6_ends = [r["perfect_at_end"] == "True" for r in table("e6_cells.csv") if int(r["model_d"]) in E7_WIDTHS]
+    return (f"arm W {line([c['end'] for c in e7_cells('W')])}; arm S {line([c['end'] for c in e7_cells('S')])}; "
+            f"E6 (widths {listed(E7_WIDTHS)}) {line(e6_ends)}")
+
+
+@number("C35", E7_WEEK, "results/fig_e6_curves.csv")
+def _c35() -> str:
+    arms = [f"arm {arm}: " + SEMI.join(listed((at_full(arm, d, s, 3001, 4000) for s in SEEDS), "/") for d in E7_WIDTHS)
+            for arm in E7_ARMS]
+    e6 = SEMI.join(listed((e6_at_full(d, s, 3001, 4000) for s in SEEDS), "/") for d in E7_WIDTHS)
+    return ". ".join(arms) + f". E6: {e6}"
+
+
+@number("C36", E7_WEEK, "results/fig_e6_curves.csv")
+def _c36() -> str:
+    def holders(counts) -> str:
+        return f"{sum(count >= HOLD_AT_LEAST for count in counts)} of {len(counts)}"
+    last_100 = {arm: [at_full(arm, d, s, 3001, 4000) for d in E7_WIDTHS for s in SEEDS] for arm in E7_ARMS}
+    e6_last_100 = [e6_at_full(d, s, 3001, 4000) for d in E7_WIDTHS for s in SEEDS]
+    return f"arm W {holders(last_100['W'])} runs; arm S {holders(last_100['S'])}; E6 (widths {listed(E7_WIDTHS)}) {holders(e6_last_100)}"
+
+
+@number("C37", E7_WEEK, PREREG)
+def _c37() -> str:
+    stretch = re.search(r"after its first stretch of (\d+) epochs at 100%", prereg()["not_scored"])
+    assert stretch and int(stretch.group(1)) == SETTLED_AFTER * 10, "the pre-registered settling stretch is no longer 50 logged epochs"
+    dips, never = [], []
+    for arm in E7_ARMS:
+        for d in E7_WIDTHS:
+            for seed in SEEDS:
+                n, points = e7_curve(arm, d, seed)
+                settled, found = settling(points, n)
+                if settled is None:
+                    never.append(f"arm {arm} width {d} seed {seed}")
+                for first, last, lowest in found:
+                    assert points[-1][1] == n, "a dipping run is expected to be back at full recall at the last logged epoch"
+                    dips.append(f"arm {arm} width {d} seed {seed}: logged epochs {first} to {last}, down to {lowest} of {n}")
+    return "; ".join(dips) + f"; each is back at full recall at epoch 4000; never settled: {listed(never, '; ') or 'none'}"
+
+
+@number("C38", E7_WEEK)
+def _c38() -> str:
+    parts = []
+    for arm in E7_ARMS:
+        cells = []
+        for d in E7_WIDTHS:
+            early, late = e7_window_mean(arm, d, 1001, 2000), e7_window_mean(arm, d, 3001, 4000)
+            cells.append(f"{float(early):.4f} to {float(late):.4f} ({float(late - early):+.4f})")
+        parts.append(f"arm {arm}: " + SLASH.join(cells))
+    return "; ".join(parts)
+
+
+@number("C39", E7_WEEK, PREREG)
+def _c39() -> str:
+    assert "rising if the gain is at least +0.005, falling if at most -0.005" in prereg()["not_scored"], "the E6 trend rule is no longer the one in force"
+    return "; ".join(f"arm {arm}: " + SLASH.join(trend_label(e7_window_mean(arm, d, 3001, 4000) - e7_window_mean(arm, d, 1001, 2000))
+                                                 for d in E7_WIDTHS) for arm in E7_ARMS)
+
+
+@number("C40", "results/e7_scores.json")
+def _c40() -> str:
+    records = document("e7_scores.json")
+    scored = [r for r in records if r["result"].startswith(("HIT", "MISS"))]
+    hits = [r for r in scored if r["result"].startswith("HIT")]
+    exact = [r for r in hits if r["result"] == "HIT (exact)"]
+    core = [r for r in scored if r["q"] in ("Q1", "Q2", "Q3", "Q5")]
+    assert all(r["result"].startswith("HIT") for r in core)
+    tripwires = [r for r in records if r["q"] == "TRIPWIRE"]
+    fired = sorted(r["what"] for r in tripwires if r["result"] == "TRIPWIRE FIRED")
+    return (f"{len(hits)} of {len(scored)} scored lines hit ({len(exact)} exact); the {len(core)} lines on seeds perfect, passing, "
+            f"first passing budget and ending at 100% all hit ({sum(r['result'] == 'HIT (exact)' for r in core)} exact); "
+            f"missed: {'; '.join(r['what'] for r in scored if r['result'] == 'MISS')}; "
+            f"tripwires fired: {len(fired)} of {len(tripwires)} ({', '.join(fired)})")
+
+
+@number("C41", E7_CELLS["W"], E7_CELLS["S"])
+def _c41() -> str:
+    bits, entries, values = bits_per_entry(), [], []
+    for d in E7_WIDTHS:
+        per_arm = []
+        for arm in E7_ARMS:
+            cells = [c for c in e7_cells(arm) if c["d"] == d]
+            assert sum(perfect_by(c, 4000) for c in cells) >= 2, (arm, d)
+            per_arm.append((cells[0]["n"], median_params(cells)))
+        assert per_arm[0] == per_arm[1], per_arm        # the two arms train the same models on the same books
+        entries.append(per_arm[0][0])
+        values.append(f"{per_arm[0][0] * bits / per_arm[0][1]:.3f}")
+    return f"{listed(entries, SLASH)} entries in both arms; at least {SLASH.join(values)} bits per parameter in both arms"
+
+
+@number("C42", E7_CELLS["W"], E7_CELLS["S"], "inputs/")
+def _c42() -> str:
+    cells = e7_cells("W") + e7_cells("S")
+    sizes = {len((PHONEBOOK / "inputs" / f"capacity_seed{s}_control.txt").read_text(encoding="utf-8").splitlines()) for s in SEEDS}
+    assert len(sizes) == 1
+    return f"{max(c['control'] for c in cells)} of {sizes.pop()} control entries recalled in all {len(cells)} E7 runs"
+
+
+@number("C43", E7_WEEK, "results/fig_e6_curves.csv")
+def _c43() -> str:
+    same = []
+    for d in E7_WIDTHS:
+        for seed in SEEDS:
+            n, points = e7_curve("S", d, seed)
+            assert n == e6_curves()["size"][d]
+            same.append([p for p in points if p[0] <= 2000] == [p for p in e6_curves()["curves"][(d, seed)] if p[0] <= 2000])
+    return f"{sum(same)} of {len(same)} arm S runs recall the same number of entries as E6 at every logged epoch up to 2000"
+
+
+@number("C44", PREREG)
+def _c44() -> str:
+    text = prereg()["definitions"]
+    hold = re.search(r"A run holds the book if at least (\d+) of its (\d+) logged epochs in (\d+)-(\d+) have all N entries recalled", text)
+    rung = re.search(r"A rung passes at E if at least (\d+) of the (\d+) book seeds are perfect by E", text)
+    assert hold and rung, text
+    assert int(hold.group(1)) == HOLD_AT_LEAST
+    return (f"fixed before the runs: a run holds the book if at least {hold.group(1)} of its {hold.group(2)} logged epochs in "
+            f"{hold.group(3)} to {hold.group(4)} have every entry recalled; a rung passes at a budget if at least {rung.group(1)} "
+            f"of its {rung.group(2)} book seeds are perfect by it")
 
 
 # ------------------------------------------------------------------ reading a sheet
@@ -1099,13 +1373,74 @@ def test_registry_agrees_with_the_analysis_outputs_it_does_not_call() -> None:
         assert (sum(perfect_by(c, 4000) for c in e6_cells() if c["d"] == d) >= 2) == passes["4000"]
 
 
+def test_registry_e7_agrees_with_the_analysis_outputs_it_does_not_call() -> None:
+    for arm in E7_ARMS:
+        extension, capacity = document(f"e7{arm.lower()}_extension.json"), document(f"e7{arm.lower()}_capacity.json")
+        for d in E7_WIDTHS:
+            cells, record = [c for c in e7_cells(arm) if c["d"] == d], extension[str(d)]
+            assert [next(c["first"] for c in cells if c["seed"] == s) for s in SEEDS] == [record["first_perfect"][str(s)] for s in SEEDS]
+            for budget in (1000, 2000, 3000, 4000):
+                assert sum(perfect_by(c, budget) for c in cells) == record["perfect_by"][str(budget)]
+                assert (sum(perfect_by(c, budget) for c in cells) >= 2) == record["passes"][str(budget)]
+            assert sum(c["end"] for c in cells) == record["perfect_at_end"]
+            early, late = e7_window_mean(arm, d, 1001, 2000), e7_window_mean(arm, d, 3001, 4000)
+            assert float(early) == pytest.approx(record["mean_accuracy"]["1001_2000"])
+            assert float(late) == pytest.approx(record["mean_accuracy"]["3001_4000"])
+            assert float(late - early) == pytest.approx(record["gain"])
+            assert trend_label(late - early) == record["trend"]
+            for s in SEEDS:
+                logged = record["epochs_at_100"]["by_seed"][str(s)]
+                assert at_full(arm, d, s, 3001, 4000) == logged["3001_4000"]
+                assert at_full(arm, d, s, 0, 4000) == logged["all"]
+            assert capacity[str(d)]["capacity_by_budget"]["4000"] == cells[0]["n"]
+            assert cells[0]["n"] * bits_per_entry() / median_params(cells) == pytest.approx(
+                capacity[str(d)]["bits_per_param_at_largest_budget"])
+    prefix = document("e7s_extension.json")
+    assert [prefix[str(d)]["first_2000_match_by_seed"][str(s)] for d in E7_WIDTHS for s in SEEDS] == [True] * 9
+    assert _c43().startswith("9 of 9")
+
+
+def curve10(pattern, step: int = 10) -> tuple:
+    """Logged epochs step, 2 x step, ... with the recalled counts of the pattern."""
+    return tuple((step * (i + 1), x) for i, x in enumerate(pattern))
+
+
+def test_registry_e7_a_run_settles_after_fifty_consecutive_logged_epochs_at_full_recall() -> None:
+    n = 10
+    assert settling(curve10([n] * 50), n) == (10, [])
+    assert settling(curve10([n] * 49 + [3] + [n] * 60), n) == (510, []), "49 is not enough; the next stretch starts at epoch 510"
+    assert settling(curve10([n, 0] * 100), n) == (None, [])
+    assert settling(curve10([6] * 5 + [n] * 50), n) == (60, []), "epochs below full recall before settling are not dips"
+
+
+def test_registry_e7_a_dip_is_a_run_of_logged_epochs_below_full_recall_after_settling() -> None:
+    n = 10
+    assert settling(curve10([n] * 50 + [7, 4, 8] + [n] * 5 + [2] + [n] * 3), n) == (10, [(510, 530, 4), (590, 590, 2)])
+    assert settling(curve10([n] * 50 + [6, 6]), n) == (10, [(510, 520, 6)]), "a dip that lasts to the end is kept"
+
+
+def test_registry_e7_windows_are_inclusive_and_pool_the_seeds(monkeypatch) -> None:
+    points = tuple((e, 4) for e in (3000, 3010, 4000, 4010)) + ((3500, 2),)
+    monkeypatch.setattr(sys.modules[__name__], "e7_curve", lambda arm, d, seed: (4, points))
+    assert at_full("W", 16, 1, 3001, 4000) == 2, "3010 and 4000 are inside; 3000 and 4010 are outside; 3500 is not at full recall"
+    inside = tuple((e, 4 if i % 2 == 0 else 2) for i, e in enumerate(range(1010, 2001, 10)))      # 100 logged epochs, half at 4 of 4
+    points = ((1000, 0),) + inside + ((2010, 0),)
+    assert e7_window_mean("W", 16, 1001, 2000) == Fraction(3, 4)
+
+
+@pytest.mark.parametrize("gain,label", [(Fraction(5, 1000), "rising"), (Fraction(49, 10000), "flat"), (Fraction(0), "flat"),
+                                        (Fraction(-49, 10000), "flat"), (Fraction(-5, 1000), "falling")])
+def test_registry_trend_label_uses_the_threshold_of_five_thousandths(gain: Fraction, label: str) -> None:
+    assert trend_label(gain) == label
+
+
 # ================================================================== the sheets
 
 @pytest.mark.parametrize("key", sorted(SHEETS))
 def test_sheet_exists_has_the_agreed_sections_in_order_and_a_status_line(key: str) -> None:
     text = sheet_text(key)
-    assert [name for _, name in headings(text)] == HEADINGS
-    assert [int(n) for n, _ in headings(text)] == list(range(1, len(HEADINGS) + 1))
+    assert [name for _, name in headings(text)] == HEADINGS[key]
+    assert [int(n) for n, _ in headings(text)] == list(range(1, len(HEADINGS[key]) + 1))
     assert re.search(r"^\*Status as of [A-Z][a-z]+ \d{1,2}, 2026", text, flags=re.MULTILINE)
     assert not re.search(r"\b(?:TODO|TBD|XXX|FIXME)\b", text)
 
@@ -1168,11 +1503,11 @@ def test_sheet_design_has_six_bullets(key: str) -> None:
 
 
 @pytest.mark.parametrize("key", sorted(SHEETS))
-def test_sheet_has_twelve_questions_each_with_an_answer_and_a_rubric(key: str) -> None:
-    block = section(sheet_text(key), "Twelve hard questions")
+def test_sheet_has_its_questions_each_with_an_answer_and_a_rubric(key: str) -> None:
+    block = section(sheet_text(key), HEADINGS[key][6])
     lines = [line for line in block.splitlines() if line.strip()]
     questions = [i for i, line in enumerate(lines) if line.startswith("**Q")]
-    assert [re.match(r"\*\*Q(\d+)\. ", lines[i]).group(1) for i in questions] == [str(n) for n in range(1, 13)]
+    assert [re.match(r"\*\*Q(\d+)\. ", lines[i]).group(1) for i in questions] == [str(n) for n in range(1, QUESTIONS[key] + 1)]
     for index in questions:
         question = lines[index]
         assert question.endswith("?**"), question
@@ -1198,6 +1533,8 @@ def test_sheet_says_what_was_not_shown_and_marks_its_mechanism(key: str) -> None
         assert "exploratory" in mechanism and "two clocks" in mechanism
     else:
         assert "time, not room" in mechanism and "width 64 is not shown" in mechanism
+        # E7: the arms, and the status words of the two claims about them (rows 19 and 20 of RESULTS.md)
+        assert "arm w" in mechanism and "arm s" in mechanism and "supported" in mechanism and "not established" in mechanism
 
 
 @pytest.mark.parametrize("key", sorted(SHEETS))
@@ -1235,6 +1572,19 @@ def test_sheet_links_resolve_and_point_at_tracked_files(key: str) -> None:
     files, folders = tracked()
     untracked = [target for target in targets if target.parent != DEFENSE.resolve() and target not in files and target not in folders]
     assert not untracked, f"links to files git does not track (they would be broken on GitHub): {untracked}"
+
+
+def test_capacity_sheet_does_not_say_that_the_weight_decay_or_the_schedule_was_never_varied() -> None:
+    """E4 to E6 held both fixed; E7 varied them, so an unqualified 'none was varied' is stale."""
+    text = sheet_text("capacity").lower()
+    for phrase in ("none of these was varied", "none was varied"):
+        assert phrase not in text, phrase
+
+
+def test_capacity_sheet_says_who_drafted_the_e7_predictions() -> None:
+    """The sheet is study material for explaining the work unaided, so it keeps the disclosure that RESULTS.md and the week README make."""
+    text = " ".join(sheet_text("capacity").lower().split())
+    assert "drafted by claude" in text and "adopted" in text
 
 
 def test_sheets_link_to_each_other_and_to_the_results_document() -> None:

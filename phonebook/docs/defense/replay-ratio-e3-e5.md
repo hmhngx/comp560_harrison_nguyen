@@ -1,6 +1,6 @@
 # Defense sheet: how many copies of the new book to replay (E3 and E5)
 
-*Status as of November 4, 2026. A study sheet for explaining the replay-ratio experiments without help. Every number in it is rechecked against the committed results by `tests/test_defense_sheets.py`, and the numbers table says where each one comes from. Companion sheet: [capacity (E4 to E6)](capacity-e4-e6.md). All claims and their evidence: [RESULTS.md](../../RESULTS.md).*
+*Status as of November 4, 2026. A study sheet for explaining the replay-ratio experiments without help. Every number in it is rechecked against the committed results by `tests/test_defense_sheets.py`, and the numbers table says where each one comes from. Companion sheet: [capacity (E4 to E7)](capacity-e4-e6.md). All claims and their evidence: [RESULTS.md](../../RESULTS.md).*
 
 ## 1. The question
 
