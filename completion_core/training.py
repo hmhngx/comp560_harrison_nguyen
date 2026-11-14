@@ -127,6 +127,8 @@ def run_epoch(
     In training this is an online mean for the changing model, not a final-model
     dataset evaluation. Reporting weights do not rescale batch gradients or L2-SP.
     """
+    if optimizer is not None and not grad_clip >= 0:  # only training reads grad_clip; written this way so that NaN fails too
+        raise ValueError(f"grad_clip must be a number >= 0 (0 means no clipping), got {grad_clip!r}")
     _check_task_criterion(criterion)
     is_train = optimizer is not None
     model.train(is_train)

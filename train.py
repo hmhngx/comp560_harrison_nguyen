@@ -222,7 +222,8 @@ def check_adapt_compatibility(
     """Refuse a checkpoint whose recorded architecture differs from the model being built.
 
     Tensors trained with a different head count have exactly the same shapes, so load_state_dict
-    cannot detect it; only the metadata written by make_checkpoint_payload can.
+    cannot detect it; only the metadata written by make_checkpoint_payload can. A field the checkpoint does
+    not record cannot be compared: that is reported in a warning, never treated as a match in silence.
     """
     raw = torch.load(checkpoint_path, map_location=device)
     recorded = raw.get("model_config") if isinstance(raw, dict) else None
@@ -235,6 +236,10 @@ def check_adapt_compatibility(
     if mismatched:
         detail = ", ".join(f"{key}: checkpoint {old} vs current {new}" for key, (old, new) in mismatched.items())
         raise ValueError(f"Model adaptation checkpoint was trained with a different architecture ({detail}).")
+    unrecorded = [key for key in current if key not in recorded]
+    if unrecorded:
+        print(f"Warning: {checkpoint_path} model_config does not record {', '.join(unrecorded)}; "
+              "cannot verify that they match.")
 
 
 def optimizer_overrides(cfg: TrainConfig) -> dict:
@@ -278,7 +283,6 @@ def main() -> None:
     # Track total runtime
     total_start_time = time.perf_counter()
 
-    cfg.out_dir.mkdir(parents=True, exist_ok=True)
     torch.manual_seed(cfg.seed)
 
     # --- Vocabulary ---
@@ -323,6 +327,10 @@ def main() -> None:
                 "Ensure data/vocab and model dimensions match the source checkpoint."
             ) from exc
         print(f"adapting model from checkpoint: {cfg.adapt_from}")
+
+    # Created only now, so that a run refused above (missing data, an adapt checkpoint of another architecture)
+    # leaves no empty output folder behind.
+    cfg.out_dir.mkdir(parents=True, exist_ok=True)
 
     # parse_args() already enforces that l2sp_lambda > 0 implies adapt_from is set.
     old_params = None
