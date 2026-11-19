@@ -9,6 +9,7 @@ from __future__ import annotations
 import hashlib
 import io
 import ntpath
+import re
 import shutil
 import subprocess
 import sys
@@ -16,16 +17,18 @@ from pathlib import Path
 
 import pytest
 
+from report import build_report as br
 from report import gate
 
 ROOT = Path(__file__).resolve().parents[1]
 
-GOOD_TEX = (
+BARE_TEX = (  # every required section, but no title and a one-word abstract
     "\\begin{abstract}A.\\end{abstract}\n"
     "\\section{Introduction}x\n\\section{Related Work}y\n\\section{Conclusion}z \\label{endcontent}\n"
     "\\section*{References}\n"
     "\\appendix\\section{Use Of Artificial Intelligence}q\n"
 )
+GOOD_TEX = "\\title{" + " ".join(["Word"] * 10) + "}\n" + BARE_TEX.replace("{abstract}A.", "{abstract}" + " ".join(["word"] * 175), 1)  # passes every gate
 GOOD_AUX = "\\newlabel{endcontent}{{3}{2}}\n"
 GOOD_TEXT = "page one\fConclusion\nReferences\n[1] Li\f"  # what pdftotext prints: two pages, 'References' on page 2
 BIB_AUX = "\\bibdata{refs}\n"
@@ -341,6 +344,44 @@ def test_a_tool_that_cannot_start_is_a_gate_error(tmp_path):
 
 # ---- check_build: the pieces put together -------------------------------------------------------------------------
 
+OVERFULL = "Overfull \\hbox (12.3pt too wide) in paragraph at lines 4--5\n"
+
+
+def test_check_build_adds_the_polish_problems_after_the_report_problems(tmp_path):
+    tex, out = project(tmp_path, BARE_TEX)
+    log = "LaTeX Warning: Reference `x' on page 1 undefined on input line 3.\n" + OVERFULL
+    result = gate.check_build(tex, out, run=FakeTeX(log=log), which=which_everything)
+    assert result.problems == [
+        "undefined reference: x",
+        "overfull box: 12.3pt too wide in paragraph at lines 4--5",
+        "no \\title{...} found in the source",
+        "abstract has 1 word; the guideline asks for 150 to 200",
+    ]
+
+
+def test_check_build_reads_the_pdf_text_for_leftovers_and_a_repeated_references_heading(tmp_path):
+    tex, out = project(tmp_path, BARE_TEX)
+    text = "Author Name\fConclusion\nReferences\nReferences\n[1] Li\f"
+    problems = gate.check_build(tex, out, run=FakeTeX(pdftotext_out=text), which=which_everything).problems
+    assert "template text left in the PDF (page 1): 'Author Name'" in problems
+    assert "the heading 'References' is printed 2 times (pages 2, 2)" in problems
+
+
+def test_check_build_refuses_text_kept_in_another_file(tmp_path):
+    tex, out = project(tmp_path, BARE_TEX + "\\input{intro}\n\\input{numbers}\n")
+    problems = gate.check_build(tex, out, run=FakeTeX(), which=which_everything).problems
+    assert [p for p in problems if p.startswith("text comes from another file")] == [
+        "text comes from another file (\\input{intro}): the gate reads main.tex only, so its sections, captions and citations are not checked"
+    ]
+
+
+def test_main_prints_the_polish_problems_and_fails(tmp_path, capsys):
+    tex, _ = project(tmp_path, BARE_TEX)
+    assert gate.main([str(tex)], run=FakeTeX(log=OVERFULL), which=which_everything) == 1
+    out = capsys.readouterr().out
+    assert "FAIL: 3 problems" in out and "  - overfull box: 12.3pt too wide in paragraph at lines 4--5" in out
+
+
 def test_check_build_clean_document_has_no_problems_and_reports_the_measurements(tmp_path):
     tex, out = project(tmp_path)
     result = gate.check_build(tex, out, run=FakeTeX(), which=which_everything)
@@ -529,7 +570,7 @@ def test_main_builds_into_the_folder_given_with_dash_dash_out(tmp_path):
 
 def test_the_module_runs_with_dash_m_and_shows_its_usage():
     done = subprocess.run([sys.executable, "-m", "report.gate", "--help"], cwd=ROOT, capture_output=True, text=True)
-    assert done.returncode == 0 and done.stdout.startswith("usage: python -m report.gate [-h] [--out OUT] tex")
+    assert done.returncode == 0 and done.stdout.startswith("usage: python -m report.gate [-h] [--out OUT] [--max-overfull PT] tex")
 
 
 def test_the_module_run_without_arguments_exits_with_status_2():
@@ -560,14 +601,34 @@ def test_the_template_files_are_the_lab_files_unmodified(name):
     assert hashlib.sha256(data).hexdigest() == TEMPLATE_SHA256[name]
 
 
-def template_build(tmp_path: Path, edit=lambda tex: tex) -> tuple[Path, Path]:
-    """Copy the template to tmp_path/src as main.tex beside dnu.sty, with the end label added and edit(tex) applied; return (main.tex, build folder)."""
+ACK_TEXT = "We thank the reviewers for their careful reading."
+TEMPLATE_PHRASES = [  # the placeholder sentences of the template, typed here on purpose (not taken from the gate)
+    "Summarize the research question, approach", "Introduce the problem, explain its importance", "See the DNU Lab web pages",
+    "Explain the data, materials, methods", "Present the principal findings, using figures", "Interpret the findings, describe limitations",
+    "Summarize the report's main conclusions", "Add the report's references here", "Add optional supplementary methods",
+]
+
+
+def clean_template(tex: str) -> str:
+    """The template made ready to submit as far as the gate can see: a 10-word title, an author, a 175-word abstract, no placeholder text, no '(optional)'."""
+    tex = tex.replace("DNU Research Report Title", " ".join(["Word"] * 10)).replace("Author Name", "Real Person")
+    tex = tex.replace("youremail@dickinson.edu", "real.person@dickinson.edu").replace(" (optional)", "")
+    tex = re.sub(r"\\begin\{abstract\}.*?\\end\{abstract\}", lambda m: "\\begin{abstract}" + " ".join(["word"] * 175) + "\\end{abstract}", tex, flags=re.S)
+    for phrase in TEMPLATE_PHRASES:
+        tex = tex.replace(phrase, "Plain text")
+    return tex
+
+
+def template_build(tmp_path: Path, edit=lambda tex: tex, clean: bool = True) -> tuple[Path, Path]:
+    """Copy the template to tmp_path/src as main.tex beside dnu.sty, with the end label added, made ready to submit (unless clean=False) and edit(tex) applied;
+    return (main.tex, build folder). The last content paragraph is ACK_TEXT when cleaned, the template's own sentence when not."""
     source = tmp_path / "src"
     source.mkdir()
     shutil.copy(TEMPLATE_DIR / "dnu.sty", source / "dnu.sty")
     tex = (TEMPLATE_DIR / "dnu-report.tex").read_text(encoding="utf-8")
     assert tex.count(LAST_PARAGRAPH) == 1
-    (source / "main.tex").write_text(edit(tex.replace(LAST_PARAGRAPH, LAST_PARAGRAPH + END_LABEL)), encoding="utf-8")
+    tex = clean_template(tex.replace(LAST_PARAGRAPH, ACK_TEXT + END_LABEL)) if clean else tex.replace(LAST_PARAGRAPH, LAST_PARAGRAPH + END_LABEL)
+    (source / "main.tex").write_text(edit(tex), encoding="utf-8")
     return source / "main.tex", source / "build"
 
 
@@ -578,7 +639,7 @@ def test_the_template_with_an_end_label_passes_every_gate_on_a_real_build(tmp_pa
     assert result.problems == []
     pages = gate.pdf_pages(out / "main.pdf")
     # the page the .aux file gives for the label is the page that holds the text the label follows
-    holder = next(number for number, text in enumerate(pages, start=1) if "support as appropriate" in " ".join(text.split()))
+    holder = next(number for number, text in enumerate(pages, start=1) if "their careful reading" in " ".join(text.split()))
     assert result.label_page == holder
     assert result.references_page - result.label_page in (0, 1)
     assert (result.pages, result.passes) == (len(pages), 2)
@@ -610,3 +671,124 @@ def test_a_bibliography_is_built_and_every_entry_is_checked_on_a_real_build(tmp_
     assert result.passes == 3
     # the reference list was typeset (plainnat lowercases the title), so bibtex ran and the second pass read its .bbl file
     assert "a test entry one" in " ".join(gate.pdf_pages(out / "main.pdf")).lower()
+
+
+# ---- the polish checks on real builds ---------------------------------------------------------------------------------------
+
+UNMODIFIED_TEMPLATE_PROBLEMS = [  # without page numbers and heading numbers, which depend on the TeX and pdftotext versions
+    "template text left in the PDF: 'DNU Research Report Title'",
+    "template text left in the PDF: 'Author Name'",
+    "template text left in the PDF: 'youremail@dickinson.edu'",
+    "template text left in the PDF: 'Summarize the research question, approach'",
+    "template text left in the PDF: 'Introduce the problem, explain its importance'",
+    "template text left in the PDF: 'See the DNU Lab web pages'",
+    "template text left in the PDF: 'See the DNU Lab web pages'",
+    "template text left in the PDF: 'Explain the data, materials, methods'",
+    "template text left in the PDF: 'Present the principal findings, using figures'",
+    "template text left in the PDF: 'Interpret the findings, describe limitations'",
+    "template text left in the PDF: 'Summarize the report's main conclusions'",
+    "template text left in the PDF: 'Optionally, acknowledge'",
+    "template text left in the PDF: 'Add the report's references here'",
+    "template text left in the PDF: 'Add optional supplementary methods'",
+    "heading still says (optional): 'Methods (optional)'",
+    "heading still says (optional): 'Results (optional)'",
+    "heading still says (optional): 'Discussion (optional)'",
+    "heading still says (optional): 'Supplementary material (optional)'",
+    "title has 4 words; the guideline asks for 8 to 15",
+    "abstract has 16 words; the guideline asks for 150 to 200",
+]
+
+
+def without_positions(problems: list[str]) -> list[str]:
+    """Problems sorted, with the page number and the section number or letter of a heading taken out."""
+    return sorted(re.sub(r" \(page \d+\)", "", re.sub(r"'(?:\d+|[A-Z]) ", "'", problem)) for problem in problems)
+
+
+@pytest.mark.integration
+def test_the_unmodified_template_is_refused_and_every_leftover_is_named(tmp_path):
+    tex, out = template_build(tmp_path, clean=False)
+    assert without_positions(gate.check_build(tex, out).problems) == sorted(UNMODIFIED_TEMPLATE_PROBLEMS)
+
+
+def test_every_prose_paragraph_of_the_template_contains_a_known_placeholder_phrase():
+    """If the lab changes the template (its SHA-256 is pinned above), a new instruction sentence must be added to build_report.TEMPLATE_PLACEHOLDERS."""
+    body = (TEMPLATE_DIR / "dnu-report.tex").read_text(encoding="utf-8").split("\\begin{document}")[1]
+    paragraphs, current = [], []
+    for line in body.splitlines():
+        stripped = line.strip()
+        if not stripped or stripped.startswith(("\\", "%")):
+            if current:
+                paragraphs.append(" ".join(" ".join(current).split()))
+                current = []
+        else:
+            current.append(stripped)
+    if current:
+        paragraphs.append(" ".join(" ".join(current).split()))
+    assert len(paragraphs) == 11
+    assert [p for p in paragraphs if not any(phrase in p for phrase in br.TEMPLATE_PLACEHOLDERS)] == []
+
+
+# ---- the overfull limit ----------------------------------------------------------------------------------------------------
+
+def test_check_build_the_overfull_limit_can_be_raised(tmp_path):
+    tex, out = project(tmp_path)
+    assert len(gate.check_build(tex, out, run=FakeTeX(log=OVERFULL), which=which_everything).problems) == 1
+    assert gate.check_build(tex, out, run=FakeTeX(log=OVERFULL), which=which_everything, max_overfull_pt=20.0).problems == []
+
+
+def test_main_takes_a_max_overfull_option(tmp_path):
+    tex, _ = project(tmp_path)
+    assert gate.main([str(tex)], run=FakeTeX(log=OVERFULL), which=which_everything) == 1
+    assert gate.main([str(tex), "--max-overfull", "20"], run=FakeTeX(log=OVERFULL), which=which_everything) == 0
+
+
+SMALL_OVERFULL = "Overfull \\hbox (0.75pt too wide) in paragraph at lines 4--5\n"
+
+
+def test_main_accepts_zero_as_the_overfull_limit_and_then_refuses_any_overfull_box(tmp_path):
+    tex, _ = project(tmp_path)
+    assert gate.main([str(tex), "--max-overfull", "0"], run=FakeTeX(log=SMALL_OVERFULL), which=which_everything) == 1
+    assert gate.main([str(tex), "--max-overfull", "0"], run=FakeTeX(), which=which_everything) == 0
+
+
+def test_main_accepts_a_fractional_overfull_limit(tmp_path):
+    tex, _ = project(tmp_path)
+    assert gate.main([str(tex), "--max-overfull", "0.8"], run=FakeTeX(log=SMALL_OVERFULL), which=which_everything) == 0
+    assert gate.main([str(tex), "--max-overfull", "0.7"], run=FakeTeX(log=SMALL_OVERFULL), which=which_everything) == 1
+
+
+@pytest.mark.parametrize("value", ["nan", "inf", "=-1", "abc"])
+def test_main_refuses_an_overfull_limit_that_is_not_a_finite_number_of_at_least_zero(tmp_path, capsys, value):
+    tex, _ = project(tmp_path)
+    args = [str(tex), "--max-overfull" + value] if value.startswith("=") else [str(tex), "--max-overfull", value]
+    with pytest.raises(SystemExit) as caught:
+        gate.main(args, run=FakeTeX(), which=which_everything)
+    assert caught.value.code == 2 and "--max-overfull: must be a finite number of at least 0" in capsys.readouterr().err
+
+
+@pytest.mark.integration
+def test_an_unbreakable_line_that_runs_into_the_margin_is_flagged_from_the_real_log(tmp_path):
+    long_word = "\\texttt{" + "w" * 120 + "}"
+    tex, out = template_build(tmp_path, lambda text: text.replace("\\section{Related Work}", "\\section{Related Work}\nSee " + long_word + ".\n"))
+    problems = gate.check_build(tex, out).problems
+    assert len(problems) == 1 and re.fullmatch(r"overfull box: \d+\.\d+pt too wide in paragraph at lines \d+--\d+", problems[0]), problems
+
+
+@pytest.mark.integration
+def test_a_figure_taller_than_the_page_is_flagged_from_the_real_log(tmp_path):
+    tall = "\\begin{figure}[t]\\rule{1pt}{10in}\\caption{Tall.}\\label{fig:tall}\\end{figure}\nSee Figure~\\ref{fig:tall}.\n"
+    tex, out = template_build(tmp_path, lambda text: text.replace("\\section{Related Work}", "\\section{Related Work}\n" + tall))
+    problems = gate.check_build(tex, out).problems
+    assert any(re.fullmatch(r"float too large for the page by \d+\.\d+pt", p) for p in problems), problems
+
+
+@pytest.mark.integration
+def test_a_manual_references_heading_next_to_a_bibliography_is_flagged_as_printed_twice(tmp_path):
+    def doubled(text: str) -> str:
+        text = text.replace("\\section*{References}", "\\section*{References}\n\\bibliographystyle{plainnat}\n\\bibliography{refs}\n")
+        return text.replace("\\section{Related Work}", "\\section{Related Work}\nBy \\citet{alpha2020} and \\citet{beta2021}.\n")
+
+    tex, out = template_build(tmp_path, doubled)
+    (tex.parent / "refs.bib").write_text(BIB, encoding="utf-8")
+    problems = gate.check_build(tex, out).problems
+    assert len(problems) == 1 and re.fullmatch(r"the heading 'References' is printed 2 times \(pages \d+, \d+\)", problems[0]), problems

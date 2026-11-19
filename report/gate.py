@@ -4,7 +4,8 @@ r"""Command-line wrapper for the report gate: build the report with TeX, then ch
 
 It runs pdflatex (and bibtex once, when the document has a bibliography) and repeats pdflatex until the .aux file stops changing. It then
 extracts the text of every page with pdftotext and gives the source, the .bib files, the .aux and .log files and the page texts to
-build_report.check_report. The checks read the main .tex file only: files it pulls in with \input or \include are not followed.
+build_report.check_report and then build_report.polish_problems. The checks read the main .tex file only: files it pulls in with \input or
+\include are not followed, so any of them except \input{numbers} (the generated numbers) is itself a problem.
 
 Exit status: 0 when every gate passed; 1 when the gate ran and found problems (a build that produced no PDF counts as a problem); 2 when
 the gate could not run (a tool is missing, a tool did not finish, or the source cannot be read). A missing TeX is never skipped.
@@ -14,6 +15,7 @@ Needs pdflatex, bibtex and pdftotext on PATH; MiKTeX ships all three.
 from __future__ import annotations
 
 import argparse
+import math
 import os
 import re
 import shutil
@@ -162,7 +164,7 @@ def _read_bibliography(tex: str, directory: Path) -> tuple[str, list[str]]:
     return "\n".join(texts), problems
 
 
-def check_build(tex_path: Path, out: Path, run: Run = subprocess.run, which: Which = shutil.which) -> Result:
+def check_build(tex_path: Path, out: Path, run: Run = subprocess.run, which: Which = shutil.which, max_overfull_pt: float = br.MAX_OVERFULL_PT) -> Result:
     try:
         tex = tex_path.read_text(encoding="utf-8", errors="replace")
     except OSError as error:
@@ -175,6 +177,7 @@ def check_build(tex_path: Path, out: Path, run: Run = subprocess.run, which: Whi
         return Result(problems, build.passes)
     pages = pdf_pages(build.pdf, run, which)
     problems += br.check_report(tex, bib_text, build.aux_text, build.log_text, pages)
+    problems += br.polish_problems(tex, pages, build.log_text, max_overfull_pt)
     return Result(
         problems,
         build.passes,
@@ -182,6 +185,17 @@ def check_build(tex_path: Path, out: Path, run: Run = subprocess.run, which: Whi
         references_page=_measure(br.first_references_page, pages),
         pages=len(pages),
     )
+
+
+def _limit(text: str) -> float:
+    """The --max-overfull value: a finite number of at least 0 (a NaN would make every overfull box pass)."""
+    try:
+        value = float(text)
+    except ValueError:
+        value = float("nan")
+    if not math.isfinite(value) or value < 0:
+        raise argparse.ArgumentTypeError("must be a finite number of at least 0")
+    return value
 
 
 def main(argv: Sequence[str] | None = None, run: Run = subprocess.run, which: Which = shutil.which, stdout=None, stderr=None) -> int:
@@ -193,10 +207,12 @@ def main(argv: Sequence[str] | None = None, run: Run = subprocess.run, which: Wh
     parser = argparse.ArgumentParser(prog="python -m report.gate", description="Build the report with TeX and run the report gate checks.")
     parser.add_argument("tex", type=Path, help="the report's main .tex file")
     parser.add_argument("--out", type=Path, help="folder for the build files (default: build/ next to the .tex file, which git ignores)")
+    parser.add_argument("--max-overfull", type=_limit, default=br.MAX_OVERFULL_PT, metavar="PT",
+                        help="the widest overfull box, in points, that is accepted (default: %(default)s)")
     args = parser.parse_args(argv)
     out = args.out if args.out is not None else args.tex.parent / "build"
     try:
-        result = check_build(args.tex, out, run, which)
+        result = check_build(args.tex, out, run, which, args.max_overfull)
     except GateError as error:
         print(f"gate could not run: {error}", file=stderr)
         return 2

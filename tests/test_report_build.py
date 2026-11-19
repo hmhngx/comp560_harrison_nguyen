@@ -412,3 +412,275 @@ def test_cited_and_referenced_keys_are_sets_without_repeats():
 def test_keys_in_splits_strips_and_drops_empty_keys_and_ignores_comments():
     pattern = re.compile(r"\\x\{([^}]*)\}")
     assert br.keys_in(pattern, "\\x{a, b,,c} % \\x{z}\n\\x{ d }") == ["a", "b", "c", "d"]
+
+
+# ---- layout_problems: what LaTeX warns about that is visible on the page ---------------------------------------------
+
+def test_layout_problems_reports_an_overfull_box_wider_than_the_limit():
+    log = "Overfull \\hbox (12.3pt too wide) in paragraph at lines 40--41\n"
+    assert br.layout_problems(log) == ["overfull box: 12.3pt too wide in paragraph at lines 40--41"]
+
+
+@pytest.mark.parametrize("amount, flagged", [("0.5", False), ("1.0", False), ("1.01", True), ("12", True)])
+def test_layout_problems_the_overfull_limit_is_one_point_and_a_box_exactly_at_the_limit_is_fine(amount, flagged):
+    assert bool(br.layout_problems(f"Overfull \\hbox ({amount}pt too wide) in paragraph at lines 3--4\n")) is flagged
+
+
+def test_layout_problems_the_limit_can_be_changed():
+    log = "Overfull \\hbox (2.0pt too wide) in paragraph at lines 3--4\n"
+    assert br.layout_problems(log, max_overfull_pt=2.5) == []
+    assert len(br.layout_problems(log, max_overfull_pt=1.5)) == 1
+
+
+def test_layout_problems_an_overfull_box_without_a_location_has_no_trailing_space():
+    assert br.layout_problems("Overfull \\hbox (12.3pt too wide)\n") == ["overfull box: 12.3pt too wide"]
+
+
+def test_layout_problems_reports_an_overfull_vertical_box_too():
+    log = "Overfull \\vbox (4.5pt too high) has occurred while \\output is active\n"
+    assert br.layout_problems(log) == ["overfull box: 4.5pt too high has occurred while \\output is active"]
+
+
+def test_layout_problems_ignores_underfull_boxes():
+    assert br.layout_problems("Underfull \\hbox (badness 10000) in paragraph at lines 3--4\n") == []
+
+
+def test_layout_problems_reports_a_missing_character():
+    assert br.layout_problems("Missing character: There is no ^^e9 in font ptmr7t!\n") == ["missing character: There is no ^^e9 in font ptmr7t!"]
+
+
+def test_layout_problems_reports_a_font_warning_by_its_first_line_only():
+    log = "LaTeX Font Warning: Font shape `T1/ptm/bx/it' undefined\n(Font)              using `T1/ptm/bx/n' instead on input line 12.\n"
+    assert br.layout_problems(log) == ["font warning: Font shape `T1/ptm/bx/it' undefined"]
+
+
+def test_layout_problems_reports_a_float_that_is_too_large_for_the_page():
+    log = "LaTeX Warning: Float too large for page by 23.4pt on input line 55.\n"
+    assert br.layout_problems(log) == ["float too large for the page by 23.4pt"]
+
+
+def test_layout_problems_reads_a_line_that_tex_wrapped_at_79_characters():
+    first = "Missing character: There is no ^^e9 in font " + "x" * 35
+    assert len(first) == 79
+    assert br.layout_problems(first + "\nyz!\n") == ["missing character: There is no ^^e9 in font " + "x" * 35 + "yz!"]
+
+
+def test_layout_problems_lists_every_problem_in_the_order_of_the_log_and_a_clean_log_has_none():
+    log = "ok\nMissing character: There is no ^^e9 in font f!\nOverfull \\hbox (9.0pt too wide) in paragraph at lines 1--2\n"
+    assert [p.split(":")[0] for p in br.layout_problems(log)] == ["missing character", "overfull box"]
+    assert br.layout_problems("This is pdfTeX\nOutput written on main.pdf (2 pages).\n") == []
+
+
+# ---- leftover_template_text: placeholders and "(optional)" headings that must not reach the PDF -----------------------
+
+def test_leftover_template_text_names_every_placeholder_with_its_page():
+    pages = ["DNU Research Report Title\nAuthor Name\nyouremail@dickinson.edu", "fine", "See the DNU Lab web pages for detailed instructions"]
+    assert br.leftover_template_text(pages) == [
+        "template text left in the PDF (page 1): 'DNU Research Report Title'",
+        "template text left in the PDF (page 1): 'Author Name'",
+        "template text left in the PDF (page 1): 'youremail@dickinson.edu'",
+        "template text left in the PDF (page 3): 'See the DNU Lab web pages'",
+    ]
+
+
+def test_leftover_template_text_finds_a_placeholder_split_over_lines_and_with_a_typographic_apostrophe():
+    pages = ["Summarize the\nresearch   question, approach", "Add the report" + chr(0x2019) + "s references\nhere, using"]
+    found = br.leftover_template_text(pages)
+    assert [f.split(": ")[1] for f in found] == ["'Summarize the research question, approach'", "'Add the report's references here'"]
+
+
+def test_leftover_template_text_does_not_flag_ordinary_sentences_that_share_a_few_words_with_the_template():
+    pages = ["Interpret the findings with care.\nIntroduce the problem early. Present the principal findings first.\nExplain the data, materials in a table."]
+    assert br.leftover_template_text(pages) == []
+
+
+@pytest.mark.parametrize("line", ["Methods (optional)", "3 Methods (optional)", "3.1 Data and Methods (optional)", "B Supplementary material (optional)"])
+def test_leftover_template_text_flags_a_heading_that_ends_in_optional(line):
+    assert len(br.leftover_template_text([line])) == 1
+
+
+def test_leftover_template_text_a_heading_of_seven_words_is_still_a_heading_and_one_of_eight_is_prose():
+    assert len(br.leftover_template_text(["A Very Long Heading Of Six (optional)"])) == 1       # 7 words including (optional)
+    assert br.leftover_template_text(["A Very Long Heading Of Seven Words (optional)"]) == []   # 8 words
+
+
+@pytest.mark.parametrize("line", [
+    "which part is (optional)", "uses the flag --x (optional)", "Cell (Optional)", "A long sentence that happens to end with the word (optional)",
+])
+def test_leftover_template_text_does_not_flag_prose_or_table_lines_that_end_in_optional(line):
+    assert br.leftover_template_text([line]) == []
+
+
+def test_leftover_template_text_reports_a_heading_that_still_says_optional():
+    pages = ["1 Introduction", "3 Methods (optional)\nWords (optional) in the middle stay.", "A Supplementary material (optional)  "]
+    assert br.leftover_template_text(pages) == [
+        "heading still says (optional) (page 2): '3 Methods (optional)'",
+        "heading still says (optional) (page 3): 'A Supplementary material (optional)'",
+    ]
+
+
+def test_leftover_template_text_a_clean_report_has_none():
+    assert br.leftover_template_text(["A title\nAn author\n1 Introduction\nText.", "References\n[1] Li"]) == []
+
+
+# ---- title_words and abstract_words: RP-08 and RP-09 -----------------------------------------------------------------
+
+@pytest.mark.parametrize("text, words", [
+    ("One two three", 3),
+    ("Hello \\textbf{big} world.", 3),
+    ("\\num{e4.bits.w64} bits", 2),
+    ("The $x^2 + y$ term", 3),
+    ("a~b", 2),
+    ("3001--4000", 1),
+    ("word \\\\ word", 2),
+    ("100\\% sure", 2),
+    ("\\citep{a,b} said so", 3),
+    ("-- alone ---", 1),
+    ("-- ---", 0),
+    ("  \n\t ", 0),
+    ("{\\em two} {words}", 2),
+    ("See \\label{abs} here", 2),
+    ("Visit \\url{https://example.org/a/long/path} now", 3),
+    ("A\\footnote{five words in this note} b", 2),
+    ("A\\thanks{a note} b", 2),
+    ("\\href{http://example.org}{the page} ok", 3),
+    ("Figure~\\ref{fig:a} and \\cref{t:b,t:c}", 4),
+    ("\\cref{a, b} is", 2),
+    ("\\autoref{a, b} is", 2),
+    ("\\citep{a, b} said", 2),
+    ("\\citep[p. 3]{a} said", 2),
+    ("costs \\$5 total", 3),
+    ("a \\$5 and \\$6 b", 5),
+    ("snake\\_case words", 2),
+])
+def test_count_words_follows_the_rules_in_the_gate_documentation(text, words):
+    assert br.count_words(text) == words
+
+
+def test_title_words_reads_the_title_command_and_ignores_comments_thanks_and_line_breaks():
+    tex = "% \\title{No no}\n\\title{A Title\\\\ With a Break\\thanks{A note.}}\n"
+    assert br.title_words(tex) == 5
+
+
+def test_title_words_handles_nested_braces_and_is_none_without_a_title():
+    assert br.title_words("\\title{A \\textsc{Nested {Deep}} Title}") == 4
+    assert br.title_words("\\begin{document}no title\\end{document}") is None
+
+
+def test_abstract_words_reads_the_environment_and_ignores_comments():
+    tex = "\\begin{abstract}\nOne two % three four\nfive\n\\end{abstract}\n"
+    assert br.abstract_words(tex) == 3
+    assert br.abstract_words("\\section{Introduction}x") is None
+
+
+def title_of(words: int) -> str:
+    return "\\title{" + " ".join(["Word"] * words) + "}\n"
+
+
+def abstract_of(words: int) -> str:
+    return "\\begin{abstract}" + " ".join(["word"] * words) + "\\end{abstract}\n"
+
+
+@pytest.mark.parametrize("words, ok", [(7, False), (8, True), (15, True), (16, False)])
+def test_word_count_problems_the_title_needs_8_to_15_words(words, ok):
+    expected = [] if ok else [f"title has {words} words; the guideline asks for 8 to 15"]
+    assert br.word_count_problems(title_of(words) + abstract_of(175)) == expected
+
+
+@pytest.mark.parametrize("words, ok", [(149, False), (150, True), (200, True), (201, False)])
+def test_word_count_problems_the_abstract_needs_150_to_200_words(words, ok):
+    expected = [] if ok else [f"abstract has {words} words; the guideline asks for 150 to 200"]
+    assert br.word_count_problems(title_of(10) + abstract_of(words)) == expected
+
+
+def test_word_count_problems_says_word_in_the_singular_for_one_and_names_a_missing_title():
+    assert br.word_count_problems(title_of(1) + abstract_of(1)) == [
+        "title has 1 word; the guideline asks for 8 to 15",
+        "abstract has 1 word; the guideline asks for 150 to 200",
+    ]
+    assert br.word_count_problems(abstract_of(175)) == ["no \\title{...} found in the source"]
+
+
+def test_a_title_whose_braces_do_not_balance_is_reported_as_that_and_not_as_a_huge_word_count():
+    with pytest.raises(ValueError):
+        br.title_words("\\title{A B C\n\\begin{abstract}" + " ".join(["w"] * 400) + "\\end{abstract}")
+    assert br.word_count_problems("\\title{A B C\n" + abstract_of(175)) == ["the braces of \\title{...} do not balance"]
+
+
+def test_word_count_problems_leaves_a_missing_abstract_to_the_required_sections_check():
+    assert br.word_count_problems(title_of(10)) == []
+
+
+# ---- single_file_problems: the gate reads main.tex only ---------------------------------------------------------------
+
+@pytest.mark.parametrize("tex", ["\\input{numbers}", "\\input{numbers.tex}", "\\input { numbers }", "% \\input{intro}", "no commands"])
+def test_single_file_problems_accepts_the_numbers_file_and_comments(tex):
+    assert br.single_file_problems(tex) == []
+
+
+@pytest.mark.parametrize("command", [
+    "\\input{intro}", "\\include{results}", "\\InputIfFileExists{x}{}{}", "\\subfile{s}", "\\import{d/}{f}", "\\input {intro}", "\\input{ intro }",
+])
+def test_single_file_problems_refuses_text_pulled_in_from_another_file(command):
+    problems = br.single_file_problems(command)
+    assert len(problems) == 1 and problems[0].startswith("text comes from another file (") and "main.tex only" in problems[0]
+
+
+def test_single_file_problems_names_each_file_once_per_use():
+    assert len(br.single_file_problems("\\input{a} \\input{numbers} \\include{b}")) == 2
+
+
+# ---- references_heading_problems --------------------------------------------------------------------------------------
+
+def test_references_heading_problems_one_heading_or_none_is_not_this_checks_business():
+    assert br.references_heading_problems(["a", "References\n[1]"]) == []
+    assert br.references_heading_problems(["a", "b"]) == []
+
+
+def test_references_heading_problems_names_the_pages_of_a_repeated_heading():
+    assert br.references_heading_problems(["a", "x", "References\nReferences\n[1]", "References"]) == [
+        "the heading 'References' is printed 3 times (pages 3, 3, 4)"
+    ]
+
+
+def test_references_heading_problems_counts_headings_that_pdftotext_joined_on_one_line():
+    assert br.references_heading_problems(["a", "References References\n[1]"]) == ["the heading 'References' is printed 2 times (pages 2, 2)"]
+
+
+def test_first_references_page_and_the_text_above_it_accept_two_headings_on_one_line():
+    pages = ["a", "Some text\nReferences References\n[1]"]
+    assert br.first_references_page(pages) == 2
+    assert br.text_above_references(pages, 2) == ["Some text"]
+
+
+def test_references_heading_problems_only_a_line_that_is_exactly_the_word_counts():
+    assert br.references_heading_problems(["See References below", "References\n[1]", "My References list"]) == []
+
+
+# ---- polish_problems: all of it, in a fixed order ----------------------------------------------------------------------
+
+GOOD_POLISH_TEX = title_of(10) + abstract_of(175) + "\\input{numbers}\n"
+
+
+def test_polish_problems_the_overfull_limit_can_be_raised():
+    log = "Overfull \\hbox (12.3pt too wide) in paragraph at lines 4--5\n"
+    assert len(br.polish_problems(GOOD_POLISH_TEX, ["x"], log)) == 1
+    assert br.polish_problems(GOOD_POLISH_TEX, ["x"], log, max_overfull_pt=20.0) == []
+
+
+def test_polish_problems_a_compliant_report_has_none():
+    assert br.polish_problems(GOOD_POLISH_TEX, ["A title\nAn author", "References\n[1] Li"], "") == []
+
+
+def test_polish_problems_lists_layout_then_leftovers_then_words_then_files_then_references():
+    tex = abstract_of(1) + "\\input{intro}\n"
+    pages = ["Author Name", "References\nReferences"]
+    log = "Overfull \\hbox (12.3pt too wide) in paragraph at lines 4--5\n"
+    assert br.polish_problems(tex, pages, log) == [
+        "overfull box: 12.3pt too wide in paragraph at lines 4--5",
+        "template text left in the PDF (page 1): 'Author Name'",
+        "no \\title{...} found in the source",
+        "abstract has 1 word; the guideline asks for 150 to 200",
+        "text comes from another file (\\input{intro}): the gate reads main.tex only, so its sections, captions and citations are not checked",
+        "the heading 'References' is printed 2 times (pages 2, 2)",
+    ]
