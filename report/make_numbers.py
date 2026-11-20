@@ -5,9 +5,10 @@ r"""Write report/numbers.tex: every number the report prints, as a TeX key defin
 The report text says \num{e7w.bits.w64}, never 0.188. numbers.tex defines \num so that an unknown key is a LaTeX error (the report gate reads it from
 the log), never a silent blank. Keys are lower-case words, digits and dots (e4.cap.w64.b1000); values are plain text without TeX syntax.
 
-Reads only tracked files: the derived files in phonebook/results, the E4, E6 and E7 protocol.json files, the three control books, and the three E7
-arm W width-64 metrics.csv files (for the dips). Anything missing, not a whole number where a count is expected, or inconsistent between files stops
-the run with a NumbersError; nothing is ever printed as 0 or left blank. The output is deterministic: sorted keys, LF line ends, no timestamp.
+Reads only tracked files: the derived files in phonebook/results (including the four cells files), the E4, E6 and E7 protocol.json files, the capacity
+books and their three control books, the 126 evaluation files, and the three E7 arm W width-64 metrics.csv files (for the dips). Anything missing, not a
+whole number where a count is expected, or inconsistent between files stops the run with a NumbersError; nothing is ever printed as 0 or left blank.
+The output is deterministic: sorted keys, LF line ends, no timestamp.
 
 Exit status: 0 written (or, with --check, up to date); 1 with --check and the file differs or is missing; 2 an input is missing or wrong.
 """
@@ -31,12 +32,23 @@ EXPERIMENTS = "phonebook/experiments"
 WIDTHS = (8, 16, 32, 64)
 WIDE = (16, 32, 64)
 SEEDS = (1, 2, 3)
-LAST_WINDOW = 100      # logged epochs in 3001 to 4000 (every 10 epochs)
+WINDOW_FIRST, WINDOW_LAST = 3001, 4000   # the late window of E6 and E7: epochs 3001 to 4000
+LAST_WINDOW = 100      # logged epochs in the late window (every 10 epochs)
 HOLD_MIN = 50          # "holds": at least this many of the last 100 logged epochs (3001 to 4000) at 100%
 SETTLED_RUN = 50       # "settled": this many consecutive logged epochs at 100% (500 epochs)
-BITS_PER_ENTRY = math.log2(800 * 800 * 10_000)   # the phone number only: 800 area codes, 800 exchanges, 10,000 subscriber values
+PASS_MIN = 2           # a rung passes at a budget when at least this many of its 3 book seeds are perfect by then
+EARLY_KEY, LATE_KEY = "1001_2000", f"{WINDOW_FIRST}_{WINDOW_LAST}"   # the keys of the extension files' mean accuracies and epochs at 100%
+E4_BUDGETS = ("100", "300", "500", "1000")   # epochs at which E4 reads its capacities (prefixes of one 1000-epoch run)
+FIRST_CODE = 200       # the first area code and the first exchange (a phone number is AAA-EEE-SSSS)
+AREA_CODES, EXCHANGES, SUBSCRIBERS = 800, 800, 10_000   # the phone-number space: area codes 200 to 999, exchanges 200 to 999, subscriber numbers 0000 to 9999
+_ENTRY = re.compile(r"[A-Za-z]+ [A-Za-z]+=([0-9]{3})-([0-9]{3})-([0-9]{4})")
 KEY = re.compile(r"[a-z][a-z0-9]*(?:\.[a-z0-9]+)*")
 VALUE = re.compile(r"[A-Za-z0-9.,]+")
+
+
+def bits_per_entry() -> float:
+    """The information in the phone number only (the name is the prompt): log2 of the number of possible phone numbers."""
+    return math.log2(AREA_CODES * EXCHANGES * SUBSCRIBERS)
 
 
 class NumbersError(Exception):
@@ -73,7 +85,7 @@ def unused_keys(tex: str, values: dict[str, str]) -> list[str]:
     return sorted(key for key in values if key not in used)
 
 
-_COMMAND_ARGUMENTS = re.compile(
+COMMAND_ARGUMENTS = re.compile(
     r"\\(?:[cC]ite[a-zA-Z]*\*?|[a-zA-Z]*ref|label|includegraphics|input|include|bibliography|bibliographystyle|begin|end|numdef|num)"
     r"\s*(?:\[[^\]]*\]\s*)*\{[^{}]*\}"
 )
@@ -86,14 +98,14 @@ def typed_numbers_matching(tex: str, values: dict[str, str]) -> list[str]:
     Small whole numbers (one or two digits, no decimal point) are structure, not results ("width 8", "2 layers") and are never reported.
     Arguments of citation, reference, label, input and environment commands, and comments, are not prose.
     """
-    body = _COMMAND_ARGUMENTS.sub(" ", br.strip_comments(tex))
     known = {value.replace(",", "") for value in values.values()}
-    found = []
-    for match in _LITERAL.finditer(body):
-        digits = match.group(0).replace(",", "")
-        if ("." in digits or len(digits) >= 3) and digits in known:
-            found.append(match.group(0))
-    return found
+    return [literal for literal in typed_numbers(tex) if literal.replace(",", "") in known]
+
+
+def typed_numbers(tex: str) -> list[str]:
+    """Every number literal of three or more digits, or with a decimal point, typed in the prose, as typed and in order (the same prose rules)."""
+    body = COMMAND_ARGUMENTS.sub(" ", br.strip_comments(tex))
+    return [match.group(0) for match in _LITERAL.finditer(body) if "." in match.group(0) or sum(c.isdigit() for c in match.group(0)) >= 3]
 
 
 # ---- reading the inputs -------------------------------------------------------------------------------------------------------------------------
@@ -180,7 +192,7 @@ def _word(value) -> str:
 
 
 def _mean(source: _Source, d: int) -> tuple[str, str]:
-    return (f"{source.real(str(d), 'mean_accuracy', '1001_2000', high=1.0):.4f}", f"{source.real(str(d), 'mean_accuracy', '3001_4000', high=1.0):.4f}")
+    return (f"{source.real(str(d), 'mean_accuracy', EARLY_KEY, high=1.0):.4f}", f"{source.real(str(d), 'mean_accuracy', LATE_KEY, high=1.0):.4f}")
 
 
 def _recalled(acc: str, n: int, rel: str) -> int:
@@ -269,7 +281,7 @@ def _design(root: Path, out: dict[str, str]) -> dict[int, int]:
     if kind != "step":
         raise NumbersError(f"arm S lr_schedule is not a step schedule: {kind!r}")
     out["design.s.step"], out["design.s.factor"] = step, factor
-    out["design.bitsentry"] = f"{BITS_PER_ENTRY:.3f}"
+    out["design.bitsentry"] = f"{bits_per_entry():.3f}"
     upe: dict[int, set[int]] = defaultdict(set)
     for run in runs:
         try:
@@ -286,7 +298,92 @@ def _design(root: Path, out: dict[str, str]) -> dict[int, int]:
     result = {n: seen.pop() for n, seen in upe.items()}
     for n in sorted(result):
         out[f"design.upe.n{n}"] = str(result[n])
+    interval, last = int(out["design.loginterval"]), int(out["design.epochs.e6"])
+    if WINDOW_LAST != last:
+        raise NumbersError(f"the late window ends at epoch {WINDOW_LAST} but E6 and E7 train for {last} epochs")
+    window, remainder = divmod(WINDOW_LAST - WINDOW_FIRST + 1, interval)
+    if remainder or window != LAST_WINDOW:
+        raise NumbersError(f"the late window {WINDOW_FIRST} to {WINDOW_LAST} holds {window} logged epochs at every {interval}, but LAST_WINDOW is {LAST_WINDOW}")
+    out["design.hold.min"], out["design.hold.window"], out["design.hold.from"] = str(HOLD_MIN), str(LAST_WINDOW), str(WINDOW_FIRST)
+    out["design.settled.logged"], out["design.settled.epochs"] = str(SETTLED_RUN), str(SETTLED_RUN * interval)
+    out["design.rule.min"] = str(PASS_MIN)
+    out["design.phone.area"], out["design.phone.exchange"], out["design.phone.subscriber"] = str(AREA_CODES), str(EXCHANGES), f"{SUBSCRIBERS:,}"
+    rungs = sorted(result)
+    ratios = _ratios(rungs)
+    _books(root, rungs)
+    out["design.rung.first"], out["design.rung.last"], out["design.rung.count"] = str(rungs[0]), str(rungs[-1]), str(len(rungs))
+    out["design.rung.ratio.min"], out["design.rung.ratio.max"] = f"{min(ratios):.2f}", f"{max(ratios):.2f}"
+    _controls(root, out, {"e4": len(_runs(p4)), "e6": len(_runs(p6)), "e7w": len(_runs(pw)), "e7s": len(_runs(ps))})
+    agree, compared = _regenerated(root, [("week_2026-10-31", p4 + p6), ("week_2026-11-13", pw + ps)])
+    out["design.regen.agree"], out["design.regen.runs"] = str(agree), str(compared)
     return result
+
+
+def _ratios(rungs: list[int]) -> list[float]:
+    """The ratio of each rung to the one below it; a ladder has at least two rungs."""
+    if len(rungs) < 2:
+        raise NumbersError(f"the protocols have {len(rungs)} rungs, at least 2 are needed for a ladder")
+    return [b / a for a, b in zip(rungs, rungs[1:])]
+
+
+def _next_rung(ladder: list[int], n: int) -> str:
+    """The smallest rung above n on the ladder, or "none" at the top; n must itself be a rung."""
+    if n not in ladder:
+        raise NumbersError(f"{n} is not a rung of the ladder {ladder}")
+    return _word(next((rung for rung in ladder if rung > n), None))
+
+
+def _books(root: Path, rungs: list[int]) -> None:
+    """The capacity books agree with the protocols and with the phone-number constants: the sizes on disk are the rungs of the protocols for every book seed,
+    and the largest book has that many entries, each a two-word name and a number AAA-EEE-SSSS inside the documented space."""
+    largest = rungs[-1]
+    inputs = root / "phonebook" / "inputs"
+    for s in SEEDS:
+        on_disk = sorted(int(m.group(1)) for p in inputs.glob(f"capacity_seed{s}_n*.txt") if (m := re.fullmatch(rf"capacity_seed{s}_n(\d+)\.txt", p.name)))
+        if on_disk != rungs:
+            raise NumbersError(f"the capacity books for seed {s} have rungs {on_disk}, the protocols have {rungs}")
+        rel = f"phonebook/inputs/capacity_seed{s}_n{largest}.txt"
+        lines = [line for line in _text(root, rel).split("\n") if line.strip()]   # read_text has turned Windows line endings into newlines
+        if len(lines) != largest:
+            raise NumbersError(f"{rel}: {len(lines)} entries, expected {largest}")
+        for number, line in enumerate(lines, 1):
+            match = _ENTRY.fullmatch(line)
+            ok = match is not None and FIRST_CODE <= int(match.group(1)) < FIRST_CODE + AREA_CODES and FIRST_CODE <= int(match.group(2)) < FIRST_CODE + EXCHANGES \
+                and int(match.group(3)) < SUBSCRIBERS
+            if not ok:
+                raise NumbersError(f"{rel}: line {number} is not 'Name Name=NNN-NNN-NNNN' with the area code from {FIRST_CODE} to {FIRST_CODE + AREA_CODES - 1} "
+                                   f"and the exchange from {FIRST_CODE} to {FIRST_CODE + EXCHANGES - 1} and a subscriber number below {SUBSCRIBERS}: {line!r}")
+
+
+def _controls(root: Path, out: dict[str, str], runs: dict[str, int]) -> None:
+    """The control results of every run: the cells files have one row per run, every control passed, and the most control entries recalled in any run."""
+    worst = total = 0
+    for name, expected in runs.items():
+        rel = f"{RESULTS}/{name}_cells.csv"
+        rows = _csv(root, rel)
+        if len(rows) != expected:
+            raise NumbersError(f"{rel}: {len(rows)} rows but the protocols have {expected} runs")
+        for row in rows:
+            if row.get("control_ok") != "True":
+                raise NumbersError(f"{rel}: control_ok must be True in every row, got {row.get('control_ok')!r}")
+            worst = max(worst, _whole(row, "max_control", rel))
+        total += len(rows)
+    out["design.control.max"], out["design.control.runs"] = str(worst), str(total)
+    out["design.runs.e4"], out["design.runs.e6"], out["design.runs.e7"] = str(runs["e4"]), str(runs["e6"]), str(runs["e7w"] + runs["e7s"])
+
+
+def _regenerated(root: Path, groups: list[tuple[str, list[tuple[str, dict]]]]) -> tuple[int, int]:
+    """(runs whose regenerated answers equal the teacher-forced count, runs compared): the evaluation of the saved weights of every run."""
+    agree = total = 0
+    for week, protocols in groups:
+        for folder, protocol in protocols:
+            for run in protocol["runs"]:
+                book = _json(root, f"{EXPERIMENTS}/{week}/{folder}/{run['scenario']}/{run['condition']}.evaluation.json")
+                forced = (book.count("books", "A", "teacher_forced", "sequence_correct"), book.count("books", "A", "teacher_forced", "sequence_total"))
+                generated = (book.count("books", "A", "generation", "correct"), book.count("books", "A", "generation", "total"))
+                total += 1
+                agree += forced == generated
+    return agree, total
 
 
 def _scores(root: Path, name: str) -> list[str]:
@@ -305,8 +402,14 @@ def build(root: Path | str = ROOT) -> dict[str, str]:
     # E4
     e4 = _json(root, f"{RESULTS}/e4_capacity.json")
     for d in WIDTHS:
+        budgets = e4.at(str(d), "capacity_by_budget")
+        if not isinstance(budgets, dict) or sorted(budgets) != sorted(E4_BUDGETS):
+            raise NumbersError(f"{e4.name}: the budgets must be {list(E4_BUDGETS)}, got {sorted(budgets) if isinstance(budgets, dict) else budgets!r}")
+    for i, budget in enumerate(E4_BUDGETS, 1):
+        out[f"design.budget.{i}"] = budget
+    for d in WIDTHS:
         w = str(d)
-        for budget in ("100", "300", "500", "1000"):
+        for budget in E4_BUDGETS:
             out[f"e4.cap.w{d}.b{budget}"] = _word(e4.count_or_none(w, "capacity_by_budget", budget))
         cap = e4.count(w, "capacity_by_budget", "1000")
         out[f"e4.params.w{d}"] = f"{e4.count(w, 'params'):,}"
@@ -351,8 +454,8 @@ def build(root: Path | str = ROOT) -> dict[str, str]:
                 raise NumbersError(f"{ext.name}: width {d}: perfect_at_end {at_end} exceeds reached_perfect {reached}")
             if sum(f is not None for f in firsts) != reached:
                 raise NumbersError(f"{ext.name}: width {d}: first_perfect lists {sum(f is not None for f in firsts)} seeds that reached 100%, reached_perfect says {reached}")
-            if passes != (perfect_by >= 2):
-                raise NumbersError(f"{ext.name}: width {d}: passes at 4000 is {passes} but {perfect_by} of {seeds} seeds were perfect by 4000 (a rung passes with 2)")
+            if passes != (perfect_by >= PASS_MIN):
+                raise NumbersError(f"{ext.name}: width {d}: passes at 4000 is {passes} but {perfect_by} of {seeds} seeds were perfect by 4000 (a rung passes with {PASS_MIN})")
             if (first_budget is None) == passes:
                 raise NumbersError(f"{ext.name}: width {d}: first_pass_budget {first_budget!r} does not agree with passes at 4000 ({passes})")
             out[f"{arm}.n.w{d}"] = str(n)
@@ -372,16 +475,16 @@ def build(root: Path | str = ROOT) -> dict[str, str]:
                     if not run or entries[d] != {n}:
                         raise NumbersError(f"{curves_rel}: no curve for width {d} seed {s} with {n} entries")
                     _every_logged_epoch([e for e, _ in run], int(out["design.loginterval"]), int(out["design.epochs.e6"]), curves_rel, f"the curve of width {d} seed {s}")
-                    late.append(sum(1 for e, k in run if 3001 <= e <= 4000 and k == n))
+                    late.append(sum(1 for e, k in run if WINDOW_FIRST <= e <= WINDOW_LAST and k == n))
                     out[f"e6.logged100.w{d}.s{s}"] = str(sum(1 for e, k in run if k == n))
                     at_end = [k for e, k in run if e == 4000]
                     if len(at_end) != 1:
                         raise NumbersError(f"{curves_rel}: width {d} seed {s} has {len(at_end)} rows at epoch 4000")
                     out[f"e6.recall4000.w{d}.s{s}"] = str(at_end[0])
                 else:
-                    late.append(ext.count(w, "epochs_at_100", "by_seed", str(s), "3001_4000"))
+                    late.append(ext.count(w, "epochs_at_100", "by_seed", str(s), LATE_KEY))
                     if late[-1] > LAST_WINDOW:
-                        raise NumbersError(f"{ext.name}: {w}/epochs_at_100/by_seed/{s}/3001_4000 is {late[-1]}, but the window holds {LAST_WINDOW} logged epochs")
+                        raise NumbersError(f"{ext.name}: {w}/epochs_at_100/by_seed/{s}/{LATE_KEY} is {late[-1]}, but the window holds {LAST_WINDOW} logged epochs")
                 out[f"{arm}.late100.w{d}.s{s}"] = str(late[-1])
             holding = sum(1 for c in late if c >= HOLD_MIN)
             out[f"{arm}.holding.w{d}"] = str(holding)
@@ -389,6 +492,20 @@ def build(root: Path | str = ROOT) -> dict[str, str]:
                 holding_total += holding
         out[f"{arm}.holdingtotal"] = str(holding_total)
     out["design.seeds"] = str(len(SEEDS))   # every extension file was checked to say so
+
+    # the rung above each pass (the limit sentence: those rungs were not run at the longer budget) and the updates of the E6 rungs in 4000 epochs
+    ladder = sorted(upe)
+    for d in WIDE:
+        nw, ns = out[f"e7w.n.w{d}"], out[f"e7s.n.w{d}"]
+        if nw != ns:
+            raise NumbersError(f"E7 arms W and S disagree about the rung at width {d}: {nw} and {ns}")
+        out[f"e7.next.w{d}"] = _next_rung(ladder, int(nw))
+    for d in WIDTHS:
+        n6 = int(out[f"e6.n.w{d}"])
+        if n6 not in upe:
+            raise NumbersError(f"no protocol has {n6} entries, so updates per epoch at the E6 rung of width {d} are unknown")
+        out[f"e6.next.w{d}"] = _next_rung(ladder, n6) if out[f"e6.passes.w{d}"] == "yes" else "none"
+        out[f"e6.updates.w{d}"] = f"{upe[n6] * int(out['design.epochs.e6']):,}"
 
     # the dips of arm W at width 64 (the one place the report needs the raw per-epoch counts of E7)
     n64 = int(out["e7w.n.w64"])

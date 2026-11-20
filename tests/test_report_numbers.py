@@ -33,12 +33,16 @@ INPUT_FILES = [
     "phonebook/results/e6_extension.json", "phonebook/results/e7w_extension.json", "phonebook/results/e7s_extension.json",
     "phonebook/results/e4_prediction_scores.json", "phonebook/results/e6_prediction_scores.json", "phonebook/results/e7_scores.json",
     "phonebook/results/fig_e6_curves.csv",
+    "phonebook/results/e4_cells.csv", "phonebook/results/e6_cells.csv", "phonebook/results/e7w_cells.csv", "phonebook/results/e7s_cells.csv",
 ]
 INPUT_GLOBS = [
     "phonebook/experiments/week_2026-10-31/e[46]_*/protocol.json",
     "phonebook/experiments/week_2026-11-13/e7_*/protocol.json",
     "phonebook/experiments/week_2026-11-13/e7_w_d64_seed*/s*_n640/d64/metrics.csv",
     "phonebook/inputs/capacity_seed*_control.txt",
+    "phonebook/inputs/capacity_seed*_n*.txt",
+    "phonebook/experiments/week_2026-10-31/e[46]_*/s*_n*/d*.evaluation.json",
+    "phonebook/experiments/week_2026-11-13/e7_*/s*_n*/d*.evaluation.json",
 ]
 
 
@@ -46,7 +50,8 @@ def copy_inputs(dst: Path) -> None:
     paths = [ROOT / rel for rel in INPUT_FILES]
     for pattern in INPUT_GLOBS:
         paths += [p for p in ROOT.glob(pattern) if "__interrupted" not in str(p)]
-    assert len(paths) == len(INPUT_FILES) + 24 + 12 + 18 + 3 + 3, len(paths)  # E4 24, E6 12 and E7 18 protocols; 3 metrics files; 3 control books
+    # E4 24, E6 12 and E7 18 protocols; 3 metrics files; 3 control books; 3 seeds x 14 rungs of books; 126 evaluation files (E4 96, E6 12, E7 18)
+    assert len(paths) == len(INPUT_FILES) + 24 + 12 + 18 + 3 + 3 + 42 + 126, len(paths)
     for path in paths:
         target = dst / path.relative_to(ROOT)
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -128,6 +133,19 @@ PINNED = {
     "design.upe.n10": "1", "design.upe.n14": "1", "design.upe.n20": "1", "design.upe.n28": "1", "design.upe.n40": "1", "design.upe.n57": "1",
     "design.upe.n80": "2", "design.upe.n113": "2", "design.upe.n160": "3", "design.upe.n226": "4", "design.upe.n320": "5",
     "design.upe.n453": "8", "design.upe.n640": "10", "design.upe.n905": "15",
+    # R5: the phone-number space, the rules, the budgets, the ladder, the controls, the run counts, the updates and the audit agreement.
+    # Typed from tools\\r5_design_facts_check.py (evidence\\r5_design_facts_check_output.txt) and from the locked scorer's constants.
+    "design.phone.area": "800", "design.phone.exchange": "800", "design.phone.subscriber": "10,000",
+    "design.hold.min": "50", "design.hold.window": "100", "design.hold.from": "3001",
+    "design.settled.logged": "50", "design.settled.epochs": "500", "design.rule.min": "2",
+    "design.budget.1": "100", "design.budget.2": "300", "design.budget.3": "500", "design.budget.4": "1000",
+    "design.rung.first": "10", "design.rung.last": "905", "design.rung.count": "14", "design.rung.ratio.min": "1.40", "design.rung.ratio.max": "1.43",
+    "e7.next.w16": "226", "e7.next.w32": "453", "e7.next.w64": "905",
+    "e6.next.w8": "28", "e6.next.w16": "226", "e6.next.w32": "453", "e6.next.w64": "none",
+    "design.control.max": "0", "design.control.runs": "126",
+    "design.runs.e4": "96", "design.runs.e6": "12", "design.runs.e7": "18",
+    "e6.updates.w8": "4,000", "e6.updates.w16": "12,000", "e6.updates.w32": "20,000", "e6.updates.w64": "40,000",
+    "design.regen.agree": "126", "design.regen.runs": "126",
 }
 
 
@@ -282,7 +300,51 @@ def raw_expected() -> dict[str, str]:
     sizes = {len([line for line in b.read_text(encoding="utf-8").split("\n") if line.strip()]) for b in books}
     assert len(sizes) == 1
     out["design.control"] = str(sizes.pop())
+    out.update(raw_r5(out))
     return out
+
+
+def raw_r5(out: dict[str, str]) -> dict[str, str]:
+    """The R5 keys, from the raw files and from the source text of the files that define the rules (never from report/make_numbers.py)."""
+    new: dict[str, str] = {}
+    pb = (ROOT / "phonebook" / "create_phonebook.py").read_text(encoding="utf-8")
+    area = re.search(r"area = 200 \+ value % (\d+)", pb).group(1)
+    exchange = re.search(r"exchange = 200 \+ value % (\d+)", pb).group(1)
+    subscriber = re.search(r"subscriber = \(value // \d+\) % ([0-9_]+)", pb).group(1).replace("_", "")
+    new["design.phone.area"], new["design.phone.exchange"], new["design.phone.subscriber"] = area, exchange, f"{int(subscriber):,}"
+    scorer = (ROOT / "phonebook" / "score_e7_predictions.py").read_text(encoding="utf-8")
+    new["design.rule.min"] = re.search(r"^PASS_SEEDS = (\d+)", scorer, re.M).group(1)
+    new["design.hold.min"] = re.search(r"^HOLD_MIN = (\d+)", scorer, re.M).group(1)
+    new["design.hold.window"] = re.search(r"^LATE_LOGGED = (\d+)", scorer, re.M).group(1)
+    new["design.hold.from"] = re.search(r'LATE = "[0-9]+_[0-9]+", "(\d+)_\d+"', scorer).group(1)
+    new["design.settled.logged"], new["design.settled.epochs"] = "50", "500"      # the dip rule of the report: 50 consecutive logged epochs, every 10 epochs
+    spec = json.loads(next((EXPERIMENTS / "week_2026-10-31").glob("e4_*/protocol.json")).read_text(encoding="utf-8"))["spec"]
+    budgets = [int(b) for b in re.search(r"epochs \[([0-9, ]+)\]", spec["decision_rules"]["budgets"]).group(1).split(",")]
+    for i, b in enumerate(budgets, 1):
+        new[f"design.budget.{i}"] = str(b)
+    ladder = sorted({int(m.group(1)) for p in (ROOT / "phonebook" / "inputs").glob("capacity_seed*_n*.txt")
+                     if (m := re.fullmatch(r"capacity_seed\d+_n(\d+)\.txt", p.name))})
+    new["design.rung.first"], new["design.rung.last"], new["design.rung.count"] = str(ladder[0]), str(ladder[-1]), str(len(ladder))
+    ratios = [b / a for a, b in zip(ladder, ladder[1:])]
+    new["design.rung.ratio.min"], new["design.rung.ratio.max"] = f"{min(ratios):.2f}", f"{max(ratios):.2f}"
+    above = lambda n: word(next((r for r in ladder if r > n), None))
+    for d in (16, 32, 64):
+        new[f"e7.next.w{d}"] = above(int(out[f"e7w.n.w{d}"]))
+    for d in WIDTHS:
+        new[f"e6.next.w{d}"] = above(int(out[f"e6.n.w{d}"])) if out[f"e6.passes.w{d}"] == "yes" else "none"
+        new[f"e6.updates.w{d}"] = f"{math.ceil(int(out[f'e6.n.w{d}']) / 64) * 4000:,}"
+    cells = {name: list(csv.DictReader((ROOT / "phonebook" / "results" / f"{name}_cells.csv").read_text(encoding="utf-8").splitlines())) for name in ("e4", "e6", "e7w", "e7s")}
+    new["design.control.max"] = str(max(int(r["max_control"]) for rows in cells.values() for r in rows))
+    new["design.control.runs"] = str(sum(len(rows) for rows in cells.values()))
+    new["design.runs.e4"], new["design.runs.e6"], new["design.runs.e7"] = str(len(cells["e4"])), str(len(cells["e6"])), str(len(cells["e7w"]) + len(cells["e7s"]))
+    evaluations = [p for week, pattern in (("week_2026-10-31", "e[46]_*"), ("week_2026-11-13", "e7_*")) for p in (EXPERIMENTS / week).glob(f"{pattern}/s*_n*/d*.evaluation.json")
+                   if "__interrupted" not in str(p)]
+    agree = 0
+    for p in evaluations:
+        book = json.loads(p.read_text(encoding="utf-8"))["books"]["A"]
+        agree += book["teacher_forced"]["sequence_correct"] == book["generation"]["correct"] and book["teacher_forced"]["sequence_total"] == book["generation"]["total"]
+    new["design.regen.agree"], new["design.regen.runs"] = str(agree), str(len(evaluations))
+    return new
 
 
 @pytest.fixture(scope="module")
@@ -360,6 +422,30 @@ VALUES = {"e6.bits.w16": "0.566", "e4.params.w64": "110,656", "design.epochs.e4"
 ])
 def test_typed_numbers_matching_flags_a_result_typed_by_hand(tex, flagged):
     assert mn.typed_numbers_matching(tex, VALUES) == flagged
+
+
+@pytest.mark.parametrize("tex, found", [
+    ("It holds 453 entries and 0.5 more.", ["453", "0.5"]),
+    ("Width 64, seeds 12 and 3.", []),
+    ("A year 2026 and 110,656 parameters.", ["2026", "110,656"]),
+    ("% 905 in a comment\nText 906.", ["906"]),
+    ("See \\ref{fig:905} and \\cite{k905} and \\num{x.905}.", []),
+    ("Both 453 and 453, then 1.40.", ["453", "453", "1.40"]),
+    ("Ratios 1.5 and 9.9, a 12 and a 99.", ["1.5", "9.9"]),       # two digits and a decimal point: a decimal is always a result
+    ("A 1,000 and a 12,345 and 999.", ["1,000", "12,345", "999"]),
+    ("Row \\ref{r}905 and 1.5\\cite{k}.", ["905", "1.5"]),         # a removed argument leaves a space, so the number next to it is still one literal
+])
+def test_typed_numbers_lists_every_literal_of_three_digits_or_a_decimal_in_the_prose_in_order(tex, found):
+    assert mn.typed_numbers(tex) == found
+
+
+def test_typed_numbers_matching_is_typed_numbers_filtered_by_the_generated_values():
+    tex = "Rung 453, year 2026, 32.575 bits, 0.9 more."
+    assert mn.typed_numbers_matching(tex, VALUES) == [x for x in mn.typed_numbers(tex) if x.replace(",", "") in {v.replace(",", "") for v in VALUES.values()}]
+
+
+def test_the_command_argument_pattern_is_public_and_strips_cite_ref_label_input_and_num():
+    assert mn.COMMAND_ARGUMENTS.sub("_", "a \\cite{k} b \\ref{r} c \\label{l} d \\input{numbers} e \\num{x.y} f") == "a _ b _ c _ d _ e _ f"
 
 
 # ---- reading the inputs: loud failures ------------------------------------------------------------------------------------------------------
@@ -484,13 +570,13 @@ def test_a_non_finite_or_empty_recall_value_in_a_metrics_file_is_a_numbers_error
 
 
 @pytest.mark.parametrize("name, change, match", [
-    ("e7w_extension", lambda d: d["16"]["epochs_at_100"]["by_seed"]["3"].__setitem__("3001_4000", 101), "3001_4000"),
-    ("e6_extension", lambda d: d["16"].__setitem__("reached_perfect", 4), "reached_perfect"),
-    ("e6_extension", lambda d: d["16"]["perfect_by"].__setitem__("4000", 2), "perfect_by"),
-    ("e6_extension", lambda d: d["32"]["passes"].__setitem__("4000", False), "passes"),
-    ("e6_extension", lambda d: d["64"].__setitem__("first_pass_budget", 4000), "first_pass_budget"),
-    ("e6_extension", lambda d: d["16"].__setitem__("perfect_at_end", 4), "perfect_at_end"),
-    ("e6_extension", lambda d: d["16"]["first_perfect"].__setitem__("2", None), "first_perfect"),
+    ("e7w_extension", lambda d: d["16"]["epochs_at_100"]["by_seed"]["3"].__setitem__("3001_4000", 101), r"is 101, but the window holds 100 logged epochs"),
+    ("e6_extension", lambda d: d["16"].__setitem__("reached_perfect", 4), r"width 16: reached_perfect 4 and perfect_by 3 must be equal and at most 3"),
+    ("e6_extension", lambda d: d["16"]["perfect_by"].__setitem__("4000", 2), r"width 16: reached_perfect 3 and perfect_by 2 must be equal"),
+    ("e6_extension", lambda d: d["32"]["passes"].__setitem__("4000", False), r"width 32: passes at 4000 is False but 2 of 3 seeds were perfect by 4000 \(a rung passes with 2\)"),
+    ("e6_extension", lambda d: d["64"].__setitem__("first_pass_budget", 4000), r"width 64: first_pass_budget 4000 does not agree with passes at 4000 \(False\)"),
+    ("e6_extension", lambda d: d["16"].__setitem__("perfect_at_end", 4), r"width 16: perfect_at_end 4 exceeds reached_perfect 3"),
+    ("e6_extension", lambda d: d["16"]["first_perfect"].__setitem__("2", None), r"width 16: first_perfect lists 2 seeds that reached 100%, reached_perfect says 3"),
 ])
 def test_counts_that_are_impossible_or_disagree_with_each_other_are_an_error(inputs, name, change, match):
     edit_json(inputs / f"phonebook/results/{name}.json", change)
@@ -747,7 +833,7 @@ def test_every_value_equals_the_independent_recompute_from_the_raw_per_run_files
 
 
 def test_the_key_count_is_the_one_the_plan_documents(built):
-    assert len(built) == 268   # e4 39, e6 92, e7w 52, e7s 49, e7 7, design 29
+    assert len(built) == 304   # e4 39, e6 92 + 8 (next, updates), e7w 52, e7s 49, e7 7 + 3 (next), design 29 + 25
 
 
 def test_build_is_deterministic():
@@ -784,6 +870,247 @@ def test_main_returns_two_when_an_input_is_missing(tmp_path, capsys):
 
 # ---- a real TeX build ------------------------------------------------------------------------------------------------------------------------
 # Needs pdflatex on PATH. There is no skip: a machine without TeX must fail these (see report/README.md).
+
+
+# ---- R5: the new inputs and what is checked about them -----------------------------------------------------------------------------------------
+CELLS = "phonebook/results/{}_cells.csv"
+BOOK = "phonebook/inputs/capacity_seed{}_n{}.txt"
+
+
+def edit_csv(path: Path, change) -> None:
+    rows = list(csv.DictReader(path.read_text(encoding="utf-8").splitlines()))
+    change(rows)
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=list(rows[0].keys()), lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+def edit_book(path: Path, change) -> None:
+    lines = path.read_text(encoding="utf-8").split("\n")
+    change(lines)
+    path.write_text("\n".join(lines), encoding="utf-8")
+
+
+def evaluation_files(root: Path) -> list[Path]:
+    return sorted(p for pattern in ("week_2026-10-31/e[46]_*", "week_2026-11-13/e7_*") for p in (root / "phonebook" / "experiments").glob(f"{pattern}/s*_n*/d*.evaluation.json"))
+
+
+@pytest.mark.parametrize("rel", [CELLS.format("e4"), CELLS.format("e7s"), BOOK.format(2, 905), BOOK.format(1, 453)])
+def test_a_missing_cells_file_or_book_is_an_error(inputs, rel):
+    (inputs / rel).unlink()
+    with pytest.raises(mn.NumbersError):
+        mn.build(inputs)
+
+
+def test_a_missing_evaluation_file_is_an_error_not_a_smaller_count(inputs):
+    evaluation_files(inputs)[50].unlink()
+    with pytest.raises(mn.NumbersError, match="missing input file: phonebook/experiments/"):
+        mn.build(inputs)
+
+
+@pytest.mark.parametrize("bad, match", [("x", "must hold whole numbers"), ("", "must hold whole numbers"), ("1.5", "must hold whole numbers"), ("-1", "must not be negative")])
+def test_a_bad_max_control_cell_is_an_error(inputs, bad, match):
+    edit_csv(inputs / CELLS.format("e6"), lambda rows: rows[3].update(max_control=bad))
+    with pytest.raises(mn.NumbersError, match=match):
+        mn.build(inputs)
+
+
+def test_a_control_that_is_not_ok_is_an_error(inputs):
+    edit_csv(inputs / CELLS.format("e7w"), lambda rows: rows[0].update(control_ok="False"))
+    with pytest.raises(mn.NumbersError, match="e7w_cells.csv: control_ok must be True in every row, got 'False'"):
+        mn.build(inputs)
+
+
+def test_a_control_with_recalled_entries_is_reported_as_measured_not_hidden(inputs):
+    edit_csv(inputs / CELLS.format("e4"), lambda rows: rows[10].update(max_control="3"))
+    assert mn.build(inputs)["design.control.max"] == "3"
+
+
+def test_cells_that_do_not_match_the_number_of_protocol_runs_are_an_error(inputs):
+    edit_csv(inputs / CELLS.format("e6"), lambda rows: rows.pop())
+    with pytest.raises(mn.NumbersError, match=r"e6_cells.csv: 11 rows but the protocols have 12 runs"):
+        mn.build(inputs)
+
+
+@pytest.mark.parametrize("line", ["Ana Bo=199-555-1234", "Ana Bo=1000-555-1234", "Ana Bo=555-199-1234", "Ana Bo=555-555-123", "Ana Bo=555-555-12345",
+                                  "Ana Bo 555-555-1234", "Ana=555-555-1234", "Ana Bo=555-555-1234 ", "Ana Bo=555555-1234"])
+def test_a_book_line_that_is_not_a_name_and_a_phone_number_in_range_is_an_error(inputs, line):
+    edit_book(inputs / BOOK.format(2, 905), lambda lines: lines.__setitem__(100, line))
+    with pytest.raises(mn.NumbersError, match=r"capacity_seed2_n905.txt: line 101 is not 'Name Name=NNN-NNN-NNNN' with the area code from 200 to 999 and the exchange from 200 to 999"):
+        mn.build(inputs)
+
+
+def test_a_book_with_the_wrong_number_of_entries_is_an_error(inputs):
+    edit_book(inputs / BOOK.format(3, 905), lambda lines: lines.pop(0))
+    with pytest.raises(mn.NumbersError, match=r"capacity_seed3_n905.txt: 904 entries, expected 905"):
+        mn.build(inputs)
+
+
+def test_a_subscriber_number_above_the_documented_space_is_an_error(inputs, monkeypatch):
+    monkeypatch.setattr(mn, "SUBSCRIBERS", 5_000)
+    with pytest.raises(mn.NumbersError, match="subscriber"):
+        mn.build(inputs)
+
+
+def test_the_bits_per_entry_follow_the_phone_number_constants(monkeypatch):
+    assert mn.bits_per_entry() == pytest.approx(math.log2(800 * 800 * 10_000))
+    monkeypatch.setattr(mn, "SUBSCRIBERS", 5_000)
+    monkeypatch.setattr(mn, "AREA_CODES", 400)
+    assert mn.bits_per_entry() == pytest.approx(math.log2(400 * 800 * 5_000))
+
+
+def test_an_extra_book_size_is_an_error(inputs):
+    shutil.copy(inputs / BOOK.format(1, 905), inputs / BOOK.format(1, 1000))
+    with pytest.raises(mn.NumbersError, match="the capacity books for seed 1 have rungs"):
+        mn.build(inputs)
+
+
+def test_a_missing_book_size_is_an_error(inputs):
+    (inputs / BOOK.format(2, 453)).unlink()
+    with pytest.raises(mn.NumbersError, match="the capacity books for seed 2 have rungs"):
+        mn.build(inputs)
+
+
+@pytest.mark.parametrize("change", [lambda d: d["8"]["capacity_by_budget"].pop("300"), lambda d: d["8"]["capacity_by_budget"].update({"2000": None})])
+def test_e4_budgets_that_are_not_the_four_expected_are_an_error(inputs, change):
+    edit_json(inputs / "phonebook/results/e4_capacity.json", change)
+    with pytest.raises(mn.NumbersError, match=r"e4_capacity.json: the budgets must be \['100', '300', '500', '1000'\]"):
+        mn.build(inputs)
+
+
+def test_a_late_window_that_does_not_hold_the_documented_number_of_logged_epochs_is_an_error(inputs, monkeypatch):
+    monkeypatch.setattr(mn, "LAST_WINDOW", 90)
+    with pytest.raises(mn.NumbersError, match="the late window 3001 to 4000 holds 100 logged epochs at every 10, but LAST_WINDOW is 90"):
+        mn.build(inputs)
+
+
+def test_the_hold_start_key_is_the_start_of_the_late_window(built):
+    assert (int(built["design.epochs.e6"]) - int(built["design.hold.window"]) * int(built["design.loginterval"]) + 1) == int(built["design.hold.from"])
+
+
+def test_the_budgets_and_the_four_epoch_columns_agree_with_the_epochs_keys(built):
+    assert built["design.budget.4"] == built["design.epochs.e4"]
+
+
+def test_a_run_whose_regenerated_count_differs_lowers_the_agreement_count(inputs):
+    edit_json(evaluation_files(inputs)[5], lambda d: d["books"]["A"]["generation"].update(correct=d["books"]["A"]["generation"]["correct"] - 1))
+    out = mn.build(inputs)
+    assert (out["design.regen.agree"], out["design.regen.runs"]) == ("125", "126")
+
+
+def test_a_run_whose_regenerated_total_differs_is_not_counted_as_agreeing(inputs):
+    edit_json(evaluation_files(inputs)[60], lambda d: d["books"]["A"]["generation"].update(total=d["books"]["A"]["generation"]["total"] + 1))
+    assert mn.build(inputs)["design.regen.agree"] == "125"
+
+
+@pytest.mark.parametrize("damage", ["no books", "no generation", "float", "negative", "boolean"])
+def test_a_malformed_evaluation_file_is_a_numbers_error(inputs, damage):
+    def change(d):
+        if damage == "no books":
+            del d["books"]
+        elif damage == "no generation":
+            del d["books"]["A"]["generation"]
+        elif damage == "float":
+            d["books"]["A"]["teacher_forced"]["sequence_correct"] = 2.5
+        elif damage == "negative":
+            d["books"]["A"]["generation"]["correct"] = -1
+        else:
+            d["books"]["A"]["generation"]["total"] = True
+    edit_json(evaluation_files(inputs)[20], change)
+    with pytest.raises(mn.NumbersError):
+        mn.build(inputs)
+
+
+@pytest.mark.parametrize("ladder, n, expected", [([10, 20, 40], 20, "40"), ([10, 20, 40], 10, "20"), ([10, 20, 40], 40, "none")])
+def test_next_rung_is_the_smallest_rung_above_and_none_at_the_top(ladder, n, expected):
+    assert mn._next_rung(ladder, n) == expected
+
+
+def test_the_next_rung_of_a_size_that_is_not_a_rung_is_an_error():
+    with pytest.raises(mn.NumbersError, match=r"15 is not a rung of the ladder \[10, 20, 40\]"):
+        mn._next_rung([10, 20, 40], 15)
+
+
+def test_a_late_window_that_ends_before_the_last_epoch_of_e6_and_e7_is_an_error(inputs, monkeypatch):
+    monkeypatch.setattr(mn, "WINDOW_LAST", 3990)
+    with pytest.raises(mn.NumbersError, match="the late window ends at epoch 3990 but E6 and E7 train for 4000 epochs"):
+        mn.build(inputs)
+
+
+@pytest.mark.parametrize("rungs, ratios", [([10, 14], [1.4]), ([10, 20, 40], [2.0, 2.0]), ([10, 14, 20, 28], [1.4, 20 / 14, 1.4])])
+def test_the_neighbour_ratios_of_a_ladder_of_two_or_more_rungs(rungs, ratios):
+    assert mn._ratios(rungs) == ratios
+
+
+@pytest.mark.parametrize("rungs", [[], [905]])
+def test_a_ladder_of_fewer_than_two_rungs_has_no_ratios_and_is_an_error(rungs):
+    with pytest.raises(mn.NumbersError, match=rf"the protocols have {len(rungs)} rungs, at least 2 are needed for a ladder"):
+        mn._ratios(rungs)
+
+
+def test_a_failing_rung_that_no_protocol_ran_is_an_error(inputs):
+    edit_json(inputs / "phonebook/results/e6_extension.json", lambda d: d["64"].__setitem__("n", 641))
+    edit_curves(inputs, lambda lines: [l.replace("64,640,", "64,641,", 1) if l.startswith("64,640,") else l for l in lines])
+    with pytest.raises(mn.NumbersError, match="no protocol has 641 entries, so updates per epoch at the E6 rung of width 64 are unknown"):
+        mn.build(inputs)
+
+
+# a minimal tree of capacity books: the three book seeds, each with a book for every rung
+def tiny_books(tmp_path: Path, rungs: list[int], newline: str = chr(10)) -> Path:
+    folder = tmp_path / "phonebook" / "inputs"
+    folder.mkdir(parents=True)
+    for s in mn.SEEDS:
+        for n in rungs:
+            (folder / BOOK.format(s, n).rsplit("/", 1)[1]).write_bytes(newline.join(f"Ana Bo={200 + i}-{300 + i}-{i:04d}" for i in range(n)).encode("utf-8"))
+    return tmp_path
+
+
+def test_a_tree_of_valid_books_is_accepted(tmp_path):
+    mn._books(tiny_books(tmp_path, [3, 5]), [3, 5])
+
+
+def test_books_with_windows_line_endings_are_accepted(tmp_path):
+    mn._books(tiny_books(tmp_path, [3, 5], newline=chr(13) + chr(10)), [3, 5])
+
+
+def test_a_largest_book_that_is_missing_but_replaced_by_a_different_size_is_an_error(tmp_path):
+    root = tiny_books(tmp_path, [3, 5])
+    (root / "phonebook/inputs/capacity_seed1_n5.txt").rename(root / "phonebook/inputs/capacity_seed1_n6.txt")
+    with pytest.raises(mn.NumbersError, match=r"the capacity books for seed 1 have rungs \[3, 6\], the protocols have \[3, 5\]"):
+        mn._books(root, [3, 5])
+
+
+@pytest.mark.parametrize("constant, value, line, accepted", [
+    ("AREA_CODES", 5, "Ana Bo=204-300-0001", True), ("AREA_CODES", 5, "Ana Bo=205-300-0001", False), ("AREA_CODES", 5, "Ana Bo=200-300-0001", True),
+    ("EXCHANGES", 5, "Ana Bo=300-204-0001", True), ("EXCHANGES", 5, "Ana Bo=300-205-0001", False), ("EXCHANGES", 5, "Ana Bo=300-200-0001", True),
+    ("SUBSCRIBERS", 10, "Ana Bo=300-300-0009", True), ("SUBSCRIBERS", 10, "Ana Bo=300-300-0010", False), ("SUBSCRIBERS", 10, "Ana Bo=300-300-0000", True),
+])
+def test_the_edges_of_the_documented_phone_number_space(tmp_path, monkeypatch, constant, value, line, accepted):
+    monkeypatch.setattr(mn, constant, value)
+    root = tiny_books(tmp_path, [1])
+    for s in mn.SEEDS:
+        (root / BOOK.format(s, 1)).write_text(line, encoding="utf-8")
+    if accepted:
+        mn._books(root, [1])
+    else:
+        with pytest.raises(mn.NumbersError, match=r"capacity_seed1_n1.txt: line 1 is not 'Name Name=NNN-NNN-NNNN'"):
+            mn._books(root, [1])
+
+
+def test_e7_arms_that_disagree_about_the_rung_are_an_error(inputs):
+    edit_json(inputs / "phonebook/results/e7s_extension.json", lambda d: d["16"].update(n=226))
+    with pytest.raises(mn.NumbersError, match="E7 arms W and S disagree about the rung at width 16: 160 and 226"):
+        mn.build(inputs)
+
+
+def test_the_new_keys_are_all_written_by_the_generator_and_documented_in_the_readme(built):
+    readme = (ROOT / "report" / "README.md").read_text(encoding="utf-8")
+    for family in ("design.phone", "design.hold", "design.settled", "design.rule", "design.budget", "design.rung", "design.control", "design.runs", "design.regen", "e6.next", "e7.next", "e6.updates"):
+        assert any(key.startswith(family + ".") for key in built), family
+        assert family in readme, family
+
+
 def build_document(tmp_path: Path, body: str):
     src = tmp_path / "src"
     src.mkdir()
