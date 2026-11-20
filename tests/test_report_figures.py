@@ -210,7 +210,7 @@ def test_the_only_dips_after_settling_are_arm_w_at_width_64_and_the_report_numbe
     summary = figures.curve_summary(table)
     assert {key: s["dip_min"] for key, s in summary.items() if s["dip_min"] is not None} == {("W", 64): 25}
     numbers = (ROOT / "report" / "numbers.tex").read_text(encoding="utf-8")
-    assert [re.search(rf"\\numdef{{e7w\.dipmin\.w64\.s{s}}}{{(\w+)}}", numbers).group(1) for s in SEEDS] == ["390", "25", "none"]
+    assert [re.search(rf"\\reportnumdef{{e7w\.dipmin\.w64\.s{s}}}{{(\w+)}}", numbers).group(1) for s in SEEDS] == ["390", "25", "none"]
 
 
 def raw_passes(raw, arm: str, d: int) -> bool:

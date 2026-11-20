@@ -358,9 +358,9 @@ def raw():
 
 
 # ---- the TeX file: rendering ----------------------------------------------------------------------------------------------------------------
-def test_render_defines_every_key_with_numdef_in_sorted_order():
+def test_render_defines_every_key_with_reportnumdef_in_sorted_order():
     text = mn.render({"b.y": "2", "a.x": "1"})
-    assert text.index("\\numdef{a.x}{1}") < text.index("\\numdef{b.y}{2}")
+    assert text.index("\\reportnumdef{a.x}{1}") < text.index("\\reportnumdef{b.y}{2}")
 
 
 def test_render_is_deterministic_and_has_no_carriage_return_and_no_timestamp():
@@ -1132,3 +1132,18 @@ def test_an_undefined_key_is_a_latex_error_on_a_real_build_so_the_gate_cannot_pa
     result = build_document(tmp_path, "Missing: [\\num{no.such.key}].")
     errors = br.parse_log(result.log_text)["errors"]
     assert any(e.startswith("Package numbers Error: Undefined number key `no.such.key'") for e in errors)
+
+
+@pytest.mark.integration
+def test_the_numbers_file_loads_in_a_document_with_the_whole_preamble_of_the_template(tmp_path):
+    r"""The template loads microtype, which loads etoolbox, which already defines \numdef: the numbers file must build in the report's own preamble, not only in a bare article."""
+    template = (ROOT / "report" / "template" / "dnu-report.tex").read_text(encoding="utf-8").replace("\r\n", "\n")
+    preamble = template.split("\\begin{document}")[0]
+    src = tmp_path / "src"
+    src.mkdir()
+    shutil.copy(ROOT / "report" / "template" / "dnu.sty", src / "dnu.sty")
+    (src / "numbers.tex").write_bytes(mn.render(mn.build(ROOT)).encode("utf-8"))
+    (src / "main.tex").write_text(preamble + "\\input{numbers}\n\\begin{document}\nBatch \\num{design.batch}, parameters \\num{e4.params.w64}.\n\\end{document}\n", encoding="utf-8")
+    result = gate.build_pdf(src / "main.tex", src / "build")
+    assert br.parse_log(result.log_text)["errors"] == []
+    assert "Batch 64, parameters 110,656." in " ".join(" ".join(gate.pdf_pages(result.pdf)).split())
