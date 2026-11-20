@@ -63,9 +63,9 @@ def table():
 
 
 # ---- the table ------------------------------------------------------------------------------------------------------------------------------
-def test_the_table_has_the_documented_columns_lf_endings_and_one_row_per_logged_epoch_of_27_curves(table):
-    data = (RESULTS / "fig_e7_curves.csv").read_bytes()
-    assert data.split(b"\n")[0].decode() == ",".join(COLUMNS) and b"\r" not in data.replace(b"\r\n", b"\n") and b"\r\n" not in data.replace(b"\r\n", b"\n")
+def test_the_table_has_the_documented_columns_and_one_row_per_logged_epoch_of_27_curves(table):
+    data = (RESULTS / "fig_e7_curves.csv").read_bytes().replace(b"\r\n", b"\n")      # a Windows checkout turns the blob's LF into CRLF
+    assert data.split(b"\n")[0].decode() == ",".join(COLUMNS) and b"\r" not in data
     assert len(table) == 27 * 400
 
 
@@ -87,6 +87,7 @@ def test_the_e6_rows_are_the_e6_table_of_the_earlier_figure_at_widths_16_32_and_
 def test_the_writer_regenerates_the_committed_table_byte_for_byte(tmp_path):
     path = e7c.write_e7_table(tmp_path, week_e6=WEEK6, week_e7=WEEK7)
     assert path.name == "fig_e7_curves.csv"
+    assert b"\r" not in path.read_bytes()                                              # the writer itself always writes LF
     assert path.read_bytes() == (RESULTS / "fig_e7_curves.csv").read_bytes().replace(b"\r\n", b"\n")
 
 
